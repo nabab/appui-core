@@ -148,7 +148,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => 'fr',
-  'lib' => 'kendo-ui|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,line-awesome',
+  'lib' => 'w3-css,kendo-ui|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,line-awesome',
   'test' => !!$test,
   'dirs' => 'APST-UI/css'
 ])?>"></script>

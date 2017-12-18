@@ -623,7 +623,7 @@ if ( data.shortcuts ){
   });
 	data.shortcuts.unshift({
     command(){
-      appui.popup("HELP Content", "HELP Title");
+      appui.popup().load('help');
     },
     text: bbn._("Help"),
     icon: 'zmdi zmdi-help'
