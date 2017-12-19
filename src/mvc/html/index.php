@@ -46,6 +46,9 @@
       border: 0;
       overflow: hidden;
     }
+    #appui{
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
@@ -145,6 +148,14 @@
              :source="li.items"
              :unique="li.unique ? true : false"
   ></bbn-vlist>
+  <div class="w3-sidebar w3-bar-block w3-card w3-animate-right"
+       style="display:none; width: 50%; right:0; z-index: 1000"
+       id="rightMenu">
+    <button onclick="$(this).parent().hide()" class="w3-bar-item w3-button w3-large">Close &times;</button>
+    <a href="#" class="w3-bar-item w3-button">Link 1</a>
+    <a href="#" class="w3-bar-item w3-button">Link 2</a>
+    <a href="#" class="w3-bar-item w3-button">Link 3</a>
+  </div>
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => 'fr',

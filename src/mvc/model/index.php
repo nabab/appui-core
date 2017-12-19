@@ -13,6 +13,7 @@ else{
   $justificatif_defaut = '';
 }
 $id_courriers = \bbn\appui\masks::get_option_id('LTCOU');
+$id_courriers = '96dd3dfae07211e781c6000c29703ca2';
 $modeles_courriers = $lettre->get_text_value($id_courriers);
 $champs_dva = $model->inc->outils->champs_dva();
 $bureaux = array_map(function($a){
