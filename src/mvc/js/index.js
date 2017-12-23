@@ -605,43 +605,6 @@ window.adherentAPSTMixin = {
   }
 };
 
-if ( data.shortcuts ){
-  data.shortcuts.unshift({
-    url: 'pm/panel',
-    text: bbn._("Tâches"),
-    icon: 'fa fa-bug'
-  });
-  data.shortcuts.unshift({
-	  url: 'usergroup/main',
-  	text: bbn._("Mon profil"),
-  	icon: 'fa fa-user'
-  });
-  data.shortcuts.unshift({
-    url: 'dashboard',
-    text: bbn._("Tableau de bord"),
-    icon: 'fa fa-dashboard'
-  });
-	data.shortcuts.unshift({
-    command(){
-      appui.popup().load('help');
-    },
-    text: bbn._("Help"),
-    icon: 'zmdi zmdi-help'
-  });
-  data.shortcuts.push({
-    command(){
-      bbn.fn.toggle_full_screen();
-    },
-    text: bbn._("Plein écran"),
-    icon: 'fa fa-arrows-alt'
-  });
-  data.shortcuts.push({
-    url: 'logout',
-    text: bbn._("Sortir"),
-    icon: 'fa fa-sign-out'
-  });
-}
-
 window.appui = new Vue({
   mixins: [bbn.vue.resizerComponent],
   el: '#appui',
@@ -657,6 +620,36 @@ window.appui = new Vue({
     notifications: [],
     menuOpened: false,
     // configuration de l'éditeur kendo
+    leftShortcuts: [{
+      url: 'dashboard',
+      text: bbn._("Tableau de bord"),
+      icon: 'fa fa-dashboard'
+    }, {
+      command(){
+        appui.popup().load('help');
+      },
+      text: bbn._("Help"),
+      icon: 'zmdi zmdi-help'
+    }, {
+      url: 'usergroup/main',
+      text: bbn._("Mon profil"),
+      icon: 'fa fa-user'
+    }, {
+      url: 'pm/panel',
+      text: bbn._("Tâches"),
+      icon: 'fa fa-bug'
+    }],
+    rightShortcuts: [{
+      command(){
+        bbn.fn.toggle_full_screen();
+      },
+      text: bbn._("Plein écran"),
+      icon: 'fa fa-arrows-alt'
+    }, {
+      url: 'logout',
+      text: bbn._("Sortir"),
+      icon: 'fa fa-sign-out'
+    }],
     editorCfg: {
       encoded: false,
       tools: [

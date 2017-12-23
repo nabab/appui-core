@@ -54,13 +54,13 @@
 <body>
 <div id="appui" class="bbn-full-screen" style="width: 100%; height: 100%; opacity: 0;">
   <bbn-splitter orientation="vertical" ref="splitter" v-if="isMounted">
-    <div style="height: 50px; overflow: visible" scrollable="false" ref="head">
+    <bbn-pane :size="50" style="overflow: visible" :scrollable="false" ref="head" overflow="visible">
       <div class="k-header bbn-w-100 bbn-h-100 bbn-flex-width">
         <div class="bbn-block bbn-h-100 bbn-middle bbn-menu-button-container" style="width: 70px">
           <bbn-menu-button v-if="menuMounted"
                            class="bbn-xxxl"
-                           menu="$root.$refs.menu"
-          ></bbn-menu-button>
+                           menu="$root.$refs.menu">
+          </bbn-menu-button>
         </div>
         <div class="bbn-block bbn-h-100 bbn-vmiddle" style="width: 70px">
           <div class="bbn-global-search bbn-vmiddle bbn-lg">
@@ -79,19 +79,23 @@
                               @change="selectSearch"
                               :min-length="1"
                               :template="tplSearch"
-                              style="z-index: 10"
-            ></bbn-autocomplete>
-            <bbn-button icon="fa fa-search" @click="$refs.search.$refs.element.focus()"></bbn-button>
+                              style="z-index: 10">
+            </bbn-autocomplete>
+            <bbn-button icon="fa fa-search" @click="$refs.search.$refs.element.focus()">
+            </bbn-button>
           </div>
         </div>
         <div class="bbn-h-100 bbn-splitter-top-center bbn-flex-fill">
-          <bbn-fisheye v-model="shortcuts"
-                       del-url="menu/shortcuts/delete"
+          <bbn-fisheye del-url="menu/shortcuts/delete"
                        ins-url="menu/shortcuts/insert"
                        :min-index="3"
                        :z-index="3"
                        ref="fisheye"
-          @mounted="fisheyeMounted = true"></bbn-fisheye>
+                       :source="shortcuts"
+                       :fixed-left="leftShortcuts"
+                       :fixed-right="rightShortcuts"
+                       @mounted="fisheyeMounted = true">
+          </bbn-fisheye>
         </div>
         <div class="bbn-block bbn-h-100 bbn-logo-container" style="width: 140px">
           <div class="bbn-block apst-logo bbn-100">
@@ -113,18 +117,18 @@
                overflow: isOverDebug ? 'auto' : 'hidden'
              }"
              @mouseenter="isOverDebug = true"
-             @mouseleave="isOverDebug = false"
-        >
+             @mouseleave="isOverDebug = false">
           <h2>Debug...</h2>
         </div>
       </div>
-    </div>
-    <div ref="main">
+    </bbn-pane>
+    <bbn-pane ref="main">
       <bbn-tabnav :autoload="true" :source="list" ref="tabnav"></bbn-tabnav>
-    </div>
-    <div style="height: 25px" scrollable="false" ref="foot" class="k-header ">
-      <bbn-loading ref="loading" style="position: absolute; top: 0px; right: 1em; width: 30%; min-width: 300px"></bbn-loading>
-    </div>
+    </bbn-pane>
+    <bbn-pane :size="25" :scrollable="false" ref="foot" class="k-header">
+      <bbn-loading ref="loading" style="position: absolute; top: 0px; right: 1em; width: 30%; min-width:
+      300px"></bbn-loading>
+    </bbn-pane>
   </bbn-splitter>
   <bbn-treemenu source="menu/data"
                 v-if="fisheyeMounted"
@@ -134,8 +138,8 @@
                 :top="50"
                 style="width: 350px"
                 :shortcuts="$refs.fisheye"
-                @mounted="menuMounted = true"
-  ></bbn-treemenu>
+                @mounted="menuMounted = true">
+  </bbn-treemenu>
   <bbn-popup :source="popups" ref="popup" :z-index="14"></bbn-popup>
   <bbn-notification ref="notification"></bbn-notification>
   <bbn-vlist v-for="(li, idx) in vlist"
@@ -146,8 +150,8 @@
              :bottom="li.bottom"
              @close="vlist.splice(idx, 1)"
              :source="li.items"
-             :unique="li.unique ? true : false"
-  ></bbn-vlist>
+             :unique="li.unique ? true : false">
+  </bbn-vlist>
   <div class="w3-sidebar w3-bar-block w3-card w3-animate-right"
        style="display:none; width: 50%; right:0; z-index: 1000"
        id="rightMenu">
