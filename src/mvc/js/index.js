@@ -540,7 +540,7 @@ bbn.vue.addComponent('widget/svn');
 bbn.vue.addComponent('widget/user');
 bbn.vue.addComponent('widget/cotis-valid');
 bbn.vue.addComponent('map');
-
+bbn.vue.addComponent('lieux_fusion');
 
 
 $.extend(bbn.lng, data.lng);
@@ -613,43 +613,99 @@ window.appui = new Vue({
     height: 0,
     popups: [],
     vlist: [],
+    polling: false,
+    pollingErrors: 0,
     url: bbn.env.path,
     users: data.users,
     options: $.extend(data.options, {tasks: data.tasks}),
     widgets: {},
     notifications: [],
     menuOpened: false,
-    // configuration de l'éditeur kendo
-    leftShortcuts: [{
-      url: 'dashboard',
-      text: bbn._("Tableau de bord"),
-      icon: 'fa fa-dashboard'
-    }, {
-      command(){
-        appui.popup().load('help');
-      },
-      text: bbn._("Help"),
-      icon: 'zmdi zmdi-help'
-    }, {
-      url: 'usergroup/main',
-      text: bbn._("Mon profil"),
-      icon: 'fa fa-user'
-    }, {
-      url: 'pm/panel',
-      text: bbn._("Tâches"),
-      icon: 'fa fa-bug'
-    }],
-    rightShortcuts: [{
-      command(){
-        bbn.fn.toggle_full_screen();
-      },
-      text: bbn._("Plein écran"),
-      icon: 'fa fa-arrows-alt'
-    }, {
-      url: 'logout',
-      text: bbn._("Sortir"),
-      icon: 'fa fa-sign-out'
-    }],
+    themes: [
+      {
+        "value": "uniform",
+        "text": "Uniform"
+      }, {
+        "value": "black",
+        "text": "Black"
+      }, {
+        "value": "blueopal",
+        "text": "Blue Opal"
+      }, {
+        "value": "bootstrap",
+        "text": "Bootstrap"
+      }, {
+        "value": "default",
+        "text": "Default"
+      }, {
+        "value": "fiori",
+        "text": "Fiori"
+      }, {
+        "value": "flat",
+        "text": "Flat"
+      }, {
+        "value": "highcontrast",
+        "text": "High Contrast"
+      }, {
+        "value": "material",
+        "text": "Material"
+      }, {
+        "value": "materialblack",
+        "text": "Material Black"
+      }, {
+        "value": "metro",
+        "text": "Metro"
+      }, {
+        "value": "metroblack",
+        "text": "Metro Black"
+      }, {
+        "value": "moonlight",
+        "text": "Moonlight"
+      }, {
+        "value": "nova",
+        "text": "Nova"
+      }, {
+        "value": "office365",
+        "text": "Office 365"
+      }, {
+        "value": "silver",
+        "text": "Silver"
+      }
+    ],
+    leftShortcuts: [
+      {
+        url: 'dashboard',
+        text: bbn._("Tableau de bord"),
+        icon: 'fa fa-dashboard'
+      }, {
+        command(){
+          appui.popup().load('help');
+        },
+        text: bbn._("Help"),
+        icon: 'zmdi zmdi-help'
+      }, {
+        url: 'usergroup/main',
+        text: bbn._("Mon profil"),
+        icon: 'fa fa-user'
+      }, {
+        url: 'pm/panel',
+        text: bbn._("Tâches"),
+        icon: 'fa fa-bug'
+      }
+    ],
+    rightShortcuts: [
+      {
+        command(){
+          bbn.fn.toggle_full_screen();
+        },
+        text: bbn._("Plein écran"),
+        icon: 'fa fa-arrows-alt'
+      }, {
+        url: 'logout',
+        text: bbn._("Sortir"),
+        icon: 'fa fa-sign-out'
+      }
+    ],
     editorCfg: {
       encoded: false,
       tools: [
@@ -830,6 +886,7 @@ window.appui = new Vue({
     },
 
     measure(){
+      /*
       let w = $(this.$el).width(),
           h = $(this.$el).height();
       if ( w && h && ((w !== this.width) || (h !== this.height)) ){
@@ -837,176 +894,43 @@ window.appui = new Vue({
         this.height = h;
         this.$emit("resize", {width: this.width, height: this.height});
       }
-    }
-  },
-  mounted(){
-    let doResize;
-    $(window)
-      .resize(() => {
-        clearTimeout(doResize);
-        doResize = setTimeout(() => {
-          this.measure();
-        }, 250);
-      });
-    setTimeout(() => {
-      this.measure();
-      this.isMounted = true;
-      this.$emit('resize');
-      $(this.$el).animate({opacity: 1})
-    }, 1000)
-  }
-});
-
-
-/*
-appui.rest({
-  environment: {
-    settings: {
-      position: "bl"
-    }
-  },
-  notification: {},
-  loading: {},
-  message: {},
-  splitter: {
-    settings: {
-      logo: '<img src="' + data.static_path + 'img/logo.png" border="0" style="height: 100%">'
-    }
-  },
-  search: {
-    target: function(){
-      return appui.splitter.ele.find(".bbn-search-container");
+      */
     },
-    settings: {
-      url: "adherents",
-      placeholder: "Rechercher par ID, nom, marque, adresse, contact, email, etc...",
-      select: function(e){
-        var id = this.dataItem(e.item.index()).id;
-        e.preventDefault();
-        appui.search.wid.close();
-        appui.search.wid.element.val("").attr("placeholder", "?").focus();
-        bbn.fn.link("adherent/fiche/" + id + "/infos");
-      },
-      template: function(d){
-        return '<div class="bbn-nl" style="background-color: ' +
-          apst.get_couleur(d.statut, d.statut_prospect ? d.statut_prospect : '') +
-          '"><div class="bbn-block"><h3>' + d.nom + ' <em>' +
-          ( d.immatriculation ? d.immatriculation : d.statut ) +
-          ' ID: ' + d.id + '</em></h3></div><div class="bbn-block bbn-r">' +
-          d.match + '</div></div>';
+
+    poll(timestamp){
+      if ( !this.polling ){
+        this.polling = true;
+        let obj = {mode: 'json'};
+        if ( timestamp ){
+          obj.timestamp = timestamp;
+        }
+        bbn.fn.ajax(data.root + 'poller', 'json', obj, null, (data) => {
+          this.polling = false;
+          // put the data_from_file into #response
+          bbn.fn.log(data);
+          alert("ANSWER");
+          // call the function again, this time with the timestamp we just got from server.php
+          this.poll(data.timestamp);
+        }, () => {
+          this.polling = false;
+        });
       }
     }
   },
-  tabnav: {
-    target: function(){
-      return appui.splitter.ele.children("div.bbn-splitter-main");
-    },
-    settings: {
-      list: [{
-        url: "dashboard",
-        title: "Tableau de bord",
-        load: true,
-        static: true
-      }]
-    }
-  },
-  menu: {
-    target: function(){
-      return appui.splitter.ele.find(".bbn-menu-button-container");
-    },
-    settings: {
-      data: data.menu,
-      top: 52
-    }
-  },
-  shortcuts: {
-    target: function(){
-      return appui.splitter.ele.find(".bbn-splitter-top-center");
-    },
-    settings: {
-      data: [
-        [{
-          url: "dashboard",
-          text: "Tableau de bord",
-          icon: "fa fa-dashboard"
-        }, {
-          url: "usergroup/profile",
-          text: "Mon profil",
-          icon: "fa fa-user"
-        }, {
-          url: "pm/panel",
-          text: "Tâches",
-          icon: "fa fa-bug"
-        }, {
-          click: bbn.fn.toggle_full_screen,
-          text: "Plein écran",
-          icon: "fa fa-arrows-alt"
-        }],
-        data.shortcuts,
-        [{
-          url: "logout",
-          text: "Déconnexion",
-          icon: "fa fa-sign-out"
-        }]
-      ]
-    }
-  }
-}).then(function(){
-  setInterval(function(){
-    if ( !bbn.env.is_checking ){
-      bbn.env.is_checking = 1;
-      bbn.fn.ajax("check_connection", "json", {
-        tabstrip: $.map(appui.tabnav.ele.tabNav("getList"), function(a){
-          return {
-            url: a.url,
-            title: a.title,
-          };
+  mounted(){
+    setTimeout(() => {
+      this.isMounted = true;
+      setTimeout(() => {
+        this.$emit('resize');
+        $(this.$el).animate({opacity: 1}, 'slow', () => {
+          setTimeout(() => {
+            this.poll();
+          }, 10000)
         })
-      }, false, function(r){
-        bbn.env.is_checking = false;
-        if (r && (r.connected === false)){
-          document.location.reload();
-        }
-        else if (!r || !r.connected){
-          bbn.env.connection_failures++;
-        }
-        else if (bbn.env.connection_failures >= bbn.env.connection_max_failures){
-          document.location.reload();
-        }
-        else {
-          bbn.env.connection_failures = 0;
-        }
-        if (r.data){
-          appui.appui.tabnav.ele.tabNav("addData", r.data, 0);
-        }
-        if (r.notifications){
-          $.each(r.notifications, function(i, v){
-            var cfg = {
-              title: v.title,
-              html: v.html,
-              data: {id: v.id},
-              onClose: function(data){
-                //bbn.fn.log(data);
-                bbn.fn.post("actions/notifications/delete", data)
-              }
-            };
-            if (v.type){
-              appui.message.apply(v.type ? v.type : "info", cfg);
-            }
-            else {
-              appui.message.info(cfg);
-            }
-          });
-        }
-      }, function(jqXHR, textStatus, errorThrown){
-        bbn.env.is_checking = false;
-        bbn.env.connection_failures++;
-        if (bbn.env.connection_failures >= bbn.env.connection_max_failures){
-          document.location.reload();
-        }
-        appui.notification.error({title: textStatus, content: errorThrown}, "error");
-      });
-    }
-  }, 10000);
+      }, 2000);
+    }, 1000)
+  },
+  beforeDestroy(){
+    alert("NO?")
+  }
 });
-*/
