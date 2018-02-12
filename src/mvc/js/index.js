@@ -679,10 +679,10 @@ window.appui = new Vue({
         icon: 'fa fa-dashboard'
       }, {
         command(){
-          appui.popup().load('help');
+          appui.popup().load('help', '90%');
         },
         text: bbn._("Help"),
-        icon: 'zmdi zmdi-help'
+        icon: 'zmdi zmdi-help-outline'
       }, {
         url: 'usergroup/main',
         text: bbn._("Mon profil"),
@@ -783,7 +783,8 @@ window.appui = new Vue({
         url: "dashboard",
         title: "Tableau de bord",
         load: true,
-        static: true
+        static: true,
+        icon: 'fa fa-dashboard'
       }
     ],
     shortcuts: data.shortcuts,
@@ -918,19 +919,14 @@ window.appui = new Vue({
     }
   },
   mounted(){
+    this.isMounted = true;
+    this.$emit('resize');
     setTimeout(() => {
-      this.isMounted = true;
-      setTimeout(() => {
-        this.$emit('resize');
-        $(this.$el).animate({opacity: 1}, 'slow', () => {
-          setTimeout(() => {
-            this.poll();
-          }, 10000)
-        })
-      }, 2000);
-    }, 1000)
-  },
-  beforeDestroy(){
-    alert("NO?")
+      $(this.$el).animate({opacity: 1}, 'slow', () => {
+        setTimeout(() => {
+          this.poll();
+        }, 10000)
+      })
+    }, 2000);
   }
 });

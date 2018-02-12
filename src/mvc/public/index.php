@@ -10,7 +10,7 @@ $theme = $ctrl->inc->user->get_session('theme');
 if ( !$theme ){
   $theme = 'default';
 }
-$is_admin = $ctrl->inc->user->is_admin();
+$is_dev = $ctrl->inc->user->is_dev();
 $mgr = new \apst\manager($ctrl->inc->user);
 $menu = new \bbn\appui\menus();
 $current_menu = $menu->get_option_id('default', 'menus');
@@ -33,9 +33,9 @@ $ctrl->data = [
   'group_id' => $ctrl->inc->user->get_group(),
   'users' => $mgr->full_list(),
   'groups' => $mgr->groups(),
-  'menus' => $is_admin ? $menu->get_options_menus() : [],
+  'menus' => $is_dev ? $menu->get_options_menus() : [],
   'current_menu' => $current_menu,
-  'is_admin' => $is_admin,
+  'is_dev' => $is_dev,
   'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
   'root' => APPUI_CORE_ROOT
 ];

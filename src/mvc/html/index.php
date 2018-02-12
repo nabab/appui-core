@@ -54,7 +54,7 @@
 <body>
 <div id="appui" class="bbn-full-screen" style="width: 100%; height: 100%; opacity: 0;">
   <bbn-splitter orientation="vertical" ref="splitter" v-if="isMounted">
-    <bbn-pane :size="50" style="overflow: visible" :scrollable="false" ref="head" overflow="visible">
+    <bbn-pane :size="50" :scrollable="false" ref="head" overflow="visible">
       <div class="k-header bbn-w-100 bbn-h-100 bbn-flex-width">
         <div class="bbn-block bbn-h-100 bbn-middle bbn-menu-button-container" style="width: 70px">
           <bbn-menu-button v-if="menuMounted"
@@ -98,7 +98,7 @@
           </bbn-fisheye>
         </div>
         <div class="bbn-block bbn-h-100 bbn-logo-container" style="width: 140px">
-          <div class="bbn-block apst-logo bbn-100">
+          <div class="apst-logo bbn-100 bbn-r">
             <img src="<?=$static_path?>img/logo.png" border="0" class="bbn-h-90">
           </div>
         </div>
@@ -123,11 +123,22 @@
       </div>
     </bbn-pane>
     <bbn-pane ref="main">
-      <bbn-tabnav :autoload="true" :source="list" ref="tabnav"></bbn-tabnav>
+      <bbn-tabnav :autoload="true"
+                  :source="list"
+                  ref="tabnav">
+      </bbn-tabnav>
     </bbn-pane>
-    <bbn-pane :size="25" :scrollable="false" ref="foot" class="k-header">
-      <bbn-loading ref="loading" style="position: absolute; top: 0px; right: 1em; width: 30%; min-width:
-      300px"></bbn-loading>
+    <bbn-pane :size="25"
+              :scrollable="false"
+              ref="foot"
+              class="k-header"
+              overflow="visible">
+      <div class="bbn-w-50 bbn-h-100">
+        &nbsp;
+      </div>
+      <div class="bbn-w-50 bbn-h-100">
+        <bbn-loading ref="loading"></bbn-loading>
+      </div>
     </bbn-pane>
   </bbn-splitter>
   <bbn-treemenu source="menu/data"
