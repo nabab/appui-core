@@ -94,7 +94,7 @@
                        :source="shortcuts"
                        :fixed-left="leftShortcuts"
                        :fixed-right="rightShortcuts"
-                       @mounted="fisheyeMounted = true">
+                       @ready="fisheyeMounted = true">
           </bbn-fisheye>
         </div>
         <div class="bbn-block bbn-h-100 bbn-logo-container" style="width: 140px">
@@ -149,7 +149,7 @@
                 :top="50"
                 style="width: 350px"
                 :shortcuts="$refs.fisheye"
-                @mounted="menuMounted = true">
+                @ready="menuMounted = true">
   </bbn-treemenu>
   <bbn-popup :source="popups" ref="popup" :z-index="14"></bbn-popup>
   <bbn-notification ref="notification"></bbn-notification>
@@ -174,10 +174,13 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => 'fr',
-  'lib' => 'w3-css,kendo-ui|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,line-awesome',
+  'lib' => 'w3-css,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,line-awesome',
   'test' => !!$test,
   'dirs' => 'APST-UI/css'
 ])?>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-html.min.js"></script>
 <?=$script?>
 </body>
 </html>

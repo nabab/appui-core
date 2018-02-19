@@ -772,7 +772,8 @@ window.appui = new Vue({
       username: data.username,
       departements: data.departements,
       regions: data.regions,
-      champs_dva: data.champs_dva
+      champs_dva: data.champs_dva,
+      champs: data.champs
     },
     search: "",
     searchPlaceholder: "Rechercher par ID, nom, marque, adresse, contact, email, etc...",

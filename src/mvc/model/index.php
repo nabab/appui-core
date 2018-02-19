@@ -17,6 +17,11 @@ $id_courriers = \bbn\appui\masks::get_option_id('LTCOU');
 //$id_courriers = '96dd3dfae07211e781c6000c29703ca2';
 $modeles_courriers = $lettre->get_text_value($id_courriers);
 $champs_dva = $model->inc->outils->champs_dva();
+$champs = [
+  29 => $model->inc->outils->form_document(29),
+  35 => $model->inc->outils->form_document(35),
+  37 => $model->inc->outils->form_document(37)
+];
 $bureaux = array_map(function($a){
   return [
     'text' => $a['titre'],
@@ -73,6 +78,7 @@ $d = [
     return strpos($a, 'apst_') === 0;
   }),
   'champs_dva' => $champs_dva,
+  'champs' => $champs,
   'lng' => [
     'no_role_permission' => _("You have no right to modify the roles in this task"),
     'opened_tasks' => _("Opened tasks"),
