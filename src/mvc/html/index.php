@@ -75,14 +75,13 @@
                               placeholder="?"
                               v-model="search"
                               @focus="focusSearch"
+                              icon="fa fa-search"
                               @blur="blurSearch"
                               @change="selectSearch"
                               :min-length="1"
                               :template="tplSearch"
                               style="z-index: 10">
             </bbn-autocomplete>
-            <bbn-button icon="fa fa-search" @click="$refs.search.$refs.element.focus()">
-            </bbn-button>
           </div>
         </div>
         <div class="bbn-h-100 bbn-splitter-top-center bbn-flex-fill">
