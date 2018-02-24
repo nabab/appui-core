@@ -133,10 +133,10 @@
               class="k-header"
               overflow="visible">
       <div class="bbn-w-50 bbn-h-100">
-        &nbsp;
+        <bbn-loading ref="loading"></bbn-loading>
       </div>
       <div class="bbn-w-50 bbn-h-100">
-        <bbn-loading ref="loading"></bbn-loading>
+        &nbsp;
       </div>
     </bbn-pane>
   </bbn-splitter>

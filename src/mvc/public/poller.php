@@ -10,7 +10,6 @@
  * This timestamp is used by the client's JavaScript for the next request, so THIS server-side script here only
  * serves new content after the last file change. Sounds weird, but try it out, you'll get into it really fast!
  */
-
 // set php runtime to unlimited
 set_time_limit(0);
 // where does the data come from ? In real world this would be a SQL query or something
@@ -34,7 +33,7 @@ if ( $datasource && $actsource ){
     if ( count($files) ){
       $res = [];
       foreach ( $files as $f ){
-        if ( $ar = json_decode(file_get_contents($f)) ){
+        if ( $ar = json_decode(file_get_contents($f), true) ){
           $res[] = $ar;
         }
         unlink($f);

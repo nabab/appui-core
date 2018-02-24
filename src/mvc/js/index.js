@@ -521,6 +521,15 @@ if ( bbn.tasks === undefined ){
   };
 }*/
 
+bbn.vue.setComponentRule(data.root + 'components/', 'appui');
+bbn.vue.addComponent('popup/iconpicker', [{
+  data(){
+    return {
+      root: data.root
+    }
+  }
+}]);
+bbn.vue.unsetComponentRule();
 
 bbn.vue.setDefaultComponentRule('components/', 'apst');
 bbn.vue.addComponent('widget/adh');
@@ -539,6 +548,7 @@ bbn.vue.addComponent('widget/stats');
 bbn.vue.addComponent('widget/svn');
 bbn.vue.addComponent('widget/user');
 bbn.vue.addComponent('widget/cotis-valid');
+bbn.vue.addComponent('widget/news');
 bbn.vue.addComponent('map');
 bbn.vue.addComponent('lieux_fusion');
 
@@ -788,6 +798,8 @@ window.appui = new Vue({
         icon: 'fa fa-dashboard'
       }
     ],
+    poller: false,
+    observers: [],
     shortcuts: data.shortcuts,
     isMounted: false,
     debug: false,
@@ -906,13 +918,22 @@ window.appui = new Vue({
         if ( timestamp ){
           obj.timestamp = timestamp;
         }
-        bbn.fn.ajax(data.root + 'poller', 'json', obj, null, (data) => {
-          this.polling = false;
+        obj.observers = this.observers;
+        this.poller = bbn.fn.ajax(data.root + 'poller', 'json', obj, null, (r) => {
           // put the data_from_file into #response
-          bbn.fn.log(data);
-          alert("ANSWER");
+          if ( r.data ){
+            for ( d of r.data ){
+              if ( d.observers ){
+                for ( o of d.observers ){
+                  appui.$emit('bbnObs' + o.id, o.value);
+                }
+              }
+            }
+            bbn.fn.log(r.data);
+            //appui.success("<div>ANSWER</div><code>" + JSON.stringify(r.data) + '</code>', 5);
+          }
           // call the function again, this time with the timestamp we just got from server.php
-          this.poll(data.timestamp);
+          this.polling = false;
         }, () => {
           this.polling = false;
         });
@@ -929,5 +950,21 @@ window.appui = new Vue({
         }, 10000)
       })
     }, 2000);
+  },
+  watch: {
+    polling(newVal){
+      if ( !newVal ){
+        if ( this.poller && bbn.fn.isFunction(this.poller.abort) ){
+          this.poller.abort();
+        }
+        this.poll();
+      }
+    },
+    observers: {
+      deep: true,
+      handler(){
+        this.polling = false;
+      }
+		}
   }
 });
