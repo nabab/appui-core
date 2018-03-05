@@ -1,282 +1,4 @@
 /* jslint esversion: 6 */
-window.apst = {
-
-  statuts: {
-    radie: "Radié",
-    adherent: "Adhérent",
-    groupe: "Groupe",
-    prospect: "Prospect"
-  },
-
-  historique_type: function(d){
-    var op;
-    if ( (typeof(d.operation) !== 'undefined') &&
-      (op = bbn.fn.get_row(apst.historiques, "value", d.operation)) ){
-      return '<span style="color:' + op.color + '">' + op.text + '</span>';
-    }
-    return "";
-  },
-
-  historiques: [{
-    text: "Insertion",
-    value: "INSERT",
-    color: "green"
-  },{
-    text: "Modification",
-    value: "UPDATE",
-    color: "blue"
-  },{
-    text: "Suppression",
-    value: "DELETE",
-    color: "red"
-  },{
-    text: "Restauration",
-    value: "RESTORE",
-    color: "orange"
-  }],
-
-  fnom: function(inf){
-    var r = '';
-    if ( inf.civilite && inf.civilite !== 'I' ){
-      r += inf.civilite + ' ';
-    }
-    r += inf.nom;
-    if ( inf.prenom ){
-      r += ' ' + inf.prenom;
-    }
-    return r;
-  },
-
-  frcs: function(rcs){
-    rcs = rcs.toString();
-    if ( rcs.length === 9 ){
-      return rcs.substr(0, 3) + ' ' + rcs.substr(3, 3) + ' ' + rcs.substr(6);
-    }
-    return rcs;
-  },
-
-  fimmat: function(im){
-    if ( !im ){
-      return "En cours";
-    }
-    im = im.toString();
-    if ( im.length === 11 ){
-      return im.substr(0, 2) + ' ' + im.substr(2, 3) + ' ' + im.substr(5, 2) + ' ' + im.substr(7);
-    }
-    return im;
-  },
-
-  // Adresse complète multilignes
-  fadresse: function(inf){
-    var r = '';
-    if ( inf.adresse ){
-      r += inf.adresse.replace("\n", "<br>") + '<br>';
-    }
-    if ( inf.cp ){
-      r += inf.cp + ' ';
-    }
-    if ( inf.ville ){
-      r += inf.ville;
-    }
-    return r;
-  },
-
-  // Adresse pour dropdowns
-  ladresse: function(inf){
-    var r = '';
-    r += inf.adresse.length > 20 ? inf.adresse.substr(0, 20) + '...' : inf.adresse;
-    if ( inf.cp && inf.ville ){
-      r += ' ' + inf.cp + ' ' + inf.ville;
-    }
-    return r;
-  },
-
-  templates: {},
-
-  get_template: function(name){
-    if ( !this.templates[name] ){
-      this.templates[name] = kendo.template($("#tpl-" + name).html());
-    }
-    return this.templates[name];
-  },
-
-  js_pattern: new RegExp('^/(.+)/$'),
-
-  calcul_cgar: function(d){
-    var s = [], r = {};
-    $.each(apst.filtre_cgar(d), function(i, a){
-      if ( !r[a.type] ){
-        r[a.type] = parseInt(a.montant);
-      }
-      else{
-        r[a.type] += parseInt(a.montant);
-      }
-    });
-    for ( var i in r ){
-      s.push({type:i, montant: r[i]});
-    }
-    return s;
-  },
-
-  filtre_cgar: function(d){
-    var s = [];
-    $.each(d, function(i, a){
-      var dt = new Date();
-      if ( !a.fin || dt.parseSQL(a.fin).isAfter() ){
-        s.push(a);
-      }
-    });
-    return s;
-  },
-
-  link_email: function(em){
-    return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
-  },
-
-  getAdhObj: function(ele){
-    return ele ? ele.closest("div.fiche_adherent").data("adherent") : $("div.fiche_adherent:visible").data("adherent");
-  },
-
-  get_adhID: function(ele){
-    var div = ele ? ele.closest("div.fiche_adherent") : $("div.fiche_adherent:visible");
-    return div.length ? div.data("adherent").id : false;
-  },
-
-  utilisateur: function(id){
-    return bbn.fn.get_field(appui.apst.users, "value", id, "text") || "Inconnu!";
-  },
-
-  champ_recherche: function($ele){
-    $ele.kendoComboBox({
-      minLength: 1,
-      placeholder: "Recherche",
-      dataValueField: "id",
-      dataTextField: "nom",
-      delay: 500,
-      filter: "contains",
-      autoBind: false,
-      change : function (e) {
-        if (this.value() && this.selectedIndex == -1) {
-          var dt = this.dataSource._data[1];
-          this.value("");
-        }
-        return 1;
-      },
-      template: function(d){
-        return '<div  class="' + d.statut + '"><h4>' + d.nom + ' <em>' + d.immatriculation + '</em></h4><p>' + d.match + '</p></div>';
-      },
-      dataSource: new kendo.data.DataSource({
-        serverFiltering: true,
-        serverGrouping: true,
-        transport: {
-          read: function(e){
-            bbn.fn.log(e);
-            var v = false;
-            try {
-              v = e.data.filter.filters[0].value;
-            }
-            catch (e){
-              v = $ele.val();
-            }
-            if ( (typeof(v) === 'string') && ( v.isInteger() || (v.length > 2)) ){
-              bbn.fn.post("adherents", {value: v}, function(d){
-                if ( d && d.data ){
-                  e.success(d.data);
-                }
-                else{
-                  e.success([]);
-                }
-              });
-            }
-            else{
-              e.success([]);
-            }
-          }
-        }
-      })
-    });
-  },
-
-  is_actif: function(statut, prospect){
-    if ( (statut === 'prospect') && prospect ){
-      let idx = bbn.fn.search(appui.options.prospect, {value: prospect});
-      if ( (idx > -1) && ($.inArray(appui.options.prospect[idx].code, ['accepte', 'reserve', 'en_cours']) === -1) ){
-        return false;
-      }
-    }
-    if ( statut === 'radie' ){
-      return false;
-    }
-    return true;
-  },
-
-  get_couleur: function(statut, prospect){
-    switch ( statut ){
-      case "adherent":
-        return "#00BD00";
-      case "groupe":
-        return "#06A6A8";
-      case "radie":
-        return "#AC0606";
-      case "prospect":
-        if ( prospect && !apst.is_actif(statut, prospect) ){
-          return "#CC6633";
-        }
-        return "#A78C2B";
-    }
-  },
-
-  get_adherent_class: function(statut, prospect){
-    switch ( statut ){
-      case "adherent":
-        return "adherent";
-      case "groupe":
-        return "groupe";
-      case "radie":
-        return "radie";
-      case "prospect":
-        if ( prospect && !apst.is_actif(statut, prospect) ){
-          return "prospectold";
-        }
-        return "prospect";
-    }
-  },
-
-  chartChange: function(e){
-    var type = $("#As9275dK2D45gm2C0JSS033sd").data("kendoDropDownList");
-    bbn.fn.post("home_chart", {type: type.value()}, function(d){
-      if ( d.data ){
-        //chart.dataSource.data(d.data);
-        appui.home.set("stats", d);
-      }
-    });
-  },
-
-  userName: function(id){
-    return bbn.fn.get_field(appui.users, "value", id, "text");
-  },
-
-  userGroup: function(id){
-    return bbn.fn.get_field(appui.users, "value", id, "id_group");
-  },
-
-  userAvatar: function(id){
-    var av = bbn.fn.get_field(appui.apst.users, "value", id, "avatar");
-    return av ? av : bbn.var.defaultAvatar;
-  },
-
-  userAvatarImg: function(id){
-    var av = apst.userAvatar(id),
-        name = apst.userName(id);
-    return '<span class="appui-avatar"><img src="' + av + '" alt="' + name + '" title="' + name + '"></span>';
-  },
-
-  userFull: function(id){
-    var user = bbn.fn.get_row(appui.apst.users, "value", id);
-    return '<span class="appui-avatar"><img src="' + user.avatar + '" alt="' + user.text + '"> ' + user.text + '</span>';
-  }
-};
-
 bbn.fn.init({
   env: {
     lang: "fr",
@@ -501,60 +223,7 @@ bbn.fn.init({
   },
   opt: data.options
 });
-
-/*
-bbn.opt._cat = data.options_categories;
-
-appui.apst.suiveurs = $.grep(appui.apst.users, function(v){
-  return (v.id_group === 7) || (v.id_group === 8);
-});
-*/
-bbn.var.defaultAvatar = "data.defaultAvatar";
-/*
-if ( bbn.tasks === undefined ){
-  bbn.tasks = {
-    priority_colors: ['#F00', '#F40', '#F90', '#FC0', '#9B3', '#7A4', '#5A5', '#396', '#284', '#063'],
-    categories: data.task_categories,
-    states: data.task_states,
-    roles: data.task_roles,
-    options: data.task_options,
-  };
-}*/
-
-bbn.vue.setComponentRule(data.root + 'components/', 'appui');
-bbn.vue.addComponent('popup/iconpicker', [{
-  data(){
-    return {
-      root: data.root
-    }
-  }
-}]);
-bbn.vue.unsetComponentRule();
-
-bbn.vue.setDefaultComponentRule('components/', 'apst');
-bbn.vue.addComponent('widget/adh');
-bbn.vue.addComponent('widget/link');
-bbn.vue.addComponent('widget/lieu');
-bbn.vue.addComponent('widget/tier');
-bbn.vue.addComponent('widget/bug');
-bbn.vue.addComponent('widget/cgar');
-bbn.vue.addComponent('widget/doc');
-bbn.vue.addComponent('widget/dossiers');
-bbn.vue.addComponent('widget/modifs');
-bbn.vue.addComponent('widget/msg');
-bbn.vue.addComponent('widget/note');
-bbn.vue.addComponent('widget/pdt');
-bbn.vue.addComponent('widget/stats');
-bbn.vue.addComponent('widget/svn');
-bbn.vue.addComponent('widget/user');
-bbn.vue.addComponent('widget/cotis-valid');
-bbn.vue.addComponent('widget/news');
-bbn.vue.addComponent('map');
-bbn.vue.addComponent('lieux_fusion');
-
-
 $.extend(bbn.lng, data.lng);
-
 $.extend(bbn.env, {
   pages: [],
   logging: data.is_dev || data.is_test ? true : false,
@@ -564,36 +233,9 @@ $.extend(bbn.env, {
   wp_url: data.wp_url,
   userId: data.user_id,
   groupId: data.group_id,
-  userName: data.username
+  userName: data.username,
+  token: data.token
 });
-
-/*
-bbn.fn.log("DATA", data);
-const store = new Vuex.Store({
-  state: {a
-    lang: "fr",
-    opt: data.options,
-    notifications: [],
-    loading: []
-  },
-  mutations: {
-    addNotification(state, msg, type){
-      state.notifications.push({
-        msg: msg,
-        type: type ? type : 'info'
-      });
-    },
-    addLoading(msg, id){
-      state.loading.push({
-        file: msg,
-        id: id
-      });
-    },
-
-  }
-});
-*/
-
 bbn.users = data.users;
 bbn.groups = data.groups;
 
@@ -615,73 +257,16 @@ window.adherentAPSTMixin = {
   }
 };
 
-window.appui = new Vue({
-  mixins: [bbn.vue.resizerComponent],
-  el: '#appui',
+new Vue({
+  el: 'div.appui',
   data: {
-    width: 0,
-    height: 0,
-    popups: [],
-    vlist: [],
-    polling: false,
-    pollingErrors: 0,
-    url: bbn.env.path,
+    root: data.root,
     users: data.users,
     options: $.extend(data.options, {tasks: data.tasks}),
-    widgets: {},
-    notifications: [],
-    menuOpened: false,
-    themes: [
-      {
-        "value": "uniform",
-        "text": "Uniform"
-      }, {
-        "value": "black",
-        "text": "Black"
-      }, {
-        "value": "blueopal",
-        "text": "Blue Opal"
-      }, {
-        "value": "bootstrap",
-        "text": "Bootstrap"
-      }, {
-        "value": "default",
-        "text": "Default"
-      }, {
-        "value": "fiori",
-        "text": "Fiori"
-      }, {
-        "value": "flat",
-        "text": "Flat"
-      }, {
-        "value": "highcontrast",
-        "text": "High Contrast"
-      }, {
-        "value": "material",
-        "text": "Material"
-      }, {
-        "value": "materialblack",
-        "text": "Material Black"
-      }, {
-        "value": "metro",
-        "text": "Metro"
-      }, {
-        "value": "metroblack",
-        "text": "Metro Black"
-      }, {
-        "value": "moonlight",
-        "text": "Moonlight"
-      }, {
-        "value": "nova",
-        "text": "Nova"
-      }, {
-        "value": "office365",
-        "text": "Office 365"
-      }, {
-        "value": "silver",
-        "text": "Silver"
-      }
-    ],
+    menus: data.menus,
+    currentMenu: data.current_menu,
+    shortcuts: data.shortcuts,
+    logo: data.logo,
     leftShortcuts: [
       {
         url: 'dashboard',
@@ -716,79 +301,6 @@ window.appui = new Vue({
         icon: 'fa fa-sign-out'
       }
     ],
-    editorCfg: {
-      encoded: false,
-      tools: [
-        "bold",
-        "italic",
-        "underline",
-        "strikethrough",
-        "justifyLeft",
-        "justifyCenter",
-        "justifyRight",
-        "justifyFull",
-        "insertUnorderedList",
-        "insertOrderedList",
-        "indent",
-        "outdent",
-        "createLink",
-        "unlink",
-        "insertImage",
-        "subscript",
-        "superscript",
-        "createTable",
-        "addRowAbove",
-        "addRowBelow",
-        "addColumnLeft",
-        "addColumnRight",
-        "deleteRow",
-        "deleteColumn",
-        "viewHtml",
-        "formatting",
-        "fontName",
-        "fontSize",
-        "foreColor",
-        "backColor"
-      ]
-    },
-    apst: {
-      mois: [
-        {value:1, text: "janvier"},
-        {value:2, text: "février"},
-        {value:3, text: "mars"},
-        {value:4, text: "avril"},
-        {value:5, text: "mai"},
-        {value:6, text: "juin"},
-        {value:7, text: "juillet"},
-        {value:8, text: "août"},
-        {value:9, text: "septembre"},
-        {value:10, text: "octobre"},
-        {value:11, text: "novembre"},
-        {value:12, text: "décembre"},
-      ],
-      modeles_courriers: data.modeles_courriers,
-      justificatifs: data.justificatifs,
-      justificatif_defaut: data.justificatif_defaut,
-      bureaux: data.bureaux,
-      statuts: data.statuts,
-      tables: data.tables,
-      civs: data.civs,
-      pdf_cfg: data.pdf_cfg,
-      roles: data.roles,
-      docs: data.docs,
-      groups: data.groups,
-      expertises: data.expertises,
-      userid: data.userid,
-      username: data.username,
-      departements: data.departements,
-      regions: data.regions,
-      champs_dva: data.champs_dva,
-      champs: data.champs
-    },
-    search: "",
-    searchPlaceholder: "Rechercher par ID, nom, marque, adresse, contact, email, etc...",
-    menus: data.menus,
-    currentMenu: data.current_menu,
     list: [
       {
         url: "dashboard",
@@ -798,173 +310,317 @@ window.appui = new Vue({
         icon: 'fa fa-dashboard'
       }
     ],
-    poller: false,
-    observers: [],
-    shortcuts: data.shortcuts,
-    isMounted: false,
-    debug: false,
-    isOverDebug: false,
-    fisheyeMounted: false,
-    menuMounted: false
-  },
-  methods: {
-    popup(obj){
-      if ( !obj ){
-        return this.$refs.popup;
-      }
-      return this.$refs.popup.open.apply(this, arguments);
-    },
-
-    loadPopup(obj){
-      return this.$refs.popup.load.apply(this, arguments);
-    },
-
-    userName(d){
-      return bbn.fn.get_field(this.users, "value", ($.type(d) === 'object') && d.id ? d.id : d, "text");
-    },
-
-    userGroup(d){
-      return bbn.fn.get_field(this.users, "value", ($.type(d) === 'object') && d.id ? d.id : d, "id_group");
-    },
-
-    notify(obj, type, timeout){
-      return this.$refs.notification.show(obj, type, timeout);
-    },
-
-    error(obj, timeout){
-      return this.$refs.notification.error(obj, timeout);
-    },
-
-    warning(obj, timeout){
-      return this.$refs.notification.warning(obj, timeout);
-    },
-
-    success(obj, timeout){
-      return this.$refs.notification.success(obj, timeout);
-    },
-
-    info(obj, timeout){
-      return this.$refs.notification.info(obj, timeout);
-    },
-
-    confirm(){
-      return bbn.fn.confirm.apply(bbn, arguments);
-    },
-
-    alert(){
-      return bbn.fn.alert.apply(bbn, arguments);
-    },
-
-    focusSearch(){
-      let $ele = $(this.$refs.search.$refs.element),
-          $parent = $(this.$refs.search.$el).closest("div.bbn-block"),
-          w = $parent.width() + $parent.next().width() - 40;
-      $ele
-        .attr("placeholder", this.searchPlaceholder)
-        .animate({
-          width: w
-        });
-    },
-
-    blurSearch(e){
-      let $ele = $(this.$refs.search.$refs.element);
-      if ( parseInt($ele.css("maxWidth")) !== 30 ){
-        $ele.animate({
-          width: 30
-        }, function (){
-          $ele.val("").attr("placeholder", "?");
-        })
-      }
-    },
-
-    tplSearch(d){
-      let maxW = $(this.$refs.search.$el).width();
-      return '<div class="bbn-hpadded bbn-nl ' +
-        apst.get_adherent_class(d.statut, d.statut_prospect ? d.statut_prospect : '') +
-        '"><div class="bbn-block-left"><h3>' + d.nom + ' <em>' +
-        ( d.immatriculation ? d.immatriculation : d.statut ) +
-        ' ID: ' + d.id + '</em></h3></div><div class="bbn-block-right bbn-h-100 bbn-r" style="display: table"><span style="display: table-cell; vertical-align: middle">' +
-        d.match + '</span></div></div>';
-    },
-
-    selectSearch(id, event){
-      bbn.fn.log("selectSearch", data);
-      let $ele = $(this.$refs.search.$el);
-      if ( id ){
-        this.$refs.search.widget.close();
-        $(this.$refs.search.$el).val("").attr("placeholder", "?").focus();
-        bbn.fn.link("adherent/fiche/" + id + "/infos");
-        appui.search = "";
-        $ele.trigger("blur");
-      }
-    },
-
-    measure(){
-      /*
-      let w = $(this.$el).width(),
-          h = $(this.$el).height();
-      if ( w && h && ((w !== this.width) || (h !== this.height)) ){
-        this.width = w;
-        this.height = h;
-        this.$emit("resize", {width: this.width, height: this.height});
-      }
-      */
-    },
-
-    poll(timestamp){
-      if ( !this.polling ){
-        this.polling = true;
-        let obj = {mode: 'json'};
-        if ( timestamp ){
-          obj.timestamp = timestamp;
+    app: {
+      data(){
+        return {
+          statuts: {
+            radie: "Radié",
+            adherent: "Adhérent",
+            groupe: "Groupe",
+            prospect: "Prospect"
+          },
+          mois: [
+            {value: 1, text: "janvier"},
+            {value: 2, text: "février"},
+            {value: 3, text: "mars"},
+            {value: 4, text: "avril"},
+            {value: 5, text: "mai"},
+            {value: 6, text: "juin"},
+            {value: 7, text: "juillet"},
+            {value: 8, text: "août"},
+            {value: 9, text: "septembre"},
+            {value: 10, text: "octobre"},
+            {value: 11, text: "novembre"},
+            {value: 12, text: "décembre"},
+          ],
+          modeles_courriers: data.modeles_courriers,
+          justificatifs: data.justificatifs,
+          justificatif_defaut: data.justificatif_defaut,
+          bureaux: data.bureaux,
+          statuts: data.statuts,
+          tables: data.tables,
+          civs: data.civs,
+          pdf_cfg: data.pdf_cfg,
+          roles: data.roles,
+          docs: data.docs,
+          groups: data.groups,
+          expertises: data.expertises,
+          userid: data.userid,
+          username: data.username,
+          departements: data.departements,
+          regions: data.regions,
+          champs_dva: data.champs_dva,
+          champs: data.champs,
+          historiques: [{
+            text: "Insertion",
+            value: "INSERT",
+            color: "green"
+          },{
+            text: "Modification",
+            value: "UPDATE",
+            color: "blue"
+          },{
+            text: "Suppression",
+            value: "DELETE",
+            color: "red"
+          },{
+            text: "Restauration",
+            value: "RESTORE",
+            color: "orange"
+          }]
         }
-        obj.observers = this.observers;
-        this.poller = bbn.fn.ajax(data.root + 'poller', 'json', obj, null, (r) => {
-          // put the data_from_file into #response
-          if ( r.data ){
-            for ( d of r.data ){
-              if ( d.observers ){
-                for ( o of d.observers ){
-                  appui.$emit('bbnObs' + o.id, o.value);
+      },
+      methods: {
+        historique_type: function(d){
+          var op;
+          if ( (typeof(d.operation) !== 'undefined') &&
+            (op = bbn.fn.get_row(this.historiques, "value", d.operation)) ){
+            return '<span style="color:' + op.color + '">' + op.text + '</span>';
+          }
+          return "";
+        },
+
+        fnom: function(inf){
+          var r = '';
+          if ( inf.civilite && inf.civilite !== 'I' ){
+            r += inf.civilite + ' ';
+          }
+          r += inf.nom;
+          if ( inf.prenom ){
+            r += ' ' + inf.prenom;
+          }
+          return r;
+        },
+
+        frcs: function(rcs){
+          rcs = rcs.toString();
+          if ( rcs.length === 9 ){
+            return rcs.substr(0, 3) + ' ' + rcs.substr(3, 3) + ' ' + rcs.substr(6);
+          }
+          return rcs;
+        },
+
+        fimmat: function(im){
+          if ( !im ){
+            return "En cours";
+          }
+          im = im.toString();
+          if ( im.length === 11 ){
+            return im.substr(0, 2) + ' ' + im.substr(2, 3) + ' ' + im.substr(5, 2) + ' ' + im.substr(7);
+          }
+          return im;
+        },
+
+        // Adresse complète multilignes
+        fadresse: function(inf){
+          var r = '';
+          if ( inf.adresse ){
+            r += inf.adresse.replace("\n", "<br>") + '<br>';
+          }
+          if ( inf.cp ){
+            r += inf.cp + ' ';
+          }
+          if ( inf.ville ){
+            r += inf.ville;
+          }
+          return r;
+        },
+
+        // Adresse pour dropdowns
+        ladresse: function(inf){
+          var r = '';
+          r += inf.adresse.length > 20 ? inf.adresse.substr(0, 20) + '...' : inf.adresse;
+          if ( inf.cp && inf.ville ){
+            r += ' ' + inf.cp + ' ' + inf.ville;
+          }
+          return r;
+        },
+
+        templates: {},
+
+        get_template: function(name){
+          if ( !this.templates[name] ){
+            this.templates[name] = kendo.template($("#tpl-" + name).html());
+          }
+          return this.templates[name];
+        },
+
+        js_pattern: new RegExp('^/(.+)/$'),
+
+          calcul_cgar: function(d){
+          var s = [], r = {};
+          $.each(this.filtre_cgar(d), function(i, a){
+            if ( !r[a.type] ){
+              r[a.type] = parseInt(a.montant);
+            }
+            else{
+              r[a.type] += parseInt(a.montant);
+            }
+          });
+          for ( var i in r ){
+            s.push({type:i, montant: r[i]});
+          }
+          return s;
+        },
+
+        filtre_cgar: function(d){
+          var s = [];
+          $.each(d, function(i, a){
+            var dt = new Date();
+            if ( !a.fin || dt.parseSQL(a.fin).isAfter() ){
+              s.push(a);
+            }
+          });
+          return s;
+        },
+
+        link_email: function(em){
+          return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
+        },
+
+        getAdhObj: function(ele){
+          return ele ? ele.closest("div.fiche_adherent").data("adherent") : $("div.fiche_adherent:visible").data("adherent");
+        },
+
+        get_adhID: function(ele){
+          var div = ele ? ele.closest("div.fiche_adherent") : $("div.fiche_adherent:visible");
+          return div.length ? div.data("adherent").id : false;
+        },
+
+        utilisateur: function(id){
+          return bbn.fn.get_field(this.users, "value", id, "text") || "Inconnu!";
+        },
+
+        champ_recherche: function($ele){
+          $ele.kendoComboBox({
+            minLength: 1,
+            placeholder: "Recherche",
+            dataValueField: "id",
+            dataTextField: "nom",
+            delay: 500,
+            filter: "contains",
+            autoBind: false,
+            change : function (e) {
+              if (this.value() && this.selectedIndex == -1) {
+                var dt = this.dataSource._data[1];
+                this.value("");
+              }
+              return 1;
+            },
+            template: function(d){
+              return '<div  class="' + d.statut + '"><h4>' + d.nom + ' <em>' + d.immatriculation + '</em></h4><p>' + d.match + '</p></div>';
+            },
+            dataSource: new kendo.data.DataSource({
+              serverFiltering: true,
+              serverGrouping: true,
+              transport: {
+                read: function(e){
+                  bbn.fn.log(e);
+                  var v = false;
+                  try {
+                    v = e.data.filter.filters[0].value;
+                  }
+                  catch (e){
+                    v = $ele.val();
+                  }
+                  if ( (typeof(v) === 'string') && ( v.isInteger() || (v.length > 2)) ){
+                    bbn.fn.post("adherents", {value: v}, function(d){
+                      if ( d && d.data ){
+                        e.success(d.data);
+                      }
+                      else{
+                        e.success([]);
+                      }
+                    });
+                  }
+                  else{
+                    e.success([]);
+                  }
                 }
               }
+            })
+          });
+        },
+
+        is_actif: function(statut, prospect){
+          if ( (statut === 'prospect') && prospect ){
+            let idx = bbn.fn.search(appui.options.prospect, {value: prospect});
+            if ( (idx > -1) && ($.inArray(appui.options.prospect[idx].code, ['accepte', 'reserve', 'en_cours']) === -1) ){
+              return false;
             }
-            bbn.fn.log(r.data);
-            //appui.success("<div>ANSWER</div><code>" + JSON.stringify(r.data) + '</code>', 5);
           }
-          // call the function again, this time with the timestamp we just got from server.php
-          this.polling = false;
-        }, () => {
-          this.polling = false;
-        });
+          if ( statut === 'radie' ){
+            return false;
+          }
+          return true;
+        },
+
+        get_couleur: function(statut, prospect){
+          switch ( statut ){
+            case "adherent":
+              return "#00BD00";
+            case "groupe":
+              return "#06A6A8";
+            case "radie":
+              return "#AC0606";
+            case "prospect":
+              if ( prospect && !this.is_actif(statut, prospect) ){
+                return "#CC6633";
+              }
+              return "#A78C2B";
+          }
+        },
+
+        get_adherent_class: function(statut, prospect){
+          switch ( statut ){
+            case "adherent":
+              return "adherent";
+            case "groupe":
+              return "groupe";
+            case "radie":
+              return "radie";
+            case "prospect":
+              if ( prospect && !this.is_actif(statut, prospect) ){
+                return "prospectold";
+              }
+              return "prospect";
+          }
+        },
+
+        chartChange: function(e){
+          var type = $("#As9275dK2D45gm2C0JSS033sd").data("kendoDropDownList");
+          bbn.fn.post("home_chart", {type: type.value()}, function(d){
+            if ( d.data ){
+              //chart.dataSource.data(d.data);
+              //appui.home.set("stats", d);
+            }
+          });
+        },
+
+        userName: function(id){
+          return bbn.fn.get_field(appui.users, "value", id, "text");
+        },
+
+        userGroup: function(id){
+          return bbn.fn.get_field(appui.users, "value", id, "id_group");
+        },
+
+        userAvatar: function(id){
+          var av = bbn.fn.get_field(this.users, "value", id, "avatar");
+          return av ? av : bbn.var.defaultAvatar;
+        },
+
+        userAvatarImg: function(id){
+          var av = this.userAvatar(id),
+              name = this.userName(id);
+          return '<span class="appui-avatar"><img src="' + av + '" alt="' + name + '" title="' + name + '"></span>';
+        },
+
+        userFull: function(id){
+          var user = bbn.fn.get_row(this.users, "value", id);
+          return '<span class="appui-avatar"><img src="' + user.avatar + '" alt="' + user.text + '"> ' + user.text + '</span>';
+        }
       }
     }
   },
-  mounted(){
-    this.isMounted = true;
-    this.$emit('resize');
-    setTimeout(() => {
-      $(this.$el).animate({opacity: 1}, 'slow', () => {
-        setTimeout(() => {
-          this.poll();
-        }, 10000)
-      })
-    }, 2000);
-  },
-  watch: {
-    polling(newVal){
-      if ( !newVal ){
-        if ( this.poller && bbn.fn.isFunction(this.poller.abort) ){
-          this.poller.abort();
-        }
-        this.poll();
-      }
-    },
-    observers: {
-      deep: true,
-      handler(){
-        this.polling = false;
-      }
-		}
-  }
 });

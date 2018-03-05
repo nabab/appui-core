@@ -52,124 +52,19 @@
   </style>
 </head>
 <body>
-<div id="appui" class="bbn-full-screen" style="width: 100%; height: 100%; opacity: 0;">
-  <bbn-splitter orientation="vertical" ref="splitter" v-if="isMounted">
-    <bbn-pane :size="50" :scrollable="false" ref="head" overflow="visible">
-      <div class="k-header bbn-w-100 bbn-h-100 bbn-flex-width">
-        <div class="bbn-block bbn-h-100 bbn-middle bbn-menu-button-container" style="width: 70px">
-          <bbn-menu-button v-if="menuMounted"
-                           class="bbn-xxxl"
-                           menu="$root.$refs.menu">
-          </bbn-menu-button>
-        </div>
-        <div class="bbn-block bbn-h-100 bbn-vmiddle" style="width: 70px">
-          <div class="bbn-global-search bbn-vmiddle bbn-lg">
-            <bbn-autocomplete id="recherche"
-                              :delay="500"
-                              source-text="nom"
-                              source-value="id"
-                              :clear-button="false"
-                              :suggest="true"
-                              source="adherents"
-                              ref="search"
-                              placeholder="?"
-                              v-model="search"
-                              @focus="focusSearch"
-                              icon="fa fa-search"
-                              @blur="blurSearch"
-                              @change="selectSearch"
-                              :min-length="1"
-                              :template="tplSearch"
-                              style="z-index: 10">
-            </bbn-autocomplete>
-          </div>
-        </div>
-        <div class="bbn-h-100 bbn-splitter-top-center bbn-flex-fill">
-          <bbn-fisheye del-url="menu/shortcuts/delete"
-                       ins-url="menu/shortcuts/insert"
-                       :min-index="3"
-                       :z-index="3"
-                       ref="fisheye"
-                       :source="shortcuts"
-                       :fixed-left="leftShortcuts"
-                       :fixed-right="rightShortcuts"
-                       @ready="fisheyeMounted = true">
-          </bbn-fisheye>
-        </div>
-        <div class="bbn-block bbn-h-100 bbn-logo-container" style="width: 140px">
-          <div class="apst-logo bbn-100 bbn-r">
-            <img src="<?=$static_path?>img/logo.png" border="0" class="bbn-h-90">
-          </div>
-        </div>
-        <div v-if="debug"
-             class="k-widget"
-             :style="{
-               position: 'absolute',
-               top: '0px',
-               right: '0px',
-               width: isOverDebug ? 'auto' : '200px',
-               height: isOverDebug ? 'auto' : '200px',
-               minWidth: '200px',
-               minHeight: '200px',
-               maxWidth: '200px',
-               maxHeight: 'px',
-               overflow: isOverDebug ? 'auto' : 'hidden'
-             }"
-             @mouseenter="isOverDebug = true"
-             @mouseleave="isOverDebug = false">
-          <h2>Debug...</h2>
-        </div>
-      </div>
-    </bbn-pane>
-    <bbn-pane ref="main">
-      <bbn-tabnav :autoload="true"
-                  :source="list"
-                  ref="tabnav">
-      </bbn-tabnav>
-    </bbn-pane>
-    <bbn-pane :size="25"
-              :scrollable="false"
-              ref="foot"
-              class="k-header"
-              overflow="visible">
-      <div class="bbn-w-50 bbn-h-100">
-        <bbn-loading ref="loading"></bbn-loading>
-      </div>
-      <div class="bbn-w-50 bbn-h-100">
-        &nbsp;
-      </div>
-    </bbn-pane>
-  </bbn-splitter>
-  <bbn-treemenu source="menu/data"
-                v-if="fisheyeMounted"
-                ref="menu"
-                :menus="menus"
-                :current="currentMenu"
-                :top="50"
-                style="width: 350px"
-                :shortcuts="$refs.fisheye"
-                @ready="menuMounted = true">
-  </bbn-treemenu>
-  <bbn-popup :source="popups" ref="popup" :z-index="14"></bbn-popup>
-  <bbn-notification ref="notification"></bbn-notification>
-  <bbn-vlist v-for="(li, idx) in vlist"
-             :key="idx"
-             :left="li.left"
-             :top="li.top"
-             :right="li.right"
-             :bottom="li.bottom"
-             @close="vlist.splice(idx, 1)"
-             :source="li.items"
-             :unique="li.unique ? true : false">
-  </bbn-vlist>
-  <div class="w3-sidebar w3-bar-block w3-card w3-animate-right"
-       style="display:none; width: 50%; right:0; z-index: 1000"
-       id="rightMenu">
-    <button onclick="$(this).parent().hide()" class="w3-bar-item w3-button w3-large">Close &times;</button>
-    <a href="#" class="w3-bar-item w3-button">Link 1</a>
-    <a href="#" class="w3-bar-item w3-button">Link 2</a>
-    <a href="#" class="w3-bar-item w3-button">Link 3</a>
-  </div>
+<div class="appui bbn-full-screen" style="width: 100%; height: 100%">
+  <bbn-appui :cfg="app"
+             :root="root"
+             :users="users"
+             :options="options"
+             :observer="true"
+             :menus="menus"
+             :current-menu="currentMenu"
+             :shortcuts="shortcuts"
+             :logo-path="logo"
+             :left-shortcuts="leftShortcuts"
+             :right-shortcuts="rightShortcuts">
+  </bbn-appui>
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => 'fr',
