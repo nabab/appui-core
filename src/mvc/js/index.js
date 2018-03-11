@@ -61,10 +61,6 @@ bbn.fn.init({
       }
     },
 
-    money: function (m) {
-      return kendo.toString(parseInt(m), "n0");
-    },
-
     fdate: function (d, wrong_result) {
       var r;
       if ((typeof(d) === 'string') && (d.length > 5) && (d.substring(d.length - 5, d.length - 4) === '.')) {
@@ -256,7 +252,6 @@ window.adherentAPSTMixin = {
     }
   }
 };
-
 new Vue({
   el: 'div.appui',
   data: {

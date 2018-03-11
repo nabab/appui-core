@@ -4,20 +4,15 @@
  * User: BBN
  * Date: 25/11/2017
  * Time: 06:24
+ *
+ * @var $ctrl \bbn\mvc\controller
  */
 
-$theme = $ctrl->inc->user->get_session('theme');
-if ( !$theme ){
-  $theme = 'default';
-}
-$is_dev = $ctrl->inc->user->is_dev();
-$mgr = new \apst\manager($ctrl->inc->user);
 $menu = new \bbn\appui\menus();
-$current_menu = $menu->get_option_id('default', 'menus');
+$is_dev = $ctrl->inc->user->is_dev();
+
 $ctrl->data = [
-  'version' => '20170118',
   'site_url' => BBN_URL,
-  'site_title' => 'Intranet APST',
   'is_dev' => (bool)BBN_IS_DEV,
   'is_prod' => (bool)BBN_IS_PROD,
   'is_test' => (bool)BBN_IS_TEST,
@@ -25,35 +20,15 @@ $ctrl->data = [
   'static_path' => BBN_STATIC_PATH,
   'test' => BBN_IS_DEV ? 1 : 0,
   'year' => date('Y'),
-  'is_bootstrap' => $theme === 'bootstrap',
-  'is_material' => ($theme === 'material') || ($theme === 'materialblack'),
-  'theme' => $theme,
-  'ide_theme' => $ctrl->inc->session->get('ide_theme') ?: false,
   'user_id' => $ctrl->inc->user->get_id(),
   'group_id' => $ctrl->inc->user->get_group(),
-  'users' => $mgr->full_list(),
-  'groups' => $mgr->groups(),
+  'root' => APPUI_CORE_ROOT,
+  'current_menu' => $menu->get_option_id('default', 'menus'),
   'menus' => $is_dev ? $menu->get_options_menus() : [],
-  'current_menu' => $current_menu,
-  'is_dev' => $is_dev,
   'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
-  'root' => APPUI_CORE_ROOT
 ];
-/** @todo Put this in javascript in adherent (default config) */
-if ( !($tmp = $ctrl->inc->user->get_cfg('pdf_cfg')) ){
-  $tmp = [
-    "infos" => true,
-    "actionnariat" => true,
-    "succursales" => true,
-    "marques" => true,
-    "cgar" => true,
-    "pad" => true,
-    "finances" => true,
-  ];
-  $ctrl->inc->user->set_cfg(['pdf_cfg' => $tmp])->save_cfg();
-}
-$ctrl->data['pdf_cfg'] = $tmp;
-$ctrl->combo("Intranet APST", true);
+$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $ctrl->get_plugin_model('index', $ctrl->data));
+$ctrl->combo($ctrl->data['site_title'], true);
 /*
 echo "HELLO hey";
 $items = $ctrl->inc->options->items($ctrl->inc->options->get_root());

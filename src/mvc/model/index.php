@@ -1,7 +1,6 @@
 <?php
 /** @var \bbn\mvc\model $model */
-
-if ( defined('BBN_USER_TOKEN') ){
+if ( \defined('BBN_USER_TOKEN') ){
   $br_obj = new \apst\bureau($model->db);
   $lettre = new \bbn\appui\masks($model->db);
   $id_justificatifs = \bbn\appui\masks::get_option_id('LTJUS');

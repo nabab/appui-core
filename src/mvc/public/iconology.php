@@ -39,6 +39,8 @@ else {
   $ctrl->data['picker'] = (!empty($ctrl->arguments) && ($ctrl->arguments[0] === 'picker'));
   echo $ctrl
     ->set_title($ctrl->data['picker'] ? "Icon picker" : "Iconology")
+    ->set_color('purple', 'white')
+    ->set_icon('fa fa-image')
     ->add_js(['picker' => $ctrl->data['picker']])
     ->get_view();
 }
