@@ -55,7 +55,6 @@
 <div class="appui bbn-full-screen" style="width: 100%; height: 100%">
   <bbn-appui :cfg="app"
              :root="root"
-             :users="users"
              :options="options"
              :observer="true"
              :menus="menus"
@@ -72,9 +71,6 @@
   'test' => !!$test,
   'dirs' => 'APST-UI/css'
 ])?>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-css.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.7.5/beautify-html.min.js"></script>
 <?=$script?>
 </body>
 </html>

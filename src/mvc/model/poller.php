@@ -14,11 +14,19 @@
 set_time_limit(0);
 // where does the data come from ? In real world this would be a SQL query or something
 $now = time();
+
 if ( defined('BBN_USER_TOKEN_PATH') ){
   $id_user = $model->inc->user->get_id();
   $actsource = \bbn\file\dir::create_path(BBN_USER_TOKEN_PATH.'poller/active');
   $datasource = \bbn\file\dir::create_path(BBN_USER_TOKEN_PATH.'poller/queue');
   if ( $id_user && $datasource && $actsource ){
+    $hasChat = !empty($model->data['chat']);
+    if ( $hasChat ){
+      $user_system = new \bbn\user\users($model->db);
+      $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
+    }
+    $timer = new \bbn\util\timer();
+    $timer->start();
     $observer = new \bbn\appui\observer($model->db);
     if ( $files = \bbn\file\dir::get_files($actsource) ){
       foreach ( $files as $f ){
@@ -28,6 +36,7 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
     $active_file = $actsource.'/active_'.$now;
     // This file goes with the process
     file_put_contents($active_file, '1');
+
 
     $observers = [];
     // If observers are sent we check which ones are not used and delete them
@@ -49,6 +58,48 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
 
     // main loop
     while ( file_exists($active_file) ) {
+      
+      if ( $hasChat ){
+        $last = 0;
+        $chats = [];
+        if ( $timer->measure() < 1 ){
+          $chat_users = $user_system->online_list();
+          $chat_hash = md5(json_encode($chat_users));
+          $res = [];
+          if ( $chat_hash !== $model->data['usersHash'] ){
+            $res = [
+              'users' => $chat_users,
+              'hash' => $chat_hash
+            ];
+          }
+          $chats = $chat_system->get_chats();
+        }
+        if ( count($chats) ){
+          foreach ( $chats as $chat ){
+            if (
+              ($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) &&
+              count($msgs['messages'])
+            ){
+              if ( !isset($res['chats']) ){
+                $res['chats'] = [];
+                $res['last'] = 0;
+              }
+              $res['chats'][$chat] = $msgs;
+              $res['chats'][$chat]['participants'] = $chat_system->get_participants($chat);
+              $max = \bbn\x::max_with_key($msgs['messages'], 'time');
+              if ( \bbn\x::compare_floats($max, $res['last'], '>') ){
+                $res['last'] = $max;
+              }
+            }
+          }
+          if ( !empty($res['last']) ){
+            $res['last'] = ceil($res['last'] * 10000) / 10000;
+          }
+        }
+        if ( !empty($res) ){
+          return ['chat' => $res];
+        }
+      }
       // PHP caches file data by default. clearstatcache() clears that cache
       clearstatcache();
       // get files in the poller dir
@@ -61,7 +112,7 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
             if ( isset($ar['observers']) ){
               foreach ( $ar['observers'] as $o ){
                 $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
-                if ( true || !$value || ($value !== $o['value']) ){
+                if ( !$value || ($value !== $o['value']) ){
                   $returned_obs[] = $o;
                 }
               }
@@ -82,17 +133,15 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
           return ['data' => $res];
         }
       }
-      else {
-        // wait for 1 sec
-        sleep(1);
-        if ( !file_exists($active_file) ){
-          //die(var_dump($active_file, BBN_USER_PATH));
-        }
+      // wait for 1 sec
+      sleep(1);
+      if ( $timer->measure() > 10 ){
+        $timer->stop();
+        $timer->start();
+        $model->inc->user->update_activity();
       }
     }
-    die(var_dump("File does not exist", $active_file, $res));
+
+    //die(var_dump("File does not exist", $active_file, $res));
   }
-}
-else{
-  sleep(10);
 }

@@ -219,21 +219,16 @@ bbn.fn.init({
   },
   opt: data.options
 });
+bbn.fn.log(data);
 $.extend(bbn.lng, data.lng);
 $.extend(bbn.env, {
-  pages: [],
   logging: data.is_dev || data.is_test ? true : false,
   isDev: data.is_dev ? true : false,
   lang: "fr",
   siteTitle: data.site_title,
   wp_url: data.wp_url,
-  userId: data.user_id,
-  groupId: data.group_id,
-  userName: data.username,
   token: data.token
 });
-bbn.users = data.users;
-bbn.groups = data.groups;
 
 Vue.config.errorHandler = function (err, vm, info) {
   // handle error
@@ -256,7 +251,6 @@ new Vue({
   el: 'div.appui',
   data: {
     root: data.root,
-    users: data.users,
     options: $.extend(data.options, {tasks: data.tasks}),
     menus: data.menus,
     currentMenu: data.current_menu,
@@ -338,31 +332,38 @@ new Vue({
           pdf_cfg: data.pdf_cfg,
           roles: data.roles,
           docs: data.docs,
+          users: data.users,
           groups: data.groups,
           expertises: data.expertises,
-          userid: data.userid,
-          username: data.username,
+          userId: data.user_id,
           departements: data.departements,
           regions: data.regions,
           champs_dva: data.champs_dva,
           champs: data.champs,
-          historiques: [{
-            text: "Insertion",
-            value: "INSERT",
-            color: "green"
-          },{
-            text: "Modification",
-            value: "UPDATE",
-            color: "blue"
-          },{
-            text: "Suppression",
-            value: "DELETE",
-            color: "red"
-          },{
-            text: "Restauration",
-            value: "RESTORE",
-            color: "orange"
-          }]
+          historiques: [
+            {
+              text: "Insertion",
+              value: "INSERT",
+              color: "green"
+            },{
+              text: "Modification",
+              value: "UPDATE",
+              color: "blue"
+            },{
+              text: "Suppression",
+              value: "DELETE",
+              color: "red"
+            },{
+              text: "Restauration",
+              value: "RESTORE",
+              color: "orange"
+            }
+          ]
+        }
+      },
+      computed: {
+        userName(){
+          return bbn.fn.get_field(this.users, {value: this.userId}, 'text') || bbn._('Unnown')
         }
       },
       methods: {
@@ -442,7 +443,7 @@ new Vue({
 
         js_pattern: new RegExp('^/(.+)/$'),
 
-          calcul_cgar: function(d){
+        calcul_cgar: function(d){
           var s = [], r = {};
           $.each(this.filtre_cgar(d), function(i, a){
             if ( !r[a.type] ){
@@ -592,23 +593,12 @@ new Vue({
           });
         },
 
-        userName: function(id){
-          return bbn.fn.get_field(appui.users, "value", id, "text");
+        getUserName: function(id){
+          return bbn.fn.get_field(this.users, "value", id, "text");
         },
 
-        userGroup: function(id){
-          return bbn.fn.get_field(appui.users, "value", id, "id_group");
-        },
-
-        userAvatar: function(id){
-          var av = bbn.fn.get_field(this.users, "value", id, "avatar");
-          return av ? av : bbn.var.defaultAvatar;
-        },
-
-        userAvatarImg: function(id){
-          var av = this.userAvatar(id),
-              name = this.userName(id);
-          return '<span class="appui-avatar"><img src="' + av + '" alt="' + name + '" title="' + name + '"></span>';
+        getUserGroup: function(id){
+          return bbn.fn.get_field(this.users, "value", id, "id_group");
         },
 
         userFull: function(id){
