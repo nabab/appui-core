@@ -20,13 +20,19 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
   $actsource = \bbn\file\dir::create_path(BBN_USER_TOKEN_PATH.'poller/active');
   $datasource = \bbn\file\dir::create_path(BBN_USER_TOKEN_PATH.'poller/queue');
   if ( $id_user && $datasource && $actsource ){
+    $timer = new \bbn\util\timer();
+    $timer->start();
     $hasChat = !empty($model->data['chat']);
     if ( $hasChat ){
       $user_system = new \bbn\user\users($model->db);
       $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
     }
-    $timer = new \bbn\util\timer();
-    $timer->start();
+    if ( !empty($model->data['message']) && (!empty($model->data['message']['id_chat']) || !empty($model->data['message']['users'])) ){
+      $id_chat = empty($model->data['message']['id_chat']) ? $chat_system->get_chat_by_users($model->data['message']['users']) : $model->data['message']['id_chat'];
+      if ( $id_chat ){
+        $chat_system->talk($id_chat, $model->data['message']['text']);
+      }
+    }
     $observer = new \bbn\appui\observer($model->db);
     if ( $files = \bbn\file\dir::get_files($actsource) ){
       foreach ( $files as $f ){
@@ -58,7 +64,7 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
 
     // main loop
     while ( file_exists($active_file) ) {
-      
+
       if ( $hasChat ){
         $last = 0;
         $chats = [];
@@ -97,6 +103,9 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
           }
         }
         if ( !empty($res) ){
+          if ( isset($id_chat) ){
+            $res['id_chat'] = $id_chat;
+          }
           return ['chat' => $res];
         }
       }
@@ -141,7 +150,6 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
         $model->inc->user->update_activity();
       }
     }
-
-    //die(var_dump("File does not exist", $active_file, $res));
   }
+  //die(var_dump("File does not exist", $active_file, $res));
 }
