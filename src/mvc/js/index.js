@@ -608,4 +608,18 @@ new Vue({
       }
     }
   },
+  methods: {
+    setImessage(e){
+      if ( (e.hidden !== undefined) && e.id ){
+        bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
+          if ( r.success ){
+            appui.success(bbn._('Saved'));
+          }
+          else {
+            appui.error(bbn._('Error'));
+          }
+        });
+      }
+    }
+  }
 });

@@ -62,7 +62,9 @@
              :shortcuts="shortcuts"
              :logo-path="logo"
              :left-shortcuts="leftShortcuts"
-             :right-shortcuts="rightShortcuts">
+             :right-shortcuts="rightShortcuts"
+             @setimessage="setImessage"
+  >
   </bbn-appui>
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
