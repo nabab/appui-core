@@ -1,0 +1,206 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 1\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: BBN Solutions <support@bbn.solutions>\n"
+"Language-Team: FR <FR@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2018-03-18 14:47+0100\n"
+"PO-Revision-Date: 2018-03-18 14:47+0100\n"
+"Language: fr\n"
+"X-Domain: appui-core\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/iconology.php:1
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/components/popup/iconpicker.js:1
+msgid "Search in"
+msgstr "Chercher dans"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/iconology.php:1
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/components/popup/iconpicker.js:1
+msgid "icons"
+msgstr "Icônes"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/iconology.php:1
+msgid "Font-Awesome"
+msgstr "Font-Awesome"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/iconology.php:1
+msgid "Devicon"
+msgstr "Devicon"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/iconology.php:1
+msgid "Font-Mfizz"
+msgstr "Font-Mfizz"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/iconology.php:1
+msgid "Copy to clipboard: Ctrl+C"
+msgstr "Copier dans le presse-papiers: Ctrl+C"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/index.php:1
+msgid "Tous droits réservés."
+msgstr "All rights reserved."
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/components/popup/iconpicker.php:1
+msgid "LOADING ICONS"
+msgstr "CHARGEMENT DES ICÔNES"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Tableau de bord"
+msgstr "Tableau de bord"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Help"
+msgstr "Aide"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Mon profil"
+msgstr ""
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Tâches"
+msgstr ""
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Plein écran"
+msgstr ""
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Sortir"
+msgstr ""
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Unnown"
+msgstr "Inconnu"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Saved"
+msgstr "Sauvegardé"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js:1
+msgid "Error"
+msgstr "Erreur"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "You have no right to modify the roles in this task"
+msgstr "Vous n'avez pas le droit de modifier les rôles de cette tâche"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Opened tasks"
+msgstr "Tâches ouvertes"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "New task"
+msgstr "Nouvelle tâche"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Demo task form"
+msgstr "Formulaire de demo"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "My ongoing tasks"
+msgstr "Mes tâches en cours"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Timeline"
+msgstr "Chronologie"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Search"
+msgstr "Recherche"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Soon"
+msgstr "Bientôt"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "All tasks"
+msgstr "Toutes les tâches"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Are you sure you want to remove yourself from this task??"
+msgstr "Êtes-vous sûr de vouloir vous enlever de cette tâche?"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "File"
+msgstr "Fichier"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Link"
+msgstr "Lien"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Problem with the file..."
+msgstr "Problème avec le fichier"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Problem during the upload"
+msgstr "Problème durant le téléchargement"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "A file with this name already exists"
+msgstr "Un fichier du même nom existe déjà"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "User"
+msgstr "Utilisateur"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Date"
+msgstr "Date"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Action"
+msgstr "Action"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Global view"
+msgstr "Vue globale"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Roles"
+msgstr "Rôles"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Events journal"
+msgstr "Journal des évènements"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "You have to enter a comment, a link, or a file"
+msgstr "Vous devez entrer un commentaire, un lien ou un fichier"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Are you sure you want to put this task on hold?"
+msgstr "Êtes-vous sûr de vouloir mettre cette tâche en pause?"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Are you sure you want to resume this task?"
+msgstr "Êtes-vous sûr de vouloir reprendre cette tâche?"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Are you sure you want to close this task?"
+msgstr "Êtes-vous sûr de vouloir fermer cette tâche?"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/model/index.php:1
+msgid "Are you sure you want to unfollow this task?"
+msgstr "êtes-vous sûr de ne plus vouloir suivre cette tâche?"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config.php:1
+msgid "Configuration"
+msgstr "Configuration"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/environment.php:1
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/environments.php:1
+msgid "Current environment"
+msgstr "Environnement actuel"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/general.php:1
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/routes.php:1
+msgid "General"
+msgstr "Général"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/plugins.php:1
+msgid "Plugins"
+msgstr "Plugins"
