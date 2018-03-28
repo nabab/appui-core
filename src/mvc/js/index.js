@@ -7,6 +7,29 @@ bbn.fn.init({
     connection_max_failures: 10
   },
   fn: {
+    money(val, kilo){
+      let decimal = ',',
+          currency = '€',
+          thousands = ' ';
+      if ( (isNaN(val) || !val) ){
+        return '-';
+      }
+      if ( isNaN(val) || !val ){
+        return 0;
+      }
+      if ( kilo && val ){
+        val = val / 1000;
+        if ( currency ){
+          currency = 'K' + currency;
+        }
+      }
+      return parseFloat(val).toFixed(0).replace(/./g, function(c, i, a) {
+        if ( c === '.' ){
+          return decimal;
+        }
+        return i && ((a.length - i) % 3 === 0) ? thousands + c : c;
+      }) + ( currency ? ' ' + currency : '');
+    },
     ajaxErrorFunction: function (jqXHR, textStatus, errorThrown) {
       /** @todo */
       //var id = appui.notification.error({title: textStatus, content: errorThrown}, 4);
