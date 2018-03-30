@@ -24,7 +24,7 @@ if ( \defined('BBN_USER_TOKEN') ){
   ];
   $bureaux = array_map(function($a){
     return [
-      'text' => $a['titre'],
+      'text' => $a['name'],
       'value' => $a['id']
     ];
   }, $br_obj->get_all());
