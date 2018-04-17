@@ -150,6 +150,7 @@ if ( \defined('BBN_USER_TOKEN') ){
 
   $d['options'] = $model->inc->options->js_categories();
   $d['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
+	$d['options']['media_types'] = $model->inc->options->code_options('media', 'notes', 'appui');
   $d['options_categories'] = $model->inc->options->full_options();
   $d['activites'] = $model->inc->options->text_value_options(10);
   $d['token'] = BBN_USER_TOKEN;
