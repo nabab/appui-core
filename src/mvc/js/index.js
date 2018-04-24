@@ -295,7 +295,7 @@ new Vue({
         text: bbn._("Mon profil"),
         icon: 'fa fa-user'
       }, {
-        url: 'pm/panel',
+        url: 'pm/page',
         text: bbn._("Tâches"),
         icon: 'fa fa-bug'
       }
