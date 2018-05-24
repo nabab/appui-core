@@ -30,9 +30,9 @@ bbn.fn.init({
         return i && ((a.length - i) % 3 === 0) ? thousands + c : c;
       }) + ( currency ? ' ' + currency : '');
     },
-    ajaxErrorFunction: function (jqXHR, textStatus, errorThrown) {
+    defaultAjaxErrorFunction: function (jqXHR, textStatus, errorThrown) {
       /** @todo */
-      //var id = appui.notification.error({title: textStatus, content: errorThrown}, 4);
+      appui.error({title: textStatus, content: errorThrown}, 4);
       return false;
     },
 
@@ -67,8 +67,7 @@ bbn.fn.init({
 
     defaultAlertFunction: function(ele) {
       /** @todo */
-      //ele.find("form").kendoValidator().parent().addClass('k-edit-form-container');
-
+      appui.alert.apply(appui, arguments);
     },
 
     defaultStartLoadingFunction: function(url, id){
@@ -381,7 +380,8 @@ new Vue({
               value: "RESTORE",
               color: "orange"
             }
-          ]
+          ],
+          has_cotis_valid_perm: data.has_cotis_valid_perm
         }
       },
       computed: {
