@@ -11,7 +11,7 @@
         <li class="k-block"
             style="width: 120px; height:100px; display: inline-block; text-align:center; vertical-align:middle; padding-top:20px;">
           <div class="k-button" style="width:60px; height:60px">
-            <i class="fa fa-<?=$faicon ?>" style="font-size:36px; vertical-align:middle; line-height:54px"></i>
+            <i class="<?=$faicon ?>" style="font-size:36px; vertical-align:middle; line-height:54px"></i>
           </div>
           <div style="font-size:75%"><?=$faicon ?></div>
         </li>

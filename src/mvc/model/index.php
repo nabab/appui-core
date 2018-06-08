@@ -1,7 +1,7 @@
 <?php
 /** @var \bbn\mvc\model $model */
 if ( \defined('BBN_USER_TOKEN') ){
-  $br_obj = new \apst\bureau($model->db);
+  //$br_obj = new \apst\bureau($model->db);
   $lettre = new \bbn\appui\masks($model->db);
   $id_justificatifs = \bbn\appui\masks::get_option_id('LTJUS');
   $justificatifs = $lettre->get_text_value($id_justificatifs);
@@ -22,12 +22,14 @@ if ( \defined('BBN_USER_TOKEN') ){
     35 => $model->inc->outils->form_document(35),
     37 => $model->inc->outils->form_document(37)
   ];
-  $bureaux = array_map(function($a){
+  /*$bureaux = array_map(function($a){
     return [
       'text' => $a['name'],
       'value' => $a['id']
     ];
   }, $br_obj->get_all());
+	*/
+	$bureaux = [];
 
   $pm = new \bbn\appui\tasks($model->db);
 

@@ -27,7 +27,9 @@ $ctrl->data = [
   'menus' => $is_dev ? $menu->get_options_menus() : [],
   'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
 ];
-$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $ctrl->get_plugin_model('index', $ctrl->data));
+if ( ($custom_data = $ctrl->get_plugin_model('index', $ctrl->data)) && is_array($custom_data) ){
+	$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $custom_data);
+}
 $ctrl->combo($ctrl->data['site_title'], true);
 /*
 echo "HELLO hey";

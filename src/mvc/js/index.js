@@ -282,7 +282,7 @@ new Vue({
       {
         url: 'dashboard',
         text: bbn._("Tableau de bord"),
-        icon: 'fa fa-dashboard'
+        icon: 'fas fa-tachometer-alt'
       }, {
         command(){
           appui.popup().load('help', '90%');
@@ -292,11 +292,11 @@ new Vue({
       }, {
         url: 'usergroup/main',
         text: bbn._("Mon profil"),
-        icon: 'fa fa-user'
+        icon: 'fas fa-user'
       }, {
         url: 'pm/page',
         text: bbn._("Tâches"),
-        icon: 'fa fa-bug'
+        icon: 'fas fa-bug'
       }
     ],
     rightShortcuts: [
@@ -305,11 +305,11 @@ new Vue({
           bbn.fn.toggle_full_screen();
         },
         text: bbn._("Plein écran"),
-        icon: 'fa fa-arrows-alt'
+        icon: 'fas fa-arrows-alt'
       }, {
         url: 'logout',
         text: bbn._("Sortir"),
-        icon: 'fa fa-sign-out'
+        icon: 'fas fa-sign-out-alt'
       }
     ],
     list: [
@@ -318,7 +318,7 @@ new Vue({
         title: "Tableau de bord",
         load: true,
         static: true,
-        icon: 'fa fa-dashboard'
+        icon: 'fa fa-tachometer-alt'
       }
     ],
     app: {

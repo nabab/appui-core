@@ -27,8 +27,15 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
       $user_system = new \bbn\user\users($model->db);
       $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
     }
-    if ( !empty($model->data['message']) && (!empty($model->data['message']['id_chat']) || !empty($model->data['message']['users'])) ){
-      $id_chat = empty($model->data['message']['id_chat']) ? $chat_system->get_chat_by_users($model->data['message']['users']) : $model->data['message']['id_chat'];
+    if (
+      !empty($model->data['message']) && (
+        !empty($model->data['message']['id_chat']) ||
+        !empty($model->data['message']['users'])
+      )
+    ){
+      $id_chat = empty($model->data['message']['id_chat']) ?
+        $chat_system->get_chat_by_users($model->data['message']['users']) :
+        $model->data['message']['id_chat'];
       if ( $id_chat ){
         $chat_system->talk($id_chat, $model->data['message']['text']);
       }
