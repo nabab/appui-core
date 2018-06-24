@@ -1,7 +1,7 @@
 <!-- HTML Document -->
 <bbn-tabnav>
-	<bbn-tab url="home"
+	<bbns-tab url="home"
            :static="true"
            :load="true">
-  </bbn-tab>
+  </bbns-tab>
 </bbn-tabnav>

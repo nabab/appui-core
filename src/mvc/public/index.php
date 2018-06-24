@@ -10,8 +10,13 @@
 
 $menu = new \bbn\appui\menus();
 $is_dev = $ctrl->inc->user->is_dev();
-
+$routes = $ctrl->get_routes();
+$plugins = [];
+foreach ( $routes as $r ){
+  $plugins[$r['name']] = $r['url'];
+}
 $ctrl->data = [
+  'plugins' => $plugins,
   'site_url' => BBN_URL,
   'is_dev' => (bool)BBN_IS_DEV,
   'is_prod' => (bool)BBN_IS_PROD,

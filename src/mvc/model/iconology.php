@@ -1032,7 +1032,7 @@ $res = [
     'fas fa-transgender-alt',
     'fas fa-trash',
     'fas fa-trash-alt',
-    'far fa-trash-alt',
+    'far fa-trash-alt-alt',
     'fas fa-tree',
     'fab fa-trello',
     'fab fa-tripadvisor',

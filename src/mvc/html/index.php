@@ -60,6 +60,7 @@
              :menus="menus"
              :current-menu="currentMenu"
              :shortcuts="shortcuts"
+             :plugins="plugins"
              :logo-path="logo"
              :left-shortcuts="leftShortcuts"
              :right-shortcuts="rightShortcuts"
@@ -69,7 +70,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => 'fr',
-  'lib' => 'w3-css,kendo-ui-core|latest|'.$theme.',bbn-vue,grapesjs,grapesjs-blocks-basic,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor',
+  'lib' => 'w3-css,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
   'test' => !!$test,
   'dirs' => 'APST-UI/css'
 ])?>"></script>

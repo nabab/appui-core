@@ -259,22 +259,32 @@ Vue.config.errorHandler = function (err, vm, info) {
   bbn.fn.log("ERROR", err, vm, info);
 };
 
-window.adherentAPSTMixin = {
-  methods: {
-    getTab(){
-      return bbn.vue.closest(this, 'bbn-tab');
-    },
-    popup(){
-      return this.getTab().popup.apply(this, arguments);
+bbn.vue.addPrefix('apst', (tag, resolve, reject) => {
+  bbn.vue.queueComponent(tag, 'components/' + bbn.fn.replaceAll('-', '/', tag).substr('apst-'.length), {
+    methods: {
+      getTab(){
+        return bbn.vue.closest(this, 'bbns-tab');
+      },
+      popup(){
+        return this.getTab().popup.apply(this, arguments);
+      }
     }
-  }
-};
+  }, resolve, reject);
+});
+
+bbn.fn.each(data.plugins, (path, name) => {
+  bbn.vue.addPrefix(name, (tag, resolve, reject) => {
+    bbn.vue.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
+  });
+})
+
 new Vue({
   el: 'div.appui',
   data: {
     root: data.root,
     options: $.extend(data.options, {tasks: data.tasks}),
     menus: data.menus,
+    plugins: data.plugins,
     currentMenu: data.current_menu,
     shortcuts: data.shortcuts,
     logo: data.logo,
@@ -318,7 +328,7 @@ new Vue({
         title: "Tableau de bord",
         load: true,
         static: true,
-        icon: 'fa fa-tachometer-alt'
+        icon: 'fas fa-tachometer-alt'
       }
     ],
     app: {
@@ -354,6 +364,7 @@ new Vue({
           pdf_cfg: data.pdf_cfg,
           roles: data.roles,
           docs: data.docs,
+          docsFull: data.docs_full,
           users: data.users,
           groups: data.groups,
           expertises: data.expertises,

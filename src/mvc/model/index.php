@@ -76,6 +76,7 @@ if ( \defined('BBN_USER_TOKEN') ){
       ['text' => 'Radié', 'value' => 'radie', 'color' => '#AC0606']
     ],
     'docs' => $model->inc->options->options('documents'),
+    'docs_full' => $model->inc->options->full_options('documents'),
     'tables' => array_filter($model->db->get_tables(), function($a){
       return strpos($a, 'apst_') === 0;
     }),

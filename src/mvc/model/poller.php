@@ -128,7 +128,7 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
             if ( isset($ar['observers']) ){
               foreach ( $ar['observers'] as $o ){
                 $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
-                if ( !$value || ($value !== $o['value']) ){
+                if ( !$value || ($value !== $o['result']) ){
                   $returned_obs[] = $o;
                 }
               }
