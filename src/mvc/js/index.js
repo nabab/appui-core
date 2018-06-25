@@ -241,7 +241,6 @@ bbn.fn.init({
   },
   opt: data.options
 });
-bbn.fn.log(data);
 $.extend(bbn.lng, data.lng);
 $.extend(bbn.env, {
   logging: data.is_dev || data.is_test ? true : false,
@@ -256,7 +255,7 @@ Vue.config.errorHandler = function (err, vm, info) {
   // handle error
   // `info` is a Vue-specific error info, e.g. which lifecycle hook
   // the error was found in. Only available in 2.2.0+
-  bbn.fn.log("ERROR", err, vm, info);
+  bbn.fn.log("ERROR handler from VueJS", err, vm, info);
 };
 
 bbn.vue.addPrefix('apst', (tag, resolve, reject) => {
