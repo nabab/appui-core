@@ -15,6 +15,7 @@ $plugins = [];
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
 }
+$pm = new \bbn\appui\tasks($ctrl->db);
 $ctrl->data = [
   'plugins' => $plugins,
   'site_url' => BBN_URL,
@@ -31,7 +32,43 @@ $ctrl->data = [
   'current_menu' => $menu->get_option_id('default', 'menus'),
   'menus' => $is_dev ? $menu->get_options_menus() : [],
   'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
+  'task_roles' => \bbn\appui\tasks::get_options_ids('roles'),
+  'task_states' => \bbn\appui\tasks::get_options_ids('states'),
+  'task_options' => \bbn\appui\tasks::get_tasks_options(),
+  'task_categories' => \bbn\appui\tasks::cat_correspondances(),
+  'tasks' => [
+    'roles' => \bbn\appui\tasks::get_options_ids('roles'),
+    'states' => \bbn\appui\tasks::get_options_ids('states'),
+    'options' => [
+      'states' => \bbn\appui\tasks::get_options_text_value('states'),
+      'roles' => \bbn\appui\tasks::get_options_text_value('roles'),
+      'cats' => \bbn\appui\tasks::cat_correspondances()
+    ],
+    'categories' => $ctrl->inc->options->map(function($a){
+      $a['is_parent'] = !empty($a['items']);
+      if ( $a['is_parent'] ){
+        $a['expanded'] = true;
+      }
+      return $a;
+    }, $pm->categories(), 1),
+    'priority_colors' => [
+      '#F00',
+      '#F40',
+      '#F90',
+      '#FC0',
+      '#9B3',
+      '#7A4',
+      '#5A5',
+      '#396',
+      '#284',
+      '#063'
+    ]
+  ],
+  'options' => $ctrl->inc->options->js_categories()
 ];
+$ctrl->data['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
+$ctrl->data['options']['media_types'] = $ctrl->inc->options->code_options('media', 'notes', 'appui');
+$ctrl->data['options_categories'] = $ctrl->inc->options->full_options();
 if ( ($custom_data = $ctrl->get_plugin_model('index', $ctrl->data)) && is_array($custom_data) ){
 	$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $custom_data);
 }
