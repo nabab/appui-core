@@ -64,11 +64,13 @@ $ctrl->data = [
       '#063'
     ]
   ],
-  'options' => $ctrl->inc->options->js_categories()
+  'options' => $ctrl->inc->options->js_categories(),
+  'token' => BBN_USER_TOKEN,
+  'ide_theme' => $ctrl->inc->session->get('ide_theme') ?: false,
 ];
 $ctrl->data['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
 $ctrl->data['options']['media_types'] = $ctrl->inc->options->code_options('media', 'notes', 'appui');
-$ctrl->data['options_categories'] = $ctrl->inc->options->full_options();
+$ctrl->data['options']['categories'] = $ctrl->inc->options->full_options();
 if ( ($custom_data = $ctrl->get_plugin_model('index', $ctrl->data)) && is_array($custom_data) ){
 	$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $custom_data);
 }

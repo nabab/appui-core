@@ -60,11 +60,6 @@ bbn.fn.init({
       return false;
     },
 
-    defaultResizeFunction: function () {
-      /** @todo */
-      bbn.fn.redraw(document.body, true)
-    },
-
     defaultAlertFunction: function(ele) {
       /** @todo */
       appui.alert.apply(appui, arguments);
@@ -117,127 +112,15 @@ bbn.fn.init({
       }
     },
 
-    correctGridPost: function (d) {
-      if (d.filters) {
-        for (var i = 0; i < d.filters.length; i++) {
-          d.filters[i] = bbn.fn.correctGridPost(d.filters[i]);
-        }
-      }
-      else if (d.value && (typeof(d.value) === 'object') && $.isFunction(d.value.isBefore)) {
-        d.value = d.value.getSQL(1);
-      }
-      return d;
-    },
-
-    gridParse: function (data, grid) {
-      var cfg, type, objects = [];
-      if (grid) {
-        cfg = grid.options.dataSource.schema.model.fields;
-        for (var n in cfg) {
-          if (cfg[n].type && data[n] && cfg[n].type === 'date') {
-            data[n] = kendo.parseDate(data[n]);
-            data[n] = kendo.toString(data[n], 'yyyy-MM-dd HH:mm:ss');
-          }
-          else if (cfg[n].type === 'boolean') {
-            data[n] = data[n] ? 1 : 0;
-          }
-        }
-      }
-      else {
-        for (var n in data) {
-          type = $.type(data[n]);
-          if (type === 'date') {
-            data[n] = kendo.parseDate(data[n]);
-            data[n] = kendo.toString(data[n], 'yyyy-MM-dd HH:mm:ss');
-          }
-          else if (type === 'boolean') {
-            data[n] = data[n] ? 1 : 0;
-          }
-        }
-      }
-      return data;
-    },
-
-    text2value: function (arr) {
-      var tmp = [];
-      $.each(arr, function (i, v) {
-        tmp.push({text: v.text, value: v.text});
-      });
-      return tmp;
-    },
-
-    bool2checkbox: function (obj, prop) {
-      if (obj && obj.data && (obj.data[prop] !== undefined)) {
-        obj.data[prop] = obj.data[prop] ? 1 : false;
-        if (!obj.data[prop]) {
-          delete obj.data[prop];
-        }
-      }
-    },
-
-    hideUneditable: function (e) {
-      if (e.sender && e.sender.columns && e.model && e.model.fields) {
-        if ( e.model.fields && $.isArray(e.model.fields) ){
-
-        }
-        var f, ok;
-        for (var i = 0; i < e.sender.columns.length; i++) {
-          f = e.sender.columns[i].field;
-          ok = 1;
-          if ( $.isArray(e.model.fields) ){
-            var idx = bbn.fn.search(e.model.fields, "field", f);
-            if ( (idx > -1) &&
-              (e.model.fields[idx].editable !== undefined) &&
-              !e.model.fields[idx].editable
-            ){
-              ok = false;
-            }
-          }
-          else if (e.model.fields[f] && (e.model.fields[f].editable === false)) {
-            ok = false;
-          }
-          if ( !ok ){
-            e.container.find("div.k-edit-field").eq(i).hide().prev().hide();
-          }
-        }
-      }
-    },
-
-    formValidator: function (ele) {
-      ele.kendoValidator({
-        messages: {
-          required: function (input) {
-            var $par,
-                $label,
-                name = input.attr("name"),
-                title = input.attr("title");
-            if (!title) {
-              $par = input.parents(".bbn-form-field").first();
-              if ($par.length) {
-                $label = $par.prev(".bbn-form-label");
-                if ($label.length) {
-                  title = $label.text();
-                }
-              }
-            }
-            if (title) {
-              return "Le champ " + title + " est obligatoire!";
-            }
-            return "Le champ est obligatoire!";
-          }
-        }
-      });
-    },
-
   },
   lng: {
-    select_unselect_all: "Tout (dé)sélectionner",
-    search: "Rechercher",
-    close: "Fermer",
-    closeAll: "Tout fermer",
-    closeOthers: "Fermer les autres",
-    pin: "Épingler",
-    unpin: "Décrocher",
+    select_unselect_all: bbn._('(Un)Select all'),
+    search: bbn._('Search'),
+    close: bbn._('Close'),
+    closeAll: bbn._('Close all'),
+    closeOthers: bbn._('"Fermer les autres'),
+    pin: bbn._('Pin'),
+    unpin: bbn._('Unpin')
   },
   opt: data.options
 });
@@ -353,6 +236,23 @@ new Vue({
             {value: 11, text: "novembre"},
             {value: 12, text: "décembre"},
           ],
+          historiques: [{
+            text: "Insertion",
+            value: "INSERT",
+            color: "green"
+          },{
+            text: "Modification",
+            value: "UPDATE",
+            color: "blue"
+          },{
+            text: "Suppression",
+            value: "DELETE",
+            color: "red"
+          },{
+            text: "Restauration",
+            value: "RESTORE",
+            color: "orange"
+          }],
           modeles_courriers: data.modeles_courriers,
           justificatifs: data.justificatifs,
           justificatif_defaut: data.justificatif_defaut,
@@ -372,25 +272,7 @@ new Vue({
           regions: data.regions,
           champs_dva: data.champs_dva,
           champs: data.champs,
-          historiques: [
-            {
-              text: "Insertion",
-              value: "INSERT",
-              color: "green"
-            },{
-              text: "Modification",
-              value: "UPDATE",
-              color: "blue"
-            },{
-              text: "Suppression",
-              value: "DELETE",
-              color: "red"
-            },{
-              text: "Restauration",
-              value: "RESTORE",
-              color: "orange"
-            }
-          ],
+
           has_cotis_valid_perm: data.has_cotis_valid_perm
         }
       },

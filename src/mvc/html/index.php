@@ -72,7 +72,7 @@
   'lang' => 'fr',
   'lib' => 'w3-css,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
   'test' => !!$test,
-  'dirs' => 'APST-UI/css'
+  'dirs' => $cdn_dirs ?? ''
 ])?>"></script>
 <?=$script?>
 </body>
