@@ -1,29 +1,28 @@
 bbn.fn.init({
   env: {
-    lang: "en",
+    lang: data.lang,
     connection_failures: 0,
     connection_max_failures: 10,
-		logging: data.is_dev || data.is_test ? true : false,
+		logging: data.is_dev || data.is_test,
   }
 });
 
 new Vue({
   el: 'div.appui-login',
-  data: $.extend(data, {
-		formData: {
-			appui_salt: data.salt,
-			user: '',
-			pass: ''
-		}
-	}),
+  props: {
+    zIndex: {
+      type: Number,
+      default: 1
+    }
+  },
+  data: data,
   methods: {
     submited(d){
       if ( d == 1 ){
-        let action = bbn.env.path === 'logout' ? '.' : bbn.env.path;
-        window.document.location.href = action;
+        window.document.location.href = bbn.env.path;
       }
       else {
-        appui.alert(d, bbn.lng.error);
+        this.alert(d, bbn.lng.error);
       }
     }
   },

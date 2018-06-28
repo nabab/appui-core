@@ -12,5 +12,10 @@ return [
   'test' => (bool)BBN_IS_DEV,
   'year' => date('Y'),
   'theme' => BBN_DEFAULT_THEME ?: 'default',
-  'salt' => $model->inc->user->get_salt()
+  'lang' => BBN_LANG,
+  'formData' => [
+    'appui_salt' => $model->inc->user->get_salt(),
+    'user' => '',
+    'pass' => ''
+  ]
 ];

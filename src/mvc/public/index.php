@@ -9,16 +9,20 @@
  */
 
 $menu = new \bbn\appui\menus();
+$pm = new \bbn\appui\tasks($ctrl->db);
+$mgr = new \bbn\user\manager($ctrl->inc->user);
 $is_dev = $ctrl->inc->user->is_dev();
+
 $routes = $ctrl->get_routes();
 $plugins = [];
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
 }
-$pm = new \bbn\appui\tasks($ctrl->db);
+
 $ctrl->data = [
   'plugins' => $plugins,
   'site_url' => BBN_URL,
+  'site_title' => BBN_SITE_TITLE,
   'is_dev' => (bool)BBN_IS_DEV,
   'is_prod' => (bool)BBN_IS_PROD,
   'is_test' => (bool)BBN_IS_TEST,
@@ -26,55 +30,67 @@ $ctrl->data = [
   'static_path' => BBN_STATIC_PATH,
   'test' => BBN_IS_DEV ? 1 : 0,
   'year' => date('Y'),
-  'user_id' => $ctrl->inc->user->get_id(),
-  'group_id' => $ctrl->inc->user->get_group(),
+  'lang' => BBN_LANG,
   'root' => APPUI_CORE_ROOT,
   'current_menu' => $menu->get_option_id('default', 'menus'),
   'menus' => $is_dev ? $menu->get_options_menus() : [],
   'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
-  'task_roles' => \bbn\appui\tasks::get_options_ids('roles'),
-  'task_states' => \bbn\appui\tasks::get_options_ids('states'),
-  'task_options' => \bbn\appui\tasks::get_tasks_options(),
-  'task_categories' => \bbn\appui\tasks::cat_correspondances(),
-  'tasks' => [
-    'roles' => \bbn\appui\tasks::get_options_ids('roles'),
-    'states' => \bbn\appui\tasks::get_options_ids('states'),
-    'options' => [
-      'states' => \bbn\appui\tasks::get_options_text_value('states'),
-      'roles' => \bbn\appui\tasks::get_options_text_value('roles'),
-      'cats' => \bbn\appui\tasks::cat_correspondances()
-    ],
-    'categories' => $ctrl->inc->options->map(function($a){
-      $a['is_parent'] = !empty($a['items']);
-      if ( $a['is_parent'] ){
-        $a['expanded'] = true;
-      }
-      return $a;
-    }, $pm->categories(), 1),
-    'priority_colors' => [
-      '#F00',
-      '#F40',
-      '#F90',
-      '#FC0',
-      '#9B3',
-      '#7A4',
-      '#5A5',
-      '#396',
-      '#284',
-      '#063'
-    ]
-  ],
   'options' => $ctrl->inc->options->js_categories(),
+  'theme' => $ctrl->inc->user->get_session('theme') ?: 'default',
   'token' => BBN_USER_TOKEN,
-  'ide_theme' => $ctrl->inc->session->get('ide_theme') ?: false,
+  'app' => [
+    'users' => $mgr->full_list(),
+    'groups' => $mgr->groups(),
+    'user' => [
+      'id' => $ctrl->inc->user->get_id(),
+      'isAdmin' => $ctrl->inc->user->is_admin(),
+      'isDev' => $ctrl->inc->user->is_dev(),
+      'name' => $mgr->get_name($ctrl->inc->user->get_id())
+    ],
+    'group' => $mgr->get_group($ctrl->inc->user->get_group()),
+    'userId' => $ctrl->inc->user->get_id(), // Deprecated
+    'groupId' => $ctrl->inc->user->get_group() // Deprecated
+  ]
 ];
-$ctrl->data['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
+
 $ctrl->data['options']['media_types'] = $ctrl->inc->options->code_options('media', 'notes', 'appui');
 $ctrl->data['options']['categories'] = $ctrl->inc->options->full_options();
+$ctrl->data['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
+$ctrl->data['options']['tasks'] = [
+  'roles' => \bbn\appui\tasks::get_options_ids('roles'),
+  'states' => \bbn\appui\tasks::get_options_ids('states'),
+  'options' => [
+    'states' => \bbn\appui\tasks::get_options_text_value('states'),
+    'roles' => \bbn\appui\tasks::get_options_text_value('roles'),
+    'cats' => \bbn\appui\tasks::cat_correspondances()
+  ],
+  'categories' => $ctrl->inc->options->map(function($a){
+    $a['is_parent'] = !empty($a['items']);
+    if ( $a['is_parent'] ){
+      $a['expanded'] = true;
+    }
+    return $a;
+  }, $pm->categories(), 1),
+  'priority_colors' => [
+    '#F00',
+    '#F40',
+    '#F90',
+    '#FC0',
+    '#9B3',
+    '#7A4',
+    '#5A5',
+    '#396',
+    '#284',
+    '#063'
+  ]
+];
+
 if ( ($custom_data = $ctrl->get_plugin_model('index', $ctrl->data)) && is_array($custom_data) ){
 	$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $custom_data);
 }
+
 $ctrl->combo($ctrl->data['site_title'], true);
+
 /*
 echo "HELLO hey";
 $items = $ctrl->inc->options->items($ctrl->inc->options->get_root());

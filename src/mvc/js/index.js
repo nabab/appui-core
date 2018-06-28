@@ -1,8 +1,12 @@
 /* jslint esversion: 6 */
 bbn.fn.init({
   env: {
-    lang: "fr",
-    logging: document.location.href.indexOf("localhost") ? 1 : false,
+    logging: data.is_dev || data.is_test ? true : false,
+    isDev: data.is_dev ? true : false,
+    lang: data.lang,
+    siteTitle: data.site_title,
+    wp_url: data.wp_url,
+    token: data.token,
     connection_failures: 0,
     connection_max_failures: 10
   },
@@ -51,7 +55,8 @@ bbn.fn.init({
 
     defaultPreLinkFunction: function (url, force, ele) {
       if (url === 'logout') {
-        bbn.fn.post('logout');
+        url = (data.plugins['appui-core'] ? data.plugins['appui-core'] + '/' : '') + url;
+        bbn.fn.post(url);
         return false;
       }
       if ( appui.$refs.tabnav ){
@@ -103,7 +108,7 @@ bbn.fn.init({
       if (r.isSame && r.isSame(new Date())) {
         r = kendo.toString(r, 'H:mm');
         if (r === '0:00') {
-          r = "Aujourd'hui";
+          r = bbn._("Aujourd'hui");
         }
         return r;
       }
@@ -125,14 +130,6 @@ bbn.fn.init({
   opt: data.options
 });
 $.extend(bbn.lng, data.lng);
-$.extend(bbn.env, {
-  logging: data.is_dev || data.is_test ? true : false,
-  isDev: data.is_dev ? true : false,
-  lang: "fr",
-  siteTitle: data.site_title,
-  wp_url: data.wp_url,
-  token: data.token
-});
 
 Vue.config.errorHandler = function (err, vm, info) {
   // handle error
@@ -158,127 +155,58 @@ bbn.fn.each(data.plugins, (path, name) => {
   bbn.vue.addPrefix(name, (tag, resolve, reject) => {
     bbn.vue.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
   });
-})
+});
 
 new Vue({
   el: 'div.appui',
   data: {
     root: data.root,
-    options: $.extend(data.options, {tasks: data.tasks}),
+    options: data.options,
     menus: data.menus,
     plugins: data.plugins,
     currentMenu: data.current_menu,
     shortcuts: data.shortcuts,
     logo: data.logo,
-    leftShortcuts: [
-      {
-        url: 'dashboard',
-        text: bbn._("Tableau de bord"),
-        icon: 'fas fa-tachometer-alt'
-      }, {
-        command(){
-          appui.popup().load('help', '90%');
-        },
-        text: bbn._("Help"),
-        icon: 'zmdi zmdi-help-outline'
-      }, {
-        url: 'usergroup/main',
-        text: bbn._("Mon profil"),
-        icon: 'fas fa-user'
-      }, {
-        url: 'pm/page',
-        text: bbn._("Tâches"),
-        icon: 'fas fa-bug'
-      }
-    ],
-    rightShortcuts: [
-      {
-        command(){
-          bbn.fn.toggle_full_screen();
-        },
-        text: bbn._("Plein écran"),
-        icon: 'fas fa-arrows-alt'
-      }, {
-        url: 'logout',
-        text: bbn._("Sortir"),
-        icon: 'fas fa-sign-out-alt'
-      }
-    ],
-    list: [
-      {
-        url: "dashboard",
-        title: "Tableau de bord",
-        load: true,
-        static: true,
-        icon: 'fas fa-tachometer-alt'
-      }
-    ],
+    leftShortcuts: [{
+      url: 'dashboard',
+      text: bbn._("Tableau de bord"),
+      icon: 'fas fa-tachometer-alt'
+    }, {
+      command(){
+        appui.popup().load('help', '90%', '90%');
+      },
+      text: bbn._("Help"),
+      icon: 'zmdi zmdi-help-outline'
+    }, {
+      url: 'usergroup/main',
+      text: bbn._("Mon profil"),
+      icon: 'fas fa-user'
+    }],
+    rightShortcuts: [{
+      command(){
+        bbn.fn.toggle_full_screen();
+      },
+      text: bbn._("Plein écran"),
+      icon: 'fas fa-arrows-alt'
+    }, {
+      url: 'logout',
+      text: bbn._("Sortir"),
+      icon: 'fas fa-sign-out-alt'
+    }],
+    list: [{
+      url: "dashboard",
+      title: bbn._("Tableau de bord"),
+      load: true,
+      static: true,
+      icon: 'fas fa-tachometer-alt'
+    }],
     app: {
       data(){
-        return {
-          statuts: {
-            radie: "Radié",
-            adherent: "Adhérent",
-            groupe: "Groupe",
-            prospect: "Prospect"
-          },
-          mois: [
-            {value: 1, text: "janvier"},
-            {value: 2, text: "février"},
-            {value: 3, text: "mars"},
-            {value: 4, text: "avril"},
-            {value: 5, text: "mai"},
-            {value: 6, text: "juin"},
-            {value: 7, text: "juillet"},
-            {value: 8, text: "août"},
-            {value: 9, text: "septembre"},
-            {value: 10, text: "octobre"},
-            {value: 11, text: "novembre"},
-            {value: 12, text: "décembre"},
-          ],
-          historiques: [{
-            text: "Insertion",
-            value: "INSERT",
-            color: "green"
-          },{
-            text: "Modification",
-            value: "UPDATE",
-            color: "blue"
-          },{
-            text: "Suppression",
-            value: "DELETE",
-            color: "red"
-          },{
-            text: "Restauration",
-            value: "RESTORE",
-            color: "orange"
-          }],
-          modeles_courriers: data.modeles_courriers,
-          justificatifs: data.justificatifs,
-          justificatif_defaut: data.justificatif_defaut,
-          bureaux: data.bureaux,
-          statuts: data.statuts,
-          tables: data.tables,
-          civs: data.civs,
-          pdf_cfg: data.pdf_cfg,
-          roles: data.roles,
-          docs: data.docs,
-          docsFull: data.docs_full,
-          users: data.users,
-          groups: data.groups,
-          expertises: data.expertises,
-          userId: data.user_id,
-          departements: data.departements,
-          regions: data.regions,
-          champs_dva: data.champs_dva,
-          champs: data.champs,
-
-          has_cotis_valid_perm: data.has_cotis_valid_perm
-        }
+        return data.app
       },
       computed: {
         userName(){
-          return bbn.fn.get_field(this.users, {value: this.userId}, 'text') || bbn._('Unnown')
+          return bbn.fn.get_field(this.users, {value: this.user.id}, 'text') || bbn._('Unnown')
         }
       },
       methods: {
@@ -313,7 +241,7 @@ new Vue({
 
         fimmat: function(im){
           if ( !im ){
-            return "En cours";
+            return bbn._("En cours");
           }
           im = im.toString();
           if ( im.length === 11 ){
