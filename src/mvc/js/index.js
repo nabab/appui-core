@@ -167,6 +167,7 @@ new Vue({
     currentMenu: data.current_menu,
     shortcuts: data.shortcuts,
     logo: data.logo,
+    list: data.list,
     leftShortcuts: [{
       url: 'dashboard',
       text: bbn._("Tableau de bord"),
@@ -192,13 +193,6 @@ new Vue({
       url: 'logout',
       text: bbn._("Sortir"),
       icon: 'fas fa-sign-out-alt'
-    }],
-    list: [{
-      url: "dashboard",
-      title: bbn._("Tableau de bord"),
-      load: true,
-      static: true,
-      icon: 'fas fa-tachometer-alt'
     }],
     app: {
       data(){

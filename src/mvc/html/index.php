@@ -65,6 +65,7 @@
              :left-shortcuts="leftShortcuts"
              :right-shortcuts="rightShortcuts"
              @setimessage="setImessage"
+             :list="list"
   >
   </bbn-appui>
 </div>
