@@ -72,9 +72,11 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
     // main loop
     while ( file_exists($active_file) ) {
 
+      // PHP caches file data by default. clearstatcache() clears that cache
+      clearstatcache();
       if ( $hasChat ){
         $last = 0;
-        $chats = [];
+        $chats = $chat_system->get_chats();
         if ( $timer->measure() < 1 ){
           $chat_users = $user_system->online_list();
           $chat_hash = md5(json_encode($chat_users));
@@ -85,7 +87,6 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
               'hash' => $chat_hash
             ];
           }
-          $chats = $chat_system->get_chats();
         }
         if ( count($chats) ){
           foreach ( $chats as $chat ){
@@ -116,8 +117,6 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
           return ['chat' => $res];
         }
       }
-      // PHP caches file data by default. clearstatcache() clears that cache
-      clearstatcache();
       // get files in the poller dir
       $files = \bbn\file\dir::get_files($datasource);
       if ( count($files) ){
