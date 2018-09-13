@@ -10,10 +10,11 @@
       <bbn-scroll v-if="isReady">
         <bbn-button v-for="(icon, idx) in icons"
                     :key="idx"
-                    class="btn-icon"
+                    class="btn-icon bbn-middle"
                     @click="selectIcon(icon)"
                     :title="icon"
                     :icon="icon"
+                    style="width:45px; height:45px"
         ></bbn-button>
       </bbn-scroll>
       <div v-else class="bbn-full-screen bbn-middle">

@@ -23,6 +23,8 @@ $ctrl->data = [
   'plugins' => $plugins,
   'site_url' => BBN_URL,
   'site_title' => BBN_SITE_TITLE,
+  'app_name' => BBN_APP_NAME,
+  'app_prefix' => defined('BBN_APP_PREFIX') ? BBN_APP_PREFIX : BBN_APP_NAME,
   'is_dev' => (bool)BBN_IS_DEV,
   'is_prod' => (bool)BBN_IS_PROD,
   'is_test' => (bool)BBN_IS_TEST,
@@ -56,6 +58,8 @@ $ctrl->data = [
 $ctrl->data['options']['media_types'] = $ctrl->inc->options->code_options('media', 'notes', 'appui');
 $ctrl->data['options']['categories'] = $ctrl->inc->options->full_options();
 $ctrl->data['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
+
+
 $ctrl->data['options']['tasks'] = [
   'roles' => \bbn\appui\tasks::get_options_ids('roles'),
   'states' => \bbn\appui\tasks::get_options_ids('states'),

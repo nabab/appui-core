@@ -12,7 +12,8 @@
         isReady: false,
         allIcons: [],
         total: 0,
-        toSearch: ''
+        toSearch: '',
+        root: 'core/'
       }
     },
     computed: {

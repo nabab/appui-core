@@ -138,8 +138,8 @@ Vue.config.errorHandler = function (err, vm, info) {
   bbn.fn.log("ERROR handler from VueJS", err, vm, info);
 };
 
-bbn.vue.addPrefix('apst', (tag, resolve, reject) => {
-  bbn.vue.queueComponent(tag, 'components/' + bbn.fn.replaceAll('-', '/', tag).substr('apst-'.length), {
+bbn.vue.addPrefix(data.app_prefix, (tag, resolve, reject) => {
+  bbn.vue.queueComponent(tag, 'components/' + bbn.fn.replaceAll('-', '/', tag).substr((data.app_prefix + '-').length), {
     methods: {
       getTab(){
         return bbn.vue.closest(this, 'bbns-tab');

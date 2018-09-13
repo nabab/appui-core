@@ -1,66 +1,27 @@
-<div class="bbn-margin">
-  <div class="bbn-line-breaker bbn-c">
-    <input type="text" class="k-textbox recherche_icons" style="width: 50%" placeholder="<?=_("Search in")?>
-    <?=$total?> <?=_("icons")?>">
+<div class="bbn-h-100 bbn-flex-height appui-core-iconology">
+  <div class="bbn-line-breaker bbn-middle bbn-c bbn-h-10">
+    <bbn-input :placeholder="'Search in ' + source.total + ' icons'"
+               v-model="searchIcon"
+               class="search"
+               ref="search"
+    ></bbn-input>
   </div>
-  <h3 style="padding-top:10px"><?=_("Font-Awesome")?></h3>
-  <ul>
-    <?php
-    if (!empty($faicons)) {
-      foreach ($faicons as $faicon) {?>
-        <li class="k-block"
-            style="width: 120px; height:100px; display: inline-block; text-align:center; vertical-align:middle; padding-top:20px;">
-          <div class="k-button" style="width:60px; height:60px">
-            <i class="<?=$faicon ?>" style="font-size:36px; vertical-align:middle; line-height:54px"></i>
-          </div>
-          <div style="font-size:75%"><?=$faicon ?></div>
+  <div class="bbn-flex-fill">
+    <bbn-scroll>
+      <ul>
+        <li v-for="icon in icons" class="k-block">
+          <bbn-button :title= "icon"
+                      :icon="icon"
+                      class="btn"
+                      @click="copyIcon(icon)"
+          >
+          </bbn-button>
+          <div class="text-class" v-text="icon"></div>
         </li>
-        <?php
-      }
-    }
-    ?>
-  </ul>
-
- <!-- <h3 style="padding-top:10px"><?=_("Devicon")?></h3>
-  <ul>
-    <?php
-    if (!empty($devicon)) {
-      foreach ($devicon as $devico) {?>
-      <li class="k-block" style="width: 120px; height:100px; display: inline-block; text-align:center; vertical-align:middle; padding-top:20px;">
-        <div class="k-button" style="width:60px; height:60px">
-          <i class="devicon-<?=$devico?>" style="font-size:16px; vertical-align:middle"></i>
-        </div>
-        <div style="font-size:75%"><?=$devico?></div>
-      </li>
-    <?php
-      }
-    }
-    ?>
-  </ul>
-  <h3 style="padding-top:10px"><?=_("Font-Mfizz")?></h3>
-  <ul>-->
-    <?php
-    if ( !empty($mficons) ){
-      foreach ( $mficons as $mficon ){ ?>
-        <h4><?=$mficon['txt']?></h4>
-        <?php foreach ($mficon['icons'] as $icon) { ?>
-          <li class="k-block"
-              style="width: 120px; height:100px; display: inline-block; text-align:center; vertical-align:middle; padding-top:20px;">
-            <div class="k-button" style="width:60px; height:60px">
-              <i class="icon-<?= $icon ?>" style="font-size:36px; vertical-align:middle; line-height:54px"></i>
-            </div>
-            <div style="font-size:75%"><?= $icon ?></div>
-          </li>
-          <?php
-        }
-      }
-    }
-    ?>
-  </ul>
-</div>
-<script id="icon_copy_tpl" type="text/x-kendo-template">
-  <div class="bbn-100 bbn-c">
-    <span style="display:block; margin-bottom: 10px; margin-top: 10px;"><strong><?=_("Copy to clipboard: Ctrl+C")?></strong></span>
-    <input class="icon_name" style="width: 80%; text-align: center;" readonly>
+      </ul>
+    </bbn-scroll>
   </div>
-</script>
+  <div class="bbn-h-5 appui-core-iconology-copy">
+    <textarea ref="copyIcon"></textarea>
+  </div>
+</div>
