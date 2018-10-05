@@ -19,6 +19,11 @@ foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
 }
 
+/** @todo Thomas fix it!!*/
+$ctrl->set_mode('html');
+$shortcuts = $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list');
+$ctrl->set_mode('dom');
+
 $ctrl->data = [
   'plugins' => $plugins,
   'site_url' => BBN_URL,
@@ -36,7 +41,8 @@ $ctrl->data = [
   'root' => APPUI_CORE_ROOT,
   'current_menu' => $menu->get_option_id('default', 'menus'),
   'menus' => $is_dev ? $menu->get_options_menus() : [],
-  'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
+  //'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
+  'shortcuts' => $shortcuts,
   'options' => $ctrl->inc->options->js_categories(),
   'theme' => $ctrl->inc->user->get_session('theme') ?: 'default',
   'token' => BBN_USER_TOKEN,

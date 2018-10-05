@@ -58,7 +58,7 @@ else {
 /*
   echo $ctrl
     ->set_color('purple', 'white')
-    ->set_icon('fa fa-image')
+    ->set_icon('fas fa-image')
     ->combo(($ctrl->data['picker'] ? "Icon picker" : "Iconology"), true);
 }
 */
@@ -115,6 +115,6 @@ if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'iconpicker') ){
 else {
   echo $ctrl
     ->set_color('purple', 'white')
-    ->set_icon('fa fa-image')
+    ->set_icon('fas fa-image')
     ->combo("Iconology");
 }

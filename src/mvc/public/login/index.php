@@ -8,5 +8,4 @@
 /** @var \bbn\mvc\controller $ctrl */
 $ctrl->add_data([
   'css' => $ctrl->get_less()
-]);
-$ctrl->combo(BBN_SITE_TITLE, true);
+])->combo(BBN_SITE_TITLE, true);
