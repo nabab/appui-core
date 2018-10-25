@@ -167,8 +167,11 @@ bbn.fn.each(data.plugins, (path, name) => {
   });
 });
 
-new Vue({
-  el: 'div.appui',
+let js_data = {};
+if ( data.js_data ){
+  js_data = eval(data.js_data);
+}
+let defaultMixin = {
   data: {
     root: data.root,
     options: data.options,
@@ -469,4 +472,8 @@ new Vue({
       }
     }
   }
+};
+new Vue({
+  el: 'div.appui',
+  mixins: [defaultMixin, js_data],
 });

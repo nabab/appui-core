@@ -33,24 +33,6 @@
   <meta name="theme-color" content="#ffffff">
   <meta name="viewport" content="initial-scale=0.66, user-scalable=no">
   <title><?=$site_title?></title>
-  <style>
-    html{
-      width: 100%;
-      height: 100%;
-      font-family: Sans-Serif;
-    }
-    body{
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      overflow: hidden;
-    }
-    #appui{
-      box-sizing: border-box;
-    }
-  </style>
 </head>
 <body>
 <div class="appui bbn-full-screen" style="width: 100%; height: 100%">
@@ -67,12 +49,13 @@
              :right-shortcuts="rightShortcuts"
              @setimessage="setImessage"
              :list="list"
+             :search-bar="searchBar"
   >
   </bbn-appui>
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'w3-css,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
+  'lib' => 'w3-css,bbnjs,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
   'test' => !!$test,
   'dirs' => $cdn_dirs ?? ''
 ])?>"></script>

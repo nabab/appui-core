@@ -98,6 +98,10 @@ $ctrl->data['options']['tasks'] = [
 if ( ($custom_data = $ctrl->get_plugin_model('index', $ctrl->data)) && is_array($custom_data) ){
 	$ctrl->data = \bbn\x::merge_arrays($ctrl->data, $custom_data);
 }
+if ( $custom_js = $ctrl->get_plugin_view('index', 'js', $ctrl->data) ){
+  $ctrl->data['js_data'] = $custom_js;
+}
+
 
 $ctrl->combo($ctrl->data['site_title'], true);
 
