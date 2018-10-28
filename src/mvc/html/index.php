@@ -11,8 +11,9 @@
   <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="author" content="BBN Solutions">
-  <meta name="Copyright" content="<?=_("Tous droits réservés.")?>">
-  <!-- <meta http-equiv="cache-control" content="no-cache"> -->
+  <meta name="Copyright" content="<?=_("All rights reserved.")?>">
+  <meta http-equiv="expires" content="Fri, 22 Jul 2002 11:12:01 GMT">
+  <meta http-equiv="Cache-control" content="private">
   <meta http-equiv="cache-control" content="no-store">
   <link rel="apple-touch-icon" sizes="57x57" href="<?=$static_path?>img/favicon/apple-touch-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="<?=$static_path?>img/favicon/apple-touch-icon-60x60.png">
