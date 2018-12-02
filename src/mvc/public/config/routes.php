@@ -5,4 +5,6 @@
  **/
 
 /** @var $this \bbn\mvc\controller */
-$ctrl->combo(_('General'), true);
+$ctrl
+  ->add_data(['aliases' => $ctrl->get_aliases(), 'plugins' => $ctrl->get_routes()])
+  ->combo(_('Routes'), true);

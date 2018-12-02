@@ -1,6 +1,5 @@
 <?php
 /** @var \bbn\mvc\model $model */
-
 return [
   'site_url' => BBN_URL,
   'site_title' => BBN_SITE_TITLE,
@@ -9,16 +8,8 @@ return [
   'is_test' => (bool)BBN_IS_TEST,
   'shared_path' => BBN_SHARED_PATH,
   'static_path' => BBN_STATIC_PATH,
-  'test' => (bool)BBN_IS_DEV,
+  'test' => BBN_IS_DEV ? 1 : 0,
   'year' => date('Y'),
-  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default',
   'lang' => BBN_LANG,
-  'formData' => [
-    'appui_salt' => $model->inc->user->get_salt(),
-    'user' => '',
-    'pass' => ''
-  ],
-  'lost_pass' => true,
-  'core_root' => APPUI_CORE_ROOT,
   'logo' => false
 ];

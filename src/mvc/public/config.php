@@ -5,7 +5,10 @@
  **/
 
 /** @var $this \bbn\mvc\controller */
-$ctrl->combo('<i class="fas fa-cogs bbn-lg" title="'._('Configuration').'"></i>');
-$ctrl->obj->url = APPUI_CORE_ROOT.'config';
-$ctrl->obj->fcolor = '#FFF';
-$ctrl->obj->bcolor = '#000';
+$ctrl->set_obj([
+  'url' => APPUI_CORE_ROOT.'config',
+  'fcolor' => '#FFF',
+  'bcolor' => '#000',
+  'icon' => 'fas fa-cogs',
+  'notext' => true
+])->combo(_('Configuration'));

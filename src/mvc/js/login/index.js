@@ -15,7 +15,13 @@ new Vue({
       default: 1
     }
   },
-  data: data,
+  data: bbn.fn.extend({
+    lostPassForm: false,
+    lostPassFormData: {
+      email: ''
+    },
+    clientHeight: document.documentElement.clientHeight
+  }, data),
   methods: {
     submited(d){
       if ( d == 1 ){
@@ -24,6 +30,19 @@ new Vue({
       else {
         this.alert(d, bbn.lng.error);
       }
+    },
+    lostPasssubmited(d){
+      if ( d.success ){
+        this.alert(bbn._('An email has been sent to') + ' ' + this.lostPassFormData.email, bbn._('Info'));
+        this.hideLostPassForm();
+      }
+    },
+    hideLostPassForm(){
+      this.lostPassForm = false;
+      this.lostPassFormData.email = '';
+    },
+    setHeight(){
+      this.clientHeight = document.documentElement.clientHeight;
     }
   },
   mounted(){
@@ -34,9 +53,8 @@ new Vue({
           $('<h2/>')
             .text(bbn._('Refresh the page to be able to identify yourself or click '))
             .append(
-              $('<a/>')
+              $('<a class="bbn-p"/>')
                 .text(bbn._('HERE'))
-                .attr('href', 'javascript;')
                 .click(() => {
                   window.location.reload();
                 })
@@ -44,5 +62,9 @@ new Vue({
         )
       }, 1000*60*20);
     });
-  }
+    window.addEventListener('resize', this.setHeight);
+  },
+  beforeDestroy(){
+    window.removeEventListener('resize', this.setHeight);
+  },
 });

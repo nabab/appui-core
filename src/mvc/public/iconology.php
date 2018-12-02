@@ -73,7 +73,8 @@ $res = [
 //for the multitude of different prefixes adopted by faicons we proceeded to insert them directly in the list of the model
 $libraries = [
   'material' => 'zmdi zmdi-',
-  'mficons' => 'icon-'
+  'mficons' => 'icon-',
+  'faicons' => ''
 ];
 
 if ( !empty($ctrl->data) ){
@@ -87,20 +88,14 @@ if ( !empty($ctrl->data) ){
   unset($ctrl->data['total']);
 
   foreach ( $ctrl->data as $lib => $icons ){
-    $cl = $libraries[$lib];
-    if( $lib === 'faicons' ){
-      $res['icons'] = array_merge($res['icons'], $icons);
+    $cl = array_key_exists($lib, $libraries) ? $libraries[$lib] : '';
+    if ( is_array($icons[0]) && isset($icons[0]['icons']) ){
+      foreach ( $icons as $ic ){
+        $merge_icons($cl, $ic['icons']);
+      }
     }
-    else{
-      //case mficons
-      if ( is_array($icons[0]) && isset($icons[0]['icons']) ){
-        foreach ( $icons as $ic ){
-          $merge_icons($cl, $ic['icons']);
-        }
-      }
-      else {
-        $merge_icons($cl, $icons);
-      }
+    else {
+      $merge_icons($cl, $icons);
     }
   }
 
@@ -113,7 +108,7 @@ if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'iconpicker') ){
   $ctrl->obj->success = $res['total'] > 0 ? true : false;
 }
 else {
-  echo $ctrl
+  $ctrl
     ->set_color('purple', 'white')
     ->set_icon('fas fa-image')
     ->combo("Iconology");
