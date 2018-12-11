@@ -7,10 +7,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2018-10-25 18:27+0200\n"
-"POT-Revision-Date: 2018-10-25 18:27+0200\n"
+"POT-Creation-Date: 2018-12-11 05:58+0100\n"
+"POT-Revision-Date: 2018-12-11 05:58+0100\n"
 "Language: en\n"
-"X-Domain: appui-core2\n"
+"X-Domain: appui-core17\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
@@ -26,12 +26,30 @@ msgid "LOADING ICONS"
 msgstr "LOADING ICONS"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
-msgid "Tous droits réservés."
-msgstr "Tous droits réservés."
-
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "All rights reserved."
 msgstr "All rights reserved."
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/config/routes.php
+msgid "PLUGINS"
+msgstr "Plugins"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/config/routes.php
+msgid "Name"
+msgstr "Name"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/config/routes.php
+msgid "URL"
+msgstr "URL"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/config/routes.php
+msgid "Real path"
+msgstr "Real path"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/config/routes.php
+msgid "ALIASES"
+msgstr "ALIASES"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "e-Mail address"
@@ -42,16 +60,52 @@ msgid "Password"
 msgstr "Password"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
-msgid "Login"
-msgstr "Login"
+msgid "Log in"
+msgstr "Log in"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+msgid "Enter your e-mail address"
+msgstr "Enter your e-mail address"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+msgid "Cancel"
+msgstr "Cancel"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+msgid "Submit"
+msgstr "Submit"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+msgid "Password forgotten?"
+msgstr "Password forgotten?"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Choose your new password"
+msgstr "Choose your new password"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Mandatory field, 8 characters minimum"
+msgstr "Mandatory field, 8 characters minimum"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Confirm your new password"
+msgstr "Confirm your new password"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Champ obligatoire, 8 caractères minimum"
+msgstr "Champ obligatoire, 8 caractères minimum"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Reset"
+msgstr "Reset"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/iconology.js
 msgid "Copied class of the icon"
 msgstr "Copied class of the icon"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "Aujourd'hui"
-msgstr "Aujourd'hui"
+msgid "Today"
+msgstr "Today"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "(Un)Select all"
@@ -70,8 +124,8 @@ msgid "Close all"
 msgstr "Close all"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "\"Fermer les autres"
-msgstr "\"Fermer les autres"
+msgid "Close others"
+msgstr "Close others"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Pin"
@@ -82,7 +136,7 @@ msgid "Unpin"
 msgstr "Unpin"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "Tableau de bord"
+msgid "Dashboard"
 msgstr "Dashboard"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
@@ -90,24 +144,20 @@ msgid "Help"
 msgstr "Help"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "Mon profil"
-msgstr "Mon profil"
+msgid "My profile"
+msgstr "My profile"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "Plein écran"
-msgstr "Plein écran"
+msgid "Full screen"
+msgstr "Full screen"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "Sortir"
-msgstr "Sortir"
+msgid "Log out"
+msgstr "Log out"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Unnown"
 msgstr "Unnown"
-
-#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
-msgid "En cours"
-msgstr "En cours"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Saved"
@@ -118,12 +168,24 @@ msgid "Error"
 msgstr "Error"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
+msgid "An email has been sent to"
+msgstr "An email has been sent to"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
+msgid "Info"
+msgstr "Info"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "Refresh the page to be able to identify yourself or click "
 msgstr "Refresh the page to be able to identify yourself or click"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "HERE"
 msgstr "HERE"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/js/login/password/index.js
+msgid "Passwords must match!"
+msgstr "Passwords must match!"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config.php
 msgid "Configuration"
@@ -135,10 +197,13 @@ msgid "Current environment"
 msgstr "Current environment"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/general.php
-#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/routes.php
 msgid "General"
 msgstr "General"
 
 #: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/plugins.php
 msgid "Plugins"
 msgstr "Plugins"
+
+#: /home/app2/_appui/vendor/bbn/appui-core/src/mvc/public/config/routes.php
+msgid "Routes"
+msgstr "Routes"

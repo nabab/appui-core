@@ -52,14 +52,14 @@
                 :validation="validation"
       >
         <div class="bbn-grid-fields">
-          <label><?=_("Choisir votre nouveau mot de passe")?></label>
+          <label><?=_("Choose your new password")?></label>
           <bbn-input type="password" 
                      v-model="formData.pass1" 
                      required="required"
                      pattern=".{8,}"
-                     title="<?=_('Champ obligatoire, 8 caractères minimum')?>"
+                     title="<?=_('Mandatory field, 8 characters minimum')?>"
           ></bbn-input>
-          <label><?=_("Confirmer votre nouveau mot de passe")?></label>
+          <label><?=_("Confirm your new password")?></label>
           <bbn-input type="password" 
                      v-model="formData.pass2" 
                      required="required"
@@ -69,7 +69,7 @@
           <div class="bbn-grid-full bbn-c bbn-margin">
             <bbn-button :disabled="submitDisabled"
                         @click="$refs.form.submit()"
-            ><?=_('Réinitialiser')?></bbn-button>
+            ><?=_('Reset')?></bbn-button>
           </div>
         </div>
       </bbn-form>

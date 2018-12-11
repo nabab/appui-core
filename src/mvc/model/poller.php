@@ -34,6 +34,7 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
       )
     ){
       $id_chat = empty($model->data['message']['id_chat']) ?
+        // Gets the corresponding ID chat or creates one
         $chat_system->get_chat_by_users($model->data['message']['users']) :
         $model->data['message']['id_chat'];
       if ( $id_chat ){
@@ -100,7 +101,7 @@ if ( defined('BBN_USER_TOKEN_PATH') ){
               }
               $res['chats'][$chat] = $msgs;
               $res['chats'][$chat]['participants'] = $chat_system->get_participants($chat);
-              $max = \bbn\x::max_with_key($msgs['messages'], 'time');
+              $max = $msgs['last'];
               if ( \bbn\x::compare_floats($max, $res['last'], '>') ){
                 $res['last'] = $max;
               }

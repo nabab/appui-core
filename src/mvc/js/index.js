@@ -86,7 +86,7 @@ bbn.fn.init({
       if (r.isSame && r.isSame(new Date())) {
         r = kendo.toString(r, 'H:mm');
         if (r === '0:00') {
-          r = bbn._("Aujourd'hui");
+          r = bbn._("Today");
         }
         return r;
       }
@@ -101,7 +101,7 @@ bbn.fn.init({
     search: bbn._('Search'),
     close: bbn._('Close'),
     closeAll: bbn._('Close all'),
-    closeOthers: bbn._('"Fermer les autres'),
+    closeOthers: bbn._('Close others'),
     pin: bbn._('Pin'),
     unpin: bbn._('Unpin')
   },
