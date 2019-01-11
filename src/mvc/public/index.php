@@ -24,6 +24,8 @@ $ctrl->set_mode('html');
 $shortcuts = $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list');
 $ctrl->set_mode('dom');
 
+$theme = $ctrl->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
+
 $ctrl->data = [
   'plugins' => $plugins,
   'site_url' => BBN_URL,
@@ -44,7 +46,8 @@ $ctrl->data = [
   //'shortcuts' => $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list'),
   'shortcuts' => $shortcuts,
   'options' => $ctrl->inc->options->js_categories(),
-  'theme' => $ctrl->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default'),
+  'theme' => $theme,
+  'cdn_lib' => 'w3-css,bbnjs,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
   'token' => BBN_USER_TOKEN,
   'app' => [
     'users' => $mgr->full_list(),

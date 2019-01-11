@@ -56,7 +56,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'w3-css,bbnjs,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
+  'lib' => $cdn_lib,
   'test' => !!$test,
   'dirs' => $cdn_dirs ?? ''
 ])?>"></script>
