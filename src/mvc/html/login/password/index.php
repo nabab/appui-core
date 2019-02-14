@@ -48,6 +48,7 @@
 								:scrollable="false"
 								:fixed-footer="false"
 								ref="form"
+                :self="true"
                 @success="submited"
                 :validation="validation"
       >

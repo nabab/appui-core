@@ -48,50 +48,32 @@ bbn.fn.init({
       appui.alert.apply(appui, arguments);
     },
 
-    defaultStartLoadingFunction: function(url, id){
-      if ( window.appui && appui.$refs.loading ){
-        appui.$refs.loading.start(url, id);
-        return id;
+    defaultStartLoadingFunction: function(url, id, data){
+      if ( window.appui && appui.status ){
+        appui.loaders.unshift(bbn.env.loadersHistory[0]);
+        while ( appui.loaders.length > bbn.env.maxLoadersHistory ){
+          appui.loaders.pop();
+        }
       }
     },
 
-    defaultEndLoadingFunction: function(url, id, data, res){
-      if ( window.appui && appui.$refs.loading ){
-        appui.$refs.loading.end(url, id, data, res);
-      }
-    },
-
-    fdate: function (d, wrong_result) {
-      var r;
-      if ((typeof(d) === 'string') && (d.length > 5) && (d.substring(d.length - 5, d.length - 4) === '.')) {
-        d = Math.floor(d);
-      }
-      if ((typeof(d) === 'number') && (d > 0)) {
-        if (d < 10000000000) {
-          d = d * 1000;
+    defaultEndLoadingFunction: function(url, timestamp, data, res){
+      if ( window.appui && appui.status ){
+        let history = bbn.fn.get_row(bbn.env.loadersHistory, {url: url, start: timestamp});
+        let loader = bbn.fn.get_row(appui.loaders, {url: url, start: timestamp});
+        if ( loader ){
+          if (  history ){
+            bbn.fn.iterate(history, (val, prop) => {
+              if ( loader[prop] !== val ){
+                loader[prop] = val;
+              }
+            });
+          }
+          else{
+            loader.loading = false;
+          }
         }
-        r = new Date(d);
-      }
-      else {
-        try {
-          r = kendo.parseDate(d);
-        }
-        catch (err) {
-          r = d;
-        }
-      }
-      if (!r) {
-        return wrong_result ? wrong_result : '';
-      }
-      if (r.isSame && r.isSame(new Date())) {
-        r = kendo.toString(r, 'H:mm');
-        if (r === '0:00') {
-          r = bbn._("Today");
-        }
-        return r;
-      }
-      else {
-        return kendo.toString(r, 'd');
+        //appui.$refs.loading.end(url, id, data, res);
       }
     },
 
@@ -134,7 +116,6 @@ bbn.fn.each(data.plugins, (path, name) => {
 bbn.vue.addPrefix(
   data.app_prefix,
   (tag, resolve, reject, mixins) => {
-    bbn.fn.log("ADDING PREFIX", tag, data.app_prefix, mixins);
     bbn.vue.queueComponent(
       tag,
       'components/' + bbn.fn.replaceAll('-', '/', tag).substr((data.app_prefix + '-').length),
@@ -165,8 +146,9 @@ let appuiMixin = {
     shortcuts: data.shortcuts,
     logo: data.logo,
     list: data.list,
+    pollable: (data.pollable === undefined) || data.pollable,
     leftShortcuts: [{
-      url: 'dashboard',
+      url: 'dashboard/home',
       text: bbn._("Dashboard"),
       icon: 'fas fa-tachometer-alt'
     }, {
@@ -198,7 +180,7 @@ let appuiMixin = {
       },
       computed: {
         userName(){
-          return bbn.fn.get_field(this.users, {value: this.user.id}, 'text') || bbn._('Unnown')
+          return bbn.fn.get_field(this.users, {value: this.user.id}, 'text') || bbn._('Unknown')
         }
       },
       methods: {
@@ -218,7 +200,7 @@ let appuiMixin = {
           if ( bbn.fn.isArray(appui.app.users) ){
             return bbn.fn.order(appui.app.users.filter(user => {
               return !!user.active;
-            }), 'text', 'DESC');
+            }), 'text', 'ASC');
           }
           return [];
         },

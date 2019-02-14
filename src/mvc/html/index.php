@@ -43,14 +43,18 @@
              :observer="true"
              :menus="menus"
              :current-menu="currentMenu"
+             :pollable="pollable || (pollable === undefined)"
              :shortcuts="shortcuts"
              :plugins="plugins"
              :logo-path="logo"
              :left-shortcuts="leftShortcuts"
              :right-shortcuts="rightShortcuts"
              @setimessage="setImessage"
-             :list="list"
+             :source="list"
              :search-bar="searchBar"
+             :status="true"
+             :header="true"
+             :tabnav="true"
   >
   </bbn-appui>
 </div>
