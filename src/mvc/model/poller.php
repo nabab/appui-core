@@ -12,151 +12,152 @@
  */
 // set php runtime to unlimited
 set_time_limit(0);
-// where does the data come from ? In real world this would be a SQL query or something
-$now = time();
+// User is identified
+if ( $id_user = $model->inc->user->get_id() ){
 
-if ( defined('BBN_USER_TOKEN_PATH') ){
-  $id_user = $model->inc->user->get_id();
-  $actsource = \bbn\file\dir::create_path(BBN_USER_TOKEN_PATH.'poller/active');
-  $datasource = \bbn\file\dir::create_path(BBN_USER_TOKEN_PATH.'poller/queue');
-  if ( $id_user && $datasource && $actsource ){
-    $timer = new \bbn\util\timer();
-    $timer->start();
-    $hasChat = !empty($model->data['chat']);
-    if ( $hasChat ){
-      $user_system = new \bbn\user\users($model->db);
-      $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
-    }
+
+  $actsource = \bbn\file\dir::create_path(BBN_USER_PATH.'tmp/poller/active');
+  $datasource = \bbn\file\dir::create_path(BBN_USER_PATH.'tmp/poller/queue');
+
+  // Chrono
+  $now = time();
+  $timer = new \bbn\util\timer();
+  $timer->start('timeout');
+  $timer->start('activity');
+  $hasChat = !empty($model->data['chat']);
+  $res = [
+    'data' => [],
+    'start' => $now,
+    'chat' => []
+  ];
+  if ( $hasChat ){
+    $user_system = new \bbn\user\users($model->db);
+    $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
+  }
+  if ( !empty($model->data['message']) ){
+    // Gets the corresponding ID chat or creates one
     if (
-      !empty($model->data['message']) && (
-        !empty($model->data['message']['id_chat']) ||
-        !empty($model->data['message']['users'])
-      )
+      (isset($model->data['message']['id_chat']) && ($id_chat = $model->data['message']['id_chat'])) ||
+      (!empty($model->data['message']['users']) && ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users'])))
     ){
-      $id_chat = empty($model->data['message']['id_chat']) ?
-        // Gets the corresponding ID chat or creates one
-        $chat_system->get_chat_by_users($model->data['message']['users']) :
-        $model->data['message']['id_chat'];
-      if ( $id_chat ){
-        $chat_system->talk($id_chat, $model->data['message']['text']);
-      }
+      $chat_system->talk($id_chat, $model->data['message']['text']);
+      $res['chat']['id_chat'] = $id_chat;
     }
-    $observer = new \bbn\appui\observer($model->db);
-    if ( $files = \bbn\file\dir::get_files($actsource) ){
-      foreach ( $files as $f ){
-        unlink($f);
-      }
+    unset($model->data['message']);
+  }
+  $observer = new \bbn\appui\observer($model->db);
+  if ( $files = \bbn\file\dir::get_files($actsource) ){
+    foreach ( $files as $f ){
+      unlink($f);
     }
-    $active_file = $actsource.'/active_'.$now;
-    // This file goes with the process
-    file_put_contents($active_file, '1');
+  }
+  $active_file = $actsource.'/active_'.$now;
+  // This file goes with the process
+  file_put_contents($active_file, '1');
 
 
-    $observers = [];
-    // If observers are sent we check which ones are not used and delete them
-    if ( isset($model->data['observers']) ){
-      $observers = $model->data['observers'];
-      foreach ( $observer->get_list(BBN_USER_TOKEN_ID) as $ob ){
-        $found = false;
-        foreach ( $model->data['observers'] as $sent ){
-          if ( $sent['id'] === $ob['id'] ){
-            $found = true;
-            break;
-          }
-        }
-        if ( !$found ){
-          $observer->token_delete($ob['id']);
+  $observers = [];
+  // If observers are sent we check which ones are not used and delete them
+  if ( isset($model->data['observers']) ){
+    $observers = $model->data['observers'];
+    foreach ( $observer->get_list($id_user) as $ob ){
+      $found = false;
+      foreach ( $model->data['observers'] as $sent ){
+        if ( $sent['id'] === $ob['id'] ){
+          $found = true;
+          break;
         }
       }
-    }
-
-    // main loop
-    while ( file_exists($active_file) ) {
-
-      // PHP caches file data by default. clearstatcache() clears that cache
-      clearstatcache();
-      if ( $hasChat ){
-        $last = 0;
-        $chats = $chat_system->get_chats();
-        if ( $timer->measure() < 1 ){
-          $chat_users = $user_system->online_list();
-          $chat_hash = md5(json_encode($chat_users));
-          $res = [];
-          if ( $chat_hash !== $model->data['usersHash'] ){
-            $res = [
-              'users' => $chat_users,
-              'hash' => $chat_hash
-            ];
-          }
-        }
-        if ( count($chats) ){
-          foreach ( $chats as $chat ){
-            if (
-              ($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) &&
-              count($msgs['messages'])
-            ){
-              if ( !isset($res['chats']) ){
-                $res['chats'] = [];
-                $res['last'] = 0;
-              }
-              $res['chats'][$chat] = $msgs;
-              $res['chats'][$chat]['participants'] = $chat_system->get_participants($chat);
-              $max = $msgs['last'];
-              if ( \bbn\x::compare_floats($max, $res['last'], '>') ){
-                $res['last'] = $max;
-              }
-            }
-          }
-          if ( !empty($res['last']) ){
-            $res['last'] = ceil($res['last'] * 10000) / 10000;
-          }
-        }
-        if ( !empty($res) ){
-          if ( isset($id_chat) ){
-            $res['id_chat'] = $id_chat;
-          }
-          return ['chat' => $res];
-        }
-      }
-      // get files in the poller dir
-      $files = \bbn\file\dir::get_files($datasource);
-      if ( count($files) ){
-        $res = [];
-        $returned_obs = [];
-        foreach ( $files as $f ){
-          if ( $ar = json_decode(file_get_contents($f), true) ){
-            if ( isset($ar['observers']) ){
-              foreach ( $ar['observers'] as $o ){
-                $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
-                if ( !$value || ($value !== $o['result']) ){
-                  $returned_obs[] = $o;
-                }
-              }
-              if ( count($returned_obs) ){
-                $res[] = ['observers' => $returned_obs];
-              }
-            }
-            else{
-              $res[] = $ar;
-            }
-          }
-          unlink($f);
-        }
-        // put data.txt's content and timestamp of last data.txt change into array
-        // Leaves the page as it should be called back
-        if ( count($res) ){
-          unlink($active_file);
-          return ['data' => $res];
-        }
-      }
-      // wait for 1 sec
-      sleep(1);
-      if ( $timer->measure() > 10 ){
-        $timer->stop();
-        $timer->start();
-        $model->inc->user->update_activity();
+      if ( !$found ){
+        $observer->user_delete($ob['id']);
       }
     }
   }
+// main loop
+  while ( $timer->measure('timeout') < 30 ){
+    // PHP caches file data by default. clearstatcache() clears that cache
+    clearstatcache();
+    if ( $hasChat ){
+      $last = 0;
+      $chats = $chat_system->get_chats();
+      if ( $timer->measure('activity') < 1 ){
+        $chat_users = $user_system->online_list();
+        $chat_hash = md5(json_encode($chat_users));
+        if ( $chat_hash !== $model->data['usersHash'] ){
+          $res['chat']['users'] = $chat_users;
+          $res['chat']['hash'] = $chat_hash;
+        }
+      }
+      if ( count($chats) ){
+        foreach ( $chats as $chat ){
+          if (
+            ($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) &&
+            count($msgs['messages'])
+          ){
+            if ( !isset($res['chat']['chats']) ){
+              $res['chat']['chats'] = [];
+              $res['chat']['last'] = 0;
+            }
+            $res['chat']['chats'][$chat] = $msgs;
+            $res['chat']['chats'][$chat]['participants'] = $chat_system->get_participants($chat);
+            $max = $msgs['last'];
+            if ( \bbn\x::compare_floats($max, $res['chat']['last'], '>') ){
+              $res['chat']['last'] = $max;
+            }
+          }
+        }
+        if ( !empty($res['chat']['last']) ){
+          //$res['chat']['last'] = ceil($res['chat']['last'] * 10000) / 10000;
+        }
+      }
+    }
+    // get files in the poller dir
+    $files = \bbn\file\dir::get_files($datasource);
+    if ( $files && count($files) ){
+      $result = [];
+      $returned_obs = [];
+      foreach ( $files as $f ){
+        if ( $ar = json_decode(file_get_contents($f), true) ){
+          if ( isset($ar['observers']) ){
+            \bbn\x::log($ar['observers']);
+            foreach ( $ar['observers'] as $o ){
+              $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
+              if ( !$value || ($value !== $o['result']) ){
+                $returned_obs[] = $o;
+              }
+            }
+            if ( count($returned_obs) ){
+              $result[] = ['observers' => $returned_obs];
+            }
+          }
+          else{
+            $result[] = $ar;
+          }
+        }
+        unlink($f);
+      }
+      // put data.txt's content and timestamp of last data.txt change into array
+      // Leaves the page as it should be called back
+      if ( count($result) ){
+        unlink($active_file);
+        $res = ['data' => $result];
+        break;
+      }
+    }
+    // wait for 1 sec
+    if ( $timer->measure('activity') > 10 ){
+      $timer->stop('activity');
+      $timer->start('activity');
+      $model->inc->user->update_activity();
+    }
+    if ( !empty($res['chat']) || !empty($res['data']) ){
+      die(json_encode($res));
+    }
+    sleep(1);
+  }
   //die(var_dump("File does not exist", $active_file, $res));
 }
+else{
+  $res = ['disconnected' => true];
+}
+die(json_encode($res));

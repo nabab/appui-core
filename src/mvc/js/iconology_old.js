@@ -6,33 +6,27 @@
         searchIcon:'',
         totIcons: this.source.icons,
         ready: true,
-        // The real source from the items
         currentIcons: [],
+        itemsPerLine: 0,
+        lineHeight: 0,
         itemsPerPage: 0
       }
     },
     computed: {
-      // The array from which the source (currentIcons)is built
       icons(){
-        // Filtered
         if ( this.searchIcon ){
           return this.totIcons.filter(icon => icon.search(this.searchIcon.toLowerCase()) > -1);
         }
-        // or not
         return this.totIcons;
       }
     },
     methods:{
-      // Reinitializing the size calculations
       onResize(){
-        this.itemsPerPage = 0;
+        this.lineHeight = 0;
         this.updateIcons();
       },
-      // Fills the empty container with items 
-      // It does 10 at a time then lets it render through promises
-      // Stops when it gets a scroll
-      // Store the items' number (itemsPerPage) as reference for next additions
-      firstIconsFragments(prom, height){
+      addUntil(prom, height){
+        bbn.fn.log("ADD");
         let scroll = this.getRef('scroll');
         if ( !height ){
           height = scroll.contentSize > scroll.lastKnownHeight ? scroll.contentSize + scroll.lastKnownHeight : scroll.lastKnownHeight;
@@ -48,23 +42,27 @@
         for ( let i = start; i < end; i++ ){
           this.currentIcons.push(this.icons[i]);
         }
-        return new Promise((resolve) => {
+        let p = new Promise((resolve) => {
           this.$nextTick(() => {
-            resolve('ok');
+            if ( this.getRef('ul').clientHeight < height ){
+              p.then((resolve, reject) => {
+                this.addUntil(height);
+              })
+            }
+            else{
+              scroll.onResize();
+            }
+            resolve('ok')
           })
-        }).then(() => {
-          if ( this.getRef('ul').clientHeight < height ){
-            this.firstIconsFragments(height);
-          }
-          else{
-            this.itemsPerPage = this.currentIcons.length;
-            scroll.onResize();
-          }
         });
+        return p;
       },
-      // Adds itemsPerPage icons to currentIcons
       addIcons(){
         if ( this.icons.length ){
+          bbn.fn.log("ADDING ICONS");
+          if ( !this.itemsPerPage ){
+            this.itemsPerPage = this.currentIcons.length;
+          }
           this.$nextTick(() => {
             let start = this.currentIcons.length;
             let end = start + this.itemsPerPage;
@@ -80,20 +78,19 @@
           })
         }
       },
-      // Initiate the launch
       updateIcons(){
-        this.currentIcons.splice(0, this.currentIcons.length);
+        bbn.fn.log("UPDATRE");
         if ( this.icons.length ){
           let promise = new Promise((resolve, reject) => {
-            this.$nextTick(() => {
-              resolve('ok')
-            })
+            resolve('ok')
           });
-          this.firstIconsFragments(promise);
+          return promise.then(() => {
+            this.addUntil(promise);
+          })
         }
       },
       copyIcon(icon){
-        this.$refs.copyIcon.value = 'nf nf-' + icon;
+        this.$refs.copyIcon.value = icon;
         this.$refs.copyIcon.select();
         document.execCommand('copy');
         this.$nextTick(() =>{
@@ -108,6 +105,7 @@
     },
     watch: {
       searchIcon(newVal){
+        this.currentIcons.splice(0, this.currentIcons.length);
         this.$nextTick(() => {
           this.updateIcons();
         });

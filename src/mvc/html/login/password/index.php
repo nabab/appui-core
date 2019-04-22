@@ -64,8 +64,8 @@
           <bbn-input type="password" 
                      v-model="formData.pass2" 
                      required="required"
-                     pattern=".{8,}" 
-                     title="<?=_('Champ obligatoire, 8 caractères minimum')?>"
+                     pattern=".{8,}"
+                     title="<?=_('Mandatory field, 8 characters minimum')?>"
           ></bbn-input>
           <div class="bbn-grid-full bbn-c bbn-margin">
             <bbn-button :disabled="submitDisabled"

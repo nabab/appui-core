@@ -64,7 +64,44 @@ else {
 */
 
 
-$ctrl->obj->data = $ctrl->get_model();
+$ctrl->data = $ctrl->get_model();
+
+$res = [
+  'icons' => [],
+  'total' => 0
+];
+//for the multitude of different prefixes adopted by faicons we proceeded to insert them directly in the list of the model
+$libraries = [
+  'material' => 'zmdi zmdi-',
+  'mficons' => 'icon-',
+  'faicons' => ''
+];
+
+if ( !empty($ctrl->data) ){
+  //function
+  $merge_icons = function($lib, $icons) use(&$res){
+    $res['icons'] = \bbn\x::merge_arrays($res['icons'], array_map(function($i) use($lib){
+      return $lib.$i;
+    }, $icons));
+  };
+
+  unset($ctrl->data['total']);
+
+  foreach ( $ctrl->data as $lib => $icons ){
+    $cl = array_key_exists($lib, $libraries) ? $libraries[$lib] : '';
+    if ( is_array($icons[0]) && isset($icons[0]['icons']) ){
+      foreach ( $icons as $ic ){
+        $merge_icons($cl, $ic['icons']);
+      }
+    }
+    else {
+      $merge_icons($cl, $icons);
+    }
+  }
+
+  $res['total'] = count($res['icons']);
+  $ctrl->obj->data = $res;
+}
 
 
 if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'iconpicker') ){
@@ -74,5 +111,5 @@ else {
   $ctrl
     ->set_color('purple', 'white')
     ->set_icon('nf nf-fa-image')
-    ->combo("Nerd fonts");
+    ->combo("Iconology");
 }

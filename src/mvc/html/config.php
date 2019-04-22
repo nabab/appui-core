@@ -1,39 +1,39 @@
 <!-- HTML Document -->
 
 <bbn-tabnav>
-	<bbns-tab url="general"
+	<bbns-container url="general"
             :title="_('General')"
             :static="true"
             bcolor="#000"
             fcolor="#FFF"
             :load="true"
-           ></bbns-tab>
-  <bbns-tab url="environment"
+           ></bbns-container>
+  <bbns-container url="environment"
             :title="_('Current environment')"
             :static="true"
             bcolor="#000"
             fcolor="#FFF"
             :load="true"
-           ></bbns-tab>
-  <bbns-tab url="routes"
+           ></bbns-container>
+  <bbns-container url="routes"
             :title="_('Routes')"
             :static="true"
             bcolor="#000"
             fcolor="#FFF"
             :load="true"
-           ></bbns-tab>
-  <bbns-tab url="environments"
+           ></bbns-container>
+  <bbns-container url="environments"
             :title="_('Environments')"
             :static="true"
             bcolor="#000"
             fcolor="#FFF"
             :load="true"
-           ></bbns-tab>
-  <bbns-tab url="plugins"
+           ></bbns-container>
+  <bbns-container url="plugins"
             :title="_('Plugins')"
             :static="true"
             bcolor="#000"
             fcolor="#FFF"
             :load="true"
-           ></bbns-tab>
+           ></bbns-container>
 </bbn-tabnav>

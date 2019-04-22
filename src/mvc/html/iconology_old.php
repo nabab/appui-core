@@ -1,11 +1,8 @@
 <div class="bbn-h-100 bbn-flex-height appui-core-iconology">
-  <div class="bbn-line-breaker bbn-middle bbn-c bbn-padded">
-    <div style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 1px; height:1px">
-      <input type="text" ref="copyIcon">
-    </div>
+  <div class="bbn-line-breaker bbn-middle bbn-c bbn-h-10">
     <bbn-input :placeholder="'Search in ' + source.total + ' icons'"
                v-model="searchIcon"
-               class="search bbn-xl bbn-w-50"
+               class="search"
                ref="search"
     ></bbn-input>
     <div class="bbn-iblock bbn-hpadded bbn-l" v-text="icons.length + ' icons'" style="width: 10em"></div>
@@ -15,7 +12,7 @@
       <ul ref="ul">
         <li v-for="icon in currentIcons" class="k-block">
           <bbn-button :title= "icon"
-                      :icon="'nf nf-' + icon"
+                      :icon="icon"
                       class="btn"
                       @click="copyIcon(icon)"
           >
@@ -24,5 +21,8 @@
         </li>
       </ul>
     </bbn-scroll>
+  </div>
+  <div class="bbn-h-5 appui-core-iconology-copy">
+    <textarea ref="copyIcon"></textarea>
   </div>
 </div>

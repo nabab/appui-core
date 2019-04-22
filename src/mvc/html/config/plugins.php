@@ -1,7 +1,7 @@
 <!-- HTML Document -->
-<bbn-tabnav>
-	<bbns-tab url="home"
+<bbn-tabnav class="bbn-background">
+	<bbns-container url="home"
            :static="true"
            :load="true">
-  </bbns-tab>
+  </bbns-container>
 </bbn-tabnav>

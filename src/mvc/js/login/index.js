@@ -51,16 +51,14 @@ new Vue({
       setTimeout(() => {
         $('div.appui-login').empty().append(
           $('<h2/>')
-            .text(bbn._('Refresh the page to be able to identify yourself or click '))
-            .append(
-              $('<a class="bbn-p"/>')
-                .text(bbn._('HERE'))
-                .click(() => {
-                  window.location.reload();
-                })
+            .html(
+              bbn._('Refresh the page to be able to log in or click') +
+              '<a class="bbn-p" onclick="window.location.reload();"> ' +
+              bbn._('HERE') +
+              '</a>'
             )
         )
-      }, 1000*60*20);
+      }, 1200000); // 20 minutes
     });
     window.addEventListener('resize', this.setHeight);
   },
