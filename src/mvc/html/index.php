@@ -50,19 +50,23 @@ else{
       const installingWorker = registration.installing;
       installingWorker.onstatechange = () => {
         console.log("NEW STATE: " + installingWorker.state);
-        if (installingWorker.state === 'installed' && navigator.serviceWorker.controller) {
-          // Preferably, display a message asking the user to reload...
-          if ( !loaded ){
-            location.reload();
+        if (installingWorker.state === 'activated') {
+          if ( 'appui' in window ){
+            if ( confirm(
+                bbn._("The application has been updated but you still use an old version.") + "\n" +
+                bbn._("You need to refresh the page to upgrade.") + "\n" +
+                bbn._("Do you want to do it now?")
+            ) ){
+              location.reload();
+            }
           }
           else{
-            console.log("New SW version !");
-            if ( window.appui ){
-              appui.poll();
-            }
+            location.reload();
           }
         }
         else if ( 'appui' in window ){
+          let v = window.localStorage.getItem('bbn-vue-version');
+          bbn.fn.log("POLLING FROM SERVICE WORKER VERSION " + v);
           appui.poll();
         }
       };
@@ -78,8 +82,7 @@ else{
     script.type = "text/javascript";
     script.src = "<?=$script_src?>";
     script.onload = function(){
-      if ( window.bbn && navigator.serviceWorker.controller ){
-        bbn.fn.log("POSTING INIT");
+      if ( ('bbn' in window) && navigator.serviceWorker.controller ){
         navigator.serviceWorker.addEventListener('message', function(event) {
           if ( event.data && event.data.data ){
             let d = event.data;
@@ -87,7 +90,8 @@ else{
               document.getElementById('nojs_bbn').remove();
               document.querySelectorAll('.appui')[0].style.display = 'block';
               if ( d.data.version ){
-                bbn.version = d.data.version;
+                bbn.vue.version = d.data.version;
+                window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
               }
               let res = eval(d.data.script);
               if ( bbn.fn.isFunction(res) ){
@@ -96,6 +100,8 @@ else{
               }
             }
             else if ( 'appui' in window ){
+              let v = window.localStorage.getItem('bbn-vue-version');
+              bbn.fn.log("RECIVING FROM SERVICE WORKER VERSION " + v);
               appui.receive(d.data);
             }
           }
@@ -118,7 +124,8 @@ else{
 }
 if ( errorMsg ){
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('error_message').innerHTML = errorMsg;
+    document.getElementById('error_message').innerHTML = errorMsg + '<br><br>' + 
+    '<a href="https://vivaldi.com/download/">Vivaldi Browser</a>';
   });
 }
 </script>

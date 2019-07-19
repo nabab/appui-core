@@ -56,36 +56,44 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', event => {
-  event.respondWith(caches.match(event.request)
-    .then(cachedResponse => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-      return fetch(event.request).then(function (response) {
-        if (
-          (event.request.url.indexOf(data.shared_path) === 0) ||
-          (event.request.url.indexOf(data.site_url + 'components/') === 0)
-        ){
-          return caches.open(CACHE_NAME).then(cache => {
-            return cache.put(event.request, response.clone()).then(function () {
-              return response;
-            });
-          })
+  if ( event.request.credentials !== 'same-origin' ){
+    event.respondWith(caches.match(event.request)
+      .then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
         }
-        return response;
-      });
-    })
-  );
+        return fetch(event.request).then(function (response) {
+          if (
+            (event.request.url.indexOf(data.shared_path) === 0) ||
+            (event.request.url.indexOf(data.site_url + 'components/') === 0)
+          ){
+            return caches.open(CACHE_NAME).then(cache => {
+              return cache.put(event.request, response.clone()).then(function () {
+                return response;
+              });
+            })
+          }
+          return response;
+        });
+      })
+    );
+  }
 });
 
-setInterval(() => {
+let interval;
+
+function launchPoller(){
   if ( poller && !isRunning ){
     self.clients.matchAll({
       includeUncontrolled: true
     }).then(function(clientList) {
       if ( !clientList.length ){
-        console.log("THere is no client, should I claim them?");
+        console.log("There is no client, user certainly disconnected");
+        setPoller(60);
         return;
+      }
+      else if ( interval === 60 ){
+        setPoller(1);
       }
       isFocused = false;
       windows = [];
@@ -104,7 +112,15 @@ setInterval(() => {
       }
     });
   }
-}, 1000);
+}
+
+function setPoller(duration){
+  clearInterval(launchPoller);
+  setInterval(launchPoller, duration*1000);
+  interval = duration;
+}
+
+setPoller(1);
 
 self.addEventListener('message', function(event) {
   receive(event);

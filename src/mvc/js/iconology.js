@@ -1,8 +1,13 @@
+/**
+	* This file shows the icons. The trick is to render only what is needed in the viewport.
+  *
+  **/
 (()=>{
   return {
     mixins: [bbn.vue.resizerComponent],
     data(){
       return {
+        scroller: null,
         searchIcon:'',
         totIcons: this.source.icons,
         ready: true,
@@ -33,50 +38,67 @@
       // Stops when it gets a scroll
       // Store the items' number (itemsPerPage) as reference for next additions
       firstIconsFragments(prom, height){
-        let scroll = this.getRef('scroll');
-        if ( !height ){
-          height = scroll.contentSize > scroll.lastKnownHeight ? scroll.contentSize + scroll.lastKnownHeight : scroll.lastKnownHeight;
-        }
-        let start = this.currentIcons.length;
-        let end = start + 10;
-        if ( end > this.icons.length ){
-          end = this.icons.length;
-        }
-        if ( end <= start ){
-          return;
-        }
-        for ( let i = start; i < end; i++ ){
-          this.currentIcons.push(this.icons[i]);
-        }
-        return new Promise((resolve) => {
-          this.$nextTick(() => {
-            resolve('ok');
-          })
-        }).then(() => {
-          if ( this.getRef('ul').clientHeight < height ){
-            this.firstIconsFragments(height);
+        if ( !this.scroller ){
+          let scroll = this.getRef('scroll');
+          if ( scroll ){
+            this.scroller = scroll;
           }
-          else{
-            this.itemsPerPage = this.currentIcons.length;
-            scroll.onResize();
+        }
+        if ( this.scroller ){
+          let containerSize = this.scroller.containerHeight;
+          let contentSize = this.scroller.contentHeight;
+          if ( !height && !containerSize ){
+            this.scroller.onResize();
           }
-        });
+          if ( !height ){
+            height = contentSize > containerSize ? contentSize + containerSize : containerSize;
+          }
+          let start = this.currentIcons.length;
+          let end = start + 10;
+          if ( end > this.icons.length ){
+            end = this.icons.length;
+          }
+          if ( end <= start ){
+            return;
+          }
+          for ( let i = start; i < end; i++ ){
+            this.currentIcons.push(this.icons[i]);
+          }
+          return prom.then(() => {
+            let ul = this.getRef('ul');
+            bbn.fn.log('--------', height, contentSize, containerSize, ul.clientHeight, '*********');
+            
+            if ( contentSize <= height ){
+              this.scroller.onResize().then(() => {
+                let prom = new Promise((resolve, reject) => {
+                  this.$nextTick(() => {
+                    resolve('ok')
+                  })
+                });
+                this.firstIconsFragments(prom, height);
+              });
+            }
+            else{
+              this.scroller.onResize().then(() => {
+                this.itemsPerPage = this.currentIcons.length;
+              });
+            }
+          });
+        }
       },
       // Adds itemsPerPage icons to currentIcons
       addIcons(){
-        if ( this.icons.length ){
+        if ( this.icons.length && this.scroller ){
+          let start = this.currentIcons.length;
+          let end = start + this.itemsPerPage;
+          if ( end > this.icons.length ){
+            end = this.icons.length;
+          }
+          for ( let i = start; i < end; i++ ){
+            this.currentIcons.push(this.icons[i]);
+          }
           this.$nextTick(() => {
-            let start = this.currentIcons.length;
-            let end = start + this.itemsPerPage;
-            if ( end > this.icons.length ){
-              end = this.icons.length;
-            }
-            for ( let i = start; i < end; i++ ){
-              this.currentIcons.push(this.icons[i]);
-            }
-            this.$nextTick(() => {
-              this.getRef('scroll').onResize();
-            })
+            this.scroller.onResize();
           })
         }
       },
@@ -100,11 +122,6 @@
           appui.notify(bbn._('Copied class of the icon'), false, 3);
         });
       }
-    },
-    mounted(){
-      this.$nextTick(() => {
-        this.updateIcons();
-      })
     },
     watch: {
       searchIcon(newVal){

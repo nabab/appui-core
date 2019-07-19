@@ -3,7 +3,7 @@
               :collapsible="true"
               orientation="vertical">
   <bbn-pane>
-    <div class="bbn-full-screen">
+    <div class="bbn-overlay">
       <div class="bbn-flex-height">
         <div class="bbn-w-100 bbn-lg bbn-spadded bbn-bg-black bbn-white">
           <?=_('PLUGINS')?>
@@ -26,7 +26,7 @@
     </div>
   </bbn-pane>
   <bbn-pane>
-    <div class="bbn-full-screen">
+    <div class="bbn-overlay">
       <div class="bbn-flex-height">
         <div class="bbn-w-100 bbn-lg bbn-spadded bbn-bg-black bbn-white">
           <?=_('ALIASES')?>

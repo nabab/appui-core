@@ -11,9 +11,9 @@
     <div class="bbn-iblock bbn-hpadded bbn-l" v-text="icons.length + ' icons'" style="width: 10em"></div>
   </div>
   <div class="bbn-flex-fill">
-    <bbn-scroll ref="scroll" @reachBottom="addIcons">
+    <bbn-scroll ref="scroll" @reachBottom="addIcons" @ready="updateIcons">
       <ul ref="ul">
-        <li v-for="icon in currentIcons" class="k-block">
+        <li v-for="icon in currentIcons" class="bbn-block">
           <bbn-button :title= "icon"
                       :icon="'nf nf-' + icon"
                       class="btn"

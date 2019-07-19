@@ -41,9 +41,19 @@ new Vue({
       return true;
     }
   },
-  mounted() {
+  mounted() {    
     this.$nextTick(() => {
-      $("body > div.appui-password").animate({opacity: 1}, 2000).find("input:visible:first").focus();
+      //alert("dentro")
+      //$("body > div.appui-password").animate({opacity: 1}, 2000).find("input:visible:first").focus();
+      let ele =  document.querySelector("body > div.appui-password");
+        ele.style.opacity = "1";   
+        ele.style.animationDuration = "2s"; 
+      bbn.fn.each(ele.querySelectorAll("input"), (element, i) => {
+        if ( (element.style.visibility === 'visible') ){
+          element.focus();
+          return false;
+        }        
+      });
     });
   }
 });

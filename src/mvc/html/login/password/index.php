@@ -34,7 +34,7 @@
 <style><?=$css?></style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
-<div class="appui-password bbn-full-screen bbn-middle">
+<div class="appui-password bbn-overlay bbn-middle">
   <bbn-popup ref="popup"></bbn-popup>
 	<div>
 		<div class="logo bbn-c">
@@ -84,9 +84,21 @@
 ])?>"></script>
 <?=$script?>
 <script type="text/javascript">
-$(window).on("load", function(){
-  $("body > div").animate({opacity: 1}, "slow").find("input:visible:first").focus();
-});
+  
+  /*$(window).on("load", function(){
+    $("body > div").animate({opacity: 1}, "slow").find("input:visible:first").focus();
+  });*/
+  document.addEventListener('DOMContentLoaded', () => {
+    let ele =  document.querySelector("body > div");
+      ele.style.opacity = "1";   
+      ele.style.animation = "slow";
+    bbn.fn.each(ele.querySelectorAll("input"), (element, i) => {
+      if ( (element.style.visibility === 'visible') ){
+        element.focus();
+        return false;
+      }        
+    });
+  });
 </script>
 </body>
 </html>

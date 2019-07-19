@@ -1,6 +1,5 @@
 <?php
 $menu = new \bbn\appui\menus();
-$pm = new \bbn\appui\tasks($model->db);
 $mgr = new \bbn\user\manager($model->inc->user);
 $is_dev = $model->inc->user->is_dev();
 $theme = $model->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
@@ -32,7 +31,7 @@ $data = [
   //'shortcuts' => $model->get_model($model->plugin_url('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->js_categories(),
   'theme' => $theme,
-  'cdn_lib' => 'kendo-ui-core|latest|default,nerd-fonts,bbnjs|latest|'.$theme.',bbn-vue,font-awesome,font-mfizz,devicon,webmin-font,material-design-iconic-font,jquery-jsoneditor,jsPDF',
+  'cdn_lib' => 'nerd-fonts,bbnjs|latest|'.$theme.',bbn-vue,font-mfizz,devicon,webmin-font,jsPDF',
   'app' => [
     'users' => $mgr->full_list(),
     'groups' => $mgr->groups(),
@@ -40,47 +39,17 @@ $data = [
       'id' => $model->inc->user->get_id(),
       'isAdmin' => $model->inc->user->is_admin(),
       'isDev' => $model->inc->user->is_dev(),
-      'name' => $mgr->get_name($model->inc->user->get_id())
+      'name' => $mgr->get_name($model->inc->user->get_id()),
+      'email' => $mgr->get_email($model->inc->user->get_id())
     ],
     'group' => $mgr->get_group($model->inc->user->get_group()),
     'userId' => $model->inc->user->get_id(), // Deprecated
     'groupId' => $model->inc->user->get_group() // Deprecated
   ]
 ];
-
 $data['options']['media_types'] = $model->inc->options->code_options(\bbn\appui\notes::get_appui_option_id('media'));
 $data['options']['categories'] = $model->inc->options->full_options();
-$data['options']['bbn_tasks'] = \bbn\appui\tasks::get_options();
 
-
-$data['options']['tasks'] = [
-  'roles' => \bbn\appui\tasks::get_appui_options_ids('roles'),
-  'states' => \bbn\appui\tasks::get_appui_options_ids('states'),
-  'options' => [
-    'states' => \bbn\appui\tasks::get_appui_options_text_value('states'),
-    'roles' => \bbn\appui\tasks::get_appui_options_text_value('roles'),
-    'cats' => \bbn\appui\tasks::cat_correspondances()
-  ],
-  'categories' => $model->inc->options->map(function($a){
-    $a['is_parent'] = !empty($a['items']);
-    if ( $a['is_parent'] ){
-      $a['expanded'] = true;
-    }
-    return $a;
-  }, $pm->categories(), 1),
-  'priority_colors' => [
-    '#F00',
-    '#F40',
-    '#F90',
-    '#FC0',
-    '#9B3',
-    '#7A4',
-    '#5A5',
-    '#396',
-    '#284',
-    '#063'
-  ]
-];
 if ( ($custom_data = $model->get_plugin_model('index', $data)) && is_array($custom_data) ){
 	$data = \bbn\x::merge_arrays($data, $custom_data);
 }

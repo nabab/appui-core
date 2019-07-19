@@ -15,7 +15,7 @@ foreach ( $routes as $r ){
 
 /** @todo Thomas fix it!!*/
 $shortcuts = $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list');
-$ctrl->data = $ctrl->get_model('core/_index');
+$ctrl->data = $ctrl->get_model($ctrl->plugin_url('appui-core').'/_index');
 $ctrl->add_data([
   'plugins' => $plugins,
   'shortcuts' => $shortcuts

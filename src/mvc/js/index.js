@@ -1,88 +1,30 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
-    bbn.fn.init({
-      env: {
-        logging: data.is_dev || data.is_test ? true : false,
-        isDev: data.is_dev ? true : false,
-        lang: data.lang,
-        siteTitle: data.site_title,
-        wp_url: data.wp_url,
-        token: data.token,
-        connection_failures: 0,
-        connection_max_failures: 10,
-        money: data.money,
-        appPrefix: data.app_prefix,
-        plugins: data.plugins
-      },
-      fn: {
-        defaultAjaxErrorFunction: function (jqXHR, textStatus, errorThrown) {
-          /** @todo */
-          appui.error({title: textStatus, content: errorThrown}, 4);
-          return false;
-        },
-
-        defaultPreLinkFunction: (url) => {
-          let router = appui.getRef('tabnav');
-          if ( router && bbn.fn.isFunction(router.route) ){
-            router.route(url);
-          }
-          return false;
-        },
-        defaultHistoryFunction: (obj) => {
-          let router = appui.getRef('tabnav');
-          if ( router && bbn.fn.isFunction(router.route) ){
-            router.route(obj.url.substr(bbn.env.host.length+1));
-          }
-        },
-
-        defaultAlertFunction: function(ele) {
-          /** @todo */
-          appui.alert.apply(appui, arguments);
-        },
-
-        defaultStartLoadingFunction: function(url, id, data){
-          if ( window.appui && appui.status ){
-            appui.loaders.unshift(bbn.env.loadersHistory[0]);
-            while ( appui.loaders.length > bbn.env.maxLoadersHistory ){
-              appui.loaders.pop();
-            }
-          }
-        },
-
-        defaultEndLoadingFunction: function(url, timestamp, data, res){
-          if ( window.appui && appui.status ){
-            let history = bbn.fn.get_row(bbn.env.loadersHistory, {url: url, start: timestamp});
-            let loader = bbn.fn.get_row(appui.loaders, {url: url, start: timestamp});
-            if ( loader ){
-              if (  history ){
-                bbn.fn.iterate(history, (val, prop) => {
-                  if ( loader[prop] !== val ){
-                    loader[prop] = val;
-                  }
-                });
-              }
-              else{
-                loader.loading = false;
-              }
-            }
-            //appui.$refs.loading.end(url, id, data, res);
-          }
-        },
-
-      },
-      lng: {
-        select_unselect_all: bbn._('(Un)Select all'),
-        search: bbn._('Search'),
-        close: bbn._('Close'),
-        closeAll: bbn._('Close all'),
-        closeOthers: bbn._('Close others'),
-        pin: bbn._('Pin'),
-        unpin: bbn._('Unpin')
-      },
-      opt: data.options
+    bbn.fn.autoExtend('env', {
+      logging: data.is_dev || data.is_test ? true : false,
+      isDev: data.is_dev ? true : false,
+      lang: data.lang,
+      siteTitle: data.site_title,
+      wp_url: data.wp_url,
+      token: data.token,
+      connection_failures: 0,
+      connection_max_failures: 10,
+      money: data.money,
+      appPrefix: data.app_prefix,
+      plugins: data.plugins
     });
-    $.extend(bbn.lng, data.lng);
+    bbn.fn.autoExtend('lng', {
+      select_unselect_all: bbn._('(Un)Select all'),
+      search: bbn._('Search'),
+      close: bbn._('Close'),
+      closeAll: bbn._('Close all'),
+      closeOthers: bbn._('Close others'),
+      pin: bbn._('Pin'),
+      unpin: bbn._('Unpin')
+    });
+    bbn.fn.autoExtend('opt', data.options);
+    bbn.fn.extend(bbn.lng, data.lng);
 
     Vue.config.devtools = !!data.is_dev;
 
@@ -118,7 +60,7 @@
           reject
         );
       },
-      $.extend(true, {}, {
+      bbn.fn.extend(true, {}, {
         methods: {
           getTab(){
             return bbn.vue.closest(this, 'bbns-container');

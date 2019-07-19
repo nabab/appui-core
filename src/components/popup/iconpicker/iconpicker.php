@@ -1,4 +1,4 @@
-<div class="appui-icon-picker bbn-full-screen">
+<div class="appui-icon-picker bbn-overlay">
   <div class="bbn-flex-height">
     <div class="bbn-w-100 bbn-c" style="padding: 0 1em 1em 0">
       <bbn-input style="width: 300px"
@@ -17,7 +17,7 @@
                     style="width:45px; height:45px"
         ></bbn-button>
       </bbn-scroll>
-      <div v-else class="bbn-full-screen bbn-middle">
+      <div v-else class="bbn-overlay bbn-middle">
         <?=_('LOADING ICONS')?>
       </div>
     </div>
