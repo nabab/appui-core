@@ -36,7 +36,7 @@
 <style><?=$css?></style>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">
-<div class="appui-login bbn-middle">
+<div class="appui-login bbn-middle" style="transition: opacity 5s">
   <bbn-popup ref="popup"></bbn-popup>
 	<div class="container" :style="{maxHeight: clientHeight + 'px'}">
 		<div class="logo bbn-c bbn-block">
@@ -110,7 +110,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'w3-css,kendo-ui-core|latest|'.$theme.',bbn-vue,font-awesome',
+  'lib' => 'nerd-fonts,bbnjs|latest|'.$theme.',bbn-vue,font-awesome',
   'test' => !!$test
 ])?>"></script>
 <?=$script?>

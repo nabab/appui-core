@@ -17,69 +17,6 @@ let retries = 0;
 let windows = [];
 let aborter;
 let isConnected = false;
-
-self.addEventListener('install', event => {
-  console.log('Service worker install event for version ' + CACHE_NAME);
-  event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        return cache.addAll(precacheResources);
-      })
-      .then(function() {
-        // `skipWaiting()` forces the waiting ServiceWorker to become the
-        // active ServiceWorker, triggering the `onactivate` event.
-        // Together with `Clients.claim()` this allows a worker to take effect
-        // immediately in the client(s).
-        return self.skipWaiting();
-      })
-  );
-});
-
-// Activate event
-// Be sure to call self.clients.claim()
-self.addEventListener('activate', function(event) {
-  caches.keys().then(function(cacheNames) {
-    return Promise.all(
-      cacheNames.filter(function(cacheName) {
-        return cacheName !== CACHE_NAME;
-        // Return true if you want to remove this cache,
-        // but remember that caches are shared across
-        // the whole origin
-      }).map(function(cacheName) {
-        return caches.delete(cacheName);
-      })
-    // `claim()` sets this worker as the active worker for all clients that
-    // match the workers scope and triggers an `oncontrollerchange` event for
-    // the clients.
-    ).then(() => self.clients.claim());
-  })
-});
-
-self.addEventListener('fetch', event => {
-  if ( event.request.credentials !== 'same-origin' ){
-    event.respondWith(caches.match(event.request)
-      .then(cachedResponse => {
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-        return fetch(event.request).then(function (response) {
-          if (
-            (event.request.url.indexOf(data.shared_path) === 0) ||
-            (event.request.url.indexOf(data.site_url + 'components/') === 0)
-          ){
-            return caches.open(CACHE_NAME).then(cache => {
-              return cache.put(event.request, response.clone()).then(function () {
-                return response;
-              });
-            })
-          }
-          return response;
-        });
-      })
-    );
-  }
-});
-
 let interval;
 
 function launchPoller(){
@@ -87,9 +24,11 @@ function launchPoller(){
     self.clients.matchAll({
       includeUncontrolled: true
     }).then(function(clientList) {
-      if ( !clientList.length ){
-        console.log("There is no client, user certainly disconnected");
-        setPoller(60);
+      if (!clientList.length || !isConnected) {
+        if (interval !== 60) {
+          setPoller(60);
+        }
+        console.log("There is no client, user certainly disconnected (or not?)");
         return;
       }
       else if ( interval === 60 ){
@@ -110,21 +49,18 @@ function launchPoller(){
           poll();
         }
       }
+      else{
+        clearInterval(launchPoller);
+      }
     });
   }
 }
 
 function setPoller(duration){
   clearInterval(launchPoller);
-  setInterval(launchPoller, duration*1000);
   interval = duration;
+  setInterval(launchPoller, duration*1000);
 }
-
-setPoller(1);
-
-self.addEventListener('message', function(event) {
-  receive(event);
-});
 
 function receive(event){
   let promise = self.clients.matchAll().then(function(clientList) {
@@ -144,6 +80,7 @@ function processClientMessage(event, clientList){
   let senderID = event.source.id;
   let d = event.data;
   let obsTodo = [];
+  console.log(["processClientMessage", d]);
   if ( 'observers' in d ){
     observers[senderID] = d.observers;
   }
@@ -174,6 +111,7 @@ function processClientMessage(event, clientList){
 }
 
 function processServerMessage(json){
+  console.log(["processServerMessage", json]);
   return self.clients.matchAll().then(function(clientList) {
     retries = 0;
     isFocused = false;
@@ -192,8 +130,7 @@ function processServerMessage(json){
       }
     }
     if ( !clientList.length ){
-      console.log("THere is no client, should I claim them?");
-      return;
+      console.log("There is no client, should I claim them?");
     }
     clientList.forEach(function(client) {
       client.postMessage({
@@ -205,6 +142,7 @@ function processServerMessage(json){
 }
 
 function initClient(event, clientList){
+  console.log("initClient");
   let senderID = event.source.id;
   clientList.forEach(function(client) {
     if (client.id === senderID) {
@@ -254,52 +192,134 @@ function fetchWithTimeout(url, timeout, options) {
 
 function poll(){
   isRunning = true;
-  //console.log("SENDING THIS TO SERVER: \n" + JSON.stringify(dataObj, null, 2));
-  fetchWithTimeout(poller, 600000, {
-    method: "POST", // *GET, POST, PUT, DELETE, etc.
-    headers: {
-      "Content-Type": "application/json",
-      // "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: JSON.stringify(Object.keys(dataObj).length ? dataObj : {test: 1})
-  })
-    .then(function(response) {
-      // Clear the timeout as cleanup
-      if ( response.status !== 200 ){
-        console.log("Error: " + response.status);
+  if (isConnected) {
+    fetchWithTimeout(poller, 600000, {
+      method: "POST", // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        "Content-Type": "application/json",
+        // "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: JSON.stringify(Object.keys(dataObj).length ? dataObj : {test: 1})
+    })
+      .then(function(response) {
+        // Clear the timeout as cleanup
+        if ( response.status !== 200 ){
+          console.log("Error: " + response.status);
+          isRunning = false;
+          retries++;
+          if ( retries <= 3 ){
+            poll();
+          }
+        }
+        else{
+          // What we do with the answer from poller 
+          response.text().then((text) => {
+            let json;
+            try {
+              json = JSON.parse(text);
+            }
+            catch(e){
+              json = {message: "The response is no JSON", error: e.message};
+            }
+            //console.log(text);
+            processServerMessage(json).then((res) => {
+              isRunning = false;
+              if (res === false) {
+                retries++;
+                if ( retries <= 3 ){
+                  poll();
+                }
+              }
+              else{
+                poll();
+              }
+            });
+          });
+        }
+      })
+      .catch(function(err) {
         isRunning = false;
+        console.log('fetch failed! ', err);
         retries++;
         if ( retries <= 3 ){
           poll();
         }
-      }
-      else{
-        // What we do with the answer from poller 
-        response.text().then((text) => {
-          let json;
-          try {
-            json = JSON.parse(text);
-          }
-          catch(e){
-            json = {message: "The response is no JSON", error: e.message};
-          }
-          //console.log(text);
-          processServerMessage(json).then(() => {
-            isRunning = false;
-            poll();
-          });
-        });
-      }
-    })
-    .catch(function(err) {
-      isRunning = false;
-      console.log('fetch failed! ', err);
-      retries++;
-      if ( retries <= 3 ){
-        poll();
-      }
-    });
+      });
+  }
+  //console.log("SENDING THIS TO SERVER: \n" + JSON.stringify(dataObj, null, 2));
 }
+
+// Install event
+self.addEventListener('install', event => {
+  console.log('Service worker install event for version ' + CACHE_NAME);
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(cache => {
+        return cache.addAll(precacheResources);
+      })
+      .then(function() {
+        // `skipWaiting()` forces the waiting ServiceWorker to become the
+        // active ServiceWorker, triggering the `onactivate` event.
+        // Together with `Clients.claim()` this allows a worker to take effect
+        // immediately in the client(s).
+        return self.skipWaiting();
+      })
+  );
+});
+
+// Activate event
+// Be sure to call self.clients.claim()
+self.addEventListener('activate', function(event) {
+  console.log('Service worker activate event for version ' + CACHE_NAME);
+  caches.keys().then(function(cacheNames) {
+    return Promise.all(
+      cacheNames.filter(function(cacheName) {
+        return cacheName !== CACHE_NAME;
+        // Return true if you want to remove this cache,
+        // but remember that caches are shared across
+        // the whole origin
+      }).map(function(cacheName) {
+        return caches.delete(cacheName);
+      })
+    // `claim()` sets this worker as the active worker for all clients that
+    // match the workers scope and triggers an `oncontrollerchange` event for
+    // the clients.
+    ).then(() => self.clients.claim());
+  })
+});
+
+// Fetch event
+self.addEventListener('fetch', event => {
+  console.log('Service worker fetch event for version ' + CACHE_NAME);
+  if ( event.request.credentials !== 'same-origin' ){
+    event.respondWith(caches.match(event.request)
+      .then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then(function (response) {
+          if (
+            (event.request.url.indexOf(data.shared_path) === 0) ||
+            (event.request.url.indexOf(data.site_url + 'components/') === 0)
+          ){
+            return caches.open(CACHE_NAME).then(cache => {
+              return cache.put(event.request, response.clone()).then(function () {
+                return response;
+              });
+            })
+          }
+          return response;
+        });
+      })
+    );
+  }
+});
+
+setPoller(1);
+
+self.addEventListener('message', function(event) {
+  receive(event);
+});
 
           /*
         this.observersCopy = this.observers.slice();

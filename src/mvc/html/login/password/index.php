@@ -79,7 +79,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'w3-css,kendo-ui-core|latest|default,bbn-vue,font-awesome',
+  'lib' => 'nerd-fonts,bbnjs|latest|'.$theme.',bbn-vue,font-awesome',
   'test' => !!$test
 ])?>"></script>
 <?=$script?>
