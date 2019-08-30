@@ -3,7 +3,7 @@ $menu = new \bbn\appui\menus();
 $mgr = new \bbn\user\manager($model->inc->user);
 $is_dev = $model->inc->user->is_dev();
 $theme = $model->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
-$vfile = BBN_DATA_PATH.'version.txt';
+$vfile = $model->data_path().'version.txt';
 if ( !is_file($vfile) ){
   file_put_contents($vfile, '1');
   $version = 1;

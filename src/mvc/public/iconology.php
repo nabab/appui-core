@@ -68,7 +68,7 @@ $ctrl->obj->data = $ctrl->get_model();
 
 
 if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'iconpicker') ){
-  $ctrl->obj->success = $res['total'] > 0 ? true : false;
+  $ctrl->obj->success = $ctrl->obj->data['total'] > 0 ? true : false;
 }
 else {
   $ctrl

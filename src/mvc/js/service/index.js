@@ -19,6 +19,63 @@ let aborter;
 let isConnected = false;
 let interval;
 
+//window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
+//let IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
+//let dbVersion = 1;
+
+/* 
+    Note: The recommended way to do this is assigning it to window.indexedDB,
+    to avoid potential issues in the global scope when web browsers start 
+    removing prefixes in their implementations.
+    You can assign it to a varible, like var indexedDB… but then you have 
+    to make sure that the code is contained within a function.
+*/
+
+// Create/open database
+/*
+let dbRequest = indexedDB.open("appui", dbVersion);
+
+dbRequest.onsuccess = function (event) {
+  console.log("Success creating/accessing IndexedDB database");
+  let db = dbRequest.result;
+  console.log(dbRequest.result, event);
+
+  db.onerror = function (event) {
+    console.log("Error creating/accessing IndexedDB database");
+  };
+  
+  // Interim solution for Google Chrome to create an objectStore. Will be deprecated
+  if (db.setVersion) {
+    if (db.version != dbVersion) {
+      var setVersion = db.setVersion(dbVersion);
+      setVersion.onsuccess = function () {
+        console.log("DB POINT 1");
+        //db.createObjectStore(db);
+        //getImageFile();
+        // Create an objectStore
+        console.log("Creating objectStore");
+        db.createObjectStore("clipboard");
+      };
+    }
+    else {
+        console.log("DB POINT 2");
+      //getImageFile();
+    }
+  }
+  else {
+        db.createObjectStore("clipboard");
+        console.log("DB POINT 3");
+    //getImageFile();
+  }
+};
+
+// For future use. Currently only in latest Firefox versions
+dbRequest.onupgradeneeded = function (event) {
+        console.log("DB POINT 4");
+    //createObjectStore(event.target.result);
+};
+*/
+
 function launchPoller(){
   if ( poller && !isRunning ){
     self.clients.matchAll({

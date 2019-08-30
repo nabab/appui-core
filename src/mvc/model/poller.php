@@ -15,9 +15,8 @@ set_time_limit(0);
 // User is identified
 if ( $id_user = $model->inc->user->get_id() ){
 
-
-  $actsource = \bbn\file\dir::create_path(BBN_USER_PATH.'tmp/poller/active');
-  $datasource = \bbn\file\dir::create_path(BBN_USER_PATH.'tmp/poller/queue');
+  $actsource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/active');
+  $datasource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/queue');
 
   // Chrono
   $now = time();
@@ -75,6 +74,13 @@ if ( $id_user = $model->inc->user->get_id() ){
   }
 // main loop
   while ( $timer->measure('timeout') < 30 ){
+    if ( connection_aborted() ){
+
+    }
+    else if ( $timer->has_started('disconnection') ){
+      $timer->
+
+    }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
     if ( $hasChat ){

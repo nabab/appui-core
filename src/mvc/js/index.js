@@ -79,6 +79,7 @@
         tabnav: true,
         status: true,
         header: true,
+        clipboard: true,
         logo: data.logo,
         pollable: (data.pollable === undefined) || data.pollable,
         leftShortcuts: [{
@@ -87,10 +88,15 @@
           icon: 'nf nf-fa-tachometer'
         }, {
           command(){
-            appui.popup().load('help', '90%', '90%');
+            appui.popup().load({
+              url: 'help',
+              width: '90%',
+              height: '90%',
+              scrollable: false
+            });
           },
           text: bbn._("Help"),
-            icon: 'nf nf-mdi-help_circle_outline'
+          icon: 'nf nf-mdi-help_circle_outline'
         }, {
           url: 'usergroup/main',
           text: bbn._("My profile"),
