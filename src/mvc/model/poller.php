@@ -75,11 +75,16 @@ if ( $id_user = $model->inc->user->get_id() ){
 // main loop
   while ( $timer->measure('timeout') < 30 ){
     if ( connection_aborted() ){
-
+      if ( !$timer->has_started('disconnection') ){
+        $timer->start('disconnection');
+      }
+      else if ( $timer->measure('disconnection') > 10 ){
+        \bbn\x::log("Disconnected", 'poller');
+        die("Disconnected");
+      }
     }
     else if ( $timer->has_started('disconnection') ){
-      $timer->
-
+      $timer->reset();
     }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
