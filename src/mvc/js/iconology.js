@@ -119,7 +119,9 @@
         this.$refs.copyIcon.select();
         document.execCommand('copy');
         this.$nextTick(() =>{
-          appui.notify(bbn._('Copied class of the icon'), false, 3);
+          //doesn't work
+          //appui.notify(bbn._('Copied class of the icon'), false, 3);
+          appui.warning(bbn._('Copied class of the icon'), 3);
         });
       }
     },
