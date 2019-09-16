@@ -34,7 +34,7 @@
       }
     },
     created(){
-      bbn.fn.post(this.root + 'iconology/iconpicker', (d) => {
+      this.post(this.root + 'iconology/iconpicker', (d) => {
         if ( d.success && d.data.icons && d.data.total ){
           this.allIcons = d.data.icons;
           this.total = d.data.total;

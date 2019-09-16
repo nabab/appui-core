@@ -86,6 +86,7 @@ function launchPoller(){
           setPoller(60);
         }
         console.log("There is no client, user certainly disconnected (or not?)");
+        console.log("#Clients: " + clientList.length + ' / ' + isConnected);
         return;
       }
       else if ( interval === 60 ){

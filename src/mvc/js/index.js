@@ -12,7 +12,8 @@
       connection_max_failures: 10,
       money: data.money,
       appPrefix: data.app_prefix,
-      plugins: data.plugins
+      plugins: data.plugins,
+      cdn: data.shared_path
     });
     bbn.fn.autoExtend('lng', {
       select_unselect_all: bbn._('(Un)Select all'),
@@ -85,7 +86,7 @@
         leftShortcuts: [{
           url: 'dashboard/home',
           text: bbn._("Dashboard"),
-          icon: 'nf nf-fa-tachometer'
+          icon: 'nf nf-fa-dashboard'
         }, {
           command(){
             appui.popup().load({
