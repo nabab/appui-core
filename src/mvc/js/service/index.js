@@ -81,7 +81,7 @@ function launchPoller(){
     self.clients.matchAll({
       includeUncontrolled: true
     }).then(function(clientList) {
-      if (!clientList.length || !isConnected) {
+      if ( !clientList.length || !isConnected) {
         if (interval !== 60) {
           setPoller(60);
         }
@@ -169,10 +169,11 @@ function processClientMessage(event, clientList){
 }
 
 function processServerMessage(json){
-  console.log(["processServerMessage", json]);
+  console.log(json);
   return self.clients.matchAll().then(function(clientList) {
     retries = 0;
     isFocused = false;
+    /** @todo Explain Why!!! */
     if ( 'message' in dataObj ){
       delete dataObj.message;
     }
@@ -181,9 +182,11 @@ function processServerMessage(json){
     }
     if ( json.chat ){
       if ( json.chat.hash ){
+        console.log("Chat hash has changed");
         dataObj.usersHash = json.chat.hash;
       }
       if ( json.chat.last ){
+        console.log("Last chat has changed");
         dataObj.lastChat = json.chat.last;
       }
     }
