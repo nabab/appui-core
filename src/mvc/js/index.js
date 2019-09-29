@@ -73,6 +73,41 @@
       }, js_data.componentsMixin)
     );
 
+    let rightShortcuts = [{
+      command(){
+        bbn.fn.toggle_full_screen();
+      },
+      text: bbn._("Full screen"),
+      icon: 'nf nf-fa-arrows_alt'
+    }, {
+      command(){
+        window.store.remove('tabnav');
+        document.location.reload();
+      },
+      text: bbn._("Reload with a fresh view"),
+        icon: 'nf nf-mdi-sync_alert'
+    }, {
+      text: bbn._("Log out"),
+      icon: 'nf nf-fa-sign_out',
+      command(){
+        bbn.fn.post('core/logout').then(() => {
+          document.location.reload();
+        });
+      }
+    }];
+
+    if( data.app.user.isAdmin || data.app.user.isDev ){
+      rightShortcuts.splice(2, 0, {
+        text: bbn._("Increase version"),
+        icon: 'nf nf-oct-versions',
+        command(){
+          bbn.fn.post('core/service/increase').then(() => {
+            document.location.reload();
+          });
+        } 
+      })
+    }
+
     bbn.vue.initDefaults({
       appui: {
         root: data.root,
@@ -103,28 +138,7 @@
           text: bbn._("My profile"),
           icon: 'nf nf-fa-user'
         }],
-        rightShortcuts: [{
-          command(){
-            bbn.fn.toggle_full_screen();
-          },
-          text: bbn._("Full screen"),
-          icon: 'nf nf-fa-arrows_alt'
-        }, {
-          command(){
-            window.store.remove('tabnav');
-            document.location.reload();
-          },
-          text: bbn._("Reload with a fresh view"),
-            icon: 'nf nf-mdi-sync_alert'
-        }, {
-          text: bbn._("Log out"),
-          icon: 'nf nf-fa-sign_out',
-          command(){
-            bbn.fn.post('core/logout').then(() => {
-              document.location.reload();
-            });
-          }
-        }],
+        rightShortcuts: rightShortcuts,
       }
     });
 
