@@ -59,7 +59,7 @@ new Vue({
       }, 500);
       setTimeout(() => {
         document.querySelector("div.appui-login").innerHTML = `
-<h2>${bbn._('Refresh the page to be able to log in or click')} <a class="bbn-p" onclick="window.location.reload();">${bbn._('HERE')}</a></h2>`;
+<h2>`+ bbn._('Refresh the page to be able to log in or click') + ` <a class="bbn-p" onclick="window.location.reload();">` + bbn._('HERE') + `</a></h2>`;
       }, 1200000); // 20 minutes    
     });
     window.addEventListener('resize', this.setHeight);
