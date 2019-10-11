@@ -18,6 +18,8 @@ let windows = [];
 let aborter;
 let isConnected = false;
 let interval;
+let intervalObj;
+console.log("isConnected FALSE from Start....");
 
 //window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
 //let IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.OIDBTransaction || window.msIDBTransaction;
@@ -81,12 +83,18 @@ function launchPoller(){
     self.clients.matchAll({
       includeUncontrolled: true
     }).then(function(clientList) {
-      if ( !clientList.length || !isConnected) {
+      if ( !clientList.length ){
+        console.log("There is no client, user certainly disconnected (or not?). Interval is " + interval);
         if (interval !== 60) {
           setPoller(60);
         }
-        console.log("There is no client, user certainly disconnected (or not?)");
-        console.log("#Clients: " + clientList.length + ' / ' + isConnected);
+        return;
+      }
+      else if( !isConnected ){
+        console.log("Disconnected....");
+        if (interval !== 60) {
+          setPoller(60);
+        }
         return;
       }
       else if ( interval === 60 ){
@@ -115,9 +123,9 @@ function launchPoller(){
 }
 
 function setPoller(duration){
-  clearInterval(launchPoller);
+  clearInterval(intervalObj);
   interval = duration;
-  setInterval(launchPoller, duration*1000);
+  intervalObj = setInterval(launchPoller, duration*1000);
 }
 
 function receive(event){
@@ -162,14 +170,16 @@ function processClientMessage(event, clientList){
   if ( 'message' in d ){
     dataObj.message = d.message;
   }
+  if ( 'disconnected' in d ){
+    dataObj.disconnected = d.disconnected;
+  }
   if ( isRunning ){
     aborter.abort();
-    console.log("ABORT AND RESTART");
   }
 }
 
 function processServerMessage(json){
-  console.log(json);
+  console.log(["processServerMessage", json]);
   return self.clients.matchAll().then(function(clientList) {
     retries = 0;
     isFocused = false;
@@ -181,11 +191,11 @@ function processServerMessage(json){
       isConnected = false;
     }
     if ( json.chat ){
-      if ( json.chat.hash ){
+      if ( json.chat.hash && (dataObj.usersHash !== json.chat.hash)){
         console.log("Chat hash has changed");
         dataObj.usersHash = json.chat.hash;
       }
-      if ( json.chat.last ){
+      if ( json.chat.last && (dataObj.lastChat !== json.chat.last) ){
         console.log("Last chat has changed");
         dataObj.lastChat = json.chat.last;
       }
@@ -203,7 +213,6 @@ function processServerMessage(json){
 }
 
 function initClient(event, clientList){
-  console.log("initClient");
   let senderID = event.source.id;
   clientList.forEach(function(client) {
     if (client.id === senderID) {
@@ -214,6 +223,7 @@ function initClient(event, clientList){
       });
     }
   });
+  console.log("isConnected TRUE from Init");
   isConnected = true;
 }
 
@@ -282,19 +292,24 @@ function poll(){
             catch(e){
               json = {message: "The response is no JSON", error: e.message};
             }
-            //console.log(text);
-            processServerMessage(json).then((res) => {
-              isRunning = false;
-              if (res === false) {
-                retries++;
-                if ( retries <= 3 ){
+            if ( Object.keys(json).length ){
+              //console.log(text);
+              processServerMessage(json).then((res) => {
+                isRunning = false;
+                if (res === false) {
+                  retries++;
+                  if ( retries <= 3 ){
+                    poll();
+                  }
+                }
+                else{
                   poll();
                 }
-              }
-              else{
-                poll();
-              }
-            });
+              });
+            }
+            else{
+              poll();
+            }
           });
         }
       })
@@ -351,7 +366,7 @@ self.addEventListener('activate', function(event) {
 
 // Fetch event
 self.addEventListener('fetch', event => {
-  console.log('Service worker fetch event for version ' + CACHE_NAME);
+  //console.log('Service worker fetch event for version ' + CACHE_NAME);
   if ( event.request.credentials !== 'same-origin' ){
     event.respondWith(caches.match(event.request)
       .then(cachedResponse => {

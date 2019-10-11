@@ -13,7 +13,7 @@
 // set php runtime to unlimited
 set_time_limit(0);
 // User is identified
-if ( $id_user = $model->inc->user->get_id() ){
+if ($id_user = $model->inc->user->get_id()) {
 
   $actsource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/active');
   $datasource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/queue');
@@ -29,24 +29,23 @@ if ( $id_user = $model->inc->user->get_id() ){
     'start' => $now,
     'chat' => []
   ];
-  if ( $hasChat ){
+  if ($hasChat) {
     $user_system = new \bbn\user\users($model->db);
     $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
   }
-  if ( !empty($model->data['message']) ){
+  if (!empty($model->data['message'])) {
     // Gets the corresponding ID chat or creates one
-    if (
-      (isset($model->data['message']['id_chat']) && ($id_chat = $model->data['message']['id_chat'])) ||
-      (!empty($model->data['message']['users']) && ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users'])))
-    ){
+    if ((isset($model->data['message']['id_chat']) && ($id_chat = $model->data['message']['id_chat'])) 
+        || (!empty($model->data['message']['users']) && ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users'])))
+    ) {
       $chat_system->talk($id_chat, $model->data['message']['text']);
       $res['chat']['id_chat'] = $id_chat;
     }
     unset($model->data['message']);
   }
   $observer = new \bbn\appui\observer($model->db);
-  if ( $files = \bbn\file\dir::get_files($actsource) ){
-    foreach ( $files as $f ){
+  if ($files = \bbn\file\dir::get_files($actsource)) {
+    foreach ($files as $f){
       unlink($f);
     }
   }
@@ -57,87 +56,87 @@ if ( $id_user = $model->inc->user->get_id() ){
 
   $observers = [];
   // If observers are sent we check which ones are not used and delete them
-  if ( isset($model->data['observers']) ){
+  if (isset($model->data['observers'])) {
     $observers = $model->data['observers'];
-    foreach ( $observer->get_list($id_user) as $ob ){
+    foreach ($observer->get_list($id_user) as $ob){
       $found = false;
-      foreach ( $model->data['observers'] as $sent ){
-        if ( $sent['id'] === $ob['id'] ){
+      foreach ($model->data['observers'] as $sent){
+        if ($sent['id'] === $ob['id']) {
           $found = true;
           break;
         }
       }
-      if ( !$found ){
+      if (!$found) {
         $observer->user_delete($ob['id']);
       }
     }
   }
-// main loop
-  while ( $timer->measure('timeout') < 30 ){
-    if ( connection_aborted() ){
-      if ( !$timer->has_started('disconnection') ){
+  // main loop
+  while ($timer->measure('timeout') < 30){
+    if (connection_aborted()) {
+      if (!$timer->has_started('disconnection')) {
         $timer->start('disconnection');
       }
-      else if ( $timer->measure('disconnection') > 10 ){
+      elseif ($timer->measure('disconnection') > 10) {
         \bbn\x::log("Disconnected", 'poller');
         die("Disconnected");
       }
     }
-    else if ( $timer->has_started('disconnection') ){
+    elseif ($timer->has_started('disconnection')) {
       $timer->reset();
     }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
-    if ( $hasChat ){
+    if ($hasChat) {
       $last = 0;
       $chats = $chat_system->get_chats();
-      if ( $timer->measure('activity') < 1 ){
+      if ($timer->measure('activity') < 1) {
         $chat_users = $user_system->online_list();
         $chat_hash = md5(json_encode($chat_users));
-        if ( $chat_hash !== $model->data['usersHash'] ){
+        if ($chat_hash !== $model->data['usersHash']) {
           $res['chat']['users'] = $chat_users;
           $res['chat']['hash'] = $chat_hash;
         }
       }
-      if ( count($chats) ){
-        foreach ( $chats as $chat ){
-          if (
-            ($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) &&
-            count($msgs['messages'])
-          ){
-            if ( !isset($res['chat']['chats']) ){
+      if (count($chats)) {
+        foreach ($chats as $chat){
+          if (($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) 
+              && count($msgs['messages'])
+          ) {
+            if (!isset($res['chat']['chats'])) {
               $res['chat']['chats'] = [];
               $res['chat']['last'] = 0;
             }
             $res['chat']['chats'][$chat] = $msgs;
             $res['chat']['chats'][$chat]['participants'] = $chat_system->get_participants($chat);
             $max = $msgs['last'];
-            if ( \bbn\x::compare_floats($max, $res['chat']['last'], '>') ){
+            if (\bbn\x::compare_floats($max, $res['chat']['last'], '>')) {
               $res['chat']['last'] = $max;
             }
           }
         }
-        if ( !empty($res['chat']['last']) ){
+        if (!empty($res['chat']['last'])) {
           //$res['chat']['last'] = ceil($res['chat']['last'] * 10000) / 10000;
         }
       }
     }
     // get files in the poller dir
     $files = \bbn\file\dir::get_files($datasource);
-    if ( $files && count($files) ){
+
+    if ($files && count($files)) {
       $result = [];
       $returned_obs = [];
-      foreach ( $files as $f ){
-        if ( $ar = json_decode(file_get_contents($f), true) ){
-          if ( isset($ar['observers']) ){
+      foreach ($files as $f){
+        if ($ar = json_decode(file_get_contents($f), true)) {
+          if (isset($ar['observers'])) {
             \bbn\x::log($ar['observers']);
-            foreach ( $ar['observers'] as $o ){
+            foreach ($ar['observers'] as $o){
               $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
-              if ( !$value || ($value !== $o['result']) ){
+              if (!$value || ($value !== $o['result'])) {
                 $returned_obs[] = $o;
               }
             }
-            if ( count($returned_obs) ){
+            if (count($returned_obs)) {
               $result[] = ['observers' => $returned_obs];
             }
           }
@@ -149,19 +148,19 @@ if ( $id_user = $model->inc->user->get_id() ){
       }
       // put data.txt's content and timestamp of last data.txt change into array
       // Leaves the page as it should be called back
-      if ( count($result) ){
+      if (count($result)) {
         unlink($active_file);
         $res = ['data' => $result];
         break;
       }
     }
     // wait for 1 sec
-    if ( $timer->measure('activity') > 10 ){
+    if ($timer->measure('activity') > 10) {
       $timer->stop('activity');
       $timer->start('activity');
       $model->inc->user->update_activity();
     }
-    if ( !empty($res['chat']) || !empty($res['data']) ){
+    if (!empty($res['chat']) || !empty($res['data'])) {
       die(json_encode($res));
     }
     sleep(1);
@@ -169,6 +168,6 @@ if ( $id_user = $model->inc->user->get_id() ){
   //die(var_dump("File does not exist", $active_file, $res));
 }
 else{
-  $res = ['disconnected' => true];
+  die(json_encode(['disconnected' => true]));
 }
-die(json_encode($res));
+die("{}");

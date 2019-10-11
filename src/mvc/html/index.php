@@ -35,99 +35,103 @@
   <meta name="viewport" content="initial-scale=0.66, user-scalable=no">
   <title><?=$site_title?></title>
   <script>
-var errorMsg;
-if ( !('serviceWorker' in navigator) ){
-  errorMsg = "You need to have service workers support in your browser, please update or use another browser";
-}
-else if ( !('AbortController' in window) ){
-  errorMsg = "You need to have abort controller support in your browser, please update or use another browser";
-}
-else{
-  let loaded = false;
-  navigator.serviceWorker.register('/sw', {scope: '/'})
-  .then((registration) => {
-    registration.onupdatefound = () => {
-      const installingWorker = registration.installing;
-      installingWorker.onstatechange = () => {
-        console.log("NEW STATE: " + installingWorker.state);
-        if (installingWorker.state === 'activated') {
-          if ( 'appui' in window ){
-            if ( confirm(
-                bbn._("The application has been updated but you still use an old version.") + "\n" +
-                bbn._("You need to refresh the page to upgrade.") + "\n" +
-                bbn._("Do you want to do it now?")
-            ) ){
+(() => {
+  let errorMsg;
+  if ( !('serviceWorker' in navigator) ){
+    errorMsg = "You need to have service workers support in your browser, please update or use another browser";
+  }
+  else if ( !('AbortController' in window) ){
+    errorMsg = "You need to have abort controller support in your browser, please update or use another browser";
+  }
+  else{
+    let loaded = false;
+    let isReloading = false;
+    navigator.serviceWorker.register('/sw', {scope: '/'})
+    .then((registration) => {
+      registration.onupdatefound = () => {
+        const installingWorker = registration.installing;
+        installingWorker.onstatechange = () => {
+          console.log("NEW STATE: " + installingWorker.state);
+          if (!isReloading && ['activated', 'installed'].includes(installingWorker.state)) {
+            if ( 'appui' in window ){
+              if ( confirm(
+                  bbn._("The application has been updated but you still use an old version.") + "\n" +
+                  bbn._("You need to refresh the page to upgrade.") + "\n" +
+                  bbn._("Do you want to do it now?")
+              ) ){
+                isReloading = true;
+                location.reload();
+              }
+            }
+            else{
+              isReloading = true;
               location.reload();
             }
           }
-          else{
+          else if ( 'appui' in window ){
+            let v = window.localStorage.getItem('bbn-vue-version');
+            bbn.fn.log("POLLING FROM SERVICE WORKER VERSION " + v);
+            appui.poll();
+          }
+        };
+      };
+      console.log('Registration successful, scope is:', registration.scope);
+      console.log(registration);
+    })
+    .catch((error) => {
+      console.log('Service worker registration failed, error:', error);
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      let script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "<?=$script_src?>";
+      script.onload = function(){
+        if ( ('bbn' in window) && navigator.serviceWorker.controller ){
+          navigator.serviceWorker.addEventListener('message', function(event) {
+            if ( event.data && event.data.data ){
+              let d = event.data;
+              if ( d.type === 'init' ){
+                document.getElementById('nojs_bbn').remove();
+                document.querySelectorAll('.appui')[0].style.display = 'block';
+                if ( d.data.version ){
+                  bbn.vue.version = d.data.version;
+                  window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
+                }
+                let res = eval(d.data.script);
+                if ( bbn.fn.isFunction(res) ){
+                  res(d.data);
+                  loaded = true;
+                }
+              }
+              else if ( 'appui' in window ){
+                let v = window.localStorage.getItem('bbn-vue-version');
+                appui.receive(d.data);
+              }
+            }
+          });
+          navigator.serviceWorker.controller.postMessage({type: "init"})
+        }
+        else{
+          let attempts = window.localStorage.getItem('bbn-load') || 0;
+          if ( attempts < 3 ){
+            window.localStorage.setItem('bbn-load', ++attempts);
             location.reload();
           }
         }
-        else if ( 'appui' in window ){
-          let v = window.localStorage.getItem('bbn-vue-version');
-          bbn.fn.log("POLLING FROM SERVICE WORKER VERSION " + v);
-          appui.poll();
-        }
       };
-    };
-    console.log('Registration successful, scope is:', registration.scope);
-    console.log(registration);
-  })
-  .catch((error) => {
-    console.log('Service worker registration failed, error:', error);
-  });
-  document.addEventListener('DOMContentLoaded', () => {
-    let script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src = "<?=$script_src?>";
-    script.onload = function(){
-      if ( ('bbn' in window) && navigator.serviceWorker.controller ){
-        navigator.serviceWorker.addEventListener('message', function(event) {
-          if ( event.data && event.data.data ){
-            let d = event.data;
-            if ( d.type === 'init' ){
-              document.getElementById('nojs_bbn').remove();
-              document.querySelectorAll('.appui')[0].style.display = 'block';
-              if ( d.data.version ){
-                bbn.vue.version = d.data.version;
-                window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
-              }
-              let res = eval(d.data.script);
-              if ( bbn.fn.isFunction(res) ){
-                res(d.data);
-                loaded = true;
-              }
-            }
-            else if ( 'appui' in window ){
-              let v = window.localStorage.getItem('bbn-vue-version');
-              bbn.fn.log("RECIVING FROM SERVICE WORKER VERSION " + v);
-              appui.receive(d.data);
-            }
-          }
-        });
-        navigator.serviceWorker.controller.postMessage({type: "init"})
-      }
-      else{
-        let attempts = window.localStorage.getItem('bbn-load') || 0;
-        if ( attempts < 3 ){
-          window.localStorage.setItem('bbn-load', ++attempts);
-          location.reload();
-        }
-      }
-    };
-    script.onerror = function(){
-      console.log("Problem")
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
-  });
-}
-if ( errorMsg ){
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('error_message').innerHTML = errorMsg + '<br><br>' + 
-    '<a href="https://vivaldi.com/download/">Vivaldi Browser</a>';
-  });
-}
+      script.onerror = function(){
+        console.log("Problem")
+      };
+      document.getElementsByTagName("head")[0].appendChild(script);
+    });
+  }
+  if ( errorMsg ){
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('error_message').innerHTML = errorMsg + '<br><br>' + 
+      '<a href="https://vivaldi.com/download/">Vivaldi Browser</a>';
+    });
+  }
+})();
 </script>
 </head>
 <body>

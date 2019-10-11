@@ -74,13 +74,13 @@
     );
 
     let rightShortcuts = [{
-      command(){
+      action(){
         bbn.fn.toggle_full_screen();
       },
       text: bbn._("Full screen"),
       icon: 'nf nf-fa-arrows_alt'
     }, {
-      command(){
+      action(){
         window.store.remove('tabnav');
         document.location.reload();
       },
@@ -89,7 +89,7 @@
     }, {
       text: bbn._("Log out"),
       icon: 'nf nf-fa-sign_out',
-      command(){
+      action(){
         bbn.fn.post('core/logout').then(() => {
           document.location.reload();
         });
@@ -100,7 +100,7 @@
       rightShortcuts.splice(2, 0, {
         text: bbn._("Increase version"),
         icon: 'nf nf-oct-versions',
-        command(){
+        action(){
           bbn.fn.post('core/service/increase').then(() => {
             document.location.reload();
           });
@@ -123,7 +123,7 @@
           text: bbn._("Dashboard"),
           icon: 'nf nf-fa-dashboard'
         }, {
-          command(){
+          action(){
             appui.popup().load({
               url: 'help',
               width: '90%',
