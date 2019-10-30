@@ -107,11 +107,14 @@
         } 
       })
     }
+    bbn.fn.log("LIST", data.list);
 
     bbn.vue.initDefaults({
       appui: {
         root: data.root,
-        list: data.list,
+        list: [{
+          source: data.list
+        }],
         tabnav: true,
         status: true,
         header: true,

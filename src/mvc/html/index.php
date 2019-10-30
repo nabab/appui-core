@@ -38,10 +38,10 @@
 (() => {
   let errorMsg;
   if ( !('serviceWorker' in navigator) ){
-    errorMsg = "You need to have service workers support in your browser, please update or use another browser";
+    errorMsg = <?=\bbn\str::as_var(_("You need to have service workers support in your browser, please update or use another browser"))?>;
   }
   else if ( !('AbortController' in window) ){
-    errorMsg = "You need to have abort controller support in your browser, please update or use another browser";
+    errorMsg = <?=\bbn\str::as_var(_("You need to have abort controller support in your browser, please update or use another browser"))?>;
   }
   else{
     let loaded = false;
@@ -55,9 +55,9 @@
           if (!isReloading && ['activated', 'installed'].includes(installingWorker.state)) {
             if ( 'appui' in window ){
               if ( confirm(
-                  bbn._("The application has been updated but you still use an old version.") + "\n" +
-                  bbn._("You need to refresh the page to upgrade.") + "\n" +
-                  bbn._("Do you want to do it now?")
+                <?=\bbn\str::as_var(_("The application has been updated but you still use an old version."))?> + "\n" +
+                <?=\bbn\str::as_var(_("You need to refresh the page to upgrade."))?> + "\n" +
+                <?=\bbn\str::as_var(_("Do you want to do it now?"))?>
               ) ){
                 isReloading = true;
                 location.reload();
@@ -70,16 +70,16 @@
           }
           else if ( 'appui' in window ){
             let v = window.localStorage.getItem('bbn-vue-version');
-            bbn.fn.log("POLLING FROM SERVICE WORKER VERSION " + v);
+            bbn.fn.log(<?=\bbn\str::as_var(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
       };
-      console.log('Registration successful, scope is:', registration.scope);
+      console.log(<?=\bbn\str::as_var(_("Registration successful, scope is"))?>, registration.scope);
       console.log(registration);
     })
     .catch((error) => {
-      console.log('Service worker registration failed, error:', error);
+      console.log(<?=\bbn\str::as_var(_("Service worker registration failed, error"))?>, error);
     });
     document.addEventListener('DOMContentLoaded', () => {
       let script = document.createElement("script");
