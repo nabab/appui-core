@@ -44,6 +44,7 @@
     errorMsg = <?=\bbn\str::as_var(_("You need to have abort controller support in your browser, please update or use another browser"))?>;
   }
   else{
+    let hasBeenAsked = false;
     let loaded = false;
     let isReloading = false;
     navigator.serviceWorker.register('/sw', {scope: '/'})
@@ -52,7 +53,8 @@
         const installingWorker = registration.installing;
         installingWorker.onstatechange = () => {
           console.log("NEW STATE: " + installingWorker.state);
-          if (!isReloading && ['activated', 'installed'].includes(installingWorker.state)) {
+          if (!hasBeenAsked && !isReloading && ['activated', 'installed'].includes(installingWorker.state)) {
+            hasBeenAsked = true;
             if ( 'appui' in window ){
               if ( confirm(
                 <?=\bbn\str::as_var(_("The application has been updated but you still use an old version."))?> + "\n" +
