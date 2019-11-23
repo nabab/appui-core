@@ -27,7 +27,7 @@
     bbn.fn.autoExtend('opt', data.options);
     bbn.fn.extend(bbn.lng, data.lng);
 
-    Vue.config.devtools = !!data.is_dev;
+    Vue.config.devtools = !!data.is_dev || !!data.is_test;
 
     Vue.config.errorHandler = function (err, vm, info) {
       // handle error
