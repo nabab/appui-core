@@ -67,7 +67,6 @@
           return prom.then(() => {
             let ul = this.getRef('ul');
             bbn.fn.log('--------', height, contentSize, containerSize, ul.clientHeight, '*********');
-            
             if ( contentSize <= height ){
               this.scroller.onResize().then(() => {
                 let prom = new Promise((resolve, reject) => {
@@ -115,7 +114,7 @@
         }
       },
       copyIcon(icon){
-        this.$refs.copyIcon.value = 'nf nf-' + icon;
+        this.$refs.copyIcon.value = icon;
         this.$refs.copyIcon.select();
         document.execCommand('copy');
         this.$nextTick(() =>{

@@ -15,12 +15,12 @@
       <ul ref="ul">
         <li v-for="icon in currentIcons" class="bbn-block">
           <bbn-button :title= "icon"
-                      :icon="'nf nf-' + icon"
+                      :icon="'nf ' + icon"
                       class="btn"
                       @click="copyIcon(icon)"
           >
           </bbn-button>
-          <div class="text-class" v-text="icon"></div>
+          <div class="text-class" v-text="icon.substr(3)"></div>
         </li>
       </ul>
     </bbn-scroll>

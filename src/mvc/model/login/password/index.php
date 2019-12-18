@@ -11,5 +11,6 @@ return [
   'test' => BBN_IS_DEV ? 1 : 0,
   'year' => date('Y'),
   'lang' => BBN_LANG,
-  'logo' => false
+  'logo' => false,
+  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default'
 ];
