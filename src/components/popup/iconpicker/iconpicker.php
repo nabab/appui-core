@@ -1,4 +1,4 @@
-<div class="appui-icon-picker bbn-overlay bbn-w-100">
+<div class="appui-icon-picker bbn-overlay bbn-w-100 bbn-c">
   <div class="bbn-flex-height">
     <div class="bbn-w-100 bbn-c" style="padding: 0 1em 1em 0">
       <bbn-input style="width: 300px"
@@ -6,16 +6,16 @@
                  v-model="toSearch"
       ></bbn-input>
     </div>
-    <div class="bbn-flex-fill bbn-c">
+    <div class="bbn-flex-fill">
       <bbn-scroll v-if="isReady">
-          <bbn-button v-for="(icon, idx) in icons"
-                      :key="idx"
-                      class="btn-icon"
+        <div class="btn-icon bbn-iblock bbn-smargin"  v-for="(icon, idx) in icons">
+          <bbn-button :key="idx"
+                      class="bbn-c bbn-100"
                       @click="selectIcon(icon)"
                       :title="icon"
                       :icon="icon"
-                      style="width:45px; height:45px"
           ></bbn-button>
+        <div>
       </bbn-scroll>
       <div v-else class="bbn-overlay bbn-middle">
         <?=_('LOADING ICONS')?>
