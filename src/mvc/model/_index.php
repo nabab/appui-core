@@ -47,6 +47,7 @@ $data = [
     'groupId' => $model->inc->user->get_group() // Deprecated
   ]
 ];
+
 $data['options']['media_types'] = $model->inc->options->code_options(\bbn\appui\notes::get_appui_option_id('media'));
 $data['options']['categories'] = $model->inc->options->full_options();
 

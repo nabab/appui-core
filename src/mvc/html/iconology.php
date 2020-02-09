@@ -1,9 +1,6 @@
 <div class="bbn-h-100 bbn-flex-height appui-core-iconology">
   <div class="bbn-line-breaker bbn-middle bbn-c bbn-padded">
-    <div style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 1px; height:1px">
-      <input type="text" ref="copyIcon">
-    </div>
-    <bbn-input :placeholder="'Search in ' + source.total + ' icons'"
+    <bbn-input :placeholder="'Search in ' + totIcons.length + ' icons'"
                v-model="searchIcon"
                class="search bbn-xl bbn-w-50"
                ref="search"

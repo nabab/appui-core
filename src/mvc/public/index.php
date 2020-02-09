@@ -25,7 +25,6 @@ if ( $custom_js = $ctrl->custom_plugin_view('index', 'js', $ctrl->data, 'appui-c
 }
 //die(\bbn\x::hdump($custom_js, $ctrl->data));
 
-
 $ctrl->combo($ctrl->data['site_title'], true);
 
 /*

@@ -114,14 +114,8 @@
         }
       },
       copyIcon(icon){
-        this.$refs.copyIcon.value = icon;
-        this.$refs.copyIcon.select();
-        document.execCommand('copy');
-        this.$nextTick(() =>{
-          //doesn't work
-          //appui.notify(bbn._('Copied class of the icon'), false, 3);
-          appui.warning(bbn._('Copied class of the icon'), 3);
-        });
+        bbn.fn.copy(icon);
+    		appui.success(bbn._("Copied to clipboard"));
       }
     },
     watch: {

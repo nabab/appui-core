@@ -67,12 +67,12 @@ else {
 $ctrl->obj->data = $ctrl->get_model();
 
 
-if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'iconpicker') ){
+if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'charpicker') ){
   $ctrl->obj->success = $ctrl->obj->data['total'] > 0 ? true : false;
 }
 else {
   $ctrl
     ->set_color('purple', 'white')
-    ->set_icon('nf nf-fa-image')
-    ->combo("Iconology");
+    ->set_icon('nf nf-fa-font')
+    ->combo("Chartology");
 }
