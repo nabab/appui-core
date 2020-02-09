@@ -1,0 +1,6 @@
+{
+  "dependencies": [
+    "appui-usergroup",
+    "appui-options"
+  ]
+}

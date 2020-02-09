@@ -28,7 +28,7 @@ new Vue({
         window.document.location.href = bbn.env.path;
       }
       else {
-        this.alert(d, bbn.lng.error);
+        this.alert(d.errorMessage, bbn.lng.error);
       }
     },
     lostPasssubmited(d){
