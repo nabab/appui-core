@@ -1,0 +1,25 @@
+{
+  "data": [
+    {
+      "text": "Core",
+      "icon": "nf nf-fa-asterisk",
+      "items": [
+        {
+          "text": "Configuration",
+          "icon": "nf nf-fa-cog",
+          "link": "config"
+        },
+        {
+          "text": "Iconology",
+          "icon": "nf nf-fa-image",
+          "link": "iconology"
+        },
+        {
+          "text": "Special characters",
+          "icon": "nf nf-fa-font",
+          "link": "special_chars"
+        }
+      ]
+    }
+  ]
+}

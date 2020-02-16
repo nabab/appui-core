@@ -142,6 +142,7 @@
           icon: 'nf nf-fa-user'
         }],
         rightShortcuts: rightShortcuts,
+        theme: data.theme
       }
     });
 

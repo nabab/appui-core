@@ -25,7 +25,7 @@ $data = [
   'test' => BBN_IS_DEV ? 1 : 0,
   'year' => date('Y'),
   'lang' => BBN_LANG,
-  'root' => APPUI_CORE_ROOT,
+  'root' => '',//APPUI_CORE_ROOT,
   'current_menu' => $menu->get_default(),
   'menus' => count(($m = $menu->get_menus())) > 1 ? $m : [],
   //'shortcuts' => $model->get_model($model->plugin_url('appui-menu').'/shortcuts/list'),

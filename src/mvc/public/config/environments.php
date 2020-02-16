@@ -5,4 +5,4 @@
  **/
 
 /** @var $this \bbn\mvc\controller */
-$ctrl->combo(_('Current environment'), true);
+$ctrl->combo(_('Environments'));

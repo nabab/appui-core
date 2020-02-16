@@ -5,4 +5,4 @@
  **/
 
 /** @var $this \bbn\mvc\controller */
-$ctrl->combo(_('General'), true);
+$ctrl->combo();
