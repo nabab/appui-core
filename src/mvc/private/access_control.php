@@ -54,17 +54,21 @@ else if ( $ctrl->inc->user->is_just_login() ){
 // Dans le cas où l'on veut la structure
 else if ( $ctrl->get_mode() === 'dom' ){
   if ( !$ctrl->inc->user->check_session() ){
-    // Just for GDPR
-    $cookie = $ctrl->get_cookie();
-    if ( empty($cookie) || empty($cookie['bbn_accept_cookie']) ){
-      $ctrl->reroute('privacy');
-    }
-    else{
-      if ( in_array($path, $authorized, true) ){
-        return 1;
+   if ($ctrl->has_plugin('appui-gdpr')) {
+     $cookie = $ctrl->get_cookie();
+     if ( empty($cookie) || empty($cookie['bbn_accept_cookie']) ){
+       $ctrl->reroute('privacy');
+      
+       else{
+         if ( in_array($path, $authorized, true) ){
+           return 1;
+          }
+          $ctrl->reroute('core/login');
+        }
       }
-      $ctrl->reroute('core/login');
-    }
+      else {
+        $ctrl->reroute('core/login');
+      }
   }
   return 1;
 }
