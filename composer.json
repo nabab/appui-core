@@ -13,7 +13,9 @@
     }
   ],
   "require": {
-    "php": ">=7.1",
-    "bbn/bbn": "dev-master"
+    "php": ">=7.3",
+    "bbn/bbn": "dev-master",
+    "bbn/appui-options": "dev-master",
+    "bbn/appui-usergroup": "dev-master"
   }
 }
