@@ -5,4 +5,4 @@
  **/
 
 /** @var $this \bbn\mvc\controller */
-$ctrl->combo('<i class="nf nf-fa-home bbn-lg"></i>', true);
+$ctrl->set_icon('nf nf-fa-home')->combo(_('Home'));

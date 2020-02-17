@@ -39,8 +39,24 @@
     if ( data.js_data ){
       js_data = eval(data.js_data) || {};
     }
+    bbn.fn.log("IS THERE JS DATA?", js_data, data);
     if ( !js_data.appuiMixin ){
-      js_data.appuiMixin = {};
+      js_data.appuiMixin = {
+        header: true,
+        tabnav: true,
+        clipboard: true,
+        status: true,
+        list: [
+          {
+            url: 'core/home',
+            title: bbn._("Home"),
+            load: true,
+            static: true,
+            icon: 'nf nf-fa-home'
+          }
+        ],
+        searchBar: false
+      };
     }
     if ( !js_data.componentsMixin ){
       js_data.componentsMixin = {};
@@ -113,7 +129,7 @@
       appui: {
         root: data.root,
         list: [{
-          source: data.list
+          source: data.list || js_data.appuiMixin.list
         }],
         tabnav: true,
         status: true,
