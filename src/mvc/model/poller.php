@@ -23,17 +23,18 @@ if ($id_user = $model->inc->user->get_id()) {
   $timer = new \bbn\util\timer();
   $timer->start('timeout');
   $timer->start('activity');
+  $chat_enabled = $model->has_plugin('appui-chat');
   $hasChat = !empty($model->data['chat']);
   $res = [
     'data' => [],
     'start' => $now,
     'chat' => []
   ];
-  if ($hasChat) {
+  if ($chat_enabled && $hasChat) {
     $user_system = new \bbn\user\users($model->db);
     $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
   }
-  if (!empty($model->data['message'])) {
+  if ($chat_enabled && !empty($model->data['message'])) {
     // Gets the corresponding ID chat or creates one
     if ((isset($model->data['message']['id_chat']) && ($id_chat = $model->data['message']['id_chat'])) 
         || (!empty($model->data['message']['users']) && ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users'])))
@@ -87,7 +88,7 @@ if ($id_user = $model->inc->user->get_id()) {
     }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
-    if ($hasChat) {
+    if ($chat_enabled && $hasChat) {
       $last = 0;
       $chats = $chat_system->get_chats();
       if ($timer->measure('activity') < 1) {
