@@ -76,6 +76,9 @@ elseif (in_array($path, $authorized, true)) {
 if (!$ctrl->inc->user->check_session()) {
   return false;
 }
+if (class_exists('\\bbn\\appui\\history')) {
+  \bbn\appui\history::set_user($ctrl->inc->user->get_id());
+}
 if (($path !== 'core/poller')
     && !defined("BBN_MVC_ID")
     && defined('BBN_REFERER')

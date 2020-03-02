@@ -48,6 +48,25 @@ if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
     "bbn/appui-write" => "dev-master",
   ];
   
+  $json = file_get_contents($model->lib_path().'bbn/appui-core/src/cfg/composers.json');
+  $composers = json_decode($json, true);
+  $oplugins = $composers['plugins'];
+  unset($composers['plugins']);
+  array_walk(
+    $oplugins,
+    function (&$a, $name) use ($composers) {
+      $a = array_merge(
+        $composers,
+        $a,
+        [
+          'sname' => $name,
+          'homepage' => "https://github.com/nabab/".$name
+        ]
+      );
+    }
+  );
+  $json = file_get_contents($model->lib_path().'bbn/appui-core/src/cfg/schema.json');
+  $schema = json_decode($json, true);
   $json = file_get_contents($model->app_path().'cfg/environment.json');
   $envs = json_decode($json, true);
   $json = file_get_contents($model->app_path().'cfg/settings.json');
@@ -93,7 +112,9 @@ if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
     'settings' => $settings,
     'composer' => $composer,
     'aliases' => $aliases,
+    'oplugins' => array_values($oplugins),
     'plugins' => $plugins,
+    'schema' => $schema,
     'packages' => $packages,
     'dpackages' => $dpackages
   ];

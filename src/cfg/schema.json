@@ -1,0 +1,289 @@
+{
+  "settings": [
+    {
+      "text": "Informations",
+      "items": [
+        {
+          "text": "Application name",
+          "name": "app_name",
+          "desc": "The name of the application is used for",
+          "editable": true
+        },
+        {
+          "text": "Site title",
+          "name": "site_title",
+          "desc": "The site's title as it will appear in the title bar of your browser",
+          "editable": true
+        },
+        {
+          "text": "Client",
+          "name": "client_name",
+          "desc": "The name of the client for which this project is designed. It will appear in the GDPR.",
+          "editable": true
+        },
+        {
+          "text": "Project",
+          "name": "project",
+          "desc": "The UID of the project on app-ui.com allowing you to communicate with other servers"
+        }
+      ]
+    },
+    {
+      "text": "Settings",
+      "items": [
+        {
+          "text": "Default theme",
+          "name": "theme",
+          "desc": "The default theme that will have all new users (yuou can change your theme in your profile)",
+          "editable": true
+        },
+        {
+          "text": "Default timezone",
+          "name": "app_name",
+          "desc": "The default timezone of the data in the app",
+          "editable": true
+        },
+        {
+          "text": "Session duration (in sec)",
+          "name": "sess_lifetime",
+          "desc": "The length of time, in seconds, after which an inactive user session will be deleted",
+          "editable": true
+        },
+        {
+          "text": "Language",
+          "name": "lang",
+          "desc": "The language of the user in the app",
+          "editable": true
+        },
+        {
+          "text": "External user's email",
+          "name": "external_user_email",
+          "desc": "The email address used by the external user, for all actions which are not performed by a real user. This email addres will also be used as default From in the emails sent by the application",
+          "editable": true
+        }
+      ]
+    },
+    {
+      "text": "Security",
+      "items": [
+        {
+          "text": "Encryption key",
+          "name": "encryption_key",
+          "desc": "The default encryption key used to store sensitive data",
+          "viewable": true
+        },
+        {
+          "text": "Fingerprint",
+          "name": "fingerprint",
+          "desc": "The default fingerprint used to encode sensitive data",
+          "viewable": true
+        }
+      ]
+    },
+    {
+      "text": "Class personnalization",
+      "items": [
+        {
+          "text": "User",
+          "name": "user",
+          "desc": "The alternative class to replace the bbn one used otherwise",
+          "editable": true
+        },
+        {
+          "text": "Preferences",
+          "name": "preferences",
+          "desc": "The alternative class to replace the bbn one used otherwise",
+          "editable": true
+        },
+        {
+          "text": "Permissions",
+          "name": "permissions",
+          "desc": "The alternative class to replace the bbn one used otherwise",
+          "editable": true
+        },
+        {
+          "text": "Options",
+          "name": "options",
+          "desc": "The alternative class to replace the bbn one used otherwise",
+          "editable": true
+        },
+        {
+          "text": "History",
+          "name": "history",
+          "desc": "The alternative class to replace the bbn one used otherwise",
+          "editable": true
+        }
+      ]
+    }
+  ],
+  "environment": [
+    {
+      "text": "Installation",
+      "items": [
+        {
+          "text": "Host name",
+          "name": "hostname",
+          "desc": "The host name of the server where the app is installed"
+        },
+        {
+          "text": "Application path",
+          "name": "app_path",
+          "desc": "The path in which the app is installed (in which the src directory is located)"
+        },
+        {
+          "text": "Public path",
+          "name": "public",
+          "desc": "The root path in the URL. For example if your app is reachable at www.test.com/my_app, its value will be /myapp."
+        },
+        {
+          "text": "Environment UID",
+          "name": "app_id",
+          "desc": "The ID provided by app-ui.com which allow you to identify your different installations and let them communicate securely"
+        }
+      ]
+    },
+    {
+      "text": "Installation configuration",
+      "items": [
+        {
+          "text": "Application's email",
+          "name": "admin_email",
+          "desc": "The default email address to which the app will send system notifiactions",
+          "editable": true
+        },
+        {
+          "text": "Environment",
+          "name": "env",
+          "desc": "The type of environment: can be dev, test, or prod",
+          "component": "bbn-radio",
+          "source": [
+            {
+              "text": "Development",
+              "value": "dev"
+            }, {
+              "text": "Test",
+              "value": "test"
+            }, {
+              "text": "Production",
+              "value": "prod"
+            }
+          ],
+          "editable": true
+        },
+        {
+          "text": "SSL",
+          "name": "is_ssl",
+          "desc": "Whether or not a SSL certificate is used for this app. Be careful, the certificate MUST be trusted otherwise the app won't work",
+          "type": "bool",
+          "editable": true
+        }
+      ]
+    },
+    {
+      "text": "Database",
+      "items": [
+        {
+          "text": "Engine",
+          "name": "db_engine",
+          "desc": "The type of database: can be mysql or sqlite",
+          "editable": true
+        },
+        {
+          "text": "Host",
+          "name": "db_host",
+          "desc": "The database host (IP or name)",
+          "editable": true
+        },
+        {
+          "text": "Username",
+          "name": "db_user",
+          "desc": "The username to use for the database connection",
+          "editable": true
+        },
+        {
+          "text": "Mot de passe",
+          "name": "db_pass",
+          "desc": "The password to use for the database connection",
+          "editable": true
+        },
+        {
+          "text": "Database name",
+          "name": "database",
+          "desc": "The database where are all the app-ui tables",
+          "editable": true
+        }
+      ]
+    },
+    {
+      "text": "Paths",
+      "items": [
+        {
+          "text": "Library",
+          "name": "lib_path",
+          "desc": "The vendor directory (from Composer)",
+          "editable": true
+        },
+        {
+          "text": "Data",
+          "name": "data_path",
+          "desc": "The directory where the data is stored",
+          "editable": true
+        },
+        {
+          "text": "Public directory",
+          "name": "cur_path",
+          "desc": "The directory where the root HTML of the domain is located",
+          "editable": true
+        },
+        {
+          "text": "Static content",
+          "name": "static_path",
+          "val": "https://cdn.apst.travel/APST-UI/",
+          "editable": true
+        },
+        {
+          "text": "Static libraries",
+          "name": "shared_path",
+          "val": "https://cdn.apst.travel/",
+          "editable": true
+        },
+        {
+          "text": "Logs",
+          "name": "log_path",
+          "val": "/home/app2/logs/",
+          "editable": true
+        }
+      ]
+    },
+    {
+      "text": "Other constants",
+      "items": [
+        {
+          "text": "WordPress URL",
+          "name": "wp_url",
+          "editable": true
+        },
+        {
+          "text": "Internal path to CDN",
+          "name": "cdn_path",
+          "editable": true
+        },
+        {
+          "text": "CDN Database",
+          "name": "cdn_db",
+          "editable": true
+        },
+        {
+          "text": "Root checker",
+          "name": "root_checker",
+          "editable": true
+        },
+        {
+          "text": "WordPress database",
+          "name": "wp_database",
+          "editable": true
+        }
+      ]
+    }
+  ]
+}

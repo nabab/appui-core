@@ -38,7 +38,39 @@
 (() => {
   let errorMsg;
   if ( !('serviceWorker' in navigator) ){
-    errorMsg = <?=\bbn\str::as_var(_("You need to have service workers support in your browser, please update or use another browser"))?>;
+    //errorMsg = <?=\bbn\str::as_var(_("You need to have service workers support in your browser, please update or use another browser"))?>;
+    document.addEventListener('DOMContentLoaded', () => {
+      let script = document.createElement("script");
+      script.type = "text/javascript";
+      script.src = "<?=$script_src?>";
+      script.onload = function(){
+        if ( 'bbn' in window ){
+          bbn.fn.post('<?=$plugins['appui-core']?>/index', d => {
+            document.getElementById('nojs_bbn').remove();
+            document.querySelectorAll('.appui')[0].style.display = 'block';
+            if ( d.data.version ){
+              bbn.vue.version = d.data.version;
+              window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
+            }
+            let res = eval(d.script);
+            if ( bbn.fn.isFunction(res) ){
+              res(d.data);
+            }
+          })
+        }
+        else{
+          let attempts = window.localStorage.getItem('bbn-load') || 0;
+          if ( attempts < 3 ){
+            window.localStorage.setItem('bbn-load', ++attempts);
+            location.reload();
+          }
+        }
+      };
+      script.onerror = function(){
+        console.log("Problem")
+      };
+      document.getElementsByTagName("head")[0].appendChild(script);
+    });
   }
   else if ( !('AbortController' in window) ){
     errorMsg = <?=\bbn\str::as_var(_("You need to have abort controller support in your browser, please update or use another browser"))?>;

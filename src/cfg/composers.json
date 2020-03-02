@@ -1,0 +1,127 @@
+{
+  "homepage": "https://github.com/nabab/appui-i18n",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Nabet",
+      "email": "thomas.nabet@gmail.com",
+      "homepage": "http://bbn.solutions",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.3",
+    "bbn/bbn": "dev-master"
+  },
+  "plugins": {
+    "appui-core": {
+      "name": "bbn/appui-core",
+      "description": "Appui DOM Interface",
+      "keywords": ["cms","intranet","spa","appui"],
+      "require": {
+        "bbn/appui-components": "dev-master",
+        "bbn/appui-usergroup": "dev-master",
+        "bbn/appui-options": "dev-master",
+        "bbn/appui-menu": "dev-master"
+      }
+    },
+    "appui-billing": {
+      "name": "bbn/appui-billing",
+      "description": "Appui billing system",
+      "keywords": ["billing","intranet","spa","appui"],
+      "require": {
+        "bbn/appui-tasks": "dev-master"
+      }
+    },
+    "appui-cdn": {
+      "name": "bbn/appui-cdn",
+      "description": "Appui static serving system",
+      "keywords": ["cdn","static","intranet","spa","appui"]
+    },
+    "appui-chat": {
+      "name": "bbn/appui-chat",
+      "description": "Appui chat system",
+      "keywords": ["chat","intranet","spa","appui"]
+    },
+    "appui-components": {
+      "name": "bbn/appui-components",
+      "description": "Appui components system",
+      "keywords": ["components","vuejs","intranet","spa","appui"]
+    },
+    "appui-cron": {
+      "name": "bbn/appui-cron",
+      "description": "Appui components system",
+      "keywords": ["components","vuejs","intranet","spa","appui"]
+    },
+    "appui-dashboard": {
+      "name": "bbn/appui-dashboard",
+      "description": "Dashboards for Appui",
+      "keywords": ["dashboard","vuejs","intranet","spa","appui"]
+    },
+    "appui-databases": {
+      "name": "bbn/appui-databases",
+      "description": "Databases management system",
+      "keywords": ["database","vuejs","intranet","spa","appui"]
+    },
+    "appui-emails": {
+      "name": "bbn/appui-emails",
+      "description": "Appui emailing system",
+      "keywords": ["emailing","vuejs","intranet","spa","appui"]
+    },
+    "appui-entity": {
+      "name": "bbn/appui-entity",
+      "description": "Entities management system for Appui",
+      "keywords": ["entities","vuejs","intranet","spa","appui"]
+    },
+    "appui-gdpr": {
+      "name": "bbn/appui-gdpr",
+      "description": "Appui GDPR compliance",
+      "keywords": ["gdpr","vuejs","intranet","spa","appui"]
+    },
+    "appui-history": {
+      "name": "bbn/appui-history",
+      "description": "Appui history system",
+      "keywords": ["history","vuejs","intranet","spa","appui"]
+    },
+    "appui-i18n": {
+      "name": "bbn/appui-i18n",
+      "description": "Appui internationalization system and tyranslations interface",
+      "keywords": ["translations","i18n","vuejs","intranet","spa","appui"]
+    },
+    "appui-ide": {
+      "name": "bbn/appui-ide",
+      "description": "Appui IDE",
+      "keywords": ["ide","vuejs","intranet","spa","appui"]
+    },
+    "appui-menu": {
+      "name": "bbn/appui-menu",
+      "description": "Appui menu management system",
+      "keywords": ["menus","vuejs","intranet","spa","appui"]
+    },
+    "appui-notes": {
+      "name": "bbn/appui-notes",
+      "description": "Appui content management system",
+      "keywords": ["cms","notes","vuejs","intranet","spa","appui"]
+    },
+    "appui-options": {
+      "name": "bbn/appui-options",
+      "description": "Appui options management system",
+      "keywords": ["options","vuejs","intranet","spa","appui"]
+    },
+    "appui-server": {
+      "name": "bbn/appui-server",
+      "description": "Appui servers management system",
+      "keywords": ["servers","vuejs","intranet","spa","appui"]
+    },
+    "appui-task": {
+      "name": "bbn/appui-task",
+      "description": "Appui task and project management system",
+      "keywords": ["tasks","project","vuejs","intranet","spa","appui"]
+    },
+    "appui-usergroup": {
+      "name": "bbn/appui-usergroup",
+      "description": "Appui users and groups management system",
+      "keywords": ["users","groups","intranet","spa","appui"]
+    }
+  }
+}
