@@ -90,7 +90,7 @@ if (($path !== 'core/poller')
       'time' => microtime(true) * 1000,
       'path' => $path,
       'params' => count($ctrl->arguments) ? implode("/", $ctrl->arguments) : null,
-      'post' => empty($ctrl->post) ? null : json_encode($ctrl->post),
+      'post' => empty($ctrl->post) ? null : json_encode(array_keys($ctrl->post)),
       'referer' => BBN_REFERER
     ]
   );

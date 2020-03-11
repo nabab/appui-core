@@ -1,28 +1,35 @@
-<div class="bbn-padded appui-core-config-settings">
+<div class="bbn-w-100 appui-core-config-settings">
   <div class="bbn-section" v-for="schema in source.schema">
     <div class="bbn-legend" v-text="schema.text"></div>
     <div class="bbn-grid-fields">
       <template v-for="(item, idx) in schema.items">
         <div class="bbn-label">
-          <bbn-button v-if="item.desc"
-                      icon="nf nf-mdi-help_circle_outline"
-                      @click="getPopup().alert(item.desc, '<?=_('Description')?>')"
-                      :notext="true">
-          </bbn-button> &nbsp; 
+          <div v-if="item.desc"
+               class="bbn-p bbn-spadded bbn-iblock"
+               @click="getPopup().alert(item.desc, '<?=_('Description')?>')"
+               :title="_('Description')">
+            <i class="nf nf-mdi-help_circle_outline"></i>
+          </div>
           <span v-text="item.text"></span>
         </div>
         <div>
-          <bbn-button v-if="item.viewable"
-                      icon="nf nf-fa-eye"
-                      @click="open(item)"
-                      :notext="true">
-          </bbn-button>
-          <bbn-button v-else-if="item.editable"
-                      icon="nf nf-fa-edit"
-                      @click="open(item)"
-                      :notext="true">
-          </bbn-button> &nbsp; 
-          <span v-text="item.viewable ? '**********' : source.settings[item.name]"></span>
+          <div v-if="item.viewable"
+               class="bbn-p bbn-spadded bbn-iblock"
+               @click="open(item)"
+               :title="_('View')">
+            <i class="nf nf-fa-eye"></i>
+          </div>
+          <div v-else-if="item.editable"
+               class="bbn-p bbn-spadded bbn-iblock"
+               @click="open(item)"
+               :title="_('Edit')">
+            <i class="nf nf-fa-edit"></i>
+          </div>
+          <span v-if="item.name === 'db_connection'"
+                v-html="dbText">
+          </span>
+          <span v-else
+          			v-text="item.viewable ? '**********' : source.settings[item.name]"></span>
         </div>
       </template>
     </div>

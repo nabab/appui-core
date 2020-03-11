@@ -35,7 +35,89 @@
           "text": "Default theme",
           "name": "theme",
           "desc": "The default theme that will have all new users (yuou can change your theme in your profile)",
-          "editable": true
+          "editable": true,
+          "source": [
+            {
+              "value": "neutral",
+              "text": "Neutral",
+              "isDark": false
+            },
+            {
+              "value": "uniform",
+              "text": "Uniform",
+              "isDark": false
+            },
+            {
+              "value": "black",
+              "text": "Black",
+              "isDark": true
+            },
+            {
+              "value": "blue",
+              "text": "Blue",
+              "isDark": false
+            },
+            {
+              "value": "default",
+              "text": "Default",
+              "isDark": false
+            },
+            {
+              "value": "dark",
+              "text": "Dark",
+              "isDark": true
+            },
+            {
+              "value": "flat",
+              "text": "Flat",
+              "isDark": false
+            },
+            {
+              "value": "jeans",
+              "text": "Jeans",
+              "isDark": false
+            },
+            {
+              "value": "grey",
+              "text": "Grey",
+              "isDark": true
+            },
+            {
+              "value": "moonlight",
+              "text": "Moonlight",
+              "isDark": true
+            },
+            {
+              "value": "mirko",
+              "text": "Mirko",
+              "isDark": true
+            },
+            {
+              "value": "turquoise-light2",
+              "text": "Turquoise light variant",
+              "isDark": false
+            },
+            {
+              "value": "turquoise-dark2",
+              "text": "Turquoise dark variant",
+              "isDark": true
+            },
+            {
+              "value": "turquoise-dark",
+              "text": "Turquoise dark",
+              "isDark": true
+            },
+            {
+              "value": "turquoise-light",
+              "text": "Turquoise light",
+              "isDark": false
+            },
+            {
+              "value": "moonlight-variant",
+              "text": "Moonlight variant",
+              "isDark": true
+            }
+          ]
         },
         {
           "text": "Default timezone",
@@ -183,28 +265,10 @@
       "text": "Database",
       "items": [
         {
-          "text": "Engine",
-          "name": "db_engine",
-          "desc": "The type of database: can be mysql or sqlite",
-          "editable": true
-        },
-        {
-          "text": "Host",
-          "name": "db_host",
-          "desc": "The database host (IP or name)",
-          "editable": true
-        },
-        {
-          "text": "Username",
-          "name": "db_user",
-          "desc": "The username to use for the database connection",
-          "editable": true
-        },
-        {
-          "text": "Mot de passe",
-          "name": "db_pass",
-          "desc": "The password to use for the database connection",
-          "editable": true
+          "text": "Connection",
+          "name": "db_connection",
+          "desc": "The database connection information",
+          "editable": "appui-core-form-db"
         },
         {
           "text": "Database name",

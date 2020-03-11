@@ -105,6 +105,8 @@ if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
     ];
   }
   return [
+    'app_path' => BBN_APP_PATH,
+    'hostname' => BBN_HOSTNAME,
     'aliases' => $model->data['aliases'],
     'routes' => $model->data['routes'],
     'environments' => $envs,

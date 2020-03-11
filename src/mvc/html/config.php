@@ -7,7 +7,8 @@
     <appui-core-config-settings :source="{
                                          schema: source.schema.settings,
                                          settings: source.settings,
-                                         root: root
+                                         root: root,
+                                         data: {}
                                          }">
     </appui-core-config-settings>
   </bbn-container>
@@ -15,28 +16,36 @@
                  title="<?=_('Environments')?>"
                  :static="true"
                  :scrollable="true">
-    <div class="bbn-padded">
-      <div class="bbn-w-100 bbn-c bbn-space-bottom">
-        <bbn-dropdown :source="envs" v-model="num" class="bbn-wider"></bbn-dropdown>
+      <div class="bbn-w-100 bbn-c bbn-padded">
+        <bbn-dropdown :source="envs"
+                      v-model="envIndex"
+                      class="bbn-wider">
+        </bbn-dropdown>
+        <div v-if="originalIndex === envIndex"
+             class="bbn-green bbn-m bbn-b"
+             v-text="_('This is the current environment')">
+        </div>
       </div>
-      <appui-core-config-settings v-if="visible && source.environments[num]"
+      <appui-core-config-settings v-if="visible && currentEnvironment"
                                   :source="{
                                            schema: source.schema.environment,
-                                           settings: source.environments[num],
-                                           root: root
+                                           settings: currentEnvironment,
+                                           root: root,
+                                           data: {env: envIndex}
                                            }">
       </appui-core-config-settings>
-    </div>
   </bbn-container>
   <bbn-container url="routes"
                  title="<?=_('Routes')?>"
                  :static="true">
     <bbn-table :source="source.aliases"
+               ref="aliases-table"
                :toolbar="[{
-                         text: '<?=_('New plugin')?>',
+                         text: '<?=_('New route')?>',
                          action: 'insert'
                          }]"
-               editable="true">
+               @saverow="routeSave"
+               :editable="true">
       <bbns-column field="url"
                    title="<?=_('URL')?>"
                    :width="350">
@@ -106,6 +115,7 @@
                      title="<?=_('Other plugins')?>"
                      :static="true">
         <bbn-table :source="devSource"
+                   ref="oplugins-table"
                    :toolbar="[{
                              text: '<?=_('New plugin')?>',
                              action: 'insert'
@@ -122,7 +132,7 @@
           </bbns-column>
           <bbns-column title="<?=_('URL')?>"
                        :width="250"
-                       :component="$options.components['gridUrl']">
+                       field="url">
           </bbns-column>
           <bbns-column title="<?=_('Description')?>"
                        field="description">
@@ -134,12 +144,14 @@
                        :sortable="false"
                        :buttons="[{
                                    text: '<?=_('Edit')?>',
-                                 	 notext: true,
-                                   action: 'edit'
+                                   action: 'edit',
+                                   icon: 'nf nf-fa-edit',
+                                   notext: true
                                  }, {
                                    text: '<?=_('Delete')?>',
-                                 	 notext: true,
-                                   action: 'delete'
+                                   action: 'delete',
+                                   icon: 'nf nf-fa-times',
+                                   notext: true
                                  }]">
           </bbns-column>
         </bbn-table>
