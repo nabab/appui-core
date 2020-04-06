@@ -7,6 +7,7 @@
  *
  * @var $ctrl \bbn\mvc\controller
  */
+
 $routes = $ctrl->get_routes();
 $plugins = [];
 foreach ( $routes as $r ){

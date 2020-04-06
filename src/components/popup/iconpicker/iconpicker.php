@@ -15,7 +15,7 @@
                       :title="icon"
                       :icon="icon"
           ></bbn-button>
-        <div>
+        </div>
       </bbn-scroll>
       <div v-else class="bbn-overlay bbn-middle">
         <?=_('LOADING ICONS')?>

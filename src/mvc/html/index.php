@@ -37,7 +37,7 @@
   <script>
 (() => {
   let errorMsg,
-      isDev = <?=$is_dev?>;
+      isDev = <?=$is_dev ? '1' : '0'?>;
   if ( isDev || !('serviceWorker' in navigator) ){
     //errorMsg = <?=\bbn\str::as_var(_("You need to have service workers support in your browser, please update or use another browser"))?>;
     document.addEventListener('DOMContentLoaded', () => {

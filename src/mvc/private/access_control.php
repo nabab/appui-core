@@ -100,13 +100,13 @@ if (($path !== 'core/poller')
 // The current path
 $url = $ctrl->get_url();
 
-// Case where we have a tabNav
+// Case where we have a bbn-router (nav)
 if (defined('BBN_BASEURL')
     && (empty(BBN_BASEURL)
       || (strpos($url, BBN_BASEURL) === 0)
     )
 ) {
-  // Length of the baseURL from the tabNav sending the request
+  // Length of the baseURL from the bbn-router(nav) sending the request
   $len = strlen(BBN_BASEURL);
   // So we will give the first file matching after the base URL sent
   $start = BBN_BASEURL;

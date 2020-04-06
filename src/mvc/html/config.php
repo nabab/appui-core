@@ -1,5 +1,8 @@
 <!-- HTML Document -->
-<bbn-tabnav class="appui-core-config">
+<bbn-router class="appui-core-config"
+            :nav="true"
+            :autoload="false"
+>
 	<bbn-container url="general"
                  title="<?=_('General')?>"
                  :static="true"
@@ -75,7 +78,11 @@
   <bbn-container url="plugins"
                  title="<?=_('Plugins')?>"
                  :static="true">
-    <bbn-tabnav class="bbn-overlay" default="official">
+    <bbn-router class="bbn-overlay"
+                default="official"
+                :nav="true"
+                :autoload="false"
+    >
       <bbn-container url="official"
                      title="<?=_('Official plugins')?>"
                      :static="true">
@@ -156,7 +163,7 @@
           </bbns-column>
         </bbn-table>
       </bbn-container>
-    </bbn-tabnav>
+    </bbn-router>
   </bbn-container>
   <bbn-container url="packages"
                   title="<?=_('Packages')?>"
@@ -194,4 +201,4 @@
       </div>
     </div>
   </bbn-container>
-</bbn-tabnav>
+</bbn-router>

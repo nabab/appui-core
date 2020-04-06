@@ -43,7 +43,7 @@
     if ( !js_data.appuiMixin ){
       js_data.appuiMixin = {
         header: true,
-        tabnav: true,
+        nav: true,
         clipboard: true,
         status: true,
         list: [
@@ -97,7 +97,7 @@
       icon: 'nf nf-fa-arrows_alt'
     }, {
       action(){
-        window.store.remove('tabnav');
+        window.store.remove('router');
         document.location.reload();
       },
       text: bbn._("Reload with a fresh view"),
@@ -131,7 +131,7 @@
         list: [{
           source: data.list || js_data.appuiMixin.list
         }],
-        tabnav: true,
+        nav: true,
         status: true,
         header: true,
         clipboard: true,
