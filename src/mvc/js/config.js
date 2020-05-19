@@ -14,7 +14,7 @@
     },
     computed: {
       root(){
-        return bbn.fn.get_field(this.source.plugins, {name: 'appui-core'}, 'url') + '/';
+        return bbn.fn.getField(this.source.plugins, 'url', {name: 'appui-core'}) + '/';
       },
       currentEnvironment(){
         let idx = bbn.fn.search(this.envs, {value: this.envIndex});
@@ -23,7 +23,7 @@
       advisedSource() {
         let r = [];
         bbn.fn.iterate(this.source.oplugins, o => {
-          let row = bbn.fn.get_row(this.source.plugins, {name: o.sname});
+          let row = bbn.fn.getRow(this.source.plugins, {name: o.sname});
           let tmp = bbn.fn.extend({}, o);
           tmp.url = row ? row.url : null;
           r.push(tmp);
@@ -33,7 +33,7 @@
       devSource() {
         let r = [];
         bbn.fn.iterate(this.source.plugins, o => {
-          let row = bbn.fn.get_row(this.source.oplugins, {sname: o.name});
+          let row = bbn.fn.getRow(this.source.oplugins, {sname: o.name});
           if (!row) {
             r.push(bbn.fn.extend({}, o, row));
           }
@@ -55,17 +55,17 @@
         let err = bbn._('All the fields are mandatory');
         if (row.url && row.path) {
           if (action === 'insert') {
-            if (bbn.fn.get_row(this.source.aliases, {url: row.url})) {
+            if (bbn.fn.getRow(this.source.aliases, {url: row.url})) {
               err = bbn._("This URL is already registered")
             }
-            else if (bbn.fn.get_row(this.source.plugins, {url: row.url})) {
+            else if (bbn.fn.getRow(this.source.plugins, {url: row.url})) {
               err = bbn._("This URL is already registered as a plugin")
             }
             else {
               ok = true;
             }
           }
-          else if (bbn.fn.get_row(this.source.plugins, {url: row.url})) {
+          else if (bbn.fn.getRow(this.source.plugins, {url: row.url})) {
             err = bbn._("This URL is already registered as a plugin")
           }
           else {
@@ -111,17 +111,17 @@
         let err = bbn._('All the fields are mandatory');
         if (row.url && row.path) {
           if (action === 'insert') {
-            if (bbn.fn.get_row(this.source.aliases, {url: row.url})) {
+            if (bbn.fn.getRow(this.source.aliases, {url: row.url})) {
               err = bbn._("This URL is already registered")
             }
-            else if (bbn.fn.get_row(this.source.plugins, {url: row.url})) {
+            else if (bbn.fn.getRow(this.source.plugins, {url: row.url})) {
               err = bbn._("This URL is already registered as a plugin")
             }
             else {
               ok = true;
             }
           }
-          else if (bbn.fn.get_row(this.source.plugins, {url: row.url})) {
+          else if (bbn.fn.getRow(this.source.plugins, {url: row.url})) {
             err = bbn._("This URL is already registered as a plugin")
           }
           else {

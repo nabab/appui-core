@@ -91,7 +91,7 @@
 
     let rightShortcuts = [{
       action(){
-        bbn.fn.toggle_full_screen();
+        bbn.fn.toggleFullScreen();
       },
       text: bbn._("Full screen"),
       icon: 'nf nf-fa-arrows_alt'
@@ -176,7 +176,7 @@
           },
           computed: {
             userName(){
-              return bbn.fn.get_field(this.users, {value: this.user.id}, 'text') || bbn._('Unknown')
+              return bbn.fn.getField(this.users, 'text', {value: this.user.id}) || bbn._('Unknown')
             }
           },
           methods: {
@@ -185,11 +185,11 @@
             },
 
             getUserName: function(id){
-              return bbn.fn.get_field(this.users, "value", id, "text");
+              return bbn.fn.getField(this.users, "text", "value", id);
             },
 
             getUserGroup: function(id){
-              return bbn.fn.get_field(this.users, "value", id, "id_group");
+              return bbn.fn.getField(this.users, "id_group", "value", id);
             },
 
             getActiveUsers() {
@@ -204,7 +204,7 @@
             historique_type: function(d){
               var op;
               if ( (typeof(d.operation) !== 'undefined') &&
-                (op = bbn.fn.get_row(this.historiques, "value", d.operation)) ){
+                (op = bbn.fn.getRow(this.historiques, "value", d.operation)) ){
                 return '<span style="color:' + op.color + '">' + op.text + '</span>';
               }
               return "";
