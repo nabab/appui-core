@@ -1,4 +1,4 @@
-<div class="bbn-h-100 bbn-flex-height appui-core-iconology">
+<div class="bbn-overlay bbn-flex-height appui-core-iconology">
   <div class="bbn-line-breaker bbn-middle bbn-c bbn-padded">
     <bbn-input :placeholder="'Search in ' + totIcons.length + ' icons'"
                v-model="searchIcon"
