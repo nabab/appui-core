@@ -49,7 +49,6 @@
 								:scrollable="false"
 								:fixed-footer="false"
 								ref="form"
-                :self="true"
                 @success="submited"
                 :validation="validation"
       >
@@ -77,9 +76,11 @@
       </bbn-form>
       <h3 class="bbn-c" v-else>
         <?=_("The link is not valid")?><br><br>
-        <a href="/"><?=_("Back to the home page")?></a>
+        <a href="<?=$site_url?>" class="bbn-no"><?=_("Back to the home page")?></a>
       </h3>
     </div>
+    <!-- NOTIFICATIONS -->
+    <bbn-notification ref="notification" :z-index="15"></bbn-notification>
   </div>
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([

@@ -31,7 +31,14 @@ new Vue({
   },
   methods: {
     submited(d) {
-      window.document.location.href = bbn.env.root;
+      if (d) {
+        if (d.success) {
+          window.document.location.href = bbn.env.root;
+        }
+        else if (d && d.errorMessage) {
+          this.$refs.notification.error(d.errorMessage)
+        }
+      }
     },
     validation(d){
       if ( this.submitDisabled ){

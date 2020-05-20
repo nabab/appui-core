@@ -36,17 +36,25 @@ if ($path === $cr.'logout') {
 }
 array_push($authorized, $cr.'login/password', $cr.'login/lost_pass', $cr.'service/index', $cr.'poller');
 
+$err = $ctrl->inc->user->get_error();
 // Recherche du logo APST pour les stats
 if (!empty($_SERVER['REDIRECT_URL'])
     && strpos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
 ) {
   $ctrl->reroute('logo_mail');
 }
+
 elseif ($ctrl->inc->user->is_just_login()) {
-  if ($err = $ctrl->inc->user->get_error()) {
+  if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
   }
   die('1');
+}
+elseif ($ctrl->inc->user->is_reset()) {
+  if ($err) {
+    die(json_encode(['errorMessage' => $err['text']]));
+  }
+  die('{"success": 1}');
 }
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->get_mode() === 'dom') {
