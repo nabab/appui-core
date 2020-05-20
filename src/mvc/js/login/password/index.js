@@ -31,8 +31,7 @@ new Vue({
   },
   methods: {
     submited(d) {
-      alert('ok?');
-      //window.document.location.href = bbn.env.root;
+      window.document.location.href = bbn.env.root;
     },
     validation(d){
       if ( this.submitDisabled ){
