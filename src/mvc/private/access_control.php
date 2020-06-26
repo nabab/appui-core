@@ -28,13 +28,23 @@ $perm =& $ctrl->inc->perm;
 $path = $ctrl->get_path();
 $ctrl->db->set_error_mode('die');
 
+$auth_no_user = [
+  $cr.'manifest'
+];
+if (($ctrl->get_mode() === 'dom') && in_array($path, $auth_no_user, true)) {
+  return 1;
+}
 /* @var $authorized array The authorized pages for the non logged in users */
-$authorized = [];
+$authorized = [
+  $cr.'login/password',
+  $cr.'login/lost_pass',
+  $cr.'service/index',
+  $cr.'poller'
+];
 if ($path === $cr.'logout') {
   $ctrl->set_mode('public');
   return true;
 }
-array_push($authorized, $cr.'login/password', $cr.'login/lost_pass', $cr.'service/index', $cr.'poller');
 
 $err = $ctrl->inc->user->get_error();
 // Recherche du logo APST pour les stats
@@ -163,7 +173,7 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
   }
   else {
     $ctrl->obj->errorTitle = _("Unauthorized");
-    $ctrl->obj->error = _("Sorry but you don't hasve the permission for ".$ctrl->get_path());
+    $ctrl->obj->error = _("Sorry but you don't have the permission for ".$ctrl->get_path());
   }
 }
 return $ctrl->inc->user->is_dev();
