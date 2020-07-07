@@ -21,11 +21,8 @@ $ctrl->add_data([
   'plugins' => $plugins,
   'shortcuts' => $shortcuts
 ]);
-if ( $custom_js = $ctrl->custom_plugin_view('index', 'js', $ctrl->data, 'appui-core') ){
-  $ctrl->data['js_data'] = $custom_js;
-}
-//die(\bbn\x::hdump($custom_js, $ctrl->data));
-
+$ctrl->data['js_data'] = $ctrl->custom_plugin_view('index', 'js', $ctrl->data, 'appui-core');
+$ctrl->data['custom_css'] = $ctrl->get_plugin_view('index', 'css');
 $ctrl->combo($ctrl->data['site_title'], true);
 
 /*

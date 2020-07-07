@@ -5,4 +5,11 @@
  **/
 
 /** @var $ctrl \bbn\mvc\controller */
-echo $ctrl->get_view().$ctrl->get_js().PHP_EOL.'<style>'.$ctrl->get_less().'</style>';
+echo $ctrl
+  ->add_data(['static_path' => BBN_STATIC_PATH])
+  ->get_view().
+  $ctrl->get_js().
+  PHP_EOL.
+  '<style>'.
+    $ctrl->get_less().
+  '</style>';

@@ -34,6 +34,7 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="viewport" content="initial-scale=0.66, user-scalable=no">
 <title><?=$site_title?></title>
+<style><?=$custom_css?></style>
 <script>
 (() => {
   let errorMsg,
