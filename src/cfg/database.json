@@ -17,7 +17,7 @@
                 "columns": [
                     "id_note"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_notes",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_1",
@@ -29,7 +29,7 @@
                 "columns": [
                     "id_option"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_options",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_2",
@@ -41,7 +41,7 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_3",
@@ -53,7 +53,7 @@
                 "columns": [
                     "id_group"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_users_groups",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_4",
@@ -180,7 +180,7 @@
                 "columns": [
                     "id_imessage"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_imessages",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_users_ibfk_1",
@@ -192,7 +192,7 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_users_ibfk_2",
@@ -276,7 +276,7 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_mvc_logs_ibfk_2",
@@ -417,7 +417,7 @@
                 "columns": [
                     "id_alias"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_observers",
                 "ref_column": "id",
                 "constraint": "bbn_observers_ibfk_2",
@@ -429,7 +429,7 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": "apst_app",
+                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_observers_ibfk_3",

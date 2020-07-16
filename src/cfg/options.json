@@ -35,6 +35,20 @@
                     "cfg": {
                         "allow_children": 1
                     }
+                },
+                {
+                    "text": "Hosts",
+                    "code": "hosts",
+                    "cfg": {
+                        "allow_children": 1
+                    }
+                },
+                {
+                    "text": "Synchronization",
+                    "code": "sync",
+                    "cfg": {
+                        "allow_children": 1
+                    }
                 }
             ]
         },
