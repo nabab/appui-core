@@ -4,6 +4,7 @@
     bbn.fn.autoExtend('env', {
       logging: data.is_dev || data.is_test ? true : false,
       isDev: data.is_dev ? true : false,
+      mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
       lang: data.lang,
       siteTitle: data.site_title,
       wp_url: data.wp_url,

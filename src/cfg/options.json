@@ -1,11 +1,11 @@
-{
-    "text": "Appui",
-    "code": "appui",
-    "icon": "nf nf-fa-adn",
-    "cfg": {
-        "categories": 1,
-        "show_code": 1,
-        "permissions": 1,
-        "i18n": "en"
-    }
-}
+[{
+  "text": "Appui",
+  "code": "appui",
+  "icon": "nf nf-fa-adn",
+  "cfg": {
+    "categories": 1,
+    "show_code": 1,
+    "permissions": 1,
+    "i18n": "en"
+  }
+}]
