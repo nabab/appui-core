@@ -432,7 +432,7 @@
                 "ref_column": "id",
                 "constraint": "bbn_mvc_logs_ibfk_2",
                 "update": "CASCADE",
-                "delete": "RESTRICT",
+                "delete": "CASCADE",
                 "unique": 0
             }
         },
