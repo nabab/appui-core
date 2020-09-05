@@ -1,12 +1,51 @@
+@fuxia: #EC3E7A;
+@borders: #D62DBD;
 div.appui-password {
-	opacity: 0;
-	.bbn-input {
-		width: 100%;
-	}
-	div.logo {
-		img {
-			max-width: 500px;
-			height: auto;
+	background: black;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	overflow: auto;
+	div.container {
+		display: flex;
+		justify-content: space-between;
+		flex-direction: column;
+		.bbn-input {
+			&:focus{
+				border-color: @borders!important;
+			}
+			width: 100%;
+			@media ( min-width: 660px){
+				width: 60%;
+			}
+			input {
+				text-align: center;
+			}
+		}
+		div.logo {
+			img {
+				transform: scale(0.9);
+				max-width: 500px;
+				height: auto;
+			}
+			p{
+				color: @fuxia;
+				//margin-top: 0;
+				font-size: 90px;
+			}
+		}
+		form{
+			.bbn-button{
+				width: 40%;
+				background: unset;
+				background-color: @fuxia;
+				border-color: @fuxia;
+				&:focus{
+					border-color: @borders!important
+				}
+			}
 		}
 	}
 }
+

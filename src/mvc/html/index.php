@@ -39,8 +39,8 @@
 (() => {
   let errorMsg,
       isDev = <?=$is_dev ? '1' : '0'?>;
-  if ( isDev || !('serviceWorker' in navigator) ){
-    //errorMsg = <?=\bbn\str::as_var(_("You need to have service workers support in your browser, please update or use another browser"))?>;
+  if (isDev || !('serviceWorker' in navigator) ){
+    // Alternative method
     document.addEventListener('DOMContentLoaded', () => {
       let script = document.createElement("script");
       script.type = "text/javascript";
@@ -171,8 +171,10 @@
 </script>
 </head>
 <body>
-<div id="nojs_bbn" style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #fff url(<?=$static_path?>/img/logo_big.png) no-repeat center">
-  <div id="error_message" style="text-align:center; font-size: large"></div>
+<div id="nojs_bbn"
+     style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: #fff url(<?=$static_path?>/img/logo_big.png) no-repeat center">
+  <div id="error_message"
+       style="text-align:center; font-size: large"></div>
 </div>
 <div class="appui"
      style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #EEE;display: none">

@@ -7,8 +7,9 @@ bbn.fn.init({
   }
 });
 
+let ele =  document.querySelector("body > div.appui-password");
 new Vue({
-  el: 'div.appui-password',
+  el: ele,
   props: {
     zIndex: {
       type: Number,
@@ -52,9 +53,8 @@ new Vue({
     this.$nextTick(() => {
       //alert("dentro")
       //$("body > div.appui-password").animate({opacity: 1}, 2000).find("input:visible:first").focus();
-      let ele =  document.querySelector("body > div.appui-password");
-        ele.style.opacity = "1";   
-        ele.style.animationDuration = "2s"; 
+      this.$el.style.opacity = "1";   
+      this.$el.style.animationDuration = "2s"; 
       bbn.fn.each(ele.querySelectorAll("input"), (element, i) => {
         if ( (element.style.visibility === 'visible') ){
           element.focus();

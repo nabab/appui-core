@@ -1,5 +1,4 @@
 <?php
-
 /** @var \bbn\mvc\controller $ctrl The controller */
 $cr = $ctrl->plugin_url('appui-core').'/';
 
@@ -81,7 +80,7 @@ elseif ($ctrl->get_mode() === 'dom') {
       if (in_array($path, $authorized, true)) {
         return 1;
       }
-      $ctrl->reroute('core/login');
+      $ctrl->reroute($cr.'login');
     }
   }
   return 1;
@@ -97,7 +96,7 @@ if (!$ctrl->inc->user->check_session()) {
 if (class_exists('\\bbn\\appui\\history')) {
   \bbn\appui\history::set_user($ctrl->inc->user->get_id());
 }
-if (($path !== 'core/poller')
+if (($path !== $cr.'poller')
     && !defined("BBN_MVC_ID")
     && defined('BBN_REFERER')
 ) {
