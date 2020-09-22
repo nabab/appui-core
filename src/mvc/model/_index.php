@@ -1,9 +1,13 @@
 <?php
+use bbn\x;
+
+$timer = new \bbn\util\timer();
+$timer->start();
 $menu = new \bbn\appui\menus();
 $mgr = new \bbn\user\manager($model->inc->user);
 $is_dev = $model->inc->user->is_dev();
 $theme = $model->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
-$data = \bbn\x::merge_arrays($model->data, [
+$data = x::merge_arrays($model->data, [
   'current_menu' => $menu->get_default(),
   'menus' => count(($m = $menu->get_menus())) > 1 ? $m : [],
   //'shortcuts' => $model->get_model($model->plugin_url('appui-menu').'/shortcuts/list'),
@@ -30,7 +34,7 @@ $data['options']['media_types'] = $model->inc->options->code_options(\bbn\appui\
 $data['options']['categories'] = $model->inc->options->full_options();
 
 if ( ($custom_data = $model->get_plugin_model('index', $data)) && is_array($custom_data) ){
-	$data = \bbn\x::merge_arrays($data, $custom_data);
+	$data = x::merge_arrays($data, $custom_data);
 }
 $data['script_src'] = BBN_SHARED_PATH.'?'.http_build_query([
   'lang' => $data['lang'],

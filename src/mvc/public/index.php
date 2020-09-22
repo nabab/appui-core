@@ -8,22 +8,28 @@
  * @var $ctrl \bbn\mvc\controller
  */
 
+$shortcuts = $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list');
 $routes = $ctrl->get_routes();
 $plugins = [];
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
 }
-
-/** @todo Thomas fix it!!*/
-$shortcuts = $ctrl->get_model($ctrl->plugin_url('appui-menu').'/shortcuts/list');
 $ctrl->data = $ctrl->get_model($ctrl->plugin_url('appui-core').'/_index');
 $ctrl->add_data([
   'plugins' => $plugins,
   'shortcuts' => $shortcuts
 ]);
-$ctrl->data['js_data'] = $ctrl->custom_plugin_view('index', 'js', $ctrl->data, 'appui-core');
-$ctrl->data['custom_css'] = $ctrl->get_plugin_view('index', 'css');
-$ctrl->combo($ctrl->data['site_title'], true);
+// The whole DOM
+if (empty($ctrl->post)) {
+  $ctrl->data['custom_css'] = $ctrl->get_plugin_view('index', 'css');
+  $ctrl->combo($ctrl->data['site_title'], true);
+}
+// Only the data
+else {
+  $ctrl->add_js();
+  $ctrl->data['js_data'] = $ctrl->custom_plugin_view('index', 'js', $ctrl->data, 'appui-core');
+  $ctrl->obj->data = $ctrl->data;
+}
 
 /*
 echo "HELLO hey";

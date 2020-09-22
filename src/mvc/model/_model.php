@@ -25,4 +25,4 @@ return $model->get_set_from_cache(function() use($model){
     'lang' => BBN_LANG,
     'root' => ''
   ];
-}, '_model', '', 3600);
+}, [], '', 3600);

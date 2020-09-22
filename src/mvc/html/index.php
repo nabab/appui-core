@@ -32,7 +32,7 @@
 <meta name="msapplication-TileColor" content="#9f00a7">
 <meta name="msapplication-TileImage" content="<?=$static_path?>img/favicon/mstile-144x144.png">
 <meta name="theme-color" content="#ffffff">
-<meta name="viewport" content="initial-scale=0.66, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=0.66, user-scalable=no">
 <title><?=$site_title?></title>
 <style><?=$custom_css?></style>
 <script>
@@ -47,7 +47,7 @@
       script.src = "<?=$script_src?>";
       script.onload = function(){
         if ( 'bbn' in window ){
-          bbn.fn.post('<?=$plugins['appui-core']?>/index', d => {
+          bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
             document.getElementById('nojs_bbn').remove();
             document.querySelectorAll('.appui')[0].style.display = 'block';
             if ( d.data.version ){
@@ -177,7 +177,7 @@
        style="text-align:center; font-size: large"></div>
 </div>
 <div class="appui"
-     style="position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #EEE;display: none">
+     style="position: absolute; top: 0; left: 0; bottom: 0; right: 0">
   <bbn-appui :cfg="app"
              :options="options"
              :menus="menus"
