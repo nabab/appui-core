@@ -7,7 +7,7 @@ div.appui-password {
 	justify-content: center;
 	height: 100%;
 	overflow: auto;
-	div.container {
+	div.appui-password-container {
 		display: flex;
 		justify-content: space-between;
 		flex-direction: column;
@@ -16,18 +16,21 @@ div.appui-password {
 				border-color: @borders!important;
 			}
 			width: 100%;
-			@media ( min-width: 660px){
-				width: 60%;
-			}
 			input {
 				text-align: center;
 			}
 		}
-		div.logo {
+		div.appui-password-logo {
 			img {
 				transform: scale(0.9);
 				max-width: 500px;
 				height: auto;
+				.bbn-mobile & {
+					max-width: 90%;
+				}
+				.bbn-mobile.bbn-tablet & {
+					max-width: 80%;
+				}
 			}
 			p{
 				color: @fuxia;
@@ -44,6 +47,11 @@ div.appui-password {
 				&:focus{
 					border-color: @borders!important
 				}
+			}
+		}
+		.bbn-mobile & {
+			.bbn-input {
+				width: 90%;
 			}
 		}
 	}

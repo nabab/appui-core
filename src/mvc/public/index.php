@@ -21,7 +21,7 @@ $ctrl->add_data([
 ]);
 // The whole DOM
 if (empty($ctrl->post)) {
-  $ctrl->data['custom_css'] = $ctrl->get_plugin_view('index', 'css');
+  $ctrl->data['custom_css'] = $ctrl->get_plugin_view('index', 'css') ?: $ctrl->get_less();
   $ctrl->combo($ctrl->data['site_title'], true);
 }
 // Only the data

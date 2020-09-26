@@ -232,14 +232,6 @@
     new Vue({
       el: 'div.appui',
       mixins: [appuiMixin, js_data.appuiMixin],
-      created(){
-        if ( this.isMobile ){
-          document.body.classList.add('bbn-mobile');
-        }
-        if ( this.isTablet ){
-          document.body.classList.add('bbn-tablet');
-        }
-      }
     });
   };
 })();

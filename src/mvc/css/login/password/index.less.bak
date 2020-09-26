@@ -1,38 +1,33 @@
 @fuxia: #EC3E7A;
 @borders: #D62DBD;
-div.appui-login {
+div.appui-password {
 	background: black;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	opacity: 0;
 	height: 100%;
 	overflow: auto;
-	div.appui-login-container {
+	div.container {
 		display: flex;
 		justify-content: space-between;
 		flex-direction: column;
-		max-width: 90%;
 		.bbn-input {
-			width: 100%;
 			&:focus{
 				border-color: @borders!important;
+			}
+			width: 100%;
+			@media ( min-width: 660px){
+				width: 60%;
 			}
 			input {
 				text-align: center;
 			}
 		}
-		div.appui-login-logo {
+		div.logo {
 			img {
 				transform: scale(0.9);
 				max-width: 500px;
 				height: auto;
-				.bbn-mobile & {
-					max-width: 90%;
-				}
-				.bbn-mobile.bbn-tablet & {
-					max-width: 80%;
-				}
 			}
 			p{
 				color: @fuxia;
@@ -49,11 +44,6 @@ div.appui-login {
 				&:focus{
 					border-color: @borders!important
 				}
-			}
-		}
-		.bbn-mobile & {
-			.bbn-input {
-				width: 90%;
 			}
 		}
 	}

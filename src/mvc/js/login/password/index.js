@@ -23,7 +23,9 @@ new Vue({
       key: data.key,
       pass1: '',
       pass2: ''
-    }
+    },
+    isMobile: bbn.fn.isMobile(),
+    isTablet: bbn.fn.isTabletDevice()
   }, data),
   computed: {
     submitDisabled(){
@@ -49,17 +51,25 @@ new Vue({
       return true;
     }
   },
-  mounted() {    
+  created(){
+    if ( this.isMobile ){
+      document.body.classList.add('bbn-mobile');
+    }
+    if ( this.isTablet ){
+      document.body.classList.add('bbn-tablet');
+    }
+  },
+  mounted() {
     this.$nextTick(() => {
       //alert("dentro")
       //$("body > div.appui-password").animate({opacity: 1}, 2000).find("input:visible:first").focus();
-      this.$el.style.opacity = "1";   
-      this.$el.style.animationDuration = "2s"; 
+      this.$el.style.opacity = "1";
+      this.$el.style.animationDuration = "2s";
       bbn.fn.each(ele.querySelectorAll("input"), (element, i) => {
         if ( (element.style.visibility === 'visible') ){
           element.focus();
           return false;
-        }        
+        }
       });
     });
   }
