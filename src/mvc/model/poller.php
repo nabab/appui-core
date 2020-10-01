@@ -11,19 +11,17 @@
  * serves new content after the last file change. Sounds weird, but try it out, you'll get into it really fast!
  */
 // set php runtime to unlimited
-use bbn;
-use bbn\x;
 
 set_time_limit(0);
 // User is identified
 if ($id_user = $model->inc->user->get_id()) {
 
-  $actsource = bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/active');
-  $datasource = bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/queue');
+  $actsource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/active');
+  $datasource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/queue');
 
   // Chrono
   $now = time();
-  $timer = new bbn\util\timer();
+  $timer = new \bbn\util\timer();
   $timer->start('timeout');
   $timer->start('activity');
   $chat_enabled = $model->has_plugin('appui-chat');
@@ -34,21 +32,28 @@ if ($id_user = $model->inc->user->get_id()) {
     'chat' => []
   ];
   if ($chat_enabled && $hasChat) {
-    $user_system = new bbn\user\users($model->db);
-    $chat_system = new bbn\appui\chat($model->db, $model->inc->user);
+    $user_system = new \bbn\user\users($model->db);
+    $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
   }
   if ($chat_enabled && !empty($model->data['message'])) {
     // Gets the corresponding ID chat or creates one
-    if ((isset($model->data['message']['id_chat']) && ($id_chat = $model->data['message']['id_chat'])) 
-        || (!empty($model->data['message']['users']) && ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users'])))
+    if (
+      (
+        isset($model->data['message']['id_chat']) &&
+        ($id_chat = $model->data['message']['id_chat'])
+      ) ||
+      (
+        !empty($model->data['message']['users']) &&
+        ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users']))
+      )
     ) {
       $chat_system->talk($id_chat, $model->data['message']['text']);
       $res['chat']['id_chat'] = $id_chat;
     }
     unset($model->data['message']);
   }
-  $observer = new bbn\appui\observer($model->db);
-  if ($files = bbn\file\dir::get_files($actsource)) {
+  $observer = new \bbn\appui\observer($model->db);
+  if ($files = \bbn\file\dir::get_files($actsource)) {
     foreach ($files as $f){
       unlink($f);
     }
@@ -82,7 +87,7 @@ if ($id_user = $model->inc->user->get_id()) {
         $timer->start('disconnection');
       }
       elseif ($timer->measure('disconnection') > 10) {
-        x::log("Disconnected", 'poller');
+        \bbn\x::log("Disconnected", 'poller');
         die("Disconnected");
       }
     }
@@ -92,40 +97,61 @@ if ($id_user = $model->inc->user->get_id()) {
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
     if ($chat_enabled && $hasChat) {
-      $last = 0;
       $chats = $chat_system->get_chats();
+      $chats_hash = md5(json_encode($chats));
       if ($timer->measure('activity') < 1) {
         $chat_users = $user_system->online_list();
-        $chat_hash = md5(json_encode($chat_users));
-        if ($chat_hash !== $model->data['usersHash']) {
+        $chat_users_hash = md5(json_encode($chat_users));
+        if ($chat_users_hash !== $model->data['usersHash']) {
           $res['chat']['users'] = $chat_users;
-          $res['chat']['hash'] = $chat_hash;
+          $res['chat']['hash'] = $chat_users_hash;
+        }
+      }
+      if ( $chats_hash !== $model->data['chatsHash']) {
+        $res['chat']['chats'] = [
+          'current' => [],
+          'hash' => $chats_hash,
+          'last' => 0
+        ];
+        foreach ( $chats as $c ){
+          $res['chat']['chats']['current'][$c] = [
+            'info' => $chat_system->info($c)
+          ];
+          if ( empty($model->data['chatsHash']) ){
+            $res['chat']['chats']['current'][$c]['participants'] = $chat_system->get_participants($c, false);
+            if ( $m = $chat_system->get_messages($c) ){
+              $res['chat']['chats']['current'][$c]['messages'] = $m['messages'];
+            }
+          }
         }
       }
       if (count($chats)) {
         foreach ($chats as $chat){
-          if (($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) 
-              && count($msgs['messages'])
+          if (
+            ($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) &&
+            count($msgs['messages'])
           ) {
             if (!isset($res['chat']['chats'])) {
-              $res['chat']['chats'] = [];
-              $res['chat']['last'] = 0;
+              $res['chat']['chats'] = [
+                'current' => [],
+                'last' => 0
+              ];
             }
-            $res['chat']['chats'][$chat] = $msgs;
-            $res['chat']['chats'][$chat]['participants'] = $chat_system->get_participants($chat);
+            $res['chat']['chats']['current'][$chat]['messages'] = $msgs['messages'];
+            $res['chat']['chats']['current'][$chat]['participants'] = $chat_system->get_participants($chat, false);
             $max = $msgs['last'];
-            if (x::compare_floats($max, $res['chat']['last'], '>')) {
-              $res['chat']['last'] = $max;
+            if (\bbn\x::compare_floats($max, $res['chat']['chats']['last'], '>')) {
+              $res['chat']['chats']['last'] = $max;
             }
           }
         }
-        if (!empty($res['chat']['last'])) {
+        if (!empty($res['chat']['chats']['last'])) {
           //$res['chat']['last'] = ceil($res['chat']['last'] * 10000) / 10000;
         }
       }
     }
     // get files in the poller dir
-    $files = bbn\file\dir::get_files($datasource);
+    $files = \bbn\file\dir::get_files($datasource);
 
     if ($files && count($files)) {
       $result = [];
@@ -133,9 +159,9 @@ if ($id_user = $model->inc->user->get_id()) {
       foreach ($files as $f){
         if ($ar = json_decode(file_get_contents($f), true)) {
           if (isset($ar['observers'])) {
-            x::log($ar['observers']);
+            \bbn\x::log($ar['observers']);
             foreach ($ar['observers'] as $o){
-              $value = x::get_field($observers, ['id' => $o['id']], 'value');
+              $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
               if (!$value || ($value !== $o['result'])) {
                 $returned_obs[] = $o;
               }

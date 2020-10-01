@@ -19,6 +19,7 @@ let aborter;
 let isConnected = false;
 let interval;
 let intervalObj;
+let noResp = false;
 console.log("isConnected FALSE from Start....");
 
 //window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
@@ -167,6 +168,9 @@ function processClientMessage(event, clientList){
   if ( 'usersHash' in d ){
     dataObj.usersHash = d.usersHash;
   }
+  if ( 'chatsHash' in d ){
+    dataObj.chatsHash = d.chatsHash;
+  }
   if ( 'message' in d ){
     dataObj.message = d.message;
   }
@@ -195,9 +199,13 @@ function processServerMessage(json){
         console.log("Chat hash has changed");
         dataObj.usersHash = json.chat.hash;
       }
-      if ( json.chat.last && (dataObj.lastChat !== json.chat.last) ){
+      if ( json.chat.chats && json.chat.chats.last && (dataObj.lastChat !== json.chat.chats.last) ){
         console.log("Last chat has changed");
-        dataObj.lastChat = json.chat.last;
+        dataObj.lastChat = json.chat.chats.last;
+      }
+      if ( json.chat.chats && json.chat.chats.hash && (dataObj.chatsHash !== json.chat.chats.hash) ){
+        console.log("Chats have changed");
+        dataObj.chatsHash = json.chat.chats.hash;
       }
     }
     if ( !clientList.length ){
@@ -288,18 +296,29 @@ function poll(){
             let json;
             try {
               json = JSON.parse(text);
+              noResp = false;
             }
             catch(e){
+              noResp = true;
               json = {message: "The response is no JSON", error: e.message};
             }
             if ( Object.keys(json).length ){
               //console.log(text);
               processServerMessage(json).then((res) => {
                 isRunning = false;
-                if (res === false) {
+                if ((res === false) || noResp) {
                   retries++;
                   if ( retries <= 3 ){
-                    poll();
+                    if ( noResp ){
+                      console.log('Poller noResp');
+                      setTimeout(poll, 60000);
+                    }
+                    else {
+                      poll();
+                    }
+                  }
+                  else {
+                    
                   }
                 }
                 else{
