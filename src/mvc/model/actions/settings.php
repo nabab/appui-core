@@ -122,7 +122,7 @@ if ($model->has_data(['name', 'value'], true)) {
           'hostname' => $hostname,
           'app_path' => $app_path
         ]);
-        if ($idx !== false ) {
+        if ($idx !== null ) {
           $ar[$idx][$model->data['name']] = $res;
           file_put_contents($model->app_path().'cfg/environment.json', json_encode($ar, JSON_PRETTY_PRINT));
           $data['success'] = true;
