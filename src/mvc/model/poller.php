@@ -44,13 +44,25 @@ if ($id_user = $model->inc->user->get_id()) {
       ) ||
       (
         !empty($model->data['message']['users']) &&
+        !empty($model->data['message']['id_temp']) &&
         ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users']))
       )
     ) {
       $chat_system->talk($id_chat, $model->data['message']['text']);
       $res['chat']['id_chat'] = $id_chat;
+      if ( !empty($model->data['message']['id_temp']) ){
+        $res['chat']['id_temp'] = $model->data['message']['id_temp'];
+      }
     }
-    unset($model->data['message']);
+  }
+  if (
+    $chat_enabled &&
+    !empty($model->data['setLastActivity']) &&
+    !empty($model->data['setLastActivity']['id_chat']) &&
+    !empty($model->data['setLastActivity']['id_user'])
+  ){
+    $chat_system->set_last_activity($model->data['setLastActivity']['id_chat'], $model->data['setLastActivity']['id_user']);
+    unset($model->data['setLastActivity']);
   }
   $observer = new \bbn\appui\observer($model->db);
   if ($files = \bbn\file\dir::get_files($actsource)) {
@@ -96,7 +108,7 @@ if ($id_user = $model->inc->user->get_id()) {
     }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
-    if ($chat_enabled && $hasChat) {
+    /* if ($chat_enabled && $hasChat) {
       $chats = $chat_system->get_chats();
       $chats_hash = md5(json_encode($chats));
       if ($timer->measure('activity') < 1) {
@@ -111,43 +123,98 @@ if ($id_user = $model->inc->user->get_id()) {
         $res['chat']['chats'] = [
           'current' => [],
           'hash' => $chats_hash,
-          'last' => 0
+          'last' => $model->data['lastChat'] ?? null
         ];
         foreach ( $chats as $c ){
           $res['chat']['chats']['current'][$c] = [
-            'info' => $chat_system->info($c)
+            'info' => $chat_system->info($c),
+            'admins' => $chat_system->get_admins($c)
           ];
           if ( empty($model->data['chatsHash']) ){
             $res['chat']['chats']['current'][$c]['participants'] = $chat_system->get_participants($c, false);
-            if ( $m = $chat_system->get_messages($c) ){
-              $res['chat']['chats']['current'][$c]['messages'] = $m['messages'];
+            if ( empty($model->data['message']) && ($m = $chat_system->get_prev_messages($c)) ){
+              $res['chat']['chats']['current'][$c]['messages'] = $m;
+              $max = $m[count($m)-1]['time'];
+              if (\bbn\x::compare_floats($max, $res['chat']['chats']['last'], '>')) {
+                $res['chat']['chats']['last'] = $max;
+              }
             }
           }
         }
       }
       if (count($chats)) {
         foreach ($chats as $chat){
-          if (
-            ($msgs = $chat_system->get_messages($chat, $model->data['lastChat'] ?? null)) &&
-            count($msgs['messages'])
-          ) {
+          if ( $msgs = $chat_system->get_next_messages($chat, $model->data['lastChat'] ?? null) ) {
             if (!isset($res['chat']['chats'])) {
               $res['chat']['chats'] = [
                 'current' => [],
-                'last' => 0
+                'last' => $model->data['lastChat'] ?? 0
               ];
             }
-            $res['chat']['chats']['current'][$chat]['messages'] = $msgs['messages'];
+            $res['chat']['chats']['current'][$chat]['messages'] = $msgs;
             $res['chat']['chats']['current'][$chat]['participants'] = $chat_system->get_participants($chat, false);
-            $max = $msgs['last'];
+            $res['chat']['chats']['current'][$chat]['admins'] = $chat_system->get_admins($chat);
+            $max = $msgs[count($msgs)-1]['time'];
             if (\bbn\x::compare_floats($max, $res['chat']['chats']['last'], '>')) {
               $res['chat']['chats']['last'] = $max;
             }
           }
         }
-        if (!empty($res['chat']['chats']['last'])) {
-          //$res['chat']['last'] = ceil($res['chat']['last'] * 10000) / 10000;
+      }
+      if ( isset($model->data['message']) ){
+        unset($model->data['message']);
+      }
+    } */
+    if ($chat_enabled && $hasChat) {
+      if ($timer->measure('activity') < 1) {
+        $chat_users = $user_system->online_list();
+        $chat_users_hash = md5(json_encode($chat_users));
+        if ($chat_users_hash !== $model->data['usersHash']) {
+          $res['chat']['users'] = $chat_users;
+          $res['chat']['hash'] = $chat_users_hash;
         }
+      }
+      $ctmp = [
+        'current' => [],
+        'last' => $model->data['lastChat'] ?? 0
+      ];
+      if ( $chats = $chat_system->get_chats() ){
+        foreach ( $chats as $c ){
+          $ctmp['current'][$c] = [
+            'info' => $chat_system->info($c),
+            'admins' => $chat_system->get_admins($c),
+            'participants' => $chat_system->get_participants($c, false)
+          ];
+        }
+      }
+      $chats_hash = md5(json_encode($ctmp));
+      if (
+        ($chats_hash !== $model->data['chatsHash']) ||
+        !empty($model->data['message'])
+      ){
+        $ctmp['hash'] = $chats_hash;
+        foreach ( $chats as $c ){
+          if ( empty($model->data['chatsHash']) && empty($model->data['message']) ){
+            if ( $m = $chat_system->get_prev_messages($c) ){
+              $ctmp['current'][$c]['messages'] = $m;
+              $max = $m[count($m)-1]['time'];
+              if (\bbn\x::compare_floats($max, $ctmp['last'], '>')) {
+                $ctmp['last'] = $max;
+              }
+            }
+          }
+          else if ( $m = $chat_system->get_next_messages($c, $model->data['lastChat'] ?? null) ){
+            $ctmp['current'][$c]['messages'] = $m;
+            $max = $m[count($m)-1]['time'];
+            if ( \bbn\x::compare_floats($max, $ctmp['last'], '>')) {
+              $ctmp['last'] = $max;
+            }
+          }
+        }
+        $res['chat']['chats'] = $ctmp;
+      }
+      if ( isset($model->data['message']) ){
+        unset($model->data['message']);
       }
     }
     // get files in the poller dir

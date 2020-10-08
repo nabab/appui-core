@@ -39,6 +39,7 @@
 (() => {
   let errorMsg,
       isDev = <?=$is_dev ? '1' : '0'?>;
+      isDev = 0;
   if (isDev || !('serviceWorker' in navigator) ){
     // Alternative method
     document.addEventListener('DOMContentLoaded', () => {

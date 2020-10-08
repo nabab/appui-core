@@ -191,6 +191,9 @@ function processServerMessage(json){
     if ( 'message' in dataObj ){
       delete dataObj.message;
     }
+    if ( 'setLastActivity' in dataObj ){
+      delete dataObj.setLastActivity;
+    }
     if ( json.disconnected ){
       isConnected = false;
     }
