@@ -1,16 +1,8 @@
 <?php
 /** @var \bbn\mvc\model $model The model */
 return $model->get_set_from_cache(function() use($model){
-  $vfile = $model->data_path().'version.txt';
-  if ( !is_file($vfile) ){
-    file_put_contents($vfile, '1');
-    $version = 1;
-  }
-  else{
-    $version = intval(file_get_contents($vfile));
-  }
   return [
-    'version' => $version,
+    'version' => 666,
     'site_url' => BBN_URL,
     'site_title' => BBN_SITE_TITLE,
     'app_name' => BBN_APP_NAME,

@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+use bbn\str;
+?><!DOCTYPE html>
 <!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="<?=$lang?>"> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="<?=$lang?>"> <![endif]-->
 <!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="<?=$lang?>"> <![endif]-->
@@ -37,57 +39,107 @@
 <style><?=$custom_css?></style>
 <script>
 (() => {
-  let errorMsg,
-      isDev = <?=$is_dev ? '1' : '0'?>;
-      isDev = 0;
-  if (isDev || !('serviceWorker' in navigator) ){
-    // Alternative method
-    document.addEventListener('DOMContentLoaded', () => {
-      let script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = "<?=$script_src?>";
-      script.onload = function(){
-        if ( 'bbn' in window ){
-          if ( bbn.fn.isMobile() ){
-            document.body.classList.add('bbn-mobile');
-            if ( bbn.fn.isTabletDevice() ){
-              document.body.classList.add('bbn-tablet');
-            }
+  /** @var {String} errorMsg An error message to display */
+  let errorMsg;
+
+  /** @var {Boolean} isDev True if dev environment */
+  const isDev = <?=$is_dev ? '1' : '0'?>;
+
+  /** @var {Boolean} hasServiceWorker True if Service Worker available */
+  const hasServiceWorker = !!('serviceWorker' in navigator);
+
+  /** @var {String} scriptSrc The script source */
+  const scriptSrc = <?=str::as_var($script_src)?>;
+
+  /** @var {Boolean} hasBeenAsked True if it already has been asked to reload because the version is new */
+  let hasBeenAsked = false;
+
+  /** @var {Boolean} loaded True after init */
+  let loaded = false;
+
+  /** @var {Boolean} isReloading True wgen is reloading */
+  let isReloading = false;
+
+  /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
+  let onDomLoaded = () => {
+    let script = document.getElementById('bbn_script');
+    if (script) {
+      script.remove();
+    }
+    script = document.createElement("script");
+    script.type = "text/javascript";
+    script.id = "bbn_script";
+    script.src = scriptSrc;
+    // All will be initiated when the libraries are loaded
+    script.onload = function(){
+      // Check that bbn is defined
+      if ( 'bbn' in window ){
+        if ( bbn.fn.isMobile() ){
+          document.body.classList.add('bbn-mobile');
+          if ( bbn.fn.isTabletDevice() ){
+            document.body.classList.add('bbn-tablet');
           }
-          bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
-            document.getElementById('nojs_bbn').remove();
-            document.querySelectorAll('.appui')[0].style.display = 'block';
-            if ( d.data.version ){
-              bbn.vue.version = d.data.version;
-              window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
-            }
-            let res = eval(d.script);
-            if ( bbn.fn.isFunction(res) ){
-              res(d.data);
-            }
-          })
         }
-        else{
-          let attempts = window.localStorage.getItem('bbn-load') || 0;
-          if ( attempts < 3 ){
-            window.localStorage.setItem('bbn-load', ++attempts);
-            location.reload();
+        // Init phase
+        if (hasServiceWorker) {
+          // through service worker
+          if (navigator.serviceWorker && navigator.serviceWorker.controller) {
+            navigator.serviceWorker.addEventListener('message', function(event) {
+              if ( event.data && event.data.data ){
+                let d = event.data;
+                if ( d.type === 'init' ){
+                  init(d);
+                }
+                else if ( 'appui' in window ){
+                  let v = window.localStorage.getItem('bbn-vue-version');
+                  appui.receive(d.data);
+                }
+              }
+            });
+            navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>"});
           }
         }
-      };
-      script.onerror = function(){
-        console.log("Problem")
-      };
-      document.getElementsByTagName("head")[0].appendChild(script);
-    });
-  }
-  else if ( !('AbortController' in window) ){
-    errorMsg = <?=\bbn\str::as_var(_("You need to have abort controller support in your browser, please update or use another browser"))?>;
-  }
-  else{
-    let hasBeenAsked = false;
-    let loaded = false;
-    let isReloading = false;
+        // Through Ajax
+        else {
+          bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, init);
+        }
+      }
+      // If bbn is not defined we reload the window 
+      else {
+        let attempts = window.localStorage.getItem('bbn-load') || 0;
+        // and avoid to do it more than 3 times
+        if ( attempts < 3 ){
+          window.localStorage.setItem('bbn-load', ++attempts);
+          alert("RELOADING??");
+          location.reload();
+        }
+      }
+    };
+    script.onerror = function(){
+      console.log("Impossible to load the libraries script");
+    };
+    document.getElementsByTagName("head")[0].appendChild(script);
+  };
+
+  let init = (d) => {
+    //document.getElementById('nojs_bbn').remove();
+    //document.querySelectorAll('.appui')[0].style.display = 'block';
+    if ( d.data.version ){
+      bbn.vue.version = d.data.version;
+      window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
+    }
+    let res = eval(d.data.script || d.script);
+    if ( bbn.fn.isFunction(res) ){
+      res(d.data);
+      //alert("kkk");
+      bbn.env.token = "<?=$token?>";
+      //loaded = true;
+    }
+  };
+
+  // Only if service worker is enabled
+  if (hasServiceWorker) {
+    // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
     .then((registration) => {
       registration.onupdatefound = () => {
@@ -98,88 +150,34 @@
             hasBeenAsked = true;
             if ( 'appui' in window ){
               if ( confirm(
-                <?=\bbn\str::as_var(_("The application has been updated but you still use an old version."))?> + "\n" +
-                <?=\bbn\str::as_var(_("You need to refresh the page to upgrade."))?> + "\n" +
-                <?=\bbn\str::as_var(_("Do you want to do it now?"))?>
+                <?=str::as_var(_("The application has been updated but you still use an old version."))?> + "\n" +
+                <?=str::as_var(_("You need to refresh the page to upgrade."))?> + "\n" +
+                <?=str::as_var(_("Do you want to do it now?"))?>
               ) ){
                 isReloading = true;
                 location.reload();
               }
             }
             else{
-              isReloading = true;
-              location.reload();
+              onDomLoaded();
             }
           }
           else if ( 'appui' in window ){
             let v = window.localStorage.getItem('bbn-vue-version');
-            bbn.fn.log(<?=\bbn\str::as_var(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            bbn.fn.log(<?=str::as_var(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
       };
-      console.log(<?=\bbn\str::as_var(_("Registration successful, scope is"))?>, registration.scope);
-      console.log(registration);
+      //console.log(<?=str::as_var(_("Registration successful, scope is"))?>, registration.scope);
+      //console.log(registration);
     })
     .catch((error) => {
-      console.log(<?=\bbn\str::as_var(_("Service worker registration failed, error"))?>, error);
-    });
-    document.addEventListener('DOMContentLoaded', () => {
-      let script = document.createElement("script");
-      script.type = "text/javascript";
-      script.src = "<?=$script_src?>";
-      script.onload = function(){
-        if ( ('bbn' in window) && navigator.serviceWorker.controller ){
-          if ( bbn.fn.isMobile() ){
-            document.body.classList.add('bbn-mobile');
-            if ( bbn.fn.isTabletDevice() ){
-              document.body.classList.add('bbn-tablet');
-            }
-          }
-          navigator.serviceWorker.addEventListener('message', function(event) {
-            if ( event.data && event.data.data ){
-              let d = event.data;
-              if ( d.type === 'init' ){
-                document.getElementById('nojs_bbn').remove();
-                document.querySelectorAll('.appui')[0].style.display = 'block';
-                if ( d.data.version ){
-                  bbn.vue.version = d.data.version;
-                  window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
-                }
-                let res = eval(d.data.script);
-                if ( bbn.fn.isFunction(res) ){
-                  res(d.data);
-                  loaded = true;
-                }
-              }
-              else if ( 'appui' in window ){
-                let v = window.localStorage.getItem('bbn-vue-version');
-                appui.receive(d.data);
-              }
-            }
-          });
-          navigator.serviceWorker.controller.postMessage({type: "init"})
-        }
-        else{
-          let attempts = window.localStorage.getItem('bbn-load') || 0;
-          if ( attempts < 3 ){
-            window.localStorage.setItem('bbn-load', ++attempts);
-            location.reload();
-          }
-        }
-      };
-      script.onerror = function(){
-        console.log("Problem")
-      };
-      document.getElementsByTagName("head")[0].appendChild(script);
+      console.log(<?=str::as_var(_("Service worker registration failed, error"))?>, error);
     });
   }
-  if ( errorMsg ){
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('error_message').innerHTML = errorMsg + '<br><br>' + 
-      '<a href="https://vivaldi.com/download/">Vivaldi Browser</a>';
-    });
-  }
+  // Adding the function onDOMContentLoaded
+  document.addEventListener('DOMContentLoaded', onDomLoaded);
 })();
 </script>
 </head>

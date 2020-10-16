@@ -40,7 +40,6 @@
     if ( data.js_data ){
       js_data = eval(data.js_data) || {};
     }
-    bbn.fn.log("IS THERE JS DATA?", js_data, data);
     if ( !js_data.appuiMixin ){
       js_data.appuiMixin = {
         header: true,
@@ -124,8 +123,6 @@
         } 
       })
     }
-    bbn.fn.log("LIST", data.list);
-
     bbn.vue.initDefaults({
       appui: {
         root: data.root,

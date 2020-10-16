@@ -7,7 +7,16 @@ $menu = new \bbn\appui\menus();
 $mgr = new \bbn\user\manager($model->inc->user);
 $is_dev = $model->inc->user->is_dev();
 $theme = $model->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
+$vfile = $model->data_path().'version.txt';
+if ( !is_file($vfile) ){
+  file_put_contents($vfile, '1');
+  $version = 1;
+}
+else{
+  $version = intval(file_get_contents($vfile));
+}
 $data = x::merge_arrays($model->data, [
+  'version' => $version,
   'current_menu' => $menu->get_default(),
   'menus' => count(($m = $menu->get_menus())) > 1 ? $m : [],
   //'shortcuts' => $model->get_model($model->plugin_url('appui-menu').'/shortcuts/list'),

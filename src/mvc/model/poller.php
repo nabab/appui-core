@@ -12,67 +12,85 @@
  */
 // set php runtime to unlimited
 
+use bbn\util\timer;
+use bbn\file\dir;
+use bbn\x;
+
 set_time_limit(0);
 // User is identified
 if ($id_user = $model->inc->user->get_id()) {
 
-  $actsource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/active');
-  $datasource = \bbn\file\dir::create_path($model->user_tmp_path('appui-cron').'poller/queue');
+  $actsource = dir::create_path($model->user_tmp_path($id_user).'poller/active');
+  $datasource = dir::create_path($model->user_tmp_path($id_user).'poller/queue');
 
-  // Chrono
+  /**
+   * @var int A timestamp of the start of the execution.
+   */
   $now = time();
-  $timer = new \bbn\util\timer();
+  /**
+   * @var timer A timer object to keep track of the time
+   */
+  $timer = new timer();
+  // For the timour
   $timer->start('timeout');
+  // To measure the active time
   $timer->start('activity');
+  $timeout = 30;
+
+  /**
+   * @var array The list of plugins that have a poller model
+   */
+  $plugins = $model->get_cached_model($model->plugin_url('appui-core').'/poller_plugins', 300);
+  /**
+   * @var array The list of functions from plugins
+   */
+  $plugins_pollers = [];
+  foreach ( $plugins as $plugin ){
+    if ( $m = $model->get_subplugin_model('poller', [], $plugin, 'appui-core') ){
+      array_push($plugins_pollers, ...array_map(function($p) use($plugin){
+        $p['plugin'] = $plugin;
+        return $p;
+      }, $m));
+    }
+  }
+  $times_file = \bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller_times.json';
+  $times = [];
+  if ( is_file($times_file) ){
+    $times = json_decode(file_get_contents($times_file), true);
+  }
+  /**
+   * @var bool True if the chat plugin is configured.
+   */
   $chat_enabled = $model->has_plugin('appui-chat');
+  /**
+   * @var bool True if chat data is being sent.
+   */
   $hasChat = !empty($model->data['chat']);
+
+  /**
+   * @var array The result that will be output as JSON.
+   */
   $res = [
     'data' => [],
     'start' => $now,
-    'chat' => []
+    'chat' => [],
+    'plugins' => []
   ];
-  if ($chat_enabled && $hasChat) {
-    $user_system = new \bbn\user\users($model->db);
-    $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
-  }
-  if ($chat_enabled && !empty($model->data['message'])) {
-    // Gets the corresponding ID chat or creates one
-    if (
-      (
-        isset($model->data['message']['id_chat']) &&
-        ($id_chat = $model->data['message']['id_chat'])
-      ) ||
-      (
-        !empty($model->data['message']['users']) &&
-        !empty($model->data['message']['id_temp']) &&
-        ($id_chat = $chat_system->get_chat_by_users($model->data['message']['users']))
-      )
-    ) {
-      $chat_system->talk($id_chat, $model->data['message']['text']);
-      $res['chat']['id_chat'] = $id_chat;
-      if ( !empty($model->data['message']['id_temp']) ){
-        $res['chat']['id_temp'] = $model->data['message']['id_temp'];
-      }
-    }
-  }
-  if (
-    $chat_enabled &&
-    !empty($model->data['setLastActivity']) &&
-    !empty($model->data['setLastActivity']['id_chat']) &&
-    !empty($model->data['setLastActivity']['id_user'])
-  ){
-    $chat_system->set_last_activity($model->data['setLastActivity']['id_chat'], $model->data['setLastActivity']['id_user']);
-    unset($model->data['setLastActivity']);
-  }
+  /**
+   * @var bbn\appui\observer
+   */
   $observer = new \bbn\appui\observer($model->db);
-  if ($files = \bbn\file\dir::get_files($actsource)) {
+  // Removing the files in active directory as there should be only one
+  if ($files = dir::get_files($actsource)) {
     foreach ($files as $f){
       unlink($f);
     }
   }
   $active_file = $actsource.'/active_'.$now;
   // This file goes with the process
-  file_put_contents($active_file, '1');
+  $pid = getmypid();
+  /** @todo What's the interest if I delete them?? */
+  file_put_contents($active_file, (string)$pid);
 
 
   $observers = [];
@@ -81,91 +99,56 @@ if ($id_user = $model->inc->user->get_id()) {
     $observers = $model->data['observers'];
     foreach ($observer->get_list($id_user) as $ob){
       $found = false;
-      foreach ($model->data['observers'] as $sent){
-        if ($sent['id'] === $ob['id']) {
-          $found = true;
-          break;
-        }
-      }
-      if (!$found) {
+      if (!x::get_row($model->data['observers'], ['id' => $ob['id']])) {
         $observer->user_delete($ob['id']);
       }
     }
   }
   // main loop
-  while ($timer->measure('timeout') < 30){
+  while ($timer->measure('timeout') < $timeout){
+    // Look if connection is aborted and die after 10 seconds if still disconnected.
+    /** @todo To check the time used by connection_aborted function */
     if (connection_aborted()) {
       if (!$timer->has_started('disconnection')) {
         $timer->start('disconnection');
       }
       elseif ($timer->measure('disconnection') > 10) {
-        \bbn\x::log("Disconnected", 'poller');
+        x::log("Disconnected", 'poller');
         die("Disconnected");
       }
+      sleep(1);
+      continue;
     }
     elseif ($timer->has_started('disconnection')) {
       $timer->reset();
     }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
-    /* if ($chat_enabled && $hasChat) {
-      $chats = $chat_system->get_chats();
-      $chats_hash = md5(json_encode($chats));
-      if ($timer->measure('activity') < 1) {
-        $chat_users = $user_system->online_list();
-        $chat_users_hash = md5(json_encode($chat_users));
-        if ($chat_users_hash !== $model->data['usersHash']) {
-          $res['chat']['users'] = $chat_users;
-          $res['chat']['hash'] = $chat_users_hash;
+    
+
+    foreach ( $plugins_pollers as $pp ){
+      if ( !$timer->has_started($pp['id']) ){
+        $timer->start($pp['id'], (!empty($times[$pp['id']]) && ($times[$pp['id']]['current'] < $timeout)) ? (float)$times[$pp['id']]['start'] : null);
+      }
+      if ( !connection_aborted()
+        && ($timer->measure($pp['id']) >= $pp['frequency'])
+        && is_callable($pp['function'])
+        && ($plugin_res = $pp['function']($model->data[$pp['plugin']] ?? $model->data))
+      ){
+        if ( !isset($res['plugins'][$pp['plugin']]) ){
+          $res['plugins'][$pp['plugin']] = [];
         }
+        $res['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res['plugins'][$pp['plugin']], $plugin_res);
+        $timer->stop($pp['id']);
+        $timer->start($pp['id']);
       }
-      if ( $chats_hash !== $model->data['chatsHash']) {
-        $res['chat']['chats'] = [
-          'current' => [],
-          'hash' => $chats_hash,
-          'last' => $model->data['lastChat'] ?? null
-        ];
-        foreach ( $chats as $c ){
-          $res['chat']['chats']['current'][$c] = [
-            'info' => $chat_system->info($c),
-            'admins' => $chat_system->get_admins($c)
-          ];
-          if ( empty($model->data['chatsHash']) ){
-            $res['chat']['chats']['current'][$c]['participants'] = $chat_system->get_participants($c, false);
-            if ( empty($model->data['message']) && ($m = $chat_system->get_prev_messages($c)) ){
-              $res['chat']['chats']['current'][$c]['messages'] = $m;
-              $max = $m[count($m)-1]['time'];
-              if (\bbn\x::compare_floats($max, $res['chat']['chats']['last'], '>')) {
-                $res['chat']['chats']['last'] = $max;
-              }
-            }
-          }
-        }
-      }
-      if (count($chats)) {
-        foreach ($chats as $chat){
-          if ( $msgs = $chat_system->get_next_messages($chat, $model->data['lastChat'] ?? null) ) {
-            if (!isset($res['chat']['chats'])) {
-              $res['chat']['chats'] = [
-                'current' => [],
-                'last' => $model->data['lastChat'] ?? 0
-              ];
-            }
-            $res['chat']['chats']['current'][$chat]['messages'] = $msgs;
-            $res['chat']['chats']['current'][$chat]['participants'] = $chat_system->get_participants($chat, false);
-            $res['chat']['chats']['current'][$chat]['admins'] = $chat_system->get_admins($chat);
-            $max = $msgs[count($msgs)-1]['time'];
-            if (\bbn\x::compare_floats($max, $res['chat']['chats']['last'], '>')) {
-              $res['chat']['chats']['last'] = $max;
-            }
-          }
-        }
-      }
-      if ( isset($model->data['message']) ){
-        unset($model->data['message']);
-      }
-    } */
-    if ($chat_enabled && $hasChat) {
+    }
+
+    /** @todo This part should be done in the central poller */
+    /* if ($chat_enabled && $hasChat ) {
+      // Creating adequate objects: chat & users
+      $user_system = new \bbn\user\users($model->db);
+      $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
       if ($timer->measure('activity') < 1) {
         $chat_users = $user_system->online_list();
         $chat_users_hash = md5(json_encode($chat_users));
@@ -178,8 +161,8 @@ if ($id_user = $model->inc->user->get_id()) {
         'current' => [],
         'last' => $model->data['lastChat'] ?? 0
       ];
-      if ( $chats = $chat_system->get_chats() ){
-        foreach ( $chats as $c ){
+      if ($chats = $chat_system->get_chats()) {
+        foreach ($chats as $c) {
           $ctmp['current'][$c] = [
             'info' => $chat_system->info($c),
             'admins' => $chat_system->get_admins($c),
@@ -188,13 +171,10 @@ if ($id_user = $model->inc->user->get_id()) {
         }
       }
       $chats_hash = md5(json_encode($ctmp));
-      if (
-        ($chats_hash !== $model->data['chatsHash']) ||
-        !empty($model->data['message'])
-      ){
+      if ( ($chats_hash !== $model->data['chatsHash']) ){
         $ctmp['hash'] = $chats_hash;
         foreach ( $chats as $c ){
-          if ( empty($model->data['chatsHash']) && empty($model->data['message']) ){
+          if ( empty($model->data['chatsHash']) ){
             if ( $m = $chat_system->get_prev_messages($c) ){
               $ctmp['current'][$c]['messages'] = $m;
               $max = $m[count($m)-1]['time'];
@@ -213,13 +193,9 @@ if ($id_user = $model->inc->user->get_id()) {
         }
         $res['chat']['chats'] = $ctmp;
       }
-      if ( isset($model->data['message']) ){
-        unset($model->data['message']);
-      }
-    }
-    // get files in the poller dir
+    } */
+    // Get files in the poller dir
     $files = \bbn\file\dir::get_files($datasource);
-
     if ($files && count($files)) {
       $result = [];
       $returned_obs = [];
@@ -248,7 +224,6 @@ if ($id_user = $model->inc->user->get_id()) {
       if (count($result)) {
         unlink($active_file);
         $res = ['data' => $result];
-        break;
       }
     }
     // wait for 1 sec
@@ -257,8 +232,12 @@ if ($id_user = $model->inc->user->get_id()) {
       $timer->start('activity');
       $model->inc->user->update_activity();
     }
-    if (!empty($res['chat']) || !empty($res['data'])) {
-      die(json_encode($res));
+    if (!empty($res['chat']) || !empty($res['data']) || !empty($res['plugins'])) {
+      $times_currents = $timer->currents();
+      if ( !empty($times_currents) && \bbn\file\dir::create_path(dirname($times_file)) ){
+        file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
+      }
+      die(json_encode($res, JSON_PRETTY_PRINT));
     }
     sleep(1);
   }

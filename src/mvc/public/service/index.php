@@ -17,4 +17,5 @@ if ( $custom_js = $ctrl->get_plugin_view('index', 'js', $ctrl->data) ){
   $ctrl->data['js_data'] = $custom_js;
 }
 echo 'let data = '.json_encode(array_merge($ctrl->data, ['script' => $ctrl->get_view(APPUI_CORE_ROOT.'/index', 'js')])).';'.PHP_EOL;
+//echo 'let data = '.json_encode(['plugins' => $plugins, 'version' => $ctrl->data['version']]).';';
 echo $ctrl->get_view(APPUI_CORE_ROOT.'/service/index', 'js');

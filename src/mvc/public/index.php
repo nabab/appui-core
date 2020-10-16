@@ -22,7 +22,8 @@ $ctrl->add_data([
 // The whole DOM
 if (empty($ctrl->post)) {
   $ctrl->data['custom_css'] = $ctrl->get_plugin_view('index', 'css') ?: $ctrl->get_less();
-  $ctrl->combo($ctrl->data['site_title'], true);
+  $ctrl->data['token'] = $ctrl->inc->user->add_token();
+  $ctrl->combo($ctrl->data['site_title'], $ctrl->data);
 }
 // Only the data
 else {
@@ -30,6 +31,7 @@ else {
   $ctrl->data['js_data'] = $ctrl->custom_plugin_view('index', 'js', $ctrl->data, 'appui-core');
   $ctrl->obj->data = $ctrl->data;
 }
+
 
 /*
 echo "HELLO hey";
