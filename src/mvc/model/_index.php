@@ -15,6 +15,11 @@ if ( !is_file($vfile) ){
 else{
   $version = intval(file_get_contents($vfile));
 }
+$chat = false;
+if ( $model->has_plugin('appui-chat') ){
+  $cchat = new \bbn\appui\chat($model->db, $model->inc->user);
+  $chat = $cchat->get_user_status();
+}
 $data = x::merge_arrays($model->data, [
   'version' => $version,
   'current_menu' => $menu->get_default(),
@@ -31,7 +36,8 @@ $data = x::merge_arrays($model->data, [
       'isAdmin' => $model->inc->user->is_admin(),
       'isDev' => $model->inc->user->is_dev(),
       'name' => $mgr->get_name($model->inc->user->get_id()),
-      'email' => $mgr->get_email($model->inc->user->get_id())
+      'email' => $mgr->get_email($model->inc->user->get_id()),
+      'chat' => $chat
     ],
     'group' => $mgr->get_group($model->inc->user->get_group()),
     'userId' => $model->inc->user->get_id(), // Deprecated

@@ -693,6 +693,9 @@ function processServerMessage(json) {
     if( json.plugins && Object.keys(json.plugins).length ){
       for ( let plugin in json.plugins ){
         if ( 'serviceWorkers' in json.plugins[plugin] ){
+          if (!(plugin in dataObj)) {
+            dataObj[plugin] = {};
+          }
           Object.assign(dataObj[plugin], json.plugins[plugin].serviceWorkers);
         }
       }

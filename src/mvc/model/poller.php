@@ -58,22 +58,13 @@ if ($id_user = $model->inc->user->get_id()) {
   if ( is_file($times_file) ){
     $times = json_decode(file_get_contents($times_file), true);
   }
-  /**
-   * @var bool True if the chat plugin is configured.
-   */
-  $chat_enabled = $model->has_plugin('appui-chat');
-  /**
-   * @var bool True if chat data is being sent.
-   */
-  $hasChat = !empty($model->data['chat']);
-
+  
   /**
    * @var array The result that will be output as JSON.
    */
   $res = [
     'data' => [],
     'start' => $now,
-    'chat' => [],
     'plugins' => []
   ];
   /**
@@ -145,55 +136,6 @@ if ($id_user = $model->inc->user->get_id()) {
     }
 
     /** @todo This part should be done in the central poller */
-    /* if ($chat_enabled && $hasChat ) {
-      // Creating adequate objects: chat & users
-      $user_system = new \bbn\user\users($model->db);
-      $chat_system = new \bbn\appui\chat($model->db, $model->inc->user);
-      if ($timer->measure('activity') < 1) {
-        $chat_users = $user_system->online_list();
-        $chat_users_hash = md5(json_encode($chat_users));
-        if ($chat_users_hash !== $model->data['usersHash']) {
-          $res['chat']['users'] = $chat_users;
-          $res['chat']['hash'] = $chat_users_hash;
-        }
-      }
-      $ctmp = [
-        'current' => [],
-        'last' => $model->data['lastChat'] ?? 0
-      ];
-      if ($chats = $chat_system->get_chats()) {
-        foreach ($chats as $c) {
-          $ctmp['current'][$c] = [
-            'info' => $chat_system->info($c),
-            'admins' => $chat_system->get_admins($c),
-            'participants' => $chat_system->get_participants($c, false)
-          ];
-        }
-      }
-      $chats_hash = md5(json_encode($ctmp));
-      if ( ($chats_hash !== $model->data['chatsHash']) ){
-        $ctmp['hash'] = $chats_hash;
-        foreach ( $chats as $c ){
-          if ( empty($model->data['chatsHash']) ){
-            if ( $m = $chat_system->get_prev_messages($c) ){
-              $ctmp['current'][$c]['messages'] = $m;
-              $max = $m[count($m)-1]['time'];
-              if (\bbn\x::compare_floats($max, $ctmp['last'], '>')) {
-                $ctmp['last'] = $max;
-              }
-            }
-          }
-          else if ( $m = $chat_system->get_next_messages($c, $model->data['lastChat'] ?? null) ){
-            $ctmp['current'][$c]['messages'] = $m;
-            $max = $m[count($m)-1]['time'];
-            if ( \bbn\x::compare_floats($max, $ctmp['last'], '>')) {
-              $ctmp['last'] = $max;
-            }
-          }
-        }
-        $res['chat']['chats'] = $ctmp;
-      }
-    } */
     // Get files in the poller dir
     $files = \bbn\file\dir::get_files($datasource);
     if ($files && count($files)) {
@@ -232,7 +174,7 @@ if ($id_user = $model->inc->user->get_id()) {
       $timer->start('activity');
       $model->inc->user->update_activity();
     }
-    if (!empty($res['chat']) || !empty($res['data']) || !empty($res['plugins'])) {
+    if (!empty($res['data']) || !empty($res['plugins'])) {
       $times_currents = $timer->currents();
       if ( !empty($times_currents) && \bbn\file\dir::create_path(dirname($times_file)) ){
         file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
