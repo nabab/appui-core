@@ -20,45 +20,65 @@ set_time_limit(0);
 // User is identified
 if ($id_user = $model->inc->user->get_id()) {
 
-  $actsource = dir::create_path($model->user_tmp_path($id_user).'poller/active');
-  $datasource = dir::create_path($model->user_tmp_path($id_user).'poller/queue');
-
+  /**
+   * @var string The path for the active files
+   */
+  $actsource = dir::create_path(\bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/active');
+  /**
+   * @var string The path for the queue
+   */
+  $datasource = dir::create_path(\bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/queue');
+  /**
+   * @var string The path of the times.json file
+   */
+  $times_file = \bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/times.json';
   /**
    * @var int A timestamp of the start of the execution.
    */
   $now = time();
   /**
-   * @var timer A timer object to keep track of the time
+   * @var \bbn\util\timer A timer object to keep track of the time
    */
   $timer = new timer();
-  // For the timour
+  // For the timout
   $timer->start('timeout');
-  // To measure the active time
-  $timer->start('activity');
+  /**
+   * @var integer The poller timeout
+   */
   $timeout = 30;
-
   /**
    * @var array The list of plugins that have a poller model
    */
   $plugins = $model->get_cached_model($model->plugin_url('appui-core').'/poller_plugins', 300);
   /**
-   * @var array The list of functions from plugins
+   * @var array The list of functions from plugins to be performed in the loop
    */
   $plugins_pollers = [];
+  /**
+   * @var array The list of functions from plugins to be performed once
+   */
+  $plugins_pollers_noloop = [];
   foreach ( $plugins as $plugin ){
     if ( $m = $model->get_subplugin_model('poller', [], $plugin, 'appui-core') ){
-      array_push($plugins_pollers, ...array_map(function($p) use($plugin){
+      foreach ($m as $p) {
         $p['plugin'] = $plugin;
-        return $p;
-      }, $m));
+        if (empty($p['frequency'])) {
+          $plugins_pollers_noloop[] = $p;
+        }
+        else {
+          $plugins_pollers[] = $p;
+        }
+      }
     }
   }
-  $times_file = \bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller_times.json';
+
+  /**
+   * @var array The current times list
+   */
   $times = [];
-  if ( is_file($times_file) ){
+  if (is_file($times_file)) {
     $times = json_decode(file_get_contents($times_file), true);
   }
-  
   /**
    * @var array The result that will be output as JSON.
    */
@@ -70,32 +90,38 @@ if ($id_user = $model->inc->user->get_id()) {
   /**
    * @var bbn\appui\observer
    */
-  $observer = new \bbn\appui\observer($model->db);
+
   // Removing the files in active directory as there should be only one
   if ($files = dir::get_files($actsource)) {
-    foreach ($files as $f){
+    foreach ($files as $f) {
       unlink($f);
     }
   }
-  $active_file = $actsource.'/active_'.$now;
+  if (!isset($model->data['appui-core'])) {
+    $model->data['appui-core'] = [];
+  }
+  $model->data['appui-core']['active_file'] = $actsource.'/active_'.$now;
   // This file goes with the process
   $pid = getmypid();
   /** @todo What's the interest if I delete them?? */
-  file_put_contents($active_file, (string)$pid);
+  file_put_contents($model->data['appui-core']['active_file'], (string)$pid);
 
-
-  $observers = [];
-  // If observers are sent we check which ones are not used and delete them
-  if (isset($model->data['observers'])) {
-    $observers = $model->data['observers'];
-    foreach ($observer->get_list($id_user) as $ob){
-      $found = false;
-      if (!x::get_row($model->data['observers'], ['id' => $ob['id']])) {
-        $observer->user_delete($ob['id']);
+  // Plugins functions to run once
+  foreach ( $plugins_pollers_noloop as $pp ){
+    if ( !connection_aborted()
+      && is_callable($pp['function'])
+      && ($plugin_res = $pp['function']($model->data[$pp['plugin']] ?? $model->data))
+      && !empty($plugin_res['success'])
+      && !empty($plugin_res['data'])
+    ){
+      if ( !isset($res['plugins'][$pp['plugin']]) ){
+        $res['plugins'][$pp['plugin']] = [];
       }
+      $res['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res['plugins'][$pp['plugin']], $plugin_res['data']);
     }
   }
-  // main loop
+
+  // Main loop
   while ($timer->measure('timeout') < $timeout){
     // Look if connection is aborted and die after 10 seconds if still disconnected.
     /** @todo To check the time used by connection_aborted function */
@@ -115,77 +141,49 @@ if ($id_user = $model->inc->user->get_id()) {
     }
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
-    
 
+    // Start|resume timers
     foreach ( $plugins_pollers as $pp ){
       if ( !$timer->has_started($pp['id']) ){
         $timer->start($pp['id'], (!empty($times[$pp['id']]) && ($times[$pp['id']]['current'] < $timeout)) ? (float)$times[$pp['id']]['start'] : null);
       }
+    }
+    // Check e run plugins functions
+    foreach ( $plugins_pollers as $pp ){
       if ( !connection_aborted()
         && ($timer->measure($pp['id']) >= $pp['frequency'])
         && is_callable($pp['function'])
         && ($plugin_res = $pp['function']($model->data[$pp['plugin']] ?? $model->data))
+        && !empty($plugin_res['success'])
       ){
-        if ( !isset($res['plugins'][$pp['plugin']]) ){
-          $res['plugins'][$pp['plugin']] = [];
+        if (!empty($plugin_res['data'])) {
+          if ( !isset($res['plugins'][$pp['plugin']]) ){
+            $res['plugins'][$pp['plugin']] = [];
+          }
+          $res['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res['plugins'][$pp['plugin']], $plugin_res['data']);
         }
-        $res['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res['plugins'][$pp['plugin']], $plugin_res);
         $timer->stop($pp['id']);
         $timer->start($pp['id']);
       }
     }
 
-    /** @todo This part should be done in the central poller */
-    // Get files in the poller dir
-    $files = \bbn\file\dir::get_files($datasource);
-    if ($files && count($files)) {
-      $result = [];
-      $returned_obs = [];
-      foreach ($files as $f){
-        if ($ar = json_decode(file_get_contents($f), true)) {
-          if (isset($ar['observers'])) {
-            \bbn\x::log($ar['observers']);
-            foreach ($ar['observers'] as $o){
-              $value = \bbn\x::get_field($observers, ['id' => $o['id']], 'value');
-              if (!$value || ($value !== $o['result'])) {
-                $returned_obs[] = $o;
-              }
-            }
-            if (count($returned_obs)) {
-              $result[] = ['observers' => $returned_obs];
-            }
-          }
-          else{
-            $result[] = $ar;
-          }
-        }
-        unlink($f);
-      }
-      // put data.txt's content and timestamp of last data.txt change into array
-      // Leaves the page as it should be called back
-      if (count($result)) {
-        unlink($active_file);
-        $res = ['data' => $result];
-      }
-    }
-    // wait for 1 sec
-    if ($timer->measure('activity') > 10) {
-      $timer->stop('activity');
-      $timer->start('activity');
-      $model->inc->user->update_activity();
-    }
     if (!empty($res['data']) || !empty($res['plugins'])) {
       $times_currents = $timer->currents();
-      if ( !empty($times_currents) && \bbn\file\dir::create_path(dirname($times_file)) ){
+      if ( !empty($times_currents) && dir::create_path(dirname($times_file)) ){
         file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
       }
       die(json_encode($res, JSON_PRETTY_PRINT));
     }
+    // wait for 1 sec
     sleep(1);
   }
   //die(var_dump("File does not exist", $active_file, $res));
 }
 else{
   die(json_encode(['disconnected' => true]));
+}
+$times_currents = $timer->currents();
+if ( !empty($times_currents) && dir::create_path(dirname($times_file)) ){
+  file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
 }
 die("{}");

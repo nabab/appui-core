@@ -576,7 +576,7 @@
                 "delete": "CASCADE",
                 "unique": 0
             },
-            "id_token": {
+            "id_user": {
                 "columns": [
                     "id_user"
                 ],
@@ -600,7 +600,7 @@
                 "id_alias"
             ],
             "id_user": [
-                "id_token"
+                "id_user"
             ]
         },
         "fields": {

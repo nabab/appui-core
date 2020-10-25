@@ -34,12 +34,12 @@ if (($ctrl->get_mode() === 'dom') && in_array($path, $auth_no_user, true)) {
   return 1;
 }
 /* @var $authorized array The authorized pages for the non logged in users */
-$authorized = [
+$ctrl->add_authorized_route(
   $cr.'login/password',
   $cr.'login/lost_pass',
   $cr.'service/index',
   $cr.'poller'
-];
+);
 if ($path === $cr.'logout') {
   $ctrl->set_mode('public');
   return true;
@@ -52,7 +52,6 @@ if (!empty($_SERVER['REDIRECT_URL'])
 ) {
   $ctrl->reroute('logo_mail');
 }
-
 elseif ($ctrl->inc->user->is_just_login()) {
   if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
@@ -67,7 +66,20 @@ elseif ($ctrl->inc->user->is_reset()) {
 }
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->get_mode() === 'dom') {
-  if (!$ctrl->inc->user->check_session()) {
+  if ($ctrl->has_plugin('appui-api')
+      && ($api = $ctrl->plugin_url('appui-api'))
+      && (
+        ($ctrl->get_request() === $api)
+        || ($ctrl->get_request() === $api.'/index')
+      )
+  ) {
+    $ctrl->add_authorized_route(
+      $api.'/index',
+      $api
+    );
+    //die(var_dump($ctrl->get_request()));
+  }
+  elseif (!$ctrl->inc->user->check_session()) {
     $rerouted = false;
     if ($ctrl->has_plugin('appui-gdpr')) {
       $cookie = $ctrl->get_cookie();
@@ -77,7 +89,7 @@ elseif ($ctrl->get_mode() === 'dom') {
       }
     }
     if (!$rerouted) {
-      if (in_array($path, $authorized, true)) {
+      if ($ctrl->is_authorized_route($path)) {
         return 1;
       }
       $ctrl->reroute($cr.'login');
@@ -85,7 +97,7 @@ elseif ($ctrl->get_mode() === 'dom') {
   }
   return 1;
 }
-elseif (in_array($path, $authorized, true)) {
+elseif ($ctrl->is_authorized_route($path)) {
   return 1;
 }
 

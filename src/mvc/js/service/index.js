@@ -340,6 +340,9 @@ let isRunning = false;
 /** @var {Boolean} isFocused True if is focused */
 let isFocused = false;
 
+/** @var {Boolean} errorState True if the poller is in error state */
+let errorState = false;
+
 /** @var {Number} lastFocused A timestamp of the last time the window was focused */
 let lastFocused = (new Date()).getTime();
 
@@ -549,6 +552,15 @@ function launchPoller() {
         }
         return;
       }
+      else if (errorState) {
+        log('The poller is in a state of error');
+        if (interval !== 60) {
+          setPoller(60);
+          errorState = false;
+          retries = 0;
+        }
+        return;
+      }
       else if ( interval === 60 ){
         log("Setting the poller");
         setPoller(1);
@@ -641,7 +653,7 @@ function processClientMessage(event, clientList) {
   log("processClientMessage with keys " + Object.keys(d).join(', '));
   windows[senderID].data = d;
   dataObj = d;
-/* 
+
   if ( 'observers' in d ){
     observers[senderID] = d.observers;
   }
@@ -654,6 +666,7 @@ function processClientMessage(event, clientList) {
   }
   // Updating dataObj
   dataObj.observers = obsTodo;
+  /* 
   if ( 'chat' in d ){
     dataObj.chat = d.chat;
   }
@@ -685,7 +698,6 @@ function processServerMessage(json) {
   debug({response: json});
   log("processServerMessage with keys " + Object.keys(json).join(', '));
   return self.clients.matchAll().then(function(clientList) {
-    retries = 0;
     isFocused = false;
     if ( json.disconnected ){
       isConnected = false;
@@ -744,6 +756,8 @@ function fetchWithTimeout(url, timeout, options) {
 function poll(d){
   log('Polling');
   isRunning = true;
+  errorState = false;
+  noResp = false;
   if (isConnected) {
     debug({request: dataObj});
     fetchWithTimeout(poller, 600000, {
@@ -753,72 +767,75 @@ function poll(d){
         // "Content-Type": "application/x-www-form-urlencoded",
       },
       body: JSON.stringify(Object.keys(dataObj).length ? dataObj : {test: 1})
-    })
-      .then(function(response) {
-        // Clear the timeout as cleanup
-        if ( response.status !== 200 ){
-          log("Error: " + response.status);
-          isRunning = false;
-          retries++;
-          if ( retries <= 3 ){
-            poll();
-          }
-          else {
-            log('Max retries done... Bye!');
-          }
+    }).then(response => {
+      // Clear the timeout as cleanup
+      if ( response.status !== 200 ){
+        log("Error: " + response.status);
+        isRunning = false;
+        retries++;
+        if (retries <= 3) {
+          poll();
         }
-        else{
-          // What we do with the answer from poller 
-          response.text().then((text) => {
-            let json;
-            try {
-              json = JSON.parse(text);
-              noResp = false;
-            }
-            catch(e){
-              noResp = true;
-              log("The response is no JSON");
-              json = {message: "The response is no JSON", error: e.message};
-            }
-            retries = 0;
-            /** @todo WTF?? The number of retries are not well managed */
-            if ( Object.keys(json).length ){
-              log("JSON RESULT with keys " + Object.keys(json).join(', '));
-              processServerMessage(json).then((res) => {
-                isRunning = false;
-                if ((res === false) || noResp) {
-                  retries++;
-                  if ( retries <= 3 ){
-                    if ( noResp ){
-                      log('Poller noResp');
-                      setTimeout(poll, 60000);
-                    }
-                    else {
-                      poll();
-                    }
-                  }
-                  else {
-                    log('Max retries done...');
-                  }
-                }
-                else{
-                  poll();
-                }
-              });
-            }
-            else{
-              log('Empty answer from poller');
+        else {
+          errorState = true;
+          log('Max retries done... Bye!');
+        }
+      }
+      else{
+        // What we do with the answer from poller
+        response.text().then(text => {
+          let json;
+          try {
+            json = JSON.parse(text);
+          }
+          catch(e){
+            log("The response is no JSON");
+            noResp = true;
+            isRunning = false;
+            retries++;
+            if (retries <= 3) {
               poll();
             }
-          });
-        }
-      })
-      .catch(function(err) {
-        isRunning = false;
-        if (err.message !== 'The user aborted a request.') {
-          log('fetch failed!', err.message);
-        }
-      });
+            else {
+              errorState = true;
+              log('Max retries done...');
+            }
+            return;
+          }
+          if (Object.keys(json).length) {
+            log("JSON RESULT with keys " + Object.keys(json).join(', '));
+            processServerMessage(json).then(res => {
+              isRunning = false;
+              if (res === false) {
+                retries++;
+                if (retries <= 3) {
+                  poll();
+                }
+                else {
+                  errorState = true;
+                  log('Max retries done...');
+                }
+              }
+              else {
+                retries = 0;
+                poll();
+              }
+            });
+          }
+          else {
+            log('Empty answer from poller');
+            retries = 0;
+            poll();
+          }
+        });
+      }
+    }).catch(err => {
+      isRunning = false;
+      if (err.message !== 'The user aborted a request.') {
+        log('fetch failed!', err.message);
+        errorState = true;
+      }
+    });
   }
   //log("SENDING THIS TO SERVER: \n" + JSON.stringify(dataObj, null, 2));
 }
