@@ -90,9 +90,9 @@ use bbn\str;
                 if ( d.type === 'init' ){
                   init(d);
                 }
-                else if ( 'appui' in window ){
+                else if ('appui' in window){
                   let v = window.localStorage.getItem('bbn-vue-version');
-                  appui.receive(d.data);
+                  appui.receive(d);
                 }
               }
             });

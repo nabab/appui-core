@@ -302,88 +302,66 @@
  * )();
  *   "
  * };
- *       
+ *
  */
 
 /**
  * @var {String} CACHE_NAME The name of the version
  * @example 242
  **/
-const CACHE_NAME = 'v' + data.version;
-
-/**
- * @var {String} CDN The URL of the CDN
- * @example "https://cdn.bbn.io/"
- **/
-const CDN = data.shared_path;
-
-/**
- * @var {String} libFile A coma separated list of libraries for the CDN
- * @example "nerd-fonts,bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
- */
-const libFile = data.cdn_lib;
-
-/**
- * @var {Array} precacheResources Static js files to load
- * @example
- **/
-const precacheResources = [
-  data.script_src
-];
+const CACHE_NAME = 'v' + data.version,
+      /**
+       * @var {String} CDN The URL of the CDN
+       * @example "https://cdn.bbn.io/"
+       **/
+      CDN = data.shared_path,
+      /**
+       * @var {String} libFile A coma separated list of libraries for the CDN
+       * @example "nerd-fonts,bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
+       */
+      libFile = data.cdn_lib,
+      /**
+       * @var {Array} precacheResources Static js files to load
+       * @example
+       **/
+      precacheResources = [
+        data.script_src
+      ],
+      /** @var {String} poller The poller URL */
+      poller = data.plugins['appui-core'] + '/poller';
 
 /** @var {Number} offlineTimeout One hour after which the user should be offline */
-let offlineTimeout = 3600000;
-
-/** @var {Boolean} isRunning True if is running */
-let isRunning = false;
-
-/** @var {Boolean} isFocused True if is focused */
-let isFocused = false;
-
-/** @var {Boolean} errorState True if the poller is in error state */
-let errorState = false;
-
-/** @var {Number} lastFocused A timestamp of the last time the window was focused */
-let lastFocused = (new Date()).getTime();
-
-/** @var {Number} lastChat  A timestamp of the last time a chat has been received */
-let lastChat = 0;
-
-/** @var {String} poller The poller URL */
-const poller = data.plugins['appui-core'] + '/poller';
-
-/** @var {Object} dataObj The content object that will be passed with the page */
-let dataObj = {};
-
-/** @var {Object} observers The observers list */
-let observers = {};
-
-/** @var {Number} retries The number of attempts done to connect */
-let retries = 0;
-
-/** @var {Array} windows The list of client windows with objects with id and token */
-let windows = {};
-
-/** @var {Number} aborter An object allowing to abort the current query */
-let aborter;
-
-/** @var {Boolean} isConnected True if is connected */
-let isConnected = false;
-
-/** @var {Number} interval The interval length for setInterval */
-let interval;
-
-/** @var {Object} intervalObj The interval object for launching the poller */
-let intervalObj;
-
-/** @var {Boolean} noResp True if the server doesn't answer */
-let noResp = false;
-
-/** @var {Object} observers The observers list */
-let lastClientMessage = {};
-
-/** @var {Object} observers The observers list */
-let lastResponse = {};
+let offlineTimeout = 3600000,
+    /** @var {Boolean} isRunning True if is running */
+    isRunning = false,
+    /** @var {Boolean} isFocused True if is focused */
+    isFocused = false,
+    /** @var {Boolean} errorState True if the poller is in error state */
+    errorState = false,
+    /** @var {Number} lastFocused A timestamp of the last time the window was focused */
+    lastFocused = (new Date()).getTime(),
+    /** @var {Number} lastChat  A timestamp of the last time a chat has been received */
+    lastChat = 0,
+    /** @var {Object} observers The observers list */
+    observers = {},
+    /** @var {Number} retries The number of attempts done to connect */
+    retries = 0,
+    /** @var {Array} windows The list of client windows with objects with id and token */
+    windows = {},
+    /** @var {Number} aborter An object allowing to abort the current query */
+    aborter,
+    /** @var {Boolean} isConnected True if is connected */
+    isConnected = false,
+    /** @var {Number} interval The interval length for setInterval */
+    interval,
+    /** @var {Object} intervalObj The interval object for launching the poller */
+    intervalObj,
+    /** @var {Boolean} noResp True if the server doesn't answer */
+    noResp = false,
+    /** @var {Object} observers The observers list */
+    lastClientMessage = {},
+    /** @var {Object} observers The observers list */
+    lastResponse = {};
 
 /*
 //window.indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.OIndexedDB || window.msIndexedDB;
@@ -469,10 +447,8 @@ function debug(data) {
         try {
           client.postMessage({
             client: client.id,
-            data: {
-              type: 'log',
-              data: data
-            }
+            type: 'log',
+            data: data
           });
         }
         catch (e) {
@@ -483,7 +459,7 @@ function debug(data) {
     })
   })
 }
- 
+
 log("This is the start...");
 
 /**
@@ -492,15 +468,16 @@ log("This is the start...");
  * @param {Array} clientList
  */
 function updateWindows(clientList){
+  let oks = [],
+      toFill = [];
   isFocused = false;
-  let oks = [];
-  let toFill = [];
   clientList.forEach(client => {
     if (!windows[client.id]) {
       windows[client.id] = {
         id: client.id,
         token: null,
-        data: null
+        data: {},
+        channels: []
       };
       toFill.push(windows[client.id]);
     }
@@ -519,9 +496,11 @@ function updateWindows(clientList){
           }
         }
       }
+      /*
       if (windows[n] && observers[windows[n].token]) {
         delete observers[windows[n].token];
       }
+      */
       delete windows[n];
     }
   }
@@ -600,8 +579,8 @@ function setPoller(duration){
 function receive(event){
   log('Receiving an event with keys ' + Object.keys(event.data).join(', '));
   let promise = self.clients.matchAll().then(clientList => {
+    updateWindows(clientList);
     if (event.data.type === 'init') {
-      updateWindows(clientList);
       clientList.forEach(client => {
         if (client.id === event.source.id) {
           client.postMessage({
@@ -612,6 +591,49 @@ function receive(event){
           isConnected = true;
         }
       })
+    }
+    else if (event.data.type === 'initCompleted') {
+      log('init completed');
+      isConnected = true;
+      setPoller(5);
+    }
+    else if (event.data.type === 'registerChannel') {
+      if (windows[event.source.id]
+        && windows[event.source.id].channels
+        && event.data.channel
+        && !windows[event.source.id].channels.includes(event.data.channel)
+      ){
+        windows[event.source.id].channels.push(event.data.channel);
+      }
+    }
+    else if (event.data.type === 'unregisterChannel') {
+      if (windows[event.source.id]
+        && windows[event.source.id].channels
+        && event.data.channel
+        && windows[event.source.id].channels.includes(event.data.channel)
+      ){
+        windows[event.source.id].channels.splice(windows[event.source.id].channels.indexOf(event.data.channel), 1);
+      }
+    }
+    else if (event.data.type === 'messageChannel') {
+      if (event.data.channel && event.data.data){
+        clientList.forEach(client => {
+          if ((client.id !== event.source.id)
+            && windows[client.id]
+            && windows[client.id].channels.includes(event.data.channel)
+          ) {
+            client.postMessage({
+              client: event.source.id,
+              type: 'messageFromChannel',
+              channel: event.data.channel,
+              data: event.data.data
+            });
+          }
+        })
+      }
+    }
+    else if (event.data.type === 'messageFromChannel') {
+      log('messageFromChannel ' + JSON.stringify(event.data))
     }
     else{
       processClientMessage(event, clientList);
@@ -629,11 +651,9 @@ function receive(event){
  * @param {Array} clientList
  */
 function processClientMessage(event, clientList) {
-  updateWindows(clientList);
-  console.log('clientlist', clientList)
   // The sender window's ID
-  let senderID = event.source.id;
-  let d = event.data;
+  let senderID = event.source.id,
+      d = event.data;
   if (d.poll) {
     poll();
   }
@@ -647,13 +667,12 @@ function processClientMessage(event, clientList) {
     }
   }
   let obsTodo = [];
-  //log("processClientMessage", d, event, windows, clientList.length);
   lastClientMessage = d;
   debug({client: d});
   log("processClientMessage with keys " + Object.keys(d).join(', '));
   windows[senderID].data = d;
-  dataObj = d;
 
+  /*
   if ( 'observers' in d ){
     observers[senderID] = d.observers;
   }
@@ -665,8 +684,7 @@ function processClientMessage(event, clientList) {
     }
   }
   // Updating dataObj
-  dataObj.observers = obsTodo;
-  /* 
+  //dataObj[senderID].observers = obsTodo;
   if ( 'chat' in d ){
     dataObj.chat = d.chat;
   }
@@ -692,34 +710,39 @@ function processClientMessage(event, clientList) {
  * Processes a few specific server messages by updating dataObj and forwarding to each window
  *
  * @param {String} json
- * @return {*} 
+ * @return {*}
  */
 function processServerMessage(json) {
-  debug({response: json});
-  log("processServerMessage with keys " + Object.keys(json).join(', '));
-  return self.clients.matchAll().then(function(clientList) {
+  //debug({response: json});
+  //log("processServerMessage with keys " + Object.keys(json).join(', '));
+  return self.clients.matchAll().then(clientList => {
     isFocused = false;
-    if ( json.disconnected ){
+    updateWindows(clientList);
+    if (json.disconnected) {
       isConnected = false;
     }
-    if( json.plugins && Object.keys(json.plugins).length ){
-      for ( let plugin in json.plugins ){
-        if ( 'serviceWorkers' in json.plugins[plugin] ){
-          if (!(plugin in dataObj)) {
-            dataObj[plugin] = {};
+    for (let clientId in json){
+      if (windows[clientId] && json[clientId].plugins && Object.keys(json[clientId].plugins).length) {
+        for (let plugin in json[clientId].plugins) {
+          if ('serviceWorkers' in json[clientId].plugins[plugin]) {
+            if (!(plugin in windows[clientId].data)) {
+              windows[clientId].data[plugin] = {};
+            }
+            Object.assign(windows[clientId].data[plugin], json[clientId].plugins[plugin].serviceWorkers);
           }
-          Object.assign(dataObj[plugin], json.plugins[plugin].serviceWorkers);
         }
       }
     }
-    if ( !clientList.length ){
+    if (!clientList.length) {
       log("There is no client, should I claim them?");
     }
     clientList.forEach(client => {
-      client.postMessage({
-        type: 'message',
-        data: json
-      });
+      if (json[client.id]) {
+        client.postMessage({
+          type: 'message',
+          data: json[client.id]
+        });
+      }
     });
   });
 }
@@ -732,112 +755,115 @@ function processServerMessage(json) {
  * @param {Object} options
  */
 function fetchWithTimeout(url, timeout, options) {
-  return new Promise( (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     // Set timeout timer
-    let timer = setTimeout(
-      () => reject( new Error('Request timed out') ),
-      timeout
-    );
+    let timer = setTimeout(() => reject(new Error('Request timed out')), timeout);
     if ( !options ){
       options  = {};
     }
     aborter = new AbortController();
     options.signal = aborter.signal;
     fetch(url, options).then(
-        response => resolve( response ),
-        err => reject( err )
-    ).finally( () => clearTimeout(timer) );
+      response => resolve(response),
+      err => reject(err)
+    ).finally(() => clearTimeout(timer));
   })
 }
 
 /**
  * Polls the server and recalls itself when finished.
  */
-function poll(d){
+function poll(){
   log('Polling');
   isRunning = true;
   errorState = false;
   noResp = false;
   if (isConnected) {
-    debug({request: dataObj});
-    fetchWithTimeout(poller, 600000, {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        "Content-Type": "application/json",
-        // "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: JSON.stringify(Object.keys(dataObj).length ? dataObj : {test: 1})
-    }).then(response => {
-      // Clear the timeout as cleanup
-      if ( response.status !== 200 ){
-        log("Error: " + response.status);
-        isRunning = false;
-        retries++;
-        if (retries <= 3) {
-          poll();
-        }
-        else {
-          errorState = true;
-          log('Max retries done... Bye!');
-        }
+    self.clients.matchAll().then(clientList => {
+      let clientsObj = {};
+      updateWindows(clientList);
+      for (let id in windows){
+        clientsObj[id] = windows[id].data;
       }
-      else{
-        // What we do with the answer from poller
-        response.text().then(text => {
-          let json;
-          try {
-            json = JSON.parse(text);
-          }
-          catch(e){
-            log("The response is no JSON");
-            noResp = true;
-            isRunning = false;
-            retries++;
-            if (retries <= 3) {
-              poll();
-            }
-            else {
-              errorState = true;
-              log('Max retries done...');
-            }
-            return;
-          }
-          if (Object.keys(json).length) {
-            log("JSON RESULT with keys " + Object.keys(json).join(', '));
-            processServerMessage(json).then(res => {
-              isRunning = false;
-              if (res === false) {
-                retries++;
-                if (retries <= 3) {
-                  poll();
-                }
-                else {
-                  errorState = true;
-                  log('Max retries done...');
-                }
-              }
-              else {
-                retries = 0;
-                poll();
-              }
-            });
-          }
-          else {
-            log('Empty answer from poller');
-            retries = 0;
+      debug({request: clientsObj});
+      fetchWithTimeout(poller, 600000, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "Content-Type": "application/json",
+          // "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: JSON.stringify(Object.keys(clientsObj).length ? {clients: clientsObj} : {test: 1})
+      }).then(response => {
+        // Clear the timeout as cleanup
+        if ( response.status !== 200 ){
+          log("Error: " + response.status);
+          isRunning = false;
+          retries++;
+          if (retries <= 3) {
             poll();
           }
-        });
-      }
-    }).catch(err => {
-      isRunning = false;
-      if (err.message !== 'The user aborted a request.') {
-        log('fetch failed!', err.message);
-        errorState = true;
-      }
+          else {
+            errorState = true;
+            log('Max retries done... Bye!');
+          }
+        }
+        else{
+          // What we do with the answer from poller
+          response.text().then(text => {
+            let json;
+            try {
+              json = JSON.parse(text);
+            }
+            catch(e){
+              log("The response is no JSON");
+              noResp = true;
+              isRunning = false;
+              retries++;
+              if (retries <= 3) {
+                poll();
+              }
+              else {
+                errorState = true;
+                log('Max retries done...');
+              }
+              return;
+            }
+            if (Object.keys(json).length) {
+              log("JSON RESULT with keys " + Object.keys(json).join(', '));
+              processServerMessage(json).then(res => {
+                isRunning = false;
+                if (res === false) {
+                  retries++;
+                  if (retries <= 3) {
+                    poll();
+                  }
+                  else {
+                    errorState = true;
+                    log('Max retries done...');
+                  }
+                }
+                else {
+                  retries = 0;
+                  poll();
+                }
+              });
+            }
+            else {
+              log('Empty answer from poller');
+              retries = 0;
+              poll();
+            }
+          });
+        }
+      }).catch(err => {
+        isRunning = false;
+        if (err.message !== 'The user aborted a request.') {
+          log('fetch failed!', err.message);
+          errorState = true;
+        }
+      });
     });
   }
-  //log("SENDING THIS TO SERVER: \n" + JSON.stringify(dataObj, null, 2));
 }
 
 // On install it adds to the cache precacheResources and activates
@@ -880,11 +906,11 @@ self.addEventListener('activate', () => {
 
 // On fetch the cache is managed.
 self.addEventListener('fetch', event => {
-  if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ){
-    console.log('SAFARI');
-    return;
-  }
   if (event.request.method !== 'POST') {
+    if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ){
+      console.log('SAFARI');
+      return;
+    }
     event.respondWith(caches.match(event.request)
       .then(cachedResponse => {
         if (cachedResponse) {
@@ -912,45 +938,3 @@ self.addEventListener('message', event => receive(event));
 
 // Launches the poller after one second
 setPoller(1);
-
-
-          /*
-        this.observersCopy = this.observers.slice();
-        this.poller = bbn.fn.ajax(this.pollerPath, 'json', $.extend({observers: this.observers}, this.pollerObject), 'poller', (r) => {
-          this.pollerObject.message = null;
-          //bbn.fn.log("--------------OBS: Returning Data---------------");
-          // put the data_from_file into #response
-          if ( r.data ){
-            bbn.fn.each(r.data, (d, i) => {
-              if ( d.observers ){
-                for ( let b of d.observers ){
-                  let arr = bbn.fn.filter(this.observers, {id: b.id});
-                  for ( let a of arr ){
-                    if ( a.value !== b.result ){
-                      this.$emit('bbnObs' + a.element + a.id, b.result);
-                      a.value = b.result;
-                    }
-                  }
-                }
-              }
-            });
-            //appui.success("<div>ANSWER</div><code>" + JSON.stringify(r.data) + '</code>', 5);
-          }
-          if ( r.chat && this.getRef('chat') ){
-            if ( r.chat.hash ){
-              this.pollerObject.usersHash = r.chat.hash;
-            }
-            this.getRef('chat').receive(r.chat);
-            if ( r.chat.chats ){
-              this.pollerObject.lastChat = r.chat.last;
-            }
-          }
-
-          // call the function again, this time with the timestamp we just got from server.php
-          this.polling = false;
-          this.poller = false;
-        }, () => {
-          this.polling = false;
-          this.poller = false;
-        });
-        */

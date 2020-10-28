@@ -71,7 +71,6 @@ if ($id_user = $model->inc->user->get_id()) {
       }
     }
   }
-
   /**
    * @var array The current times list
    */
@@ -82,42 +81,46 @@ if ($id_user = $model->inc->user->get_id()) {
   /**
    * @var array The result that will be output as JSON.
    */
-  $res = [
+  $res = [];
+  $res_template = [
     'data' => [],
     'start' => $now,
     'plugins' => []
   ];
-  /**
-   * @var bbn\appui\observer
-   */
-
   // Removing the files in active directory as there should be only one
   if ($files = dir::get_files($actsource)) {
     foreach ($files as $f) {
       unlink($f);
     }
   }
-  if (!isset($model->data['appui-core'])) {
-    $model->data['appui-core'] = [];
-  }
-  $model->data['appui-core']['active_file'] = $actsource.'/active_'.$now;
+  $active_file = $actsource.'/active_'.$now;
   // This file goes with the process
   $pid = getmypid();
   /** @todo What's the interest if I delete them?? */
-  file_put_contents($model->data['appui-core']['active_file'], (string)$pid);
-
+  file_put_contents($active_file, (string)$pid);
+  // Clients list
+  $clients = $model->data['clients'];
   // Plugins functions to run once
   foreach ( $plugins_pollers_noloop as $pp ){
-    if ( !connection_aborted()
-      && is_callable($pp['function'])
-      && ($plugin_res = $pp['function']($model->data[$pp['plugin']] ?? $model->data))
-      && !empty($plugin_res['success'])
-      && !empty($plugin_res['data'])
-    ){
-      if ( !isset($res['plugins'][$pp['plugin']]) ){
-        $res['plugins'][$pp['plugin']] = [];
+    foreach ($clients as $id => $data) {
+      if (!isset($data['appui-core'])) {
+        $clients[$id]['appui-core'] = [];
       }
-      $res['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res['plugins'][$pp['plugin']], $plugin_res['data']);
+      $clients[$id]['appui-core']['active_file'] = $active_file;
+      if ( !connection_aborted()
+        && is_callable($pp['function'])
+        && ($plugin_res = $pp['function']($clients[$id][$pp['plugin']] ?? []))
+        && !empty($plugin_res['success'])
+        && !empty($plugin_res['data'])
+      ){
+        if ( !isset($res[$id]) ){
+          $res[$id] = $res_template;
+        }
+        if ( !isset($res[$id]['plugins'][$pp['plugin']]) ){
+          $res[$id]['plugins'][$pp['plugin']] = [];
+        }
+        $res[$id]['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
+      }
     }
   }
 
@@ -143,31 +146,44 @@ if ($id_user = $model->inc->user->get_id()) {
     clearstatcache();
 
     // Start|resume timers
+    $started_now = [];
     foreach ( $plugins_pollers as $pp ){
       if ( !$timer->has_started($pp['id']) ){
+        $started_now[] = $pp['id'];
         $timer->start($pp['id'], (!empty($times[$pp['id']]) && ($times[$pp['id']]['current'] < $timeout)) ? (float)$times[$pp['id']]['start'] : null);
       }
     }
-    // Check e run plugins functions
+
+    // Check and run plugins functions
     foreach ( $plugins_pollers as $pp ){
-      if ( !connection_aborted()
-        && ($timer->measure($pp['id']) >= $pp['frequency'])
-        && is_callable($pp['function'])
-        && ($plugin_res = $pp['function']($model->data[$pp['plugin']] ?? $model->data))
-        && !empty($plugin_res['success'])
-      ){
-        if (!empty($plugin_res['data'])) {
-          if ( !isset($res['plugins'][$pp['plugin']]) ){
-            $res['plugins'][$pp['plugin']] = [];
+      $restart_timer = false;
+      foreach ($clients as $id => $data) {
+        if ( !connection_aborted()
+          && (($timer->measure($pp['id']) >= $pp['frequency'])
+            || in_array($pp['id'], $started_now, true))
+          && is_callable($pp['function'])
+          && ($plugin_res = $pp['function']($data[$pp['plugin']] ?? []))
+          && !empty($plugin_res['success'])
+        ){
+          if (!empty($plugin_res['data'])) {
+            if ( !isset($res[$id]) ){
+              $res[$id] = $res_template;
+            }
+            if ( !isset($res[$id]['plugins'][$pp['plugin']]) ){
+              $res[$id]['plugins'][$pp['plugin']] = [];
+            }
+            $res[$id]['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
           }
-          $res['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res['plugins'][$pp['plugin']], $plugin_res['data']);
+          $restart_timer = true;
         }
+      }
+      if ($restart_timer){
         $timer->stop($pp['id']);
         $timer->start($pp['id']);
       }
     }
 
-    if (!empty($res['data']) || !empty($res['plugins'])) {
+    if (!empty($res)) {
       $times_currents = $timer->currents();
       if ( !empty($times_currents) && dir::create_path(dirname($times_file)) ){
         file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
@@ -177,7 +193,6 @@ if ($id_user = $model->inc->user->get_id()) {
     // wait for 1 sec
     sleep(1);
   }
-  //die(var_dump("File does not exist", $active_file, $res));
 }
 else{
   die(json_encode(['disconnected' => true]));

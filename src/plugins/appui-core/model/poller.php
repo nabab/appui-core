@@ -2,7 +2,7 @@
 $observer = new \bbn\appui\observer($model->db);
 $id_user = $model->inc->user->get_id();
 $queue = \bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/queue';
-return [[
+return [/*[
   'id' => 'appui-core-0',
   'frequency' => 0,
   'function' => function(array $data) use($observer, $id_user){
@@ -16,11 +16,11 @@ return [[
     }
     return ['success' => true];
   }
-], [
+], */[
   'id' => 'appui-core-1',
   'frequency' => 1,
-  'function' => function(array $data) use($observer, $id_user, $queue){
-    $ret = [
+  'function' => function(array $data) use($queue){
+    $res = [
       'success' => true,
       'data' => []
     ];
@@ -30,7 +30,7 @@ return [[
       foreach ($files as $f){
         if ($ar = json_decode(file_get_contents($f), true)) {
           if (isset($ar['observers'])) {
-            \bbn\x::log($ar['observers']);
+            //\bbn\x::log($ar['observers']);
             foreach ($ar['observers'] as $o){
               $value = \bbn\x::get_field($data['observers'], ['id' => $o['id']], 'value');
               if (!$value || ($value !== $o['result'])) {
@@ -38,19 +38,19 @@ return [[
               }
             }
             if (count($returned_obs)) {
-              $ret['data'][] = ['observers' => $returned_obs];
+              $res['data'][] = ['observers' => $returned_obs];
             }
           }
           else{
-            $ret['data'][] = $ar;
+            $res['data'][] = $ar;
           }
         }
         unlink($f);
       }
     }
-    if (count($ret) && !empty($data['active_file']) && is_file($data['active_file'])) {
+    if (count($res['data']) && !empty($data['active_file']) && is_file($data['active_file'])) {
       unlink($data['active_file']);
     }
-    return $ret;
+    return $res;
   }
 ]];

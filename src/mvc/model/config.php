@@ -65,13 +65,14 @@ if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
       );
     }
   );
+  $appui = new bbn\appui();
+  $envs = $appui->get_environment(true);
+  $settings = $appui->get_settings();
+
   $json = file_get_contents($model->lib_path().'bbn/appui-core/src/cfg/schema.json');
   $schema = json_decode($json, true);
-  $json = file_get_contents($model->app_path().'cfg/environment.json');
-  $envs = json_decode($json, true);
-  $json = file_get_contents($model->app_path().'cfg/settings.json');
-  $settings = json_decode($json, true);
-  $json = file_get_contents(BBN_APP_PATH.'composer.json');
+
+  $json = file_get_contents(dirname(BBN_LIB_PATH).'/composer.json');
   $composer = json_decode($json, true);
   $packages = [];
   foreach ($composer['require'] as $k => $v) {
