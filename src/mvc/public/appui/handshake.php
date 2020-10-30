@@ -6,6 +6,8 @@
  *
  */
 if (isset($ctrl->post['handshake'])) {
-  
+  $ctrl->action();
 }
-$ctrl->combo(_("App-UI communication"), ['root' => APPUI_CORE_ROOT]);
+else {
+  $ctrl->combo(_("App-UI communication"), true);
+}

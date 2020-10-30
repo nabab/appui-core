@@ -1,21 +1,31 @@
 {
   "text": "Core",
+  "num": 1,
   "icon": "nf nf-fa-asterisk",
   "items": [
     {
-      "text": "Configuration",
-      "icon": "nf nf-fa-cog",
-      "link": "config"
+      "text": "Home",
+      "num": 1,
+      "icon": "nf nf-fa-home",
+      "link": "home"
     },
     {
       "text": "Iconology",
-      "icon": "nf nf-fa-image",
+      "num": 2,
+      "icon": "nf nf-fa-cog",
       "link": "iconology"
     },
     {
-      "text": "Special characters",
-      "icon": "nf nf-fa-font",
-      "link": "special_chars"
+      "text": "Observers",
+      "num": 3,
+      "icon": "nf nf-fa-eye",
+      "link": "observers"
+    },
+    {
+      "text": "Configuration",
+      "num": 4,
+      "icon": "nf nf-fa-cog",
+      "link": "config"
     }
   ]
 }

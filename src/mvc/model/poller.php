@@ -107,9 +107,18 @@ if ($id_user = $model->inc->user->get_id()) {
         $clients[$id]['appui-core'] = [];
       }
       $clients[$id]['appui-core']['active_file'] = $active_file;
+      $d = [
+        'client' => $id,
+        'clients' => array_map(function($c) use($pp){
+          return $c[$pp['plugin']];
+        }, array_filter($clients, function($c) use($pp){
+          return isset($c[$pp['plugin']]);
+        })),
+        'data' => $clients[$id][$pp['plugin']] ?? []
+      ];
       if ( !connection_aborted()
         && is_callable($pp['function'])
-        && ($plugin_res = $pp['function']($clients[$id][$pp['plugin']] ?? []))
+        && ($plugin_res = $pp['function']($d))
         && !empty($plugin_res['success'])
         && !empty($plugin_res['data'])
       ){
@@ -158,11 +167,20 @@ if ($id_user = $model->inc->user->get_id()) {
     foreach ( $plugins_pollers as $pp ){
       $restart_timer = false;
       foreach ($clients as $id => $data) {
+        $d = [
+          'client' => $id,
+          'clients' => array_map(function($c) use($pp){
+            return $c[$pp['plugin']];
+          }, array_filter($clients, function($c) use($pp){
+            return isset($c[$pp['plugin']]);
+          })),
+          'data' => $data[$pp['plugin']] ?? []
+        ];
         if ( !connection_aborted()
           && (($timer->measure($pp['id']) >= $pp['frequency'])
             || in_array($pp['id'], $started_now, true))
           && is_callable($pp['function'])
-          && ($plugin_res = $pp['function']($data[$pp['plugin']] ?? []))
+          && ($plugin_res = $pp['function']($d))
           && !empty($plugin_res['success'])
         ){
           if (!empty($plugin_res['data'])) {
