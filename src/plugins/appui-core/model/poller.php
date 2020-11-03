@@ -25,11 +25,14 @@ return [/*[
       'data' => []
     ];
     // Get files in the poller dir
-    if (($files = \bbn\file\dir::get_files($queue)) && count($files)) {
+    if (count($data['clients']) && ($files = \bbn\file\dir::get_files($queue)) && count($files)) {
       $returned_obs = [];
       $after = false;
       $clients_obs = [];
       foreach ($data['clients'] as $id => $d) {
+        if (empty($d)) {
+          continue;
+        }
         if ($id === $data['client']) {
           $after = true;
           continue;

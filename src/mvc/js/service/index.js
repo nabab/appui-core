@@ -496,11 +496,6 @@ function updateWindows(clientList){
           }
         }
       }
-      /*
-      if (windows[n] && observers[windows[n].token]) {
-        delete observers[windows[n].token];
-      }
-      */
       delete windows[n];
     }
   }
@@ -580,63 +575,79 @@ function receive(event){
   log('Receiving an event with keys ' + Object.keys(event.data).join(', '));
   let promise = self.clients.matchAll().then(clientList => {
     updateWindows(clientList);
-    if (event.data.type === 'init') {
-      clientList.forEach(client => {
-        if (client.id === event.source.id) {
-          client.postMessage({
-            client: event.source.id,
-            type: 'init',
-            data: data
-          });
-          isConnected = true;
-        }
-      })
-    }
-    else if (event.data.type === 'initCompleted') {
-      log('init completed');
-      isConnected = true;
-      setPoller(5);
-    }
-    else if (event.data.type === 'registerChannel') {
-      if (windows[event.source.id]
-        && windows[event.source.id].channels
-        && event.data.channel
-        && !windows[event.source.id].channels.includes(event.data.channel)
-      ){
-        windows[event.source.id].channels.push(event.data.channel);
-      }
-    }
-    else if (event.data.type === 'unregisterChannel') {
-      if (windows[event.source.id]
-        && windows[event.source.id].channels
-        && event.data.channel
-        && windows[event.source.id].channels.includes(event.data.channel)
-      ){
-        windows[event.source.id].channels.splice(windows[event.source.id].channels.indexOf(event.data.channel), 1);
-      }
-    }
-    else if (event.data.type === 'messageChannel') {
-      if (event.data.channel && event.data.data){
+    switch (event.data.type) {
+      case 'init':
         clientList.forEach(client => {
-          if ((client.id !== event.source.id)
-            && windows[client.id]
-            && windows[client.id].channels.includes(event.data.channel)
-          ) {
+          if (client.id === event.source.id) {
             client.postMessage({
               client: event.source.id,
-              type: 'messageFromChannel',
-              channel: event.data.channel,
-              data: event.data.data
+              type: 'init',
+              data: data
             });
+            isConnected = true;
           }
         })
-      }
-    }
-    else if (event.data.type === 'messageFromChannel') {
-      log('messageFromChannel ' + JSON.stringify(event.data))
-    }
-    else{
-      processClientMessage(event, clientList);
+        break;
+
+      case 'initCompleted':
+        log('init completed');
+        isConnected = true;
+        setPoller(5);
+        break;
+
+      case 'registerChannel':
+        if (windows[event.source.id]
+          && windows[event.source.id].channels
+          && event.data.channel
+          && !windows[event.source.id].channels.includes(event.data.channel)
+        ){
+          windows[event.source.id].channels.push(event.data.channel);
+        }
+        break;
+
+      case 'unregisterChannel':
+        if (windows[event.source.id]
+          && windows[event.source.id].channels
+          && event.data.channel
+          && windows[event.source.id].channels.includes(event.data.channel)
+        ){
+          windows[event.source.id].channels.splice(windows[event.source.id].channels.indexOf(event.data.channel), 1);
+        }
+        break;
+
+      case 'messageChannel':
+        if (event.data.channel && event.data.data){
+          clientList.forEach(client => {
+            if ((client.id !== event.source.id)
+              && windows[client.id]
+              && windows[client.id].channels.includes(event.data.channel)
+            ) {
+              client.postMessage({
+                client: event.source.id,
+                type: 'messageFromChannel',
+                channel: event.data.channel,
+                data: event.data.data
+              });
+            }
+          })
+        }
+        break;
+
+      case 'messageFromChannel':
+        log('messageFromChannel ' + JSON.stringify(event.data))
+        break;
+
+      case 'notification':
+        self.registration.getNotifications({tag: event.data.data.options.tag}).then(notifications => {
+          if (!notifications.length) {
+            self.registration.showNotification(event.data.data.title, event.data.data.options);
+          }
+        })
+        break;
+
+      default:
+        processClientMessage(event, clientList);
+        break;
     }
   });
   if (event.waitUntil) {
@@ -666,40 +677,11 @@ function processClientMessage(event, clientList) {
       throw new Error("The token doesn't correspond");
     }
   }
-  let obsTodo = [];
   lastClientMessage = d;
   debug({client: d});
   log("processClientMessage with keys " + Object.keys(d).join(', '));
   windows[senderID].data = d;
 
-  /*
-  if ( 'observers' in d ){
-    observers[senderID] = d.observers;
-  }
-  for (let n in windows) {
-    if ( observers[windows[n].token] ){
-      observers[windows[n].token].forEach((b) => {
-        obsTodo.push(b);
-      });
-    }
-  }
-  // Updating dataObj
-  //dataObj[senderID].observers = obsTodo;
-  if ( 'chat' in d ){
-    dataObj.chat = d.chat;
-  }
-  if ( 'lastChat' in d ){
-    dataObj.lastChat = d.lastChat;
-  }
-  if ( 'usersHash' in d ){
-    dataObj.usersHash = d.usersHash;
-  }
-  if ( 'chatsHash' in d ){
-    dataObj.chatsHash = d.chatsHash;
-  }
-  if ( 'disconnected' in d ){
-    dataObj.disconnected = d.disconnected;
-  }*/
   // Aborting the current polling will make a new one happen with the new dataObj
   if ( isRunning ){
     aborter.abort();
@@ -713,8 +695,8 @@ function processClientMessage(event, clientList) {
  * @return {*}
  */
 function processServerMessage(json) {
-  //debug({response: json});
-  //log("processServerMessage with keys " + Object.keys(json).join(', '));
+  debug({response: json});
+  log("processServerMessage with keys " + Object.keys(json).join(', '));
   return self.clients.matchAll().then(clientList => {
     isFocused = false;
     updateWindows(clientList);
@@ -935,6 +917,23 @@ self.addEventListener('fetch', event => {
 
 // Launches the function receive for all communication from the window
 self.addEventListener('message', event => receive(event));
+
+// Notification click
+self.onnotificationclick = (event) => {
+  self.clients.matchAll().then(clientList => {
+    updateWindows(clientList);
+    clientList.every(client => {
+      if (client.id && windows[client.id]) {  
+        client.postMessage({
+          type: 'notificationClick',
+          data: {tag: event.notification.tag}
+        });
+        return false;
+      }
+      return true;
+    })
+  });
+}
 
 // Launches the poller after one second
 setPoller(1);

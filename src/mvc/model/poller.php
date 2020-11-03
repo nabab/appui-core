@@ -110,10 +110,8 @@ if ($id_user = $model->inc->user->get_id()) {
       $d = [
         'client' => $id,
         'clients' => array_map(function($c) use($pp){
-          return $c[$pp['plugin']];
-        }, array_filter($clients, function($c) use($pp){
-          return isset($c[$pp['plugin']]);
-        })),
+          return $c[$pp['plugin']] ?? [];
+        }, $clients),
         'data' => $clients[$id][$pp['plugin']] ?? []
       ];
       if ( !connection_aborted()
@@ -170,10 +168,8 @@ if ($id_user = $model->inc->user->get_id()) {
         $d = [
           'client' => $id,
           'clients' => array_map(function($c) use($pp){
-            return $c[$pp['plugin']];
-          }, array_filter($clients, function($c) use($pp){
-            return isset($c[$pp['plugin']]);
-          })),
+            return $c[$pp['plugin']] ?? [];
+          }, $clients),
           'data' => $data[$pp['plugin']] ?? []
         ];
         if ( !connection_aborted()
