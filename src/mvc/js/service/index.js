@@ -460,7 +460,7 @@ function debug(data) {
   })
 }
 
-log("This is the start...");
+//log("This is the start...");
 
 /**
  * Update the variables windows, isFocused and lastFocused if focused.
@@ -889,29 +889,36 @@ self.addEventListener('activate', () => {
 // On fetch the cache is managed.
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'POST') {
-    if ( /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ){
+    if (navigator
+      && navigator.userAgent
+      && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+    ) {
       console.log('SAFARI');
       return;
     }
-    event.respondWith(caches.match(event.request)
-      .then(cachedResponse => {
+    if ((event.request.url.indexOf(data.shared_path) === 0)
+      || (event.request.url.indexOf(data.site_url + 'components/') === 0)
+      || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
+    ){
+      event.respondWith(caches.match(event.request.url).then(cachedResponse => {
         if (cachedResponse) {
           return cachedResponse;
         }
         return fetch(event.request).then(response => {
-          if ((event.request.url.indexOf(data.shared_path) === 0)
-          || (event.request.url.indexOf(data.site_url + 'components/') === 0)
-          ){
+          if (response.ok) {
             return caches.open(CACHE_NAME).then(cache => {
-              return cache.put(event.request, response.clone()).then(() => {
+              return cache.put(event.request.url, response.clone()).then(() => {
                 return response;
               });
             })
           }
           return response;
+        }).catch(error => {
+          console.error('Error on fetch -> ', error);
+          return Response.error();
         });
-      })
-    );
+      }));
+    }
   }
 });
 

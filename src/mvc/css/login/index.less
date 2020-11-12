@@ -1,7 +1,4 @@
-@fuxia: #EC3E7A;
-@borders: #D62DBD;
 div.appui-login {
-	background: black;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -15,9 +12,6 @@ div.appui-login {
 		max-width: 90%;
 		.bbn-input {
 			width: 100%;
-			&:focus{
-				border-color: @borders!important;
-			}
 			input {
 				text-align: center;
 			}
@@ -34,21 +28,10 @@ div.appui-login {
 					max-width: 80%;
 				}
 			}
-			p{
-				color: @fuxia;
-				//margin-top: 0;
-				font-size: 90px;
-			}
 		}
 		form{
 			.bbn-button{
 				width: 40%;
-				background: unset;
-				background-color: @fuxia;
-				border-color: @fuxia;
-				&:focus{
-					border-color: @borders!important
-				}
 			}
 		}
 		.bbn-mobile & {

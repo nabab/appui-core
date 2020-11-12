@@ -165,7 +165,7 @@ use bbn\str;
           else if ( 'appui' in window ){
             let v = window.localStorage.getItem('bbn-vue-version');
             bbn.fn.log(<?=str::as_var(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
-            appui.poll();
+            //appui.poll();
           }
         };
       };

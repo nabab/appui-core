@@ -1,5 +1,3 @@
-@fuxia: #EC3E7A;
-@borders: #D62DBD;
 div.appui-password {
 	background: black;
 	display: flex;
@@ -12,9 +10,6 @@ div.appui-password {
 		justify-content: space-between;
 		flex-direction: column;
 		.bbn-input {
-			&:focus{
-				border-color: @borders!important;
-			}
 			width: 100%;
 			input {
 				text-align: center;
@@ -32,21 +27,11 @@ div.appui-password {
 					max-width: 80%;
 				}
 			}
-			p{
-				color: @fuxia;
-				//margin-top: 0;
-				font-size: 90px;
-			}
 		}
 		form{
 			.bbn-button{
 				width: 40%;
 				background: unset;
-				background-color: @fuxia;
-				border-color: @fuxia;
-				&:focus{
-					border-color: @borders!important
-				}
 			}
 		}
 		.bbn-mobile & {
