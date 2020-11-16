@@ -700,10 +700,10 @@ function processServerMessage(json) {
   return self.clients.matchAll().then(clientList => {
     isFocused = false;
     updateWindows(clientList);
-    if (json.disconnected) {
-      isConnected = false;
-    }
     for (let clientId in json){
+      if (json[clientId].disconnected) {
+        isConnected = false;
+      }
       if (windows[clientId] && json[clientId].plugins && Object.keys(json[clientId].plugins).length) {
         for (let plugin in json[clientId].plugins) {
           if ('serviceWorkers' in json[clientId].plugins[plugin]) {

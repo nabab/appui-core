@@ -118,6 +118,7 @@ if (($path !== $cr.'poller')
     && !defined("BBN_MVC_ID")
     && defined('BBN_REFERER')
 ) {
+  /*
   $ctrl->db->insert(
     'bbn_mvc_logs',
     [
@@ -130,6 +131,7 @@ if (($path !== $cr.'poller')
     ]
   );
   define("BBN_MVC_ID", $ctrl->db->last_id());
+  */
 }
 
 // The current path

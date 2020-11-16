@@ -209,10 +209,8 @@ if ($id_user = $model->inc->user->get_id()) {
   }
 }
 else{
-  die(json_encode(['disconnected' => true]));
-}
-$times_currents = $timer->currents();
-if ( !empty($times_currents) && dir::create_path(dirname($times_file)) ){
-  file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
+  die(json_encode(array_map(function(){
+    return ['disconnected' => true];
+  }, $model->data['clients'])));
 }
 die("{}");

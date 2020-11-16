@@ -2,22 +2,8 @@
 $observer = new \bbn\appui\observer($model->db);
 $id_user = $model->inc->user->get_id();
 $queue = \bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/queue/' . $model->inc->user->get_osession('id_session');
-return [/*[
+return [[
   'id' => 'appui-core-0',
-  'frequency' => 0,
-  'function' => function(array $data) use($observer, $id_user){
-    // If observers are sent we check which ones are not used and delete them
-    if (isset($data['data']['observers'])) {
-      foreach ($observer->get_list($id_user) as $ob) {
-        if (!\bbn\x::get_row($data['data']['observers'], ['id' => $ob['id']])) {
-          $observer->user_delete($ob['id']);
-        }
-      }
-    }
-    return ['success' => true];
-  }
-], */[
-  'id' => 'appui-core-1',
   'frequency' => 1,
   'function' => function(array $data) use($queue){
     $res = [
