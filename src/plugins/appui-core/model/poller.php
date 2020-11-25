@@ -32,7 +32,7 @@ return [[
       foreach ($files as $f){
         if (($ar = json_decode(file_get_contents($f), true)) && isset($ar['observers'])) {
           foreach ($ar['observers'] as $i => $o){
-            $value = \bbn\x::get_field($data['data']['observers'], ['id' => $o['id']], 'value');
+            $value = \bbn\x::get_field($data['data']['observers'] ?? [], ['id' => $o['id']], 'value');
             if (!$value || ($value !== $o['result'])) {
               $returned_obs[] = $o;
             }

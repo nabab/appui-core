@@ -13,6 +13,7 @@
       connection_max_failures: 10,
       money: data.money,
       appPrefix: data.app_prefix,
+      appName: data.app_name,
       plugins: data.plugins,
       cdn: data.shared_path
     });

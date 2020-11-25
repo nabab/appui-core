@@ -127,6 +127,7 @@ use bbn\str;
     if ( d.data.version ){
       bbn.vue.version = d.data.version;
       window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
+      bbn.version = d.data.version;
     }
     let res = eval(d.data.script || d.script);
     if ( bbn.fn.isFunction(res) ){
