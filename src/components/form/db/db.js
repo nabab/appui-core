@@ -42,7 +42,7 @@
       },
       formValidator(d){
         if ( (d.engine === 'mysql') && !this.verified ){
-          this.alert(bbn._('You have to test the connection!'));
+          this.alert(bbn._('You have to test the connection'));
           return false;
         }
         return true;
