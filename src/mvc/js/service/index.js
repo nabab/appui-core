@@ -691,26 +691,26 @@ function processClientMessage(event, clientList) {
 /**
  * Processes a few specific server messages by updating dataObj and forwarding to each window
  *
- * @param {String} json
+ * @param {Object} obj
  * @return {*}
  */
-function processServerMessage(json) {
-  debug({response: json});
-  log("processServerMessage with keys " + Object.keys(json).join(', '));
+function processServerMessage(obj) {
+  debug({response: obj});
+  log("processServerMessage with keys " + Object.keys(obj).join(', '));
   return self.clients.matchAll().then(clientList => {
     isFocused = false;
     updateWindows(clientList);
-    for (let clientId in json){
-      if (json[clientId].disconnected) {
+    for (let clientId in obj){
+      if (obj[clientId].disconnected) {
         isConnected = false;
       }
-      if (windows[clientId] && json[clientId].plugins && Object.keys(json[clientId].plugins).length) {
-        for (let plugin in json[clientId].plugins) {
-          if ('serviceWorkers' in json[clientId].plugins[plugin]) {
+      if (windows[clientId] && obj[clientId].plugins && Object.keys(obj[clientId].plugins).length) {
+        for (let plugin in obj[clientId].plugins) {
+          if ('serviceWorkers' in obj[clientId].plugins[plugin]) {
             if (!(plugin in windows[clientId].data)) {
               windows[clientId].data[plugin] = {};
             }
-            Object.assign(windows[clientId].data[plugin], json[clientId].plugins[plugin].serviceWorkers);
+            Object.assign(windows[clientId].data[plugin], obj[clientId].plugins[plugin].serviceWorkers);
           }
         }
       }
@@ -719,10 +719,10 @@ function processServerMessage(json) {
       log("There is no client, should I claim them?");
     }
     clientList.forEach(client => {
-      if (json[client.id]) {
+      if (obj[client.id]) {
         client.postMessage({
           type: 'message',
-          data: json[client.id]
+          data: obj[client.id]
         });
       }
     });
@@ -793,10 +793,54 @@ function poll(){
           // What we do with the answer from poller
           response.text().then(text => {
             let json;
-            try {
-              json = JSON.parse(text);
+            if ((typeof text === 'string')
+                && (text.trim().substr(0, 1) === '{')
+                && (text.trim().substr(-1) === '}')
+            ) {
+              try {
+                json = JSON.parse(text);
+              }
+              catch(e){
+                log("The response is no JSON");
+                noResp = true;
+                isRunning = false;
+                retries++;
+                if (retries <= 3) {
+                  poll();
+                }
+                else {
+                  errorState = true;
+                  log('Max retries done...');
+                }
+                return;
+              }
+              if (Object.keys(json).length) {
+                log("JSON RESULT with keys " + Object.keys(json).join(', '));
+                processServerMessage(json).then(res => {
+                  isRunning = false;
+                  if (res === false) {
+                    retries++;
+                    if (retries <= 3) {
+                      poll();
+                    }
+                    else {
+                      errorState = true;
+                      log('Max retries done...');
+                    }
+                  }
+                  else {
+                    retries = 0;
+                    poll();
+                  }
+                });
+              }
+              else {
+                log('Empty answer from poller');
+                retries = 0;
+                poll();
+              }
             }
-            catch(e){
+            else {
               log("The response is no JSON");
               noResp = true;
               isRunning = false;
@@ -809,31 +853,6 @@ function poll(){
                 log('Max retries done...');
               }
               return;
-            }
-            if (Object.keys(json).length) {
-              log("JSON RESULT with keys " + Object.keys(json).join(', '));
-              processServerMessage(json).then(res => {
-                isRunning = false;
-                if (res === false) {
-                  retries++;
-                  if (retries <= 3) {
-                    poll();
-                  }
-                  else {
-                    errorState = true;
-                    log('Max retries done...');
-                  }
-                }
-                else {
-                  retries = 0;
-                  poll();
-                }
-              });
-            }
-            else {
-              log('Empty answer from poller');
-              retries = 0;
-              poll();
             }
           });
         }
