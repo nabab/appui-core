@@ -12,30 +12,37 @@ $json_file = '_php_error.json';
 if (!file_exists($log_dir.$log_file) || !filesize($log_dir.$log_file)) {
   return;
 }
-rename($log_dir.$log_file, $log_dir.'.'.$log_file);
 if (is_file($log_dir.$json_file)) {
   try {
     $res = json_decode(file_get_contents($log_dir.$json_file), true);
   }
   catch (\Exception $e) {
-    x::log("IMPOSSIBLE TO GET THE JSON CONTENT FOR ERROR RECYCLING!", "IMPORTANT");
+    x::dump(_("IMPOSSIBLE TO GET THE JSON CONTENT FOR ERROR RECYCLING!"));
+    x::log(_("IMPOSSIBLE TO GET THE JSON CONTENT FOR ERROR RECYCLING!"), "IMPORTANT");
   }
 }
 else {
   $res = [];
 }
 try {
-  $res = apache::parse_file($log_dir.'.'.$log_file, $res);
+  $res = apache::parse_file($log_dir.$log_file, $res);
 }
 catch (\Exception $e) {
+  x::dump(_("IMPOSSIBLE TO PARSE THE APACHE LOG FILE!"));
   x::log("IMPOSSIBLE TO PARSE THE APACHE LOG FILE!", "IMPORTANT");
 }
 if (!empty($res)) {
-  unlink($log_dir.'.'.$log_file);
   if (file_put_contents($log_dir.$json_file, json_encode($res, JSON_PRETTY_PRINT))) {
-    echo _("JSON error log file updated").' '.count($res).' '._("total errors");
+    if (apache::cut_log_file($log_dir.$log_file, 500000)) {
+      x::dump(_("Log file partially truncated"));
+    }
+    if ($num = apache::get_last_errors()) {
+      x::dump(_("JSON error log file updated with")." $num "._("new errors for a total of").' '.count($res));
+    }
+    // Otherwise no output
   }
   else {
-    x::log("IMPOSSIBLE TO PARSE THE APACHE LOG FILE!", "IMPORTANT");
+    x::dump(_("IMPOSSIBLE TO PARSE THE APACHE LOG FILE!"));
+    x::log(_("IMPOSSIBLE TO PARSE THE APACHE LOG FILE!"), "IMPORTANT");
   }
 }
