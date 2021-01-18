@@ -1,8 +1,6 @@
 <?php
 use bbn\x;
 
-$timer = new \bbn\util\timer();
-$timer->start();
 $menu = new \bbn\appui\menus();
 $mgr = new \bbn\user\manager($model->inc->user);
 $is_dev = $model->inc->user->is_dev();
