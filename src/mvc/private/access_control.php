@@ -85,7 +85,7 @@ elseif ($ctrl->get_mode() === 'dom') {
     if ($ctrl->has_plugin('appui-gdpr')) {
       $cookie = $ctrl->get_cookie();
       if (empty($cookie) || empty($cookie['bbn_accept_cookie'])) {
-        $ctrl->reroute('privacy');
+        $ctrl->reroute($ctrl->plugin_url('appui-gdpr'));
         $rerouted = true;
       }
     }
