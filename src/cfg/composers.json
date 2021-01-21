@@ -19,9 +19,9 @@
       "description": "Appui DOM Interface",
       "keywords": ["cms","intranet","spa","appui"],
       "require": {
-        "bbn/appui-components": "dev-master",
+        "bbn/appui-component": "dev-master",
         "bbn/appui-usergroup": "dev-master",
-        "bbn/appui-options": "dev-master",
+        "bbn/appui-option": "dev-master",
         "bbn/appui-menu": "dev-master"
       }
     },
@@ -43,8 +43,8 @@
       "description": "Appui chat system",
       "keywords": ["chat","intranet","spa","appui"]
     },
-    "appui-components": {
-      "name": "bbn/appui-components",
+    "appui-component": {
+      "name": "bbn/appui-component",
       "description": "Appui components system",
       "keywords": ["components","vuejs","intranet","spa","appui"]
     },
@@ -58,13 +58,13 @@
       "description": "Dashboards for Appui",
       "keywords": ["dashboard","vuejs","intranet","spa","appui"]
     },
-    "appui-databases": {
-      "name": "bbn/appui-databases",
+    "appui-database": {
+      "name": "bbn/appui-database",
       "description": "Databases management system",
       "keywords": ["database","vuejs","intranet","spa","appui"]
     },
-    "appui-emails": {
-      "name": "bbn/appui-emails",
+    "appui-email": {
+      "name": "bbn/appui-email",
       "description": "Appui emailing system",
       "keywords": ["emailing","vuejs","intranet","spa","appui"]
     },
@@ -98,13 +98,13 @@
       "description": "Appui menu management system",
       "keywords": ["menus","vuejs","intranet","spa","appui"]
     },
-    "appui-notes": {
-      "name": "bbn/appui-notes",
+    "appui-note": {
+      "name": "bbn/appui-note",
       "description": "Appui content management system",
       "keywords": ["cms","notes","vuejs","intranet","spa","appui"]
     },
-    "appui-options": {
-      "name": "bbn/appui-options",
+    "appui-option": {
+      "name": "bbn/appui-option",
       "description": "Appui options management system",
       "keywords": ["options","vuejs","intranet","spa","appui"]
     },

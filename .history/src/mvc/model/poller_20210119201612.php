@@ -99,7 +99,7 @@ if ($id_user = $model->inc->user->get_id()) {
   /** @todo What's the interest if I delete them?? */
   file_put_contents($active_file, (string)$pid);
   // Clients list
-  $clients = $model->data['clients'] ?: [];
+  $clients = $model->data['clients'];
   // Plugins functions to run once
   foreach ( $plugins_pollers_noloop as $pp ){
     foreach ($clients as $id => $data) {

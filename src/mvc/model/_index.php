@@ -1,7 +1,7 @@
 <?php
 use bbn\x;
 
-$menu = new \bbn\appui\menus();
+$menu = new \bbn\appui\menu();
 $mgr = new \bbn\user\manager($model->inc->user);
 $is_dev = $model->inc->user->is_dev();
 $theme = $model->inc->user->get_session('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
@@ -43,7 +43,7 @@ $data = x::merge_arrays($model->data, [
   ]
 ]);
 
-$data['options']['media_types'] = $model->inc->options->code_options(\bbn\appui\notes::get_appui_option_id('media'));
+$data['options']['media_types'] = $model->inc->options->code_options(\bbn\appui\note::get_appui_option_id('media'));
 $data['options']['categories'] = $model->inc->options->full_options();
 
 if ( ($custom_data = $model->get_plugin_model('index', $data)) && is_array($custom_data) ){

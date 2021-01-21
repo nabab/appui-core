@@ -180,7 +180,7 @@
  *   "script_src":"https:\/\/cdn2.thomas.lan\/?lang=fr&lib=nerd-fonts%2Cbbn-css%7Clatest%7Cdark%2Cbbn-vue%2Cfont-mfizz%2Cdevicon%2Cwebmin-font%2CjsPDF&test=1&dirs=APST-UI%2Fcss&v=492",
  *   "plugins":{
  *     "appui-cdn":"cdn",
- *     "appui-components":"components",
+ *     "appui-component":"components",
  *     "appui-core":"core",
  *     "appui-cron":"cron",
  *     "appui-dashboard":"dashboard",

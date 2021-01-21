@@ -15,9 +15,9 @@
   "require": {
     "php": ">=7.3",
     "bbn/bbn": "dev-master",
-    "bbn/appui-components": "dev-master",
+    "bbn/appui-component": "dev-master",
     "bbn/appui-usergroup": "dev-master",
-    "bbn/appui-options": "dev-master",
+    "bbn/appui-option": "dev-master",
     "bbn/appui-menu": "dev-master"
   }
 }
