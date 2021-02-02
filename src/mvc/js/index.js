@@ -98,7 +98,7 @@
       icon: 'nf nf-fa-arrows_alt'
     }, {
       action(){
-        window.store.remove('router');
+				window.localStorage.clear();
         document.location.reload();
       },
       text: bbn._("Reload with a fresh view"),

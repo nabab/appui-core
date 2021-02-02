@@ -4,13 +4,13 @@
  *
  **/
 
-/** @var $model \bbn\mvc\model */
+/** @var $model \bbn\Mvc\Model */
 
 
-$rsa = $model->app_path().'cfg/cert';
+$rsa = $model->appPath().'cfg/cert';
 if (!is_file($rsa.'_rsa.pub')) {
   try {
-    bbn\util\enc::generateCertFiles($rsa);
+    bbn\Util\Enc::generateCertFiles($rsa);
     $model->data['res']['success'] = true;
     $model->data['res']['message'] = _("Certificate created");
   }
@@ -19,7 +19,7 @@ if (!is_file($rsa.'_rsa.pub')) {
   	$model->data['res']['error'] = _("Failed to create SSL certificate").": ".$e->getMessage();
   }
   if (is_file($rsa)) {
-    $api = new bbn\appui\api($model->inc->user, $model->db);
+    $api = new bbn\Appui\Api($model->inc->user, $model->db);
     $reg = $api->register(
       [
         'key' => file_get_contents($rsa),
@@ -35,8 +35,8 @@ if (!is_file($rsa.'_rsa.pub')) {
       file_get_contents(BBN_APP_PATH.'src/cfg/to_appui_rsa')
     );
     if ($reg && !empty($reg['id_app'])) {
-      $appui->set_environment(['id_app' => $reg['id_app']]);
-      $appui->set_settings(['id_project' => $reg['id_project']]);
+      $appui->setEnvironment(['id_app' => $reg['id_app']]);
+      $appui->setSettings(['id_project' => $reg['id_project']]);
       $pass->store($reg['key'], $id_app);
       $installer->report("Application registered with ID ".$reg['id_app']);
     }

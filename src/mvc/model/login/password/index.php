@@ -1,5 +1,5 @@
 <?php
-/** @var \bbn\mvc\model $model */
+/** @var \bbn\Mvc\Model $model */
 return [
   'site_url' => BBN_URL,
   'site_title' => BBN_SITE_TITLE,

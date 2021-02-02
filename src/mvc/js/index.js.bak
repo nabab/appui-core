@@ -25,22 +25,22 @@
       pin: bbn._('Pin'),
       unpin: bbn._('Unpin')
     });
-    bbn.fn.autoExtend('opt', data.options);
-    bbn.fn.extend(bbn.lng, data.lng);
+    bbn.fn.autoExtend('opt', Data.options);
+    bbn.fn.extend(bbn.lng, Data.lng);
 
     Vue.config.devtools = !!data.is_dev || !!data.is_test;
 
-    Vue.config.errorHandler = function (err, vm, info) {
+    Vue.config.errorHandler = function (err, vm, Info) {
       // handle error
       // `info` is a Vue-specific error info, e.g. which lifecycle hook
       // the error was found in. Only available in 2.2.0+
-      bbn.fn.log("ERROR handler from VueJS", err, vm, info);
+      bbn.fn.log("ERROR handler from VueJS", err, vm, Info);
     };
     let js_data = {};
     if ( data.js_data ){
       js_data = eval(data.js_data) || {};
     }
-    bbn.fn.log("IS THERE JS DATA?", js_data, data);
+    bbn.fn.log("IS THERE JS DATA?", js_data, Data);
     if ( !js_data.appuiMixin ){
       js_data.appuiMixin = {
         header: true,
@@ -124,7 +124,7 @@
         } 
       })
     }
-    bbn.fn.log("LIST", data.list);
+    bbn.fn.log("LIST", Data.list);
 
     bbn.vue.initDefaults({
       appui: {

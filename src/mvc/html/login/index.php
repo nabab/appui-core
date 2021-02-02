@@ -31,7 +31,7 @@
 <meta name="msapplication-TileColor" content="#9f00a7">
 <meta name="msapplication-TileImage" content="<?=$static_path?>img/favicon/mstile-144x144.png">
 <meta name="theme-color" content="#ffffff">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, User-scalable=yes">
 <title><?=$site_title?></title>
 <style><?=$css?></style>
 </head>

@@ -1,7 +1,7 @@
 <?php
-/* @var \bbn\mvc\model $model */
-if ( \bbn\x::has_props($model->data, ['host', 'user', 'pass'], true) ){
-  $db = new \bbn\db([
+/* @var \bbn\Mvc\Model $model */
+if ( \bbn\X::hasProps($model->data, ['host', 'user', 'pass'], true) ){
+  $db = new \bbn\Db([
     'engine' => 'mysql',
     'host' => $model->data['host'],
     'user' => $model->data['user'],

@@ -4,18 +4,18 @@ if ( isset($ctrl->post['type']) && !empty($ctrl->files) ){
     case 'clipboard':
       if (
         !empty($ctrl->files['file']) &&
-        ($path = $ctrl->inc->user->add_to_tmp($ctrl->files['file']['tmp_name'], $ctrl->files['file']['name']))
+        ($path = $ctrl->inc->user->addToTmp($ctrl->files['file']['tmp_name'], $ctrl->files['file']['name']))
       ){
-        $m = new \bbn\appui\medias($ctrl->db);
+        $m = new \bbn\Appui\Medias($ctrl->db);
         if ( $id_media = $m->insert($path) ){
-          die(bbn\x::dump($m->get_media($id_media, true)));
+          die(bbn\X::dump($m->getMedia($id_media, true)));
         }
         else{
-          die(bbn\x::dump("BOF"));
+          die(bbn\X::dump("BOF"));
         }
       }
       else{
-        die(\bbn\x::dump($ctrl->files['file']));
+        die(\bbn\X::dump($ctrl->files['file']));
       }
       break;
   }

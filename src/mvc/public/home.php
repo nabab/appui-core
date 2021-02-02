@@ -5,6 +5,6 @@
  * Time: 10:50
  */
 
-/** @var \bbn\mvc\controller $ctrl The current controller */
+/** @var \bbn\Mvc\Controller $ctrl The current controller */
 echo '<h2>Welcome in App-UI</h2>';
 

@@ -1,7 +1,7 @@
 <?php
-/* @var \bbn\mvc\controller $ctrl */
+/* @var \bbn\Mvc\Controller $ctrl */
 
-$file = $ctrl->data_path() . 'version.txt';
+$file = $ctrl->dataPath() . 'version.txt';
 $version = is_file($file) ? (int)file_get_contents($file) : 0;
 if ($version >= 10000) {
   $version = 0;

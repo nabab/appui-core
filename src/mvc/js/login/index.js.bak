@@ -21,7 +21,7 @@ new Vue({
       email: ''
     },
     clientHeight: document.documentElement.clientHeight
-  }, data),
+  }, Data),
   methods: {
     submited(d){
       if ( d == 1 ){

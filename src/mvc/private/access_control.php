@@ -1,8 +1,8 @@
 <?php
-/** @var \bbn\mvc\controller $ctrl The controller */
-$cr = $ctrl->plugin_url('appui-core').'/';
+/** @var \bbn\Mvc\Controller $ctrl The controller */
+$cr = $ctrl->pluginUrl('appui-core').'/';
 
-if (($definitions = $ctrl->get_cached_model($cr.'_definitions', 86400))
+if (($definitions = $ctrl->getCachedModel($cr.'_definitions', 86400))
     && isset($definitions['data'])
 ) {
   foreach ($definitions['data'] as $k => $def) {
@@ -16,51 +16,51 @@ else{
   die("Impossible to set up the definitions in the root supercontroller");
 }
 
-if ($ctrl->is_cli()) {
+if ($ctrl->isCli()) {
   return 1;
 }
 
-/** @var \bbn\user\permissions $perm */
+/** @var \bbn\User\Permissions $perm */
 $perm =& $ctrl->inc->perm;
 
 /* @var $path string The controller that will be called */
-$path = $ctrl->get_path();
-$ctrl->db->set_error_mode('die');
+$path = $ctrl->getPath();
+$ctrl->db->setErrorMode('die');
 
 $auth_no_user = [
   $cr.'manifest'
 ];
-if (($ctrl->get_mode() === 'dom') && in_array($path, $auth_no_user, true)) {
+if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
   return 1;
 }
 
 /* @var $authorized array The authorized pages for the non logged in users */
-$ctrl->add_authorized_route(
+$ctrl->addAuthorizedRoute(
   $cr.'login/password',
   $cr.'login/lost_pass',
   $cr.'service/index',
   $cr.'poller'
 );
 if ($path === $cr.'logout') {
-  $ctrl->set_mode('public');
+  $ctrl->setMode('public');
   return true;
 }
 
-$err = $ctrl->inc->user->get_error();
+$err = $ctrl->inc->user->getError();
 // Recherche du logo APST pour les stats
 if (!empty($_SERVER['REDIRECT_URL'])
     && strpos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
 ) {
   $ctrl->reroute('logo_mail');
 }
-elseif ($ctrl->inc->user->is_just_login()) {
+elseif ($ctrl->inc->user->isJustLogin()) {
   if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
   }
 
   die('1');
 }
-elseif ($ctrl->inc->user->is_reset()) {
+elseif ($ctrl->inc->user->isReset()) {
   if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
   }
@@ -68,30 +68,30 @@ elseif ($ctrl->inc->user->is_reset()) {
   die('{"success": 1}');
 }
 // Dans le cas où l'on veut la structure
-elseif ($ctrl->get_mode() === 'dom') {
-  if ($ctrl->has_plugin('appui-api')
-      && ($api = $ctrl->plugin_url('appui-api'))
-      && (      ($ctrl->get_request() === $api)
-      || ($ctrl->get_request() === $api.'/index'))
+elseif ($ctrl->getMode() === 'dom') {
+  if ($ctrl->hasPlugin('appui-api')
+      && ($api = $ctrl->pluginUrl('appui-api'))
+      && (      ($ctrl->getRequest() === $api)
+      || ($ctrl->getRequest() === $api.'/index'))
   ) {
-    $ctrl->add_authorized_route(
+    $ctrl->addAuthorizedRoute(
       $api.'/index',
       $api
     );
-    //die(var_dump($ctrl->get_request()));
+    //die(var_dump($ctrl->getRequest()));
   }
-  elseif (!$ctrl->inc->user->check_session()) {
+  elseif (!$ctrl->inc->user->checkSession()) {
     $rerouted = false;
-    if ($ctrl->has_plugin('appui-gdpr')) {
-      $cookie = $ctrl->get_cookie();
+    if ($ctrl->hasPlugin('appui-gdpr')) {
+      $cookie = $ctrl->getCookie();
       if (empty($cookie) || empty($cookie['bbn_accept_cookie'])) {
-        $ctrl->reroute($ctrl->plugin_url('appui-gdpr'));
+        $ctrl->reroute($ctrl->pluginUrl('appui-gdpr'));
         $rerouted = true;
       }
     }
 
     if (!$rerouted) {
-      if ($ctrl->is_authorized_route($path)) {
+      if ($ctrl->isAuthorizedRoute($path)) {
         return 1;
       }
 
@@ -101,17 +101,17 @@ elseif ($ctrl->get_mode() === 'dom') {
 
   return 1;
 }
-elseif ($ctrl->is_authorized_route($path)) {
+elseif ($ctrl->isAuthorizedRoute($path)) {
   return 1;
 }
 
 // Checks if the user is connected
-if (!$ctrl->inc->user->check_session()) {
+if (!$ctrl->inc->user->checkSession()) {
   return false;
 }
 
-if (class_exists('\\bbn\\appui\\history')) {
-  \bbn\appui\history::set_user($ctrl->inc->user->get_id());
+if (class_exists('\\bbn\\Appui\\History')) {
+  \bbn\Appui\History::setUser($ctrl->inc->user->getId());
 }
 
 if (($path !== $cr.'poller')
@@ -122,7 +122,7 @@ if (($path !== $cr.'poller')
   $ctrl->db->insert(
     'bbn_mvc_logs',
     [
-      'id_user' => $ctrl->inc->user->get_id() ?: null,
+      'id_user' => $ctrl->inc->user->getId() ?: null,
       'time' => microtime(true) * 1000,
       'path' => $path,
       'params' => count($ctrl->arguments) ? implode("/", $ctrl->arguments) : null,
@@ -130,12 +130,12 @@ if (($path !== $cr.'poller')
       'referer' => BBN_REFERER
     ]
   );
-  define("BBN_MVC_ID", $ctrl->db->last_id());
+  define("BBN_MVC_ID", $ctrl->db->lastId());
   */
 }
 
 // The current path
-$url = $ctrl->get_url();
+$url = $ctrl->getUrl();
 
 // Case where we have a bbn-router (nav)
 if (defined('BBN_BASEURL')
@@ -158,10 +158,10 @@ if (defined('BBN_BASEURL')
     $bits = explode('/', $remain);
     foreach ($bits as $i => $b) {
       $new = isset($new) ? $new.'/'.$b : $b;
-      if (($route = $ctrl->get_route($start.$new, $ctrl->get_mode()))
+      if (($route = $ctrl->getRoute($start.$new, $ctrl->getMode()))
           && ($route['path'] === $route['request'])
       ) {
-        if ($route['path'] !== $ctrl->get_path()) {
+        if ($route['path'] !== $ctrl->getPath()) {
           $ctrl->baseURL = BBN_BASEURL;
           $ctrl->reroute(
             $start.$new,
@@ -178,9 +178,9 @@ if (defined('BBN_BASEURL')
   $ctrl->baseURL = BBN_BASEURL;
 }
 
-/** @var bbn\user\preferences $pref */
+/** @var bbn\User\Preferences $pref */
 /*
-$pref = \bbn\user\preferences::get_instance();
+$pref = \bbn\User\Preferences::getInstance();
 if ( $perms = $pref->get_existing_permissions($path) ){
   die(var_dump($perms));
 }
@@ -190,17 +190,17 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
     define('BBN_ID_PERMISSION', $id_option);
   }
 
-  $ctrl->inc->perm->set_current($id_option);
+  $ctrl->inc->perm->setCurrent($id_option);
   if ($ctrl->inc->perm->has($id_option)) {
     return true;
   }
-  elseif ($ctrl->inc->user->is_dev()) {
+  elseif ($ctrl->inc->user->isDev()) {
     return false;
   }
   else {
     $ctrl->obj->errorTitle = _("Unauthorized");
-    $ctrl->obj->error      = _("Sorry but you don't have the permission for ".$ctrl->get_path());
+    $ctrl->obj->error      = _("Sorry but you don't have the permission for ".$ctrl->getPath());
   }
 }
 
-return $ctrl->inc->user->is_dev();
+return $ctrl->inc->user->isDev();

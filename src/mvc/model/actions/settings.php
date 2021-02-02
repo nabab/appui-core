@@ -1,7 +1,7 @@
 <?php
-/** @var \bbn\mvc\model $model */
+/** @var \bbn\Mvc\Model $model */
 $data = ['success' => false];
-if ($model->has_data(['name', 'value'], true)) {
+if ($model->hasData(['name', 'value'], true)) {
   switch ($model->data['name']) {
     case 'user':
     case 'preferences':
@@ -28,7 +28,7 @@ if ($model->has_data(['name', 'value'], true)) {
     case 'timezone':
       break;
     case 'sess_lifetime':
-      if (\bbn\str::is_integer($model->data['value'])) {
+      if (\bbn\Str::isInteger($model->data['value'])) {
         $res = $model->data['value'];
       }
       break;
@@ -36,7 +36,7 @@ if ($model->has_data(['name', 'value'], true)) {
       break;
     case 'admin_email':
     case 'external_user_email':
-      if (\bbn\str::is_email($model->data['value'])) {
+      if (\bbn\Str::isEmail($model->data['value'])) {
         $res = $model->data['value'];
       }
       break;
@@ -51,7 +51,7 @@ if ($model->has_data(['name', 'value'], true)) {
       }
       break;
     case 'env':
-      if (\bbn\x::indexOf(['dev', 'test', 'prod'], $model->data['value']) > -1) {
+      if (\bbn\X::indexOf(['dev', 'test', 'prod'], $model->data['value']) > -1) {
         $res = $model->data['value'];
       }
       break;
@@ -105,34 +105,34 @@ if ($model->has_data(['name', 'value'], true)) {
   }
   if (isset($res)) {
     if (empty($model->data['env'])) {
-      $json = file_get_contents($model->app_path().'cfg/settings.json');
+      $json = file_get_contents($model->appPath().'cfg/settings.json');
       if ($json) {
         $ar = json_decode($json, true);
         $ar[$model->data['name']] = $res;
-        file_put_contents($model->app_path().'cfg/settings.json', json_encode($ar, JSON_PRETTY_PRINT));
+        file_put_contents($model->appPath().'cfg/settings.json', Json_encode($ar, JSON_PRETTY_PRINT));
         $data['success'] = true;
       }
     }
     else {
-      [$hostname, $app_path] = \bbn\x::split($model->data['env'], '---');
-      $json = file_get_contents($model->app_path().'cfg/environment.json');
+      [$hostname, $app_path] = \bbn\X::split($model->data['env'], '---');
+      $json = file_get_contents($model->appPath().'cfg/environment.json');
       if ($json) {
         $ar = json_decode($json, true);
-        $idx = \bbn\x::find($ar, [
+        $idx = \bbn\X::find($ar, [
           'hostname' => $hostname,
           'app_path' => $app_path
         ]);
         if ($idx !== null ) {
           $ar[$idx][$model->data['name']] = $res;
-          file_put_contents($model->app_path().'cfg/environment.json', json_encode($ar, JSON_PRETTY_PRINT));
+          file_put_contents($model->appPath().'cfg/environment.json', Json_encode($ar, JSON_PRETTY_PRINT));
           $data['success'] = true;
         }
       }
     }
   }
 }
-elseif ($model->has_data(['url', 'path', 'action'], true)) {
-  if ($json = file_get_contents($model->app_path().'cfg/routes.json')) {
+elseif ($model->hasData(['url', 'path', 'action'], true)) {
+  if ($json = file_get_contents($model->appPath().'cfg/routes.json')) {
     $ar = json_decode($json, true);
     if ($ar && $ar['alias']) {
       if ($model->data['action'] === 'insert') {
@@ -154,7 +154,7 @@ elseif ($model->has_data(['url', 'path', 'action'], true)) {
           $i++;
         }
       }
-      file_put_contents($model->app_path().'cfg/routes.json', json_encode($ar, JSON_PRETTY_PRINT));
+      file_put_contents($model->appPath().'cfg/routes.json', Json_encode($ar, JSON_PRETTY_PRINT));
       $data['success'] = true;
     }
   }

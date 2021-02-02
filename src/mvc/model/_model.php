@@ -1,6 +1,6 @@
 <?php
-/** @var \bbn\mvc\model $model The model */
-return $model->get_set_from_cache(
+/** @var \bbn\Mvc\Model $model The model */
+return $model->getSetFromCache(
   function () use ($model) {
     return [
       'version' => 666,

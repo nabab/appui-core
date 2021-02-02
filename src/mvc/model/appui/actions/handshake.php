@@ -4,19 +4,19 @@
  *
  **/
 
-use bbn\x;
-use bbn\str;
+use bbn\X;
+use bbn\Str;
 
-/** @var $model \bbn\mvc\model */
-if ($model->has_data('handshake')) {
-  $api = new bbn\appui\api($model->inc->user, $model->db);
-  $test = str::genpwd();
+/** @var $model \bbn\Mvc\Model */
+if ($model->hasData('handshake')) {
+  $api = new bbn\Appui\Api($model->inc->user, $model->db);
+  $test = Str::genpwd();
   $data = $api->request('emit', [
     'handshake' => true,
     'test' => $test
   ]);
   $res = ['success' => false];
-  if ($data && x::has_prop($data, 'test') && ($data['test'] === $test)) {
+  if ($data && X::hasProp($data, 'test') && ($data['test'] === $test)) {
     $res['success'] = true;
   }
   if ($data) {

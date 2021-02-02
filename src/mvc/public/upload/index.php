@@ -4,5 +4,5 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 die(var_dump("kk;;l;l;l", $ctrl->post));

@@ -1,8 +1,8 @@
 <?php
-/** @var $model \bbn\mvc\model */
-if ( $plugins = $model->get_plugins() ){
+/** @var $model \bbn\Mvc\Model */
+if ( $plugins = $model->getPlugins() ){
   return array_values(array_filter(array_keys($plugins), function($p) use($model){
-    return $model->has_subplugin_model('poller', $p, 'appui-core');
+    return $model->hasSubpluginModel('poller', $p, 'appui-core');
   }));
 }
 return [];

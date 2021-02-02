@@ -12,34 +12,34 @@
  */
 // set php runtime to unlimited
 
-use bbn\util\timer;
-use bbn\file\dir;
-use bbn\x;
+use bbn\Util\Timer;
+use bbn\File\Dir;
+use bbn\X;
 
 set_time_limit(0);
 // User is identified
-if ($id_user = $model->inc->user->get_id()) {
+if ($id_user = $model->inc->user->getId()) {
 
   /**
    * @var string The path for the active files
    */
-  $actsource = dir::create_path(\bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/active');
+  $actsource = Dir::createPath(\bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/active');
   /**
    * @var string The path for the queue
    */
-  $datasource = dir::create_path(\bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/queue');
+  $datasource = Dir::createPath(\bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/queue');
   /**
    * @var string The path of the times.json file
    */
-  $times_file = \bbn\mvc::get_user_data_path($id_user, 'appui-core') . 'poller/times.json';
+  $times_file = \bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/times.json';
   /**
    * @var int A timestamp of the start of the execution.
    */
   $now = time();
   /**
-   * @var \bbn\util\timer A timer object to keep track of the time
+   * @var \bbn\Util\Timer A timer object to keep track of the time
    */
-  $timer = new timer();
+  $timer = new Timer();
   // For the timout
   $timer->start('timeout');
   /**
@@ -49,7 +49,7 @@ if ($id_user = $model->inc->user->get_id()) {
   /**
    * @var array The list of plugins that have a poller model
    */
-  $plugins = $model->get_cached_model($model->plugin_url('appui-core').'/poller_plugins', 300);
+  $plugins = $model->getCachedModel($model->pluginUrl('appui-core').'/poller_plugins', 300);
   /**
    * @var array The list of functions from plugins to be performed in the loop
    */
@@ -59,7 +59,7 @@ if ($id_user = $model->inc->user->get_id()) {
    */
   $plugins_pollers_noloop = [];
   foreach ( $plugins as $plugin ){
-    if ( $m = $model->get_subplugin_model('poller', [], $plugin, 'appui-core') ){
+    if ( $m = $model->getSubpluginModel('poller', [], $plugin, 'appui-core') ){
       foreach ($m as $p) {
         $p['plugin'] = $plugin;
         if (empty($p['frequency'])) {
@@ -88,7 +88,7 @@ if ($id_user = $model->inc->user->get_id()) {
     'plugins' => []
   ];
   // Removing the files in active directory as there should be only one
-  if ($files = dir::get_files($actsource)) {
+  if ($files = Dir::getFiles($actsource)) {
     foreach ($files as $f) {
       unlink($f);
     }
@@ -99,7 +99,7 @@ if ($id_user = $model->inc->user->get_id()) {
   /** @todo What's the interest if I delete them?? */
   file_put_contents($active_file, (string)$pid);
   // Clients list
-  $clients = $model->data['clients'] ?: [];
+  $clients = $model->hasData('clients', true) ? $model->data['clients'] : [];
   // Plugins functions to run once
   foreach ( $plugins_pollers_noloop as $pp ){
     foreach ($clients as $id => $data) {
@@ -126,7 +126,7 @@ if ($id_user = $model->inc->user->get_id()) {
         if ( !isset($res[$id]['plugins'][$pp['plugin']]) ){
           $res[$id]['plugins'][$pp['plugin']] = [];
         }
-        $res[$id]['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
+        $res[$id]['plugins'][$pp['plugin']] = \bbn\X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
       }
     }
   }
@@ -136,17 +136,17 @@ if ($id_user = $model->inc->user->get_id()) {
     // Look if connection is aborted and die after 10 seconds if still disconnected.
     /** @todo To check the time used by connection_aborted function */
     if (connection_aborted()) {
-      if (!$timer->has_started('disconnection')) {
+      if (!$timer->hasStarted('disconnection')) {
         $timer->start('disconnection');
       }
       elseif ($timer->measure('disconnection') > 10) {
-        x::log("Disconnected", 'poller');
+        X::log("Disconnected", 'poller');
         die("Disconnected");
       }
       sleep(1);
       continue;
     }
-    elseif ($timer->has_started('disconnection')) {
+    elseif ($timer->hasStarted('disconnection')) {
       $timer->reset();
     }
     // PHP caches file data by default. clearstatcache() clears that cache
@@ -155,7 +155,7 @@ if ($id_user = $model->inc->user->get_id()) {
     // Start|resume timers
     $started_now = [];
     foreach ( $plugins_pollers as $pp ){
-      if ( !$timer->has_started($pp['id']) ){
+      if ( !$timer->hasStarted($pp['id']) ){
         $started_now[] = $pp['id'];
         $timer->start($pp['id'], (!empty($times[$pp['id']]) && ($times[$pp['id']]['current'] < $timeout)) ? (float)$times[$pp['id']]['start'] : null);
       }
@@ -186,7 +186,7 @@ if ($id_user = $model->inc->user->get_id()) {
             if ( !isset($res[$id]['plugins'][$pp['plugin']]) ){
               $res[$id]['plugins'][$pp['plugin']] = [];
             }
-            $res[$id]['plugins'][$pp['plugin']] = \bbn\x::merge_arrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
+            $res[$id]['plugins'][$pp['plugin']] = \bbn\X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
           }
           $restart_timer = true;
         }
@@ -199,8 +199,8 @@ if ($id_user = $model->inc->user->get_id()) {
 
     if (!empty($res)) {
       $times_currents = $timer->currents();
-      if ( !empty($times_currents) && dir::create_path(dirname($times_file)) ){
-        file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
+      if ( !empty($times_currents) && Dir::createPath(dirname($times_file)) ){
+        file_put_contents($times_file, Json_encode($times_currents, JSON_PRETTY_PRINT));
       }
       die(json_encode($res, JSON_PRETTY_PRINT));
     }

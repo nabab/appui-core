@@ -1,3 +1,3 @@
 <?php
-/** @var \bbn\mvc\controller $ctrl */
+/** @var \bbn\Mvc\Controller $ctrl */
 $ctrl->action();

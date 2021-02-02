@@ -1,5 +1,5 @@
 <?php
-use bbn\str;
+use bbn\Str;
 ?><!DOCTYPE html>
 <!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="<?=$lang?>"> <![endif]-->
 <!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="<?=$lang?>"> <![endif]-->
@@ -34,7 +34,7 @@ use bbn\str;
 <meta name="msapplication-TileColor" content="#9f00a7">
 <meta name="msapplication-TileImage" content="<?=$static_path?>img/favicon/mstile-144x144.png">
 <meta name="theme-color" content="#ffffff">
-<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=yes">
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, User-scalable=yes">
 <title><?=$site_title?></title>
 <style><?=$custom_css?></style>
 <script>
@@ -49,7 +49,7 @@ use bbn\str;
   const hasServiceWorker = !!('serviceWorker' in navigator);
 
   /** @var {String} scriptSrc The script source */
-  const scriptSrc = <?=str::as_var($script_src)?>;
+  const scriptSrc = <?=str::asVar($script_src)?>;
 
   /** @var {Boolean} hasBeenAsked True if it already has been asked to reload because the version is new */
   let hasBeenAsked = false;
@@ -151,9 +151,9 @@ use bbn\str;
             hasBeenAsked = true;
             if ( 'appui' in window ){
               if ( confirm(
-                <?=str::as_var(_("The application has been updated but you still use an old version."))?> + "\n" +
-                <?=str::as_var(_("You need to refresh the page to upgrade."))?> + "\n" +
-                <?=str::as_var(_("Do you want to do it now?"))?>
+                <?=str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
+                <?=str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
+                <?=str::asVar(_("Do you want to do it now?"))?>
               ) ){
                 isReloading = true;
                 location.reload();
@@ -165,16 +165,16 @@ use bbn\str;
           }
           else if ( 'appui' in window ){
             let v = window.localStorage.getItem('bbn-vue-version');
-            bbn.fn.log(<?=str::as_var(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            bbn.fn.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
       };
-      //console.log(<?=str::as_var(_("Registration successful, scope is"))?>, registration.scope);
+      //console.log(<?=str::asVar(_("Registration successful, scope is"))?>, registration.scope);
       //console.log(registration);
     })
     .catch((error) => {
-      console.log(<?=str::as_var(_("Service worker registration failed, error"))?>, error);
+      console.log(<?=str::asVar(_("Service worker registration failed, error"))?>, error);
     });
   }
   // Adding the function onDOMContentLoaded

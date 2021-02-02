@@ -16,17 +16,20 @@ new Vue({
       default: 1
     }
   },
-  data: bbn.fn.extend({
-    formData: {
-      appui_action: 'init_password',
-      id: data.id,
-      key: data.key,
-      pass1: '',
-      pass2: ''
-    },
-    isMobile: bbn.fn.isMobile(),
-    isTablet: bbn.fn.isTabletDevice()
-  }, data),
+  data(){
+    return bbn.fn.extend({
+      ready: false,
+      formData: {
+        appui_action: 'init_password',
+        id: data.id,
+        key: data.key,
+        pass1: '',
+        pass2: ''
+      },
+      isMobile: bbn.fn.isMobile(),
+      isTablet: bbn.fn.isTabletDevice()
+    }, data)
+  },
   computed: {
     submitDisabled(){
       return !this.formData.pass1.length || !this.formData.pass2.length || (this.formData.pass1 !== this.formData.pass2);
@@ -61,7 +64,7 @@ new Vue({
   },
   mounted() {
     this.$nextTick(() => {
-      //alert("dentro")
+      this.ready = true;
       //$("body > div.appui-password").animate({opacity: 1}, 2000).find("input:visible:first").focus();
       this.$el.style.opacity = "1";
       this.$el.style.animationDuration = "2s";

@@ -1,6 +1,6 @@
 <?php
-/** @var $ctrl \bbn\mvc\controller */
-/*$ctrl->data = $ctrl->get_model();
+/** @var $ctrl \bbn\Mvc\Controller */
+/*$ctrl->data = $ctrl->getModel();
 
 
 if ( empty($ctrl->arguments) &&
@@ -20,7 +20,7 @@ if ( empty($ctrl->arguments) &&
     //function
     $merge_icons = function($lib, $icons) use(&$res){
 
-        $res['icons'] = \bbn\x::merge_arrays($res['icons'], array_map(function($i) use($lib){
+        $res['icons'] = \bbn\X::mergeArrays($res['icons'], array_map(function($i) use($lib){
           return $lib.$i;
         }, $icons));
 
@@ -57,14 +57,14 @@ else {
   //$ctrl->data['picker'] = (!empty($ctrl->arguments) && ($ctrl->arguments[0] === 'picker'));
 /*
   echo $ctrl
-    ->set_color('purple', 'white')
-    ->set_icon('nf nf-fa-image')
+    ->setColor('purple', 'white')
+    ->setIcon('nf nf-fa-image')
     ->combo(($ctrl->data['picker'] ? "Icon picker" : "Iconology"), true);
 }
 */
 
 
-$ctrl->data = $ctrl->get_model();
+$ctrl->data = $ctrl->getModel();
 
 $res = [
   'icons' => [],
@@ -80,7 +80,7 @@ $libraries = [
 if ( !empty($ctrl->data) ){
   //function
   $merge_icons = function($lib, $icons) use(&$res){
-    $res['icons'] = \bbn\x::merge_arrays($res['icons'], array_map(function($i) use($lib){
+    $res['icons'] = \bbn\X::mergeArrays($res['icons'], array_map(function($i) use($lib){
       return $lib.$i;
     }, $icons));
   };
@@ -109,7 +109,7 @@ if ( !empty($ctrl->arguments) && ($ctrl->arguments[0] === 'iconpicker') ){
 }
 else {
   $ctrl
-    ->set_color('purple', 'white')
-    ->set_icon('nf nf-fa-image')
+    ->setColor('purple', 'white')
+    ->setIcon('nf nf-fa-image')
     ->combo("Iconology");
 }

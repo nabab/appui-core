@@ -4,9 +4,9 @@
  *
  **/
 
-/** @var $this \bbn\mvc\model*/
+/** @var $this \bbn\Mvc\Model*/
 
-if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
+if ($model->inc->user->isAdmin() && $model->hasData(['aliases', 'plugins'])) {
   $mandatory_packages = [
     "bbn/bbn" => "dev-master",
     "bbn/appui-core" => "dev-master",
@@ -48,7 +48,7 @@ if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
     "bbn/appui-write" => "dev-master",
   ];
   
-  $json = file_get_contents($model->lib_path().'bbn/appui-core/src/cfg/composers.json');
+  $json = file_get_contents($model->libPath().'bbn/appui-core/src/cfg/composers.json');
   $composers = json_decode($json, true);
   $oplugins = $composers['plugins'];
   unset($composers['plugins']);
@@ -65,11 +65,11 @@ if ($model->inc->user->is_admin() && $model->has_data(['aliases', 'plugins'])) {
       );
     }
   );
-  $appui = new bbn\appui();
-  $envs = $appui->get_environment(true);
-  $settings = $appui->get_settings();
+  $appui = new bbn\Appui();
+  $envs = $appui->getEnvironment(true);
+  $settings = $appui->getSettings();
 
-  $json = file_get_contents($model->lib_path().'bbn/appui-core/src/cfg/schema.json');
+  $json = file_get_contents($model->libPath().'bbn/appui-core/src/cfg/schema.json');
   $schema = json_decode($json, true);
 
   $json = file_get_contents(dirname(BBN_LIB_PATH).'/composer.json');

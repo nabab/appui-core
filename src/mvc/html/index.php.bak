@@ -32,7 +32,7 @@
 <meta name="msapplication-TileColor" content="#9f00a7">
 <meta name="msapplication-TileImage" content="<?=$static_path?>img/favicon/mstile-144x144.png">
 <meta name="theme-color" content="#ffffff">
-<meta name="viewport" content="width=device-width, initial-scale=0.66, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=0.66, User-scalable=no">
 <title><?=$site_title?></title>
 <style><?=$custom_css?></style>
 <script>
@@ -75,7 +75,7 @@
     });
   }
   else if ( !('AbortController' in window) ){
-    errorMsg = <?=\bbn\str::as_var(_("You need to have abort controller support in your browser, please update or use another browser"))?>;
+    errorMsg = <?=\bbn\Str::asVar(_("You need to have abort controller support in your browser, please update or use another browser"))?>;
   }
   else{
     let hasBeenAsked = false;
@@ -91,9 +91,9 @@
             hasBeenAsked = true;
             if ( 'appui' in window ){
               if ( confirm(
-                <?=\bbn\str::as_var(_("The application has been updated but you still use an old version."))?> + "\n" +
-                <?=\bbn\str::as_var(_("You need to refresh the page to upgrade."))?> + "\n" +
-                <?=\bbn\str::as_var(_("Do you want to do it now?"))?>
+                <?=\bbn\Str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
+                <?=\bbn\Str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
+                <?=\bbn\Str::asVar(_("Do you want to do it now?"))?>
               ) ){
                 isReloading = true;
                 location.reload();
@@ -106,16 +106,16 @@
           }
           else if ( 'appui' in window ){
             let v = window.localStorage.getItem('bbn-vue-version');
-            bbn.fn.log(<?=\bbn\str::as_var(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            bbn.fn.log(<?=\bbn\Str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
       };
-      console.log(<?=\bbn\str::as_var(_("Registration successful, scope is"))?>, registration.scope);
+      console.log(<?=\bbn\Str::asVar(_("Registration successful, scope is"))?>, registration.scope);
       console.log(registration);
     })
     .catch((error) => {
-      console.log(<?=\bbn\str::as_var(_("Service worker registration failed, error"))?>, error);
+      console.log(<?=\bbn\Str::asVar(_("Service worker registration failed, error"))?>, error);
     });
     document.addEventListener('DOMContentLoaded', () => {
       let script = document.createElement("script");

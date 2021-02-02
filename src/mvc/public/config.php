@@ -4,10 +4,10 @@
  *
  **/
 
-/** @var $this \bbn\mvc\controller */
+/** @var $this \bbn\Mvc\Controller */
 $data = $ctrl
-  ->add_data(['aliases' => $ctrl->get_aliases(), 'plugins' => $ctrl->get_routes()])
-  ->set_obj([
+  ->addData(['aliases' => $ctrl->getAliases(), 'plugins' => $ctrl->getRoutes()])
+  ->setObj([
     'url' => APPUI_CORE_ROOT.'config',
     'fcolor' => '#FFF',
     'bcolor' => '#000',

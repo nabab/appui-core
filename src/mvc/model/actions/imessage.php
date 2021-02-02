@@ -7,12 +7,12 @@
  */
 
 if ( !empty($model->data['id']) && isset($model->data['hidden']) ){
-  $imessages = new \bbn\appui\imessages($model->db);
+  $imessages = new \bbn\Appui\Imessages($model->db);
   if ( empty($model->data['hidden']) ){
-    $succ = $imessages->unset_hidden($model->data['id'], $model->inc->user->get_id());
+    $succ = $imessages->unsetHidden($model->data['id'], $model->inc->user->getId());
   }
   else {
-    $succ = $imessages->set_hidden($model->data['id'], $model->inc->user->get_id());
+    $succ = $imessages->setHidden($model->data['id'], $model->inc->user->getId());
   }
   return ['success' => $succ];
 }

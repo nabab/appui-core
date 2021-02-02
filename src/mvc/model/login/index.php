@@ -1,5 +1,5 @@
 <?php
-/** @var \bbn\mvc\model $model */
+/** @var \bbn\Mvc\Model $model */
 
 return [
   'site_url' => BBN_URL,
@@ -14,7 +14,7 @@ return [
   'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default',
   'lang' => BBN_LANG,
   'formData' => [
-    'appui_salt' => $model->inc->user->get_salt(),
+    'appui_salt' => $model->inc->user->getSalt(),
     'user' => '',
     'pass' => ''
   ],
