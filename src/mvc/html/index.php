@@ -88,7 +88,7 @@ use bbn\Str;
               if ( event.data && event.data.data ){
                 let d = event.data;
                 if ( d.type === 'init' ){
-                  init(d);
+                  init(d.data);
                 }
                 else if ('appui' in window){
                   let v = window.localStorage.getItem('bbn-vue-version');
@@ -96,7 +96,9 @@ use bbn\Str;
                 }
               }
             });
-            navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>"});
+            bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
+              navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>", data: d});
+            });
           }
         }
         // Through Ajax
@@ -124,12 +126,12 @@ use bbn\Str;
   let init = (d) => {
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
-    if ( d.data.version ){
+    if ( d.data && d.data.version ){
       bbn.vue.version = d.data.version;
       window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
       bbn.version = d.data.version;
     }
-    let res = eval(d.data.script || d.script);
+    let res = eval(d.script || d.data.script);
     if ( bbn.fn.isFunction(res) ){
       res(d.data);
       //alert("kkk");

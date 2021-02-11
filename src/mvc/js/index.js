@@ -49,7 +49,7 @@
         status: true,
         list: [
           {
-            url: 'core/home',
+            url: appui.plugins['appui-core'] + '/home',
             title: bbn._("Home"),
             load: true,
             static: true,
@@ -107,7 +107,7 @@
       text: bbn._("Log out"),
       icon: 'nf nf-fa-sign_out',
       action(){
-        bbn.fn.post('core/logout').then(() => {
+        bbn.fn.post(appui.plugins['appui-core'] + '/logout').then(() => {
           document.location.reload();
         });
       }
@@ -118,7 +118,7 @@
         text: bbn._("Increase version"),
         icon: 'nf nf-oct-versions',
         action(){
-          bbn.fn.post('core/service/increase').then(() => {
+          bbn.fn.post(appui.plugins['appui-core'] + '/service/increase').then(() => {
             document.location.reload();
           });
         } 
@@ -137,13 +137,13 @@
         logo: data.logo,
         pollable: (data.pollable === undefined) || data.pollable,
         leftShortcuts: [{
-          url: 'dashboard/home',
+          url: data.plugins['appui-dashboard'] + '/home',
           text: bbn._("Dashboard"),
           icon: 'nf nf-fa-dashboard'
         }, {
           action(){
             appui.popup().load({
-              url: 'help',
+              url: data.plugins['appui-core'] + '/help',
               width: '90%',
               height: '90%',
               scrollable: false
@@ -152,7 +152,7 @@
           text: bbn._("Help"),
           icon: 'nf nf-mdi-help_circle_outline'
         }, {
-          url: 'usergroup/main',
+          url: data.plugins['appui-usergroup'] + '/main',
           text: bbn._("My profile"),
           icon: 'nf nf-fa-user'
         }],

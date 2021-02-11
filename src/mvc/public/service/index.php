@@ -7,15 +7,15 @@ $plugins = [];
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
 }
-$shortcuts = $ctrl->getModel($ctrl->pluginUrl('appui-menu').'/shortcuts/list');
-$ctrl->data = $ctrl->getModel(APPUI_CORE_ROOT.'/_index');
+$data = $ctrl->getModel(APPUI_CORE_ROOT.'/_index');
 $ctrl->addData([
-  'plugins' => $plugins,
-  'shortcuts' => $shortcuts
+  'version' => $data['version'],
+  'shared_path' => BBN_SHARED_PATH,
+  'static_path' => BBN_STATIC_PATH,
+  'cdn_lib' => $data['cdn_lib'],
+  'site_url' => BBN_URL,
+  'script_src' => $data['script_src'],
+  'plugins' => $plugins
 ]);
-if ( $custom_js = $ctrl->getPluginView('index', 'js', $ctrl->data) ){
-  $ctrl->data['js_data'] = $custom_js;
-}
 echo 'let data = '.json_encode(array_merge($ctrl->data, ['script' => $ctrl->getView(APPUI_CORE_ROOT.'/index', 'js')])).';'.PHP_EOL;
-//echo 'let data = '.json_encode(['plugins' => $plugins, 'version' => $ctrl->data['version']]).';';
 echo $ctrl->getView(APPUI_CORE_ROOT.'/service/index', 'js');

@@ -13,7 +13,7 @@
         allIcons: [],
         total: 0,
         toSearch: '',
-        root: 'core/'
+        root: appui.plugins['appui-core'] + '/'
       }
     },
     computed: {
