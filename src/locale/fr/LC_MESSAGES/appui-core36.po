@@ -3,13 +3,13 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: info@bbn.so\n"
 "last-Translator: BBN Solutions <support@bbn.solutions>\n"
-"Language-Team: ES <ES@li.org>\n"
+"Language-Team: FR <FR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-02-15 01:09+0100\n"
-"POT-Revision-Date: 2021-02-15 01:09+0100\n"
-"Language: es\n"
+"POT-Creation-Date: 2021-02-16 05:17+0100\n"
+"POT-Revision-Date: 2021-02-16 05:17+0100\n"
+"Language: fr\n"
 "X-Domain: appui-core\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
@@ -35,174 +35,174 @@ msgstr ""
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/config/settings/settings.js
 msgid "on"
-msgstr ""
+msgstr "Le/À"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/config/settings/settings.js
 msgid "Setting modification"
-msgstr ""
+msgstr "Modification des réglages"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/config/settings/settings.js
 msgid "Setting visualization"
-msgstr ""
+msgstr "Visualisation des réglages"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "MySQL"
-msgstr ""
+msgstr "MySQL"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "SQLite"
-msgstr ""
+msgstr "SQLite"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "Connected"
-msgstr ""
+msgstr "Connecté"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "Not connected"
-msgstr ""
+msgstr "Déconnecté"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "You have to test the connection"
-msgstr ""
+msgstr "Il vous faut tester la connection"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Engine"
-msgstr ""
+msgstr "Type de base"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Host"
-msgstr ""
+msgstr "Hôte"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Username"
-msgstr ""
+msgstr "Nom d'utilisateur"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Test connection"
-msgstr ""
+msgstr "Tester la connection"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
 msgid "Search in"
-msgstr ""
+msgstr "Chercher dans"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
 msgid "icons"
-msgstr ""
+msgstr "Icônes"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.php
 msgid "LOADING ICONS"
-msgstr ""
+msgstr "CHARGEMENT DES ICÔNES"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Environments"
-msgstr ""
+msgstr "Environnements"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Routes"
-msgstr ""
+msgstr "Routes"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "New route"
-msgstr ""
+msgstr "Nouvelle route"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Real path"
-msgstr ""
+msgstr "Chemin du fichier"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Edit"
-msgstr ""
+msgstr "Modifier"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Official plugins"
-msgstr ""
+msgstr "Plugins officiels"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Other plugins"
-msgstr ""
+msgstr "Autres plugins"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "New plugin"
-msgstr ""
+msgstr "Nouveau plugin"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Root"
-msgstr ""
+msgstr "Racine"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Packages"
-msgstr ""
+msgstr "Paquets"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Composer"
-msgstr ""
+msgstr "Composer"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Add a new package"
-msgstr ""
+msgstr "Ajouter un nouveau paquet"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/error/download/index.php
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "All rights reserved."
-msgstr ""
+msgstr "Tous droits réservés."
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "The application has been updated but you still use an old version."
-msgstr ""
+msgstr "Vous utilisez une ancienne version de l'application."
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "You need to refresh the page to upgrade."
-msgstr ""
+msgstr "Vous devez rafraîchir la page pour mettre à jour."
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "Do you want to do it now?"
-msgstr ""
+msgstr "Voulez-vous le faire maintenant?"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "POLLING FROM SERVICE WORKER VERSION"
-msgstr ""
+msgstr "SONDAGE DEPUIS LE SERVICE WORKER VERSION"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "Registration successful, scope is"
-msgstr ""
+msgstr "Enregistrement réussi, le scope est"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "Service worker registration failed, error"
-msgstr ""
+msgstr "L'enregistrement du service worker a échoué, erreur"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/appui/home.php
 msgid "There is no certificate present in your config directory!"
@@ -218,55 +218,55 @@ msgstr ""
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/error/download/index.php
 msgid "Sorry we couldn't download the file"
-msgstr ""
+msgstr "Sorry we couldn't download the file"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "e-Mail address"
-msgstr ""
+msgstr "Adresse eMail"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Log in"
-msgstr ""
+msgstr "S'identifier"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Enter your e-mail address"
-msgstr ""
+msgstr "Entrez votre adresse email"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Cancel"
-msgstr ""
+msgstr "Annuler"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Submit"
-msgstr ""
+msgstr "Envoyer"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Password forgotten?"
-msgstr ""
+msgstr "Mot de passe oublié?"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "Choose your new password"
-msgstr ""
+msgstr "Choisissez votre nouveau mot de passe"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "Mandatory field, 8 characters minimum"
-msgstr ""
+msgstr "Champ obligatoire, 8 caractères minimum"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "Confirm your new password"
-msgstr ""
+msgstr "Confirmer votre nouveau mot de passe"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "Reset"
-msgstr ""
+msgstr "Réinitialiser"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "The link is not valid"
-msgstr ""
+msgstr "Le lien n'est pas valide"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "Back to the home page"
-msgstr ""
+msgstr "Retour à la page d'accueil"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/update/options.php
 msgid "Choose a type to see the options"
@@ -286,131 +286,131 @@ msgstr ""
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/config.js
 msgid "in"
-msgstr ""
+msgstr "dans"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/config.js
 msgid "All the fields are mandatory"
-msgstr ""
+msgstr "Tous les champs sont obligatoires"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/config.js
 msgid "This URL is already registered"
-msgstr ""
+msgstr "Cette URL est déjà enregistrée"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/config.js
 msgid "This URL is already registered as a plugin"
-msgstr ""
+msgstr "Cette URL est déjà enregistrée en tant que plugin"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/config.js
 msgid "Modification saved successfully"
-msgstr ""
+msgstr "Modification sauvegardée avec succès"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/iconology.js
 msgid "Copied to clipboard"
-msgstr ""
+msgstr "Copié dans le presse-papier"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/iconology_old.js
 msgid "Copied class of the icon"
-msgstr ""
+msgstr "La classe de l'icône a été copiée"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "(Un)Select all"
-msgstr ""
+msgstr "Tout (dé)sélectionner"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Search"
-msgstr ""
+msgstr "Recherche"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Close"
-msgstr ""
+msgstr "Fermer"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Close all"
-msgstr ""
+msgstr "Tout fermer"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Close others"
-msgstr ""
+msgstr "Fermer les autres"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Pin"
-msgstr ""
+msgstr "Épingler"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Unpin"
-msgstr ""
+msgstr "Désépingler"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Full screen"
-msgstr ""
+msgstr "Plein écran"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Reload with a fresh view"
-msgstr ""
+msgstr "Réinitialiser l'application"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Log out"
-msgstr ""
+msgstr "Se déconnecter"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Increase version"
-msgstr ""
+msgstr "Ajouter une version"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Dashboard"
-msgstr ""
+msgstr "Tableau de bord"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "My profile"
-msgstr ""
+msgstr "Mon profil"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Saved"
-msgstr ""
+msgstr "Sauvegardé"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/appui/home.js
 msgid "Handshake successful with App-UI central server"
-msgstr ""
+msgstr "Poignée de main réussie avec le serveur central App-UI"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/appui/home.js
 msgid "Impossible to contact the App-UI central server"
-msgstr ""
+msgstr "Impossible de contacter le serveur central App-UI"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "An email has been sent to"
-msgstr ""
+msgstr "Un eMail vient d'être envoyé à"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "Refresh the page to be able to log in or click"
-msgstr ""
+msgstr "Recharger la page afin de pouvoir vous connecter à nouveau ou bien cliquer"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "HERE"
-msgstr ""
+msgstr "ICI"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/js/login/password/index.js
 msgid "Passwords must match!"
-msgstr ""
+msgstr "Les mots de passe doivent correspondre!"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/appui/actions/gen_cert.php
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/appui/actions/register.php
@@ -436,43 +436,43 @@ msgstr ""
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
 msgid "Database"
-msgstr ""
+msgstr "Base de données"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
 msgid "Menu"
-msgstr ""
+msgstr "menu"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
 msgid "Options"
-msgstr ""
+msgstr "Options"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
 msgid "Permissions"
-msgstr ""
+msgstr "Permissions"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
 msgid "Settings"
-msgstr ""
+msgstr "Paramètres"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/private/access_control.php
 msgid "Unauthorized"
-msgstr ""
+msgstr "Non authorisé"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/private/access_control.php
 msgid "Sorry but you don't have the permission for "
-msgstr ""
+msgstr "Désolé mais vous n'avez pas la permission pour"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/public/config.php
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/public/observers.php
 msgid "Observers"
-msgstr ""
+msgstr "Observateurs"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/public/appui/home.php
 msgid "App-UI communication"
-msgstr ""
+msgstr "Communication App-UI"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/public/update/options.php
 msgid "Options update"

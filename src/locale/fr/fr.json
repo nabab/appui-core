@@ -1,1 +1,64 @@
-{"":{"on":"Le\/\u00c0","Setting modification":"Modification des r\u00e9glages","Setting visualization":"Visualisation des r\u00e9glages","MySQL":"MySQL","SQLite":"SQLite","Connected":"Connect\u00e9","Not connected":"D\u00e9connect\u00e9","You have to test the connection":"Il vous faut tester la connection","Search in":"Chercher dans","icons":"Ic\u00f4nes","in":"dans","All the fields are mandatory":"Tous les champs sont obligatoires","This URL is already registered":"Cette URL est d\u00e9j\u00e0 enregistr\u00e9e","This URL is already registered as a plugin":"Cette URL est d\u00e9j\u00e0 enregistr\u00e9e en tant que plugin","Modification saved successfully":"Modification sauvegard\u00e9e avec succ\u00e8s","Copied to clipboard":"Copi\u00e9 dans le presse-papier","Copied class of the icon":"La classe de l'ic\u00f4ne a \u00e9t\u00e9 copi\u00e9e","(Un)Select all":"Tout (d\u00e9)s\u00e9lectionner","Search":"Recherche","Close":"Fermer","Close all":"Tout fermer","Close others":"Fermer les autres","Pin":"\u00c9pingler","Unpin":"D\u00e9s\u00e9pingler","Home":"Accueil","Full screen":"Plein \u00e9cran","Reload with a fresh view":"R\u00e9initialiser l'application","Log out":"Se d\u00e9connecter","Increase version":"Ajouter une version","Dashboard":"Tableau de bord","Help":"Aide","My profile":"Mon profil","Unknown":"Inconnu","Saved":"Sauvegard\u00e9","Error":"Erreur","Handshake successful with App-UI central server":"Poign\u00e9e de main r\u00e9ussie avec le serveur central App-UI","Impossible to contact the App-UI central server":"Impossible de contacter le serveur central App-UI","An email has been sent to":"Un eMail vient d'\u00eatre envoy\u00e9 \u00e0","Info":"Info","Refresh the page to be able to log in or click":"Recharger la page afin de pouvoir vous connecter \u00e0 nouveau ou bien cliquer","HERE":"ICI","Passwords must match!":"Les mots de passe doivent correspondre!"}}
+{
+    "components\/config\/settings\/settings": {
+        "on": "Le\/\u00c0",
+        "Setting modification": "Modification des r\u00e9glages",
+        "Setting visualization": "Visualisation des r\u00e9glages"
+    },
+    "components\/form\/db\/db": {
+        "MySQL": "MySQL",
+        "SQLite": "SQLite",
+        "Connected": "Connect\u00e9",
+        "Not connected": "D\u00e9connect\u00e9",
+        "You have to test the connection": "Il vous faut tester la connection"
+    },
+    "components\/popup\/iconpicker\/iconpicker": {
+        "Search in": "Chercher dans",
+        "icons": "Ic\u00f4nes"
+    },
+    "mvc\/config": {
+        "in": "dans",
+        "All the fields are mandatory": "Tous les champs sont obligatoires",
+        "This URL is already registered": "Cette URL est d\u00e9j\u00e0 enregistr\u00e9e",
+        "This URL is already registered as a plugin": "Cette URL est d\u00e9j\u00e0 enregistr\u00e9e en tant que plugin",
+        "Modification saved successfully": "Modification sauvegard\u00e9e avec succ\u00e8s"
+    },
+    "mvc\/iconology": {
+        "Copied to clipboard": "Copi\u00e9 dans le presse-papier"
+    },
+    "mvc\/iconology_old": {
+        "Copied class of the icon": "La classe de l'ic\u00f4ne a \u00e9t\u00e9 copi\u00e9e"
+    },
+    "mvc\/index": {
+        "(Un)Select all": "Tout (d\u00e9)s\u00e9lectionner",
+        "Search": "Recherche",
+        "Close": "Fermer",
+        "Close all": "Tout fermer",
+        "Close others": "Fermer les autres",
+        "Pin": "\u00c9pingler",
+        "Unpin": "D\u00e9s\u00e9pingler",
+        "Home": "Accueil",
+        "Full screen": "Plein \u00e9cran",
+        "Reload with a fresh view": "R\u00e9initialiser l'application",
+        "Log out": "Se d\u00e9connecter",
+        "Increase version": "Ajouter une version",
+        "Dashboard": "Tableau de bord",
+        "Help": "Aide",
+        "My profile": "Mon profil",
+        "Unknown": "Inconnu",
+        "Saved": "Sauvegard\u00e9",
+        "Error": "Erreur"
+    },
+    "mvc\/appui\/home": {
+        "Handshake successful with App-UI central server": "Poign\u00e9e de main r\u00e9ussie avec le serveur central App-UI",
+        "Impossible to contact the App-UI central server": "Impossible de contacter le serveur central App-UI"
+    },
+    "mvc\/login\/index": {
+        "An email has been sent to": "Un eMail vient d'\u00eatre envoy\u00e9 \u00e0",
+        "Info": "Info",
+        "Refresh the page to be able to log in or click": "Recharger la page afin de pouvoir vous connecter \u00e0 nouveau ou bien cliquer",
+        "HERE": "ICI"
+    },
+    "mvc\/login\/password\/index": {
+        "Passwords must match!": "Les mots de passe doivent correspondre!"
+    }
+}
