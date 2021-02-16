@@ -1,29 +1,29 @@
 {
     "components\/config\/settings": {
         "on": "Le\/\u00c0",
-        "Setting modification": "Modification des r\u00e9glages",
-        "Setting visualization": "Visualisation des r\u00e9glages"
+        "Setting modification": "",
+        "Setting visualization": ""
     },
     "components\/form\/db": {
-        "MySQL": "MySQL",
-        "SQLite": "SQLite",
+        "MySQL": "",
+        "SQLite": "",
         "Connected": "Connect\u00e9",
-        "Not connected": "D\u00e9connect\u00e9",
-        "You have to test the connection": "Il vous faut tester la connection"
+        "Not connected": "",
+        "You have to test the connection": ""
     },
     "components\/popup\/iconpicker": {
         "Search in": "Chercher dans",
         "icons": "Ic\u00f4nes"
     },
     "mvc\/config": {
-        "in": "dans",
-        "All the fields are mandatory": "Tous les champs sont obligatoires",
-        "This URL is already registered": "Cette URL est d\u00e9j\u00e0 enregistr\u00e9e",
-        "This URL is already registered as a plugin": "Cette URL est d\u00e9j\u00e0 enregistr\u00e9e en tant que plugin",
-        "Modification saved successfully": "Modification sauvegard\u00e9e avec succ\u00e8s"
+        "in": "",
+        "All the fields are mandatory": "",
+        "This URL is already registered": "",
+        "This URL is already registered as a plugin": "",
+        "Modification saved successfully": ""
     },
     "mvc\/iconology": {
-        "Copied to clipboard": "Copi\u00e9 dans le presse-papier"
+        "Copied to clipboard": ""
     },
     "mvc\/iconology_old": {
         "Copied class of the icon": "La classe de l'ic\u00f4ne a \u00e9t\u00e9 copi\u00e9e"
@@ -49,8 +49,8 @@
         "Error": "Erreur"
     },
     "mvc\/appui\/home": {
-        "Handshake successful with App-UI central server": "Poign\u00e9e de main r\u00e9ussie avec le serveur central App-UI",
-        "Impossible to contact the App-UI central server": "Impossible de contacter le serveur central App-UI"
+        "Handshake successful with App-UI central server": "",
+        "Impossible to contact the App-UI central server": ""
     },
     "mvc\/login\/index": {
         "An email has been sent to": "Un eMail vient d'\u00eatre envoy\u00e9 \u00e0",
