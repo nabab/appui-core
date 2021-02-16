@@ -1,17 +1,17 @@
 {
-    "components\/config\/settings\/settings": {
+    "components\/config\/settings": {
         "on": "Le\/\u00c0",
         "Setting modification": "Modification des r\u00e9glages",
         "Setting visualization": "Visualisation des r\u00e9glages"
     },
-    "components\/form\/db\/db": {
+    "components\/form\/db": {
         "MySQL": "MySQL",
         "SQLite": "SQLite",
         "Connected": "Connect\u00e9",
         "Not connected": "D\u00e9connect\u00e9",
         "You have to test the connection": "Il vous faut tester la connection"
     },
-    "components\/popup\/iconpicker\/iconpicker": {
+    "components\/popup\/iconpicker": {
         "Search in": "Chercher dans",
         "icons": "Ic\u00f4nes"
     },
