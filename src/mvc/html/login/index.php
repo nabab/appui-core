@@ -57,7 +57,7 @@
 			>
 				<bbn-input class="bbn-c bbn-lg"
 									 required="required"
-									 placeholder="<?=_("e-Mail address")?>"
+									 placeholder="<?=_("Login name")?>"
                    v-model="formData.user"
 			  ></bbn-input>
 				<bbn-input type="password"

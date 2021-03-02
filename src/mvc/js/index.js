@@ -107,8 +107,13 @@
       text: bbn._("Log out"),
       icon: 'nf nf-fa-sign_out',
       action(){
-        bbn.fn.post(appui.plugins['appui-core'] + '/logout').then(() => {
-          document.location.reload();
+        bbn.fn.post(appui.plugins['appui-core'] + '/logout', d => {
+          if (d.success && d.data && d.data.url) {
+            document.location.href = d.data.url;
+          }
+          else {
+            appui.error();
+          }
         });
       }
     }];

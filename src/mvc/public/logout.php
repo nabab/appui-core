@@ -5,4 +5,5 @@ if ( isset($ctrl->inc->user) && $ctrl->inc->user->checkSession() ){
   }
 	$ctrl->inc->user->logout();
 }
-$ctrl->addScript('document.location.href="'.(isset($redir) ? $redir : '.').'";');
+$ctrl->obj->success = true;
+$ctrl->obj->data = ['url' => $redir ?? '.'];

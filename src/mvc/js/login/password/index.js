@@ -27,7 +27,8 @@ new Vue({
         pass2: ''
       },
       isMobile: bbn.fn.isMobile(),
-      isTablet: bbn.fn.isTabletDevice()
+      isTablet: bbn.fn.isTabletDevice(),
+      passwordVisible: false
     }, data)
   },
   computed: {
@@ -52,6 +53,11 @@ new Vue({
         return false;
       }
       return true;
+    },
+    setEvents(ref){
+      this.$refs[ref].$on('clickRightButton', () => {
+        this.passwordVisible = !this.passwordVisible;
+      });
     }
   },
   created(){

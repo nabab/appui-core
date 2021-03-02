@@ -128,6 +128,15 @@ use bbn\Str;
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
       bbn.vue.version = d.data.version;
+      let userOnStorage = window.localStorage.getItem('bbn-user-id');
+      if (d.data.app
+        && d.data.app.user
+        && d.data.app.user.id
+        && (userOnStorage !== d.data.app.user.id)
+      ){
+        window.localStorage.clear();
+        window.localStorage.setItem('bbn-user-id', d.data.app.user.id);
+      }
       window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
       bbn.version = d.data.version;
     }
