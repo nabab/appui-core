@@ -107,7 +107,7 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
-  return false;
+  die(json_encode(['disconnected' => true]));
 }
 
 if (class_exists('\\bbn\\Appui\\History')) {
