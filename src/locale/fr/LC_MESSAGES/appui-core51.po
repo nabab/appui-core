@@ -7,10 +7,10 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-02-16 17:29+0100\n"
-"POT-Revision-Date: 2021-02-16 17:29+0100\n"
+"POT-Creation-Date: 2021-03-11 13:22+0100\n"
+"POT-Revision-Date: 2021-03-11 13:22+0100\n"
 "Language: fr\n"
-"X-Domain: appui-core\n"
+"X-Domain: appui-core51\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/cli/treat_errors.php
@@ -90,6 +90,14 @@ msgstr "Mot de passe"
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Test connection"
 msgstr ""
+
+#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/plugins/plugins.php
+msgid "Check all"
+msgstr "Tout cocher"
+
+#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/form/plugins/plugins.php
+msgid "Uncheck all"
+msgstr "Tout décocher"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
 msgid "Search in"
@@ -223,8 +231,9 @@ msgid "Sorry we couldn't download the file"
 msgstr "Sorry we couldn't download the file"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
-msgid "e-Mail address"
-msgstr "Adresse eMail"
+#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Login name"
+msgstr ""
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Log in"
@@ -245,6 +254,10 @@ msgstr "Envoyer"
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "Password forgotten?"
 msgstr "Mot de passe oublié?"
+
+#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
+msgid "Hi"
+msgstr ""
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/html/login/password/index.php
 msgid "Choose your new password"
@@ -436,33 +449,13 @@ msgstr ""
 msgid "The application didn't register!"
 msgstr ""
 
-#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
-msgid "Database"
-msgstr "Base de données"
-
-#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
-msgid "Menu"
-msgstr "menu"
-
-#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
-msgid "Options"
-msgstr "Options"
-
-#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
-msgid "Permissions"
-msgstr "Permissions"
-
-#: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/model/update/options.php
-msgid "Settings"
-msgstr "Paramètres"
-
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/private/access_control.php
 msgid "Unauthorized"
 msgstr "Non authorisé"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/private/access_control.php
-msgid "Sorry but you don't have the permission for "
-msgstr "Désolé mais vous n'avez pas la permission pour"
+msgid "Sorry but you don't have the permission for %s"
+msgstr "Désolé mais vous n'avez pas la permission pour %s"
 
 #: /home/thomas/domains/apstapp.thomas.lan/_appui/vendor/bbn/appui-core/src/mvc/public/config.php
 msgid "Configuration"

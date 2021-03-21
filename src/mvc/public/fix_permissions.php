@@ -7,8 +7,9 @@
 use bbn\X;
 
 /** @var $ctrl \bbn\Mvc\Controller */
-if (!empty($ctrl->post['go'])) {
+//if (!empty($ctrl->post['go'])) {
   $plugins = $ctrl->getPlugins();
+  die(var_dump($plugins));
   $fs = new bbn\File\System();
   $appui = $ctrl->inc->options->fromCode('appui');
   $proot = $ctrl->inc->options->fromCode('page', 'permissions', $appui);
@@ -106,4 +107,4 @@ if (!empty($ctrl->post['go'])) {
       }
     }
   }
-}
+//}

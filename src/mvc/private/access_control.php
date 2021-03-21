@@ -199,7 +199,7 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
   }
   else {
     $ctrl->obj->errorTitle = _("Unauthorized");
-    $ctrl->obj->error      = _("Sorry but you don't have the permission for ".$ctrl->getPath());
+    $ctrl->obj->error      = sprintf(_("Sorry but you don't have the permission for %s"), $ctrl->getPath());
   }
 }
 
