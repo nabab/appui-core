@@ -56,7 +56,8 @@
             icon: 'nf nf-fa-home'
           }
         ],
-        searchBar: false
+        searchBar: false,
+        broserNotification: true
       };
     }
     if ( !js_data.componentsMixin ){
@@ -139,6 +140,7 @@
         status: true,
         header: true,
         clipboard: true,
+        broserNotification: true,
         logo: data.logo,
         pollable: (data.pollable === undefined) || data.pollable,
         leftShortcuts: [{
@@ -173,8 +175,8 @@
         plugins: data.plugins,
         currentMenu: data.current_menu,
         shortcuts: data.shortcuts,
+        browserNotification: true,
         app: {
-
           data(){
             return data.app
           },
