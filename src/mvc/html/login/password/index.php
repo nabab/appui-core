@@ -47,7 +47,7 @@
     <h3 v-if="username"><?=_('Hi')?> <span v-text="username"></span></h3>
 		<div class="bbn-vmargin bbn-block bbn-c">
       <bbn-form v-if="isValidLink"
-                action="/"
+                action="index"
 								:source="formData"
 								:buttons="[]"
 								:scrollable="false"

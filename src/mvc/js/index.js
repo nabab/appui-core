@@ -47,6 +47,7 @@
         nav: true,
         clipboard: true,
         status: true,
+        footer: false,
         list: [
           {
             url: appui.plugins['appui-core'] + '/home',
@@ -139,6 +140,7 @@
         nav: true,
         status: true,
         header: true,
+        footer: false,
         clipboard: true,
         broserNotification: true,
         logo: data.logo,
