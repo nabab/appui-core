@@ -202,15 +202,16 @@ if ($id_user = $model->inc->user->getId()) {
       if ( !empty($times_currents) && Dir::createPath(dirname($times_file)) ){
         file_put_contents($times_file, Json_encode($times_currents, JSON_PRETTY_PRINT));
       }
-      die(json_encode($res, JSON_PRETTY_PRINT));
+      return $res;
     }
     // wait for 1 sec
     sleep(1);
   }
 }
 else{
-  die(json_encode(array_map(function(){
+  return array_map(function(){
     return ['disconnected' => true];
-  }, $model->data['clients'])));
+  }, $model->data['clients']);
 }
-die("{}");
+
+return [];

@@ -17,6 +17,7 @@
       plugins: data.plugins,
       cdn: data.shared_path
     });
+
     bbn.fn.autoExtend('lng', {
       select_unselect_all: bbn._('(Un)Select all'),
       search: bbn._('Search'),
@@ -26,6 +27,7 @@
       pin: bbn._('Pin'),
       unpin: bbn._('Unpin')
     });
+
     bbn.fn.autoExtend('opt', data.options);
     bbn.fn.extend(bbn.lng, data.lng);
 
@@ -37,10 +39,12 @@
       // the error was found in. Only available in 2.2.0+
       bbn.fn.log("ERROR handler from VueJS", err, vm, info);
     };
+
     let js_data = {};
     if ( data.js_data ){
       js_data = eval(data.js_data) || {};
     }
+
     if ( !js_data.appuiMixin ){
       js_data.appuiMixin = {
         header: true,
@@ -61,14 +65,17 @@
         broserNotification: true
       };
     }
+
     if ( !js_data.componentsMixin ){
       js_data.componentsMixin = {};
     }
+
     bbn.fn.each(data.plugins, (path, name) => {
       bbn.vue.addPrefix(name, (tag, resolve, reject) => {
         bbn.vue.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
       });
     });
+
     bbn.vue.addPrefix(
       data.app_prefix,
       (tag, resolve, reject, mixins) => {

@@ -1,12 +1,14 @@
 <?php
+use bbn\X;
 //header('Content-type: application/javascript; charset=utf-8');
 //echo 'console.log("This SW has been created...");'.PHP_EOL;
 $ctrl->setMode('js');
 $routes = $ctrl->getRoutes();
 $plugins = [];
-foreach ( $routes as $r ){
+foreach ($routes as $r) {
   $plugins[$r['name']] = $r['url'];
 }
+
 $data = $ctrl->getModel(APPUI_CORE_ROOT.'/_index');
 $ctrl->addData([
   'version' => $data['version'],
@@ -17,5 +19,14 @@ $ctrl->addData([
   'script_src' => $data['script_src'],
   'plugins' => $plugins
 ]);
-echo 'let data = '.json_encode(array_merge($ctrl->data, ['script' => $ctrl->getView(APPUI_CORE_ROOT.'/index', 'js')])).';'.PHP_EOL;
-echo $ctrl->getView(APPUI_CORE_ROOT.'/service/index', 'js');
+
+$script = $ctrl->getView(APPUI_CORE_ROOT.'/index', 'js');
+$json = json_encode(
+  array_merge(
+    $ctrl->data,
+    ['script' => $script]
+  ),
+  JSON_PRETTY_PRINT
+);
+$js = $ctrl->getView(APPUI_CORE_ROOT.'/service/index', 'js');
+echo 'let data = '.$json.';'.PHP_EOL.$js;
