@@ -1,7 +1,7 @@
-<div class="appui-icon-picker bbn-overlay bbn-w-100 bbn-c">
+<div class="appui-iconpicker bbn-overlay bbn-w-100 bbn-c">
   <div class="bbn-flex-height">
     <div class="bbn-w-100 bbn-c" style="padding: 0 1em 1em 0">
-      <bbn-input style="width: 300px"
+      <bbn-input style="width: 25em"
                  :placeholder="getTotal"
                  v-model="toSearch"
       ></bbn-input>
@@ -13,8 +13,7 @@
                       class="bbn-c bbn-100"
                       @click="selectIcon(icon)"
                       :title="icon"
-                      :icon="icon"
-          ></bbn-button>
+                      :icon="icon"/>
         </div>
       </bbn-scroll>
       <div v-else class="bbn-overlay bbn-middle">
