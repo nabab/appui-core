@@ -110,7 +110,7 @@ if (!$ctrl->inc->user->checkSession()) {
   die(json_encode(['disconnected' => true]));
 }
 
-if (class_exists('\\bbn\\Appui\\History')) {
+if (defined('BBN_HISTORY') && BBN_HISTORY && class_exists('\\bbn\\Appui\\History')) {
   \bbn\Appui\History::setUser($ctrl->inc->user->getId());
 }
 
