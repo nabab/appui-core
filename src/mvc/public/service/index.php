@@ -30,3 +30,5 @@ $json = json_encode(
 );
 $js = $ctrl->getView(APPUI_CORE_ROOT.'/service/index', 'js');
 echo 'let data = '.$json.';'.PHP_EOL.$js;
+header('Content-type: text/javascript; charset=utf-8');
+die();

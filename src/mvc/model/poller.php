@@ -58,8 +58,8 @@ if ($id_user = $model->inc->user->getId()) {
    * @var array The list of functions from plugins to be performed once
    */
   $plugins_pollers_noloop = [];
-  foreach ( $plugins as $plugin ){
-    if ( $m = $model->getSubpluginModel('poller', [], $plugin, 'appui-core') ){
+  foreach ($plugins as $plugin){
+    if ($m = $model->getSubpluginModel('poller', [], $plugin, 'appui-core')) {
       foreach ($m as $p) {
         $p['plugin'] = $plugin;
         if (empty($p['frequency'])) {
@@ -71,6 +71,7 @@ if ($id_user = $model->inc->user->getId()) {
       }
     }
   }
+
   /**
    * @var array The current times list
    */
@@ -78,10 +79,11 @@ if ($id_user = $model->inc->user->getId()) {
   if (is_file($times_file)) {
     $times = json_decode(file_get_contents($times_file), true);
   }
+
   /**
    * @var array The result that will be output as JSON.
    */
-  $res = [];
+  $res          = [];
   $res_template = [
     'data' => [],
     'start' => $now,
@@ -93,6 +95,7 @@ if ($id_user = $model->inc->user->getId()) {
       unlink($f);
     }
   }
+
   $active_file = $actsource.'/active_'.$now;
   // This file goes with the process
   $pid = getmypid();
@@ -101,31 +104,36 @@ if ($id_user = $model->inc->user->getId()) {
   // Clients list
   $clients = $model->hasData('clients', true) ? $model->data['clients'] : [];
   // Plugins functions to run once
-  foreach ( $plugins_pollers_noloop as $pp ){
+  foreach ($plugins_pollers_noloop as $pp){
     foreach ($clients as $id => $data) {
       if (!isset($data['appui-core'])) {
         $clients[$id]['appui-core'] = [];
       }
+
       $clients[$id]['appui-core']['active_file'] = $active_file;
-      $d = [
+      $d                                         = [
         'client' => $id,
-        'clients' => array_map(function($c) use($pp){
-          return $c[$pp['plugin']] ?? [];
-        }, $clients),
+        'clients' => array_map(
+          function ($c) use ($pp) {
+            return $c[$pp['plugin']] ?? [];
+          }, $clients
+        ),
         'data' => $clients[$id][$pp['plugin']] ?? []
       ];
-      if ( !connection_aborted()
-        && is_callable($pp['function'])
-        && ($plugin_res = $pp['function']($d))
-        && !empty($plugin_res['success'])
-        && !empty($plugin_res['data'])
-      ){
-        if ( !isset($res[$id]) ){
+      if (!connection_aborted()
+          && is_callable($pp['function'])
+          && ($plugin_res = $pp['function']($d))
+          && !empty($plugin_res['success'])
+          && !empty($plugin_res['data'])
+      ) {
+        if (!isset($res[$id])) {
           $res[$id] = $res_template;
         }
-        if ( !isset($res[$id]['plugins'][$pp['plugin']]) ){
+
+        if (!isset($res[$id]['plugins'][$pp['plugin']])) {
           $res[$id]['plugins'][$pp['plugin']] = [];
         }
+
         $res[$id]['plugins'][$pp['plugin']] = \bbn\X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
       }
     }
@@ -143,55 +151,63 @@ if ($id_user = $model->inc->user->getId()) {
         X::log("Disconnected", 'poller');
         die("Disconnected");
       }
+
       sleep(1);
       continue;
     }
     elseif ($timer->hasStarted('disconnection')) {
       $timer->reset();
     }
+
     // PHP caches file data by default. clearstatcache() clears that cache
     clearstatcache();
 
     // Start|resume timers
     $started_now = [];
-    foreach ( $plugins_pollers as $pp ){
-      if ( !$timer->hasStarted($pp['id']) ){
+    foreach ($plugins_pollers as $pp){
+      if (!$timer->hasStarted($pp['id'])) {
         $started_now[] = $pp['id'];
         $timer->start($pp['id'], (!empty($times[$pp['id']]) && ($times[$pp['id']]['current'] < $timeout)) ? (float)$times[$pp['id']]['start'] : null);
       }
     }
 
     // Check and run plugins functions
-    foreach ( $plugins_pollers as $pp ){
+    foreach ($plugins_pollers as $pp){
       $restart_timer = false;
       foreach ($clients as $id => $data) {
         $d = [
           'client' => $id,
-          'clients' => array_map(function($c) use($pp){
-            return $c[$pp['plugin']] ?? [];
-          }, $clients),
+          'clients' => array_map(
+            function ($c) use ($pp) {
+              return $c[$pp['plugin']] ?? [];
+            }, $clients
+          ),
           'data' => $data[$pp['plugin']] ?? []
         ];
-        if ( !connection_aborted()
-          && (($timer->measure($pp['id']) >= $pp['frequency'])
+        if (!connection_aborted()
+            && (($timer->measure($pp['id']) >= $pp['frequency'])
             || in_array($pp['id'], $started_now, true))
-          && is_callable($pp['function'])
-          && ($plugin_res = $pp['function']($d))
-          && !empty($plugin_res['success'])
-        ){
+            && is_callable($pp['function'])
+            && ($plugin_res = $pp['function']($d))
+            && !empty($plugin_res['success'])
+        ) {
           if (!empty($plugin_res['data'])) {
-            if ( !isset($res[$id]) ){
+            if (!isset($res[$id])) {
               $res[$id] = $res_template;
             }
-            if ( !isset($res[$id]['plugins'][$pp['plugin']]) ){
+
+            if (!isset($res[$id]['plugins'][$pp['plugin']])) {
               $res[$id]['plugins'][$pp['plugin']] = [];
             }
+
             $res[$id]['plugins'][$pp['plugin']] = \bbn\X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
           }
+
           $restart_timer = true;
         }
       }
-      if ($restart_timer){
+
+      if ($restart_timer) {
         $timer->stop($pp['id']);
         $timer->start($pp['id']);
       }
@@ -199,19 +215,22 @@ if ($id_user = $model->inc->user->getId()) {
 
     if (!empty($res)) {
       $times_currents = $timer->currents();
-      if ( !empty($times_currents) && Dir::createPath(dirname($times_file)) ){
-        file_put_contents($times_file, Json_encode($times_currents, JSON_PRETTY_PRINT));
+      if (!empty($times_currents) && Dir::createPath(dirname($times_file))) {
+        file_put_contents($times_file, json_encode($times_currents, JSON_PRETTY_PRINT));
       }
+
       return $res;
     }
+
     // wait for 1 sec
-    sleep(1);
   }
 }
 else{
-  return array_map(function(){
-    return ['disconnected' => true];
-  }, $model->data['clients']);
+  return array_map(
+    function () {
+      return ['disconnected' => true];
+    }, $model->data['clients']
+  );
 }
 
 return [];
