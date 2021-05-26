@@ -12,5 +12,5 @@ return [
   'year' => date('Y'),
   'lang' => BBN_LANG,
   'logo' => false,
-  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default'
+  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'black'
 ];

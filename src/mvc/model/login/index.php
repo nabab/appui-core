@@ -11,7 +11,7 @@ return [
   'static_path' => BBN_STATIC_PATH,
   'test' => (bool)BBN_IS_DEV,
   'year' => date('Y'),
-  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default',
+  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'black',
   'lang' => BBN_LANG,
   'formData' => [
     'appui_salt' => $model->inc->user->getSalt(),
