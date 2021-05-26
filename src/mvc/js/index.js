@@ -51,7 +51,6 @@
         nav: true,
         clipboard: true,
         status: true,
-        footer: false,
         list: [
           {
             url: appui.plugins['appui-core'] + '/home',
