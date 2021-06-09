@@ -1,35 +1,34 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
-    bbn.fn.autoExtend('env', {
-      logging: data.is_dev || data.is_test ? true : false,
-      isDev: data.is_dev ? true : false,
-      mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
-      lang: data.lang,
-      siteTitle: data.site_title,
-      wp_url: data.wp_url,
-      token: data.token,
-      connection_failures: 0,
-      connection_max_failures: 10,
-      money: data.money,
-      appPrefix: data.app_prefix,
-      appName: data.app_name,
-      plugins: data.plugins,
-      cdn: data.shared_path
+    bbn.vue.init({
+      env : {
+        logging: data.is_dev || data.is_test ? true : false,
+        isDev: data.is_dev ? true : false,
+        mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
+        lang: data.lang,
+        siteTitle: data.site_title,
+        wp_url: data.wp_url,
+        token: data.token,
+        connection_failures: 0,
+        connection_max_failures: 10,
+        money: data.money,
+        appPrefix: data.app_prefix,
+        appName: data.app_name,
+        plugins: data.plugins,
+        cdn: data.shared_path
+      },
+      lng: bbn.fn.extend({
+        select_unselect_all: bbn._('(Un)Select all'),
+        search: bbn._('Search'),
+        close: bbn._('Close'),
+        closeAll: bbn._('Close all'),
+        closeOthers: bbn._('Close others'),
+        pin: bbn._('Pin'),
+        unpin: bbn._('Unpin')
+      }, (data.lng || {})),
+      opt: data.options || {}
     });
-
-    bbn.fn.autoExtend('lng', {
-      select_unselect_all: bbn._('(Un)Select all'),
-      search: bbn._('Search'),
-      close: bbn._('Close'),
-      closeAll: bbn._('Close all'),
-      closeOthers: bbn._('Close others'),
-      pin: bbn._('Pin'),
-      unpin: bbn._('Unpin')
-    });
-
-    bbn.fn.autoExtend('opt', data.options);
-    bbn.fn.extend(bbn.lng, data.lng);
 
     let js_data = {};
     if ( data.js_data ){

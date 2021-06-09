@@ -1,9 +1,10 @@
-bbn.fn.init({
+bbn.vue.init({
   env: {
     lang: data.lang,
     connection_failures: 0,
     connection_max_failures: 10,
 		logging: data.is_dev || data.is_test,
+    mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod')
   }
 });
 
