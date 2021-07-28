@@ -225,7 +225,7 @@ if ($id_user = $model->inc->user->getId()) {
     // wait for 1 sec
   }
 }
-else{
+elseif (!empty($model->data['clients'])) {
   return array_map(
     function () {
       return ['disconnected' => true];
