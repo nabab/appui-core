@@ -1,7 +1,7 @@
 // Javascript Document
 // Javascript Document
 document.addEventListener("DOMContentLoaded", () => {
-  bbn.fn.init({
+  bbn.vue.init({
     env: {
       //lang: data.lang,
       connection_failures: 0,
