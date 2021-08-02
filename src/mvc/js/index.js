@@ -2,7 +2,7 @@
 (() => {
   return (data) => {
     bbn.vue.init({
-      env : {
+      env: {
         logging: data.is_dev || data.is_test ? true : false,
         isDev: data.is_dev ? true : false,
         mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
@@ -18,18 +18,9 @@
         plugins: data.plugins,
         cdn: data.shared_path
       },
-      lng: bbn.fn.extend({
-        select_unselect_all: bbn._('(Un)Select all'),
-        search: bbn._('Search'),
-        close: bbn._('Close'),
-        closeAll: bbn._('Close all'),
-        closeOthers: bbn._('Close others'),
-        pin: bbn._('Pin'),
-        unpin: bbn._('Unpin')
-      }, (data.lng || {})),
-      opt: data.options || {}
+      lng: data.lng,
+      opt: data.options
     });
-
     let js_data = {};
     if ( data.js_data ){
       js_data = eval(data.js_data) || {};

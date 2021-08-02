@@ -1,20 +1,20 @@
 <?php
+
 use bbn\X;
 
 $menu = new \bbn\Appui\Menu();
 $mgr = new \bbn\User\Manager($model->inc->user);
 $is_dev = $model->inc->user->isDev();
-$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'default');
-$vfile = $model->dataPath().'version.txt';
-if ( !is_file($vfile) ){
+$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'default');
+$vfile = $model->dataPath() . 'version.txt';
+if (!is_file($vfile)) {
   file_put_contents($vfile, '1');
   $version = 1;
-}
-else{
+} else {
   $version = intval(file_get_contents($vfile));
 }
 $chat = false;
-if ( $model->hasPlugin('appui-chat') ){
+if ($model->hasPlugin('appui-chat')) {
   $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
   $chat = $cchat->getUserStatus();
 }
@@ -25,7 +25,7 @@ $data = X::mergeArrays($model->data, [
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
-  'cdn_lib' => 'nerd-fonts,animate-css,bbn-css|latest|'.$theme.',bbn-vue,font-mfizz,devicon,webmin-font,jsPDF',
+  'cdn_lib' => 'nerd-fonts,animate-css,bbn-css|latest|' . $theme . ',bbn-vue,font-mfizz,devicon,webmin-font,jsPDF',
   'app' => [
     'users' => $mgr->fullList(),
     'groups' => $mgr->groups(),
@@ -46,10 +46,10 @@ $data = X::mergeArrays($model->data, [
 $data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getAppuiOptionId('media'));
 $data['options']['categories'] = $model->inc->options->fullOptions();
 
-if ( ($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data) ){
-	$data = X::mergeArrays($data, $custom_data);
+if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
+  $data = X::mergeArrays($data, $custom_data);
 }
-$data['script_src'] = BBN_SHARED_PATH.'?'.http_build_query([
+$data['script_src'] = BBN_SHARED_PATH . '?' . http_build_query([
   'lang' => $data['lang'],
   'lib' => $data['cdn_lib'],
   'test' => !BBN_IS_PROD,
