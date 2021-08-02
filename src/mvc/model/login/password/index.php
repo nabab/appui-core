@@ -1,4 +1,5 @@
 <?php
+
 /** @var \bbn\Mvc\Model $model */
 return [
   'site_url' => BBN_URL,
@@ -12,5 +13,5 @@ return [
   'year' => date('Y'),
   'lang' => BBN_LANG,
   'logo' => false,
-  'theme' => defined('BBN_DEFAULT_THEME') ? BBN_DEFAULT_THEME : 'black'
+  'theme' => defined('BBN_THEME') ? BBN_THEME : 'black'
 ];
