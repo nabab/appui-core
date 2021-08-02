@@ -18,15 +18,7 @@
         plugins: data.plugins,
         cdn: data.shared_path
       },
-      lng: bbn.fn.extend({
-        select_unselect_all: bbn._('(Un)Select all'),
-        search: bbn._('Search'),
-        close: bbn._('Close'),
-        closeAll: bbn._('Close all'),
-        closeOthers: bbn._('Close others'),
-        pin: bbn._('Pin'),
-        unpin: bbn._('Unpin')
-      }, data.lng),
+      lng: data.lng,
       opt: data.options
     });
     let js_data = {};
