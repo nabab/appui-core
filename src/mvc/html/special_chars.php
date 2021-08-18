@@ -1,4 +1,4 @@
-<div class="bbn-h-100 bbn-flex-height appui-core-special-chars">
+<div class="bbn-overlay bbn-flex-height appui-core-special-chars">
   <div class="bbn-line-breaker bbn-middle bbn-c bbn-padded">
     <bbn-input :placeholder="'Search in ' + totChars.length + ' chars'"
                v-model="searchChar"
