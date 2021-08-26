@@ -36,78 +36,87 @@
 <style><?=$css?></style>
 </head>
 <body>
-<div class="appui-login bbn-middle" style="transition: opacity 5s">
-  <bbn-popup ref="popup"></bbn-popup>
-	<div class="appui-login-container" :style="{maxHeight: clientHeight + 'px'}">
-		<div class="appui-login-logo bbn-c bbn-block">
-			<img v-if="logo" :src="logo">
-			<img v-else src="data:image/png;base64,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">
-			<!--p v-if="!logo">App-UI</p-->
-		</div>
-		<div class="bbn-vlmargin bbn-block bbn-c">
-			<bbn-form v-if="!lostPassForm"
-								action="index"
-								:source="formData"
-								:buttons="[]"
-								:scrollable="false"
-								:fixed-footer="false"
-								ref="form"
-								@success="submited"
-								key="form"
-			>
-				<bbn-input class="bbn-c bbn-lg"
-									 required="required"
-									 placeholder="<?=_("Login name")?>"
+<div class="appui-login bbn-overlay" style="transition: opacity 5s">
+  <bbn-popup ref="popup"
+             @hook:mounted="init">
+  </bbn-popup>
+  <bbn-login v-if="popup"
+             url="."
+             :logo="currentLogo"
+             :salt="formData.appui_salt"
+             :password-link="core_root + 'login/index'"
+             :lost-url="core_root + 'login/index'"
+             :secure-key="key"
+             :secure-id="id"
+             :popup="$refs.popup"
+             ref="login"
+             action-name="action"
+             salt-name="appui_salt"
+             :mode="key ? 'change' : 'login'">
+  </bbn-login>
+  <!--div class="bbn-vlmargin bbn-block bbn-c">
+   <bbn-form v-if="!lostPassForm"
+        action="index"
+        :source="formData"
+        :buttons="[]"
+        :scrollable="false"
+        :fixed-footer="false"
+        ref="form"
+        @success="submited"
+        key="form"
+   >
+    <bbn-input class="bbn-c bbn-lg"
+          required="required"
+          placeholder="<?=_("Login name")?>"
                    v-model="formData.user"
-			  ></bbn-input>
-				<bbn-input type="password"
+     ></bbn-input>
+    <bbn-input type="password"
                    class="bbn-c bbn-lg bbn-vsmargin"
                    required="required"
                    placeholder="<?=_("Password")?>"
                    v-model="formData.pass"
         ></bbn-input>
-				<div class="bbn-c bbn-vmargin">
-					<bbn-button type="button"
-											class="bbn-lg"
+    <div class="bbn-c bbn-vmargin">
+     <bbn-button type="button"
+           class="bbn-lg"
                       @click="$refs.form.submit()"
-					><?=_('Log in')?></bbn-button>
-				</div>
-			</bbn-form>
-			<bbn-form v-else
-								:action="core_root + 'login/lost_pass'"
-								:source="lostPassFormData"
-								:buttons="[]"
-								:scrollable="false"
-								:fixed-footer="false"
-								ref="formLost"
-								@success="lostPasssubmited"
-								key="formLost"
-			>
-				<bbn-input class="bbn-c bbn-lg bbn-vsmargin"
-									 required="required"
-									 placeholder="<?=_("Enter your e-mail address")?>"
+     ><?=_('Log in')?></bbn-button>
+    </div>
+   </bbn-form>
+   <bbn-form v-else
+        :action="core_root + 'login/lost_pass'"
+        :source="lostPassFormData"
+        :buttons="[]"
+        :scrollable="false"
+        :fixed-footer="false"
+        ref="formLost"
+        @success="lostPasssubmited"
+        key="formLost"
+   >
+    <bbn-input class="bbn-c bbn-lg bbn-vsmargin"
+          required="required"
+          placeholder="<?=_("Enter your e-mail address")?>"
                    v-model="lostPassFormData.email"
-			  ></bbn-input>
-				<div class="bbn-c bbn-vmargin">
-					<bbn-button type="button"
-											class="bbn-lg bbn-right-sspace"
+     ></bbn-input>
+    <div class="bbn-c bbn-vmargin">
+     <bbn-button type="button"
+           class="bbn-lg bbn-right-sspace"
                       @click="hideLostPassForm"
-					><?=_("Cancel")?></bbn-button>
-					<bbn-button type="button"
-											class="bbn-lg"
+     ><?=_("Cancel")?></bbn-button>
+     <bbn-button type="button"
+           class="bbn-lg"
                       @click="$refs.formLost.submit()"
-					><?=_('Submit')?></bbn-button>
-				</div>
-			</bbn-form>
-			<div v-if="lost_pass && !lostPassForm"
-					 class="bbn-c bbn-vsmargin"
-			>
-				<a class="bbn-p"
-					 @click="lostPassForm = true"
-				><?=_("Password forgotten?")?></a>
-			</div>
-		</div>
-	</div>
+     ><?=_('Submit')?></bbn-button>
+    </div>
+   </bbn-form>
+   <div v-if="lost_pass && !lostPassForm"
+      class="bbn-c bbn-vsmargin"
+   >
+    <a class="bbn-p"
+      @click="lostPassForm = true"
+    ><?=_("Password forgotten?")?></a>
+   </div>
+  </div-->
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
