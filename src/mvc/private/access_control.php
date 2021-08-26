@@ -36,8 +36,8 @@ if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
 
 /* @var $authorized array The authorized pages for the non logged in users */
 $ctrl->addAuthorizedRoute(
-  $cr.'login/password',
-  $cr.'login/lost_pass',
+  $cr.'login',
+  $cr.'login/index',
   $cr.'service/index',
   $cr.'poller'
 );

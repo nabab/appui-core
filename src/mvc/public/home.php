@@ -6,5 +6,5 @@
  */
 
 /** @var \bbn\Mvc\Controller $ctrl The current controller */
-echo '<h2>Welcome in App-UI</h2>';
+$ctrl->combo(_("Welcome in App-UI"));
 
