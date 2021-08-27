@@ -5,6 +5,7 @@ bbn.vue.init({
     connection_failures: 0,
     connection_max_failures: 10,
 		logging: data.is_dev || data.is_test,
+    mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod')
   }
 });
 const svg = `<svg width="100%" version="1.1" viewBox="0 0 37.921 30" xmlns="http://www.w3.org/2000/svg">
@@ -27,6 +28,7 @@ window.app = new Vue({
   },
   data(){
     return bbn.fn.extend({
+      url: bbn.env.path.split('?')[0],
       popup: false,
       lostPassForm: false,
       lostPassFormData: {

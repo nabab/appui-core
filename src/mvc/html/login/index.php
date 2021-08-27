@@ -41,7 +41,7 @@
              @hook:mounted="init">
   </bbn-popup>
   <bbn-login v-if="popup"
-             url="."
+             :url="url || core_root"
              :logo="currentLogo"
              :salt="formData.appui_salt"
              :password-link="core_root + 'login/index'"
@@ -54,69 +54,6 @@
              salt-name="appui_salt"
              :mode="key ? 'change' : 'login'">
   </bbn-login>
-  <!--div class="bbn-vlmargin bbn-block bbn-c">
-   <bbn-form v-if="!lostPassForm"
-        action="index"
-        :source="formData"
-        :buttons="[]"
-        :scrollable="false"
-        :fixed-footer="false"
-        ref="form"
-        @success="submited"
-        key="form"
-   >
-    <bbn-input class="bbn-c bbn-lg"
-          required="required"
-          placeholder="<?=_("Login name")?>"
-                   v-model="formData.user"
-     ></bbn-input>
-    <bbn-input type="password"
-                   class="bbn-c bbn-lg bbn-vsmargin"
-                   required="required"
-                   placeholder="<?=_("Password")?>"
-                   v-model="formData.pass"
-        ></bbn-input>
-    <div class="bbn-c bbn-vmargin">
-     <bbn-button type="button"
-           class="bbn-lg"
-                      @click="$refs.form.submit()"
-     ><?=_('Log in')?></bbn-button>
-    </div>
-   </bbn-form>
-   <bbn-form v-else
-        :action="core_root + 'login/lost_pass'"
-        :source="lostPassFormData"
-        :buttons="[]"
-        :scrollable="false"
-        :fixed-footer="false"
-        ref="formLost"
-        @success="lostPasssubmited"
-        key="formLost"
-   >
-    <bbn-input class="bbn-c bbn-lg bbn-vsmargin"
-          required="required"
-          placeholder="<?=_("Enter your e-mail address")?>"
-                   v-model="lostPassFormData.email"
-     ></bbn-input>
-    <div class="bbn-c bbn-vmargin">
-     <bbn-button type="button"
-           class="bbn-lg bbn-right-sspace"
-                      @click="hideLostPassForm"
-     ><?=_("Cancel")?></bbn-button>
-     <bbn-button type="button"
-           class="bbn-lg"
-                      @click="$refs.formLost.submit()"
-     ><?=_('Submit')?></bbn-button>
-    </div>
-   </bbn-form>
-   <div v-if="lost_pass && !lostPassForm"
-      class="bbn-c bbn-vsmargin"
-   >
-    <a class="bbn-p"
-      @click="lostPassForm = true"
-    ><?=_("Password forgotten?")?></a>
-   </div>
-  </div-->
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
