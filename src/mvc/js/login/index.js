@@ -28,6 +28,7 @@ window.app = new Vue({
   },
   data(){
     return bbn.fn.extend({
+      url: bbn.env.path.split('?')[0],
       popup: false,
       lostPassForm: false,
       lostPassFormData: {
