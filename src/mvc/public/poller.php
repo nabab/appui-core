@@ -1,10 +1,11 @@
 <?php
 use bbn\X;
 
-if ($model = $ctrl->getModel()) {
+if ($model = $ctrl->getModel($ctrl->post)) {
   $ctrl->obj = X::toObject($model);
 }
 else {
-  sleep(10);
+  //$ctrl->obj->script = 
+  sleep(3);
   die('{}');
 }
