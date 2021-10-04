@@ -18,11 +18,11 @@
         plugins: data.plugins,
         cdn: data.shared_path
       },
-      lng: data.lng,
-      opt: data.options
+      lng: data.lng || {},
+      opt: data.options || {}
     });
     let js_data = {};
-    if ( data.js_data ){
+    if (data.js_data) {
       js_data = eval(data.js_data) || {};
     }
 
@@ -34,7 +34,7 @@
         status: true,
         list: [
           {
-            url: appui.plugins['appui-core'] + '/home',
+            url: data.plugins['appui-core'] + '/home',
             title: bbn._("Home"),
             load: true,
             static: true,
@@ -223,6 +223,20 @@
         }
       }
     };
+
+    if (window.dayjs !== undefined) {
+      dayjs.updateLocale(bbn.env.lang, {
+        calendar: {
+          lastDay: '[' + bbn._('Yesterday at') + '] LT',
+          sameDay: '[' + bbn._('Today at') + '] LT',
+          nextDay: '[' + bbn._('Tomorrow at') + '] LT',
+          lastWeek: '[' + bbn._('last') + '] dddd [' + bbn._('at') + '] LT',
+          nextWeek: 'dddd [' + bbn._('at') + '] LT',
+          sameElse: 'L'
+        }
+      });
+    }
+
     new Vue({
       el: 'div.appui',
       mixins: [appuiMixin, js_data.appuiMixin],

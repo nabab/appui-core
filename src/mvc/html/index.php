@@ -66,6 +66,7 @@ use bbn\Str;
     if (script) {
       script.remove();
     }
+
     script = document.createElement("script");
     script.type = "text/javascript";
     script.id = "bbn_script";
@@ -73,8 +74,8 @@ use bbn\Str;
     // All will be initiated when the libraries are loaded
     script.onload = function(){
       // Check that bbn is defined
-      if ( 'bbn' in window ){
-        if ( bbn.fn.isMobile() ){
+      if ('bbn' in window) {
+        if (bbn.fn.isMobile()) {
           document.body.classList.add('bbn-mobile');
           if ( bbn.fn.isTabletDevice() ){
             document.body.classList.add('bbn-tablet');
@@ -140,12 +141,18 @@ use bbn\Str;
       window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
       bbn.version = d.data.version;
     }
-    let res = eval(d.script || d.data.script);
-    if ( bbn.fn.isFunction(res) ){
-      res(d.data);
-      //alert("kkk");
+
+    let res = {};
+    if (d.script) {
+      res = eval(d.script);
+    }
+    else if (d.data && d.data.script) {
+      res = eval(d.data.script);
+    }
+
+    if (bbn.fn.isFunction(res)) {
+      res(d.data || {});
       bbn.env.token = "<?=$token?>";
-      //loaded = true;
     }
   };
 
