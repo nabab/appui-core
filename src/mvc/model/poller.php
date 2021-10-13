@@ -152,8 +152,7 @@ if ($id_user = $model->inc->user->getId()) {
         die("Disconnected");
       }
 
-      sleep(1);
-      continue;
+      die('{}');
     }
     elseif ($timer->hasStarted('disconnection')) {
       $timer->reset();
@@ -223,6 +222,7 @@ if ($id_user = $model->inc->user->getId()) {
     }
 
     // wait for 1 sec
+    sleep(1);
   }
 }
 elseif (!empty($model->data['clients'])) {
