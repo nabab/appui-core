@@ -41,7 +41,7 @@
              @hook:mounted="init">
   </bbn-popup>
   <bbn-login v-if="popup"
-             :url="url || core_root"
+             :url="url || (core_root + 'home'"
              :logo="currentLogo"
              :salt="formData.appui_salt"
              :password-link="core_root + 'login/index'"
