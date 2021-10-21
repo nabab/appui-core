@@ -1,11 +1,24 @@
 <?php
+/**
+ * 
+ */
+
 use bbn\Str;
+/**
+ * @var string $lang        The current Language
+ * @var string $site_url    The website's URL
+ * @var string $static_path The URL to the static libraries
+ * @var string $site_title  The website's title
+ * @var string $custom_css  A CSS stylesheet URL
+ * @var string $is_dev      True if environment is dev
+ * @var string $script_src  The URL of the script which will call all the libraries
+ * @var string $plugins     Array of the plugins in use
+ * @var string $token       A token
+ * @var string $noscript    Some text to show if noscript
+ */
+
 ?><!DOCTYPE html>
-<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if gt IE 9]><!--><html class="no-js" lang="<?=$lang?>"><!--<![endif]-->
+<html class="no-js" lang="<?=$lang?>">
 <head>
 <base href="<?=$site_url?>" target="_self">
 
@@ -219,5 +232,8 @@ use bbn\Str;
   >
   </bbn-appui>
 </div>
+<noscript>
+  <?= $noscript ?? '' ?>
+</noscript>
 </body>
 </html>

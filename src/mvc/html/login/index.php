@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="<?=$lang?>"> <![endif]-->
-<!--[if gt IE 9]><!--><html class="no-js" lang="<?=$lang?>"><!--<![endif]-->
+<html class="no-js" lang="<?=$lang?>">
 <head>
 <base href="<?=$site_url?>" target="_self">
 <meta charset="utf-8">
@@ -61,5 +57,6 @@
   'test' => !!$test
 ])?>"></script>
 <?=$script?>
+<noscript><?= _("The login page") ?></noscript>
 </body>
 </html>
