@@ -4,50 +4,22 @@
  *
  **/
 
-/** @var $this \bbn\Mvc\Model*/
+use bbn\X;
+
+/** @var $model \bbn\Mvc\Model*/
 
 if ($model->inc->user->isAdmin() && $model->hasData(['aliases', 'plugins'])) {
+  $plugins_packages   = [];
   $mandatory_packages = [
     "bbn/bbn" => "dev-master",
     "bbn/appui-core" => "dev-master",
     "bbn/appui-usergroup" => "dev-master"
   ];
-  $plugins_packages = [
-    "bbn/appui-option" => "dev-master",
-    "bbn/appui-billing" => "dev-master",
-    "bbn/appui-cdn" => "dev-master",
-    "bbn/appui-chat" => "dev-master",
-    "bbn/appui-clipboard" => "dev-master",
-    "bbn/appui-component" => "dev-master",
-    "bbn/appui-config" => "dev-master",
-    "bbn/appui-crm" => "dev-master",
-    "bbn/appui-cron" => "dev-master",
-    "bbn/appui-dashboard" => "dev-master",
-    "bbn/appui-database" => "dev-master",
-    "bbn/appui-email" => "dev-master",
-    "bbn/appui-entity" => "dev-master",
-    "bbn/appui-explorer" => "dev-master",
-    "bbn/appui-ext-tools" => "dev-master",
-    "bbn/appui-finder" => "dev-master",
-    "bbn/appui-gdpr" => "dev-master",
-    "bbn/appui-history" => "dev-master",
-		"bbn/appui-hr" => "dev-master",
-    "bbn/appui-i18n" => "dev-master",
-    "bbn/appui-ide" => "dev-master",
-    "bbn/appui-mailing" => "dev-master",
-    "bbn/appui-menu" => "dev-master",
-    "bbn/appui-monitor" => "dev-master",
-    "bbn/appui-note" => "dev-master",
-    "bbn/appui-notification" => "dev-master",
-    "bbn/appui-project" => "dev-master",
-    "bbn/appui-server" => "dev-master",
-    "bbn/appui-social" => "dev-master",
-    "bbn/appui-spreadsheet" => "dev-master",
-    "bbn/appui-style" => "dev-master",
-    "bbn/appui-task" => "dev-master",
-    "bbn/appui-write" => "dev-master",
-  ];
-  
+  $packages           = $model->getModel(APPUI_CORE_ROOT.'data/plugins/packages');
+  foreach ($packages as $p) {
+    $plugins_packages[$p['value']] = $p['version'];
+  }
+
   $json = file_get_contents($model->libPath().'bbn/appui-core/src/cfg/composers.json');
   $composers = json_decode($json, true);
   $oplugins = $composers['plugins'];
@@ -122,4 +94,3 @@ if ($model->inc->user->isAdmin() && $model->hasData(['aliases', 'plugins'])) {
     'dpackages' => $dpackages
   ];
 }
-return ['foo' => 'bar'];
