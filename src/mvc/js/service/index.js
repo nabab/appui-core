@@ -19,7 +19,7 @@
         CDN = data.shared_path,
         /**
          * @var {String} libFile A coma separated list of libraries for the CDN
-         * @example "nerd-fonts,bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
+         * @example "bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
          */
         libFile = data.cdn_lib,
         /**
@@ -71,9 +71,9 @@
   //let dbVersion = 1;
 
       Note: The recommended way to do this is assigning it to window.indexedDB,
-      to avoid potential issues in the global scope when web browsers start 
+      to avoid potential issues in the global scope when web browsers start
       removing prefixes in their implementations.
-      You can assign it to a varible, like var indexedDB… but then you have 
+      You can assign it to a varible, like var indexedDB… but then you have
       to make sure that the code is contained within a function.
 
   // Create/open database
@@ -358,7 +358,7 @@
   }
 
   /**
-   * 
+   *
    *
    * @param {Event} event
    * @param {Array} clientList
@@ -651,7 +651,7 @@
     self.clients.matchAll().then(clientList => {
       updateWindows(clientList);
       clientList.every(client => {
-        if (client.id && windows[client.id]) {  
+        if (client.id && windows[client.id]) {
           client.postMessage({
             type: 'notificationClick',
             data: {tag: event.notification.tag}
@@ -665,5 +665,5 @@
 
   // Launches the poller after one second
   setPoller(1);
-  
+
 })(data);
