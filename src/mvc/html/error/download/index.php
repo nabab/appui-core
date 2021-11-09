@@ -48,6 +48,6 @@
 </div>
 <script type="text/javascript" src="<?=BBN_SHARED_PATH?>?<?=http_build_query([
   'lang' => BBN_LANG,
-  'lib' => 'nerd-fonts,bbn-css|latest|'.BBN_THEME.',bbn-vue',
+  'lib' => 'bbn-css|latest|'.BBN_THEME.',bbn-vue',
   'test' => BBN_IS_DEV
 ])?>"></script>

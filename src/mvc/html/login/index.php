@@ -53,7 +53,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'nerd-fonts,bbn-css|latest|'.$theme.',bbn-vue',
+  'lib' => 'bbn-css|latest|'.$theme.',bbn-vue',
   'test' => !!$test
 ])?>"></script>
 <?=$script?>
