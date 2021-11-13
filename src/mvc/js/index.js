@@ -86,13 +86,6 @@
       text: bbn._("Full screen"),
       icon: 'nf nf-fa-arrows_alt'
     }, {
-      action(){
-				window.localStorage.clear();
-        document.location.reload();
-      },
-      text: bbn._("Reload with a fresh view"),
-        icon: 'nf nf-mdi-sync_alert'
-    }, {
       text: bbn._("Log out"),
       icon: 'nf nf-fa-sign_out',
       action(){
@@ -107,17 +100,6 @@
       }
     }];
 
-    if( data.app.user.isAdmin || data.app.user.isDev ){
-      rightShortcuts.splice(2, 0, {
-        text: bbn._("Increase version"),
-        icon: 'nf nf-oct-versions',
-        action(){
-          bbn.fn.post(appui.plugins['appui-core'] + '/service/increase').then(() => {
-            document.location.reload();
-          });
-        } 
-      })
-    }
     bbn.vue.initDefaults({
       appui: {
         root: data.root,
