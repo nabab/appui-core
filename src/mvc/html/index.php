@@ -70,6 +70,9 @@ use bbn\Str;
   /** @var {Boolean} loaded True after init */
   let loaded = false;
 
+  /** @var {Boolean} DOMLoaded True after DOMContentLoad event */
+  let DOMLoaded = false;
+
   /** @var {Boolean} isReloading True wgen is reloading */
   let isReloading = false;
 
@@ -86,6 +89,7 @@ use bbn\Str;
     script.src = scriptSrc;
     // All will be initiated when the libraries are loaded
     script.onload = function(){
+      loaded = true;
       // Check that bbn is defined
       if ('bbn' in window) {
         if (bbn.fn.isMobile()) {
@@ -95,32 +99,30 @@ use bbn\Str;
           }
         }
         // Init phase
-        if (hasServiceWorker) {
-          // through service worker
-          if (navigator.serviceWorker && navigator.serviceWorker.controller) {
-            navigator.serviceWorker.addEventListener('message', function(event) {
-              if ( event.data && event.data.data ){
-                let d = event.data;
-                if ( d.type === 'init' ){
-                  init(d.data);
-                }
-                else if ('appui' in window){
-                  let v = window.localStorage.getItem('bbn-vue-version');
-                  appui.receive(d);
-                }
+        // through service worker
+        if (hasServiceWorker && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.addEventListener('message', function(event) {
+            if ( event.data && event.data.data ){
+              let d = event.data;
+              if ( d.type === 'init' ){
+                init(d.data);
               }
-            });
-            bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
-              navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>", data: d});
-            });
-          }
+              else if ('appui' in window){
+                let v = window.localStorage.getItem('bbn-vue-version');
+                appui.receive(d);
+              }
+            }
+          });
+          bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
+            navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>", data: d});
+          });
         }
         // Through Ajax
         else {
           bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, init);
         }
       }
-      // If bbn is not defined we reload the window 
+      // If bbn is not defined we reload the window
       else {
         let attempts = window.localStorage.getItem('bbn-load') || 0;
         // and avoid to do it more than 3 times
@@ -169,7 +171,7 @@ use bbn\Str;
     }
   };
 
-  // Only if service worker is enabled
+  // Only if service worker is enabled and not already registered
   if (hasServiceWorker) {
     // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
@@ -177,10 +179,12 @@ use bbn\Str;
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         installingWorker.onstatechange = () => {
-          console.log("NEW STATE: " + installingWorker.state);
-          if (!hasBeenAsked && !isReloading && ['activated', 'installed'].includes(installingWorker.state)) {
-            hasBeenAsked = true;
-            if ( 'appui' in window ){
+          if (!hasBeenAsked
+            && !isReloading
+            && ['activated', 'installed'].includes(installingWorker.state)
+          ) {
+            if (('appui' in window)) {
+              hasBeenAsked = true;
               if ( confirm(
                 <?=str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
                 <?=str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
@@ -190,26 +194,42 @@ use bbn\Str;
                 location.reload();
               }
             }
-            else{
-              onDomLoaded();
+            else if ((installingWorker.state === 'activated') && !loaded) {
+              if (!DOMLoaded) {
+                document.addEventListener('DOMContentLoaded', onDomLoaded)
+              }
+              else {
+                onDomLoaded();
+              }
             }
           }
-          else if ( 'appui' in window ){
+          else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn-vue-version');
             bbn.fn.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
       };
-      //console.log(<?=str::asVar(_("Registration successful, scope is"))?>, registration.scope);
-      //console.log(registration);
+      if (navigator.serviceWorker.controller && !loaded) {
+        if (!DOMLoaded) {
+          document.addEventListener('DOMContentLoaded', onDomLoaded)
+        }
+        else {
+          onDomLoaded();
+        }
+      }
     })
     .catch((error) => {
       console.log(<?=str::asVar(_("Service worker registration failed, error"))?>, error);
     });
   }
-  // Adding the function onDOMContentLoaded
-  document.addEventListener('DOMContentLoaded', onDomLoaded);
+  else {
+    // Adding the function onDOMContentLoaded
+    document.addEventListener('DOMContentLoaded', onDomLoaded);
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    DOMLoaded = true;
+  });
 })();
 </script>
 </head>
