@@ -614,8 +614,13 @@
         && navigator.userAgent
         && /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
       ) {
-        console.log('SAFARI');
-        return;
+        let fullVersion = navigator.userAgent.substring(navigator.userAgent.indexOf("Version") + 8),
+            versionIdx = fullVersion.indexOf(' '),
+            version = versionIdx > 0 ? fullVersion.substring(0, versionIdx) : fullVersion;
+        console.log('SAFARI ' + version);
+        if (parseFloat(version) < 15) {
+          return;
+        }
       }
       if ((event.request.url.indexOf(data.shared_path) === 0)
         || (event.request.url.indexOf(data.site_url + 'components/') === 0)
