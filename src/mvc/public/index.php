@@ -21,7 +21,7 @@ $ctrl->addData([
 ]);
 // The whole DOM
 if (empty($ctrl->post)) {
-  $ctrl->data['custom_css'] = $ctrl->getPluginView('index', 'css') ?: $ctrl->getLess();
+  $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
   $ctrl->data['token'] = $ctrl->inc->user->addToken();
   $ctrl->combo($ctrl->data['site_title'], $ctrl->data);
 }
