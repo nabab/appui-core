@@ -63,7 +63,7 @@
       noResp = false,
       /** @var {Object} lastClientMessage The last client message processed */
       lastClientMessage = {},
-      /** @var {Object} lastResponse The observers list */
+      /** @var {Object} lastResponse The last response processed */
       lastResponse = {};
 
   /**
@@ -86,10 +86,13 @@
    * @param {Object} data
    */
   function debug(data) {
+    // Get the current windows list
     self.clients.matchAll({
       includeUncontrolled: true
     }).then(clientList => {
+      // Set the 'windows' property
       data.windows = windows;
+      // Try to send the 'log' message to the clients
       clientList.forEach(client => {
         if (windows[client.id]) {
           try {
@@ -119,7 +122,9 @@
     let oks = [],
         toFill = [];
     isFocused = false;
+    // Analyze clients
     clientList.forEach(client => {
+      // Create the client into windows list if not exists
       if (!windows[client.id]) {
         windows[client.id] = {
           id: client.id,
@@ -127,16 +132,21 @@
           data: {},
           channels: []
         };
+        // Add the client to a temp array
         toFill.push(windows[client.id]);
       }
       oks.push(client.id);
+      // Set lastFocused and isFocused variables if the client is focused
       if ( client.focused ){
         lastFocused = (new Date()).getTime();
         isFocused = true;
       }
     });
+    // Analyze the clients inside the windows variable
     for (let n in windows) {
+      // Check if the client is to be deleted from windows variable
       if (!oks.includes(n)) {
+        // Copy the data property to the new clients created if exists
         if (windows[n].data) {
           for (let i = 0; i < toFill.length; i++) {
             if (!toFill[i].data) {
@@ -144,6 +154,7 @@
             }
           }
         }
+        // Delete client from windows variable
         delete windows[n];
       }
     }
@@ -438,9 +449,9 @@
         }
         // Check if the window exists into windows list
         if (windows[clientId]
-          // Check if the 'plugins' property exists into recipient window
+          // Check if the 'plugins' property exists into recipient window of this message
           && obj[clientId].plugins
-          // Check if the 'plugins' property of the recipient window is not empty
+          // Check if the 'plugins' property of the recipient window of this message is not empty
           && Object.keys(obj[clientId].plugins).length
         ) {
           // Browse plugins
@@ -460,6 +471,8 @@
       if (!clientList.length) {
         log("There is no client, should I claim them?");
       }
+      // Set lastResponse
+      lastResponse = obj;
       // Browse windows
       clientList.forEach(client => {
         // Check if the window is a recipient
@@ -483,14 +496,18 @@
    * @returns {Promise}
    */
   function fetchWithTimeout(url, timeout, options) {
+    // Create and return a Promise
     return new Promise((resolve, reject) => {
       // Set timeout timer
       let timer = setTimeout(() => reject(new Error('Request timed out')), timeout);
+      // Set the 'options' variable as an object if not exists
       if ( !options ){
         options  = {};
       }
+      // Inizialize an AbortController object
       aborter = new AbortController();
       options.signal = aborter.signal;
+      // Fetch
       fetch(url, options).then(
         response => resolve(response),
         err => reject(err)
@@ -506,14 +523,18 @@
     isRunning = true;
     errorState = false;
     noResp = false;
+    // Check if the user is connected
     if (isConnected) {
+      // Get the current windows list
       self.clients.matchAll().then(clientList => {
         let clientsObj = {};
+        // Update the windows list
         updateWindows(clientList);
         for (let id in windows){
           clientsObj[id] = windows[id].data;
         }
         debug({request: clientsObj});
+        // Call 'fetchWithTimeout' function
         fetchWithTimeout(poller, 600000, {
           method: "POST", // *GET, POST, PUT, DELETE, etc.
           headers: {
@@ -522,9 +543,9 @@
           },
           body: JSON.stringify(Object.keys(clientsObj).length ? {clients: clientsObj} : {test: 1})
         }).then(response => {
-          // Clear the timeout as cleanup
           if ( response.status !== 200 ){
             log("Error: " + response.status);
+            // Retry poll
             retryPoll();
           }
           else{
@@ -535,19 +556,23 @@
                   && (text.trim().substr(0, 1) === '{')
                   && (text.trim().substr(-1) === '}')
               ) {
+                // Parse JSON
                 try {
                   json = JSON.parse(text);
                 }
                 catch(e){
                   log("The response is no JSON");
+                  // Retry poll
                   retryPoll(true);
                   return;
                 }
                 if (Object.keys(json).length) {
                   log("JSON RESULT with keys " + Object.keys(json).join(', '));
+                  // Call 'processServerMessage' function
                   processServerMessage(json).then(res => {
                     isRunning = false;
                     if (res === false) {
+                      // Retry poll
                       retryPoll(false);
                     }
                     else {
@@ -564,6 +589,7 @@
               }
               else {
                 log("The response is no JSON");
+                // Retry poll
                 retryPoll(true);
                 return;
               }
