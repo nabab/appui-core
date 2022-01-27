@@ -80,6 +80,21 @@
     );
 
     let rightShortcuts = [{
+      url: data.plugins['appui-usergroup'] + '/main',
+      text: bbn._("My profile"),
+      icon: 'nf nf-fa-user'
+    }, {
+      action(){
+        appui.popup().load({
+          url: data.plugins['appui-core'] + '/help',
+          width: '90%',
+          height: '90%',
+          scrollable: false
+        });
+      },
+      text: bbn._("Help"),
+      icon: 'nf nf-mdi-help_circle_outline'
+    }, {
       action(){
         bbn.fn.toggleFullScreen();
       },
@@ -118,21 +133,6 @@
           url: data.plugins['appui-dashboard'] + '/home',
           text: bbn._("Dashboard"),
           icon: 'nf nf-fa-dashboard'
-        }, {
-          action(){
-            appui.popup().load({
-              url: data.plugins['appui-core'] + '/help',
-              width: '90%',
-              height: '90%',
-              scrollable: false
-            });
-          },
-          text: bbn._("Help"),
-          icon: 'nf nf-mdi-help_circle_outline'
-        }, {
-          url: data.plugins['appui-usergroup'] + '/main',
-          text: bbn._("My profile"),
-          icon: 'nf nf-fa-user'
         }],
         rightShortcuts: rightShortcuts,
         theme: data.theme
