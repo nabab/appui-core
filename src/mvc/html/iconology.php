@@ -17,7 +17,7 @@
                       @click="copyIcon(icon)"
           >
           </bbn-button>
-          <div class="text-class" v-text="icon.substr(3)"></div>
+          <div class="text-class" v-text="icon.substring(3)"></div>
         </li>
       </ul>
     </bbn-scroll>
