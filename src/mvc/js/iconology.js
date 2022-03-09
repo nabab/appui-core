@@ -4,17 +4,27 @@
   **/
 (()=>{
   return {
-    mixins: [bbn.vue.resizerComponent],
+    mixins: [
+      bbn.vue.basicComponent,
+      bbn.vue.resizerComponent,
+      bbn.vue.keepCoolComponent
+    ],
     data(){
       return {
         scroller: null,
         searchIcon:'',
         totIcons: this.source.icons,
         ready: true,
+        sectionSize: 125,
         // The real source from the items
-        currentIcons: [],
-        itemsPerPage: 0
-      }
+        iconsPerPage:  10,
+        containerSize: 0,
+        scrollSize: 0,
+        currentWidth: 0,
+        isInit: false,
+        scrolltop: 0,
+        numberShown: 10,
+      };
     },
     computed: {
       // The array from which the source (currentIcons)is built
@@ -28,102 +38,72 @@
       }
     },
     methods:{
-      // Reinitializing the size calculations
-      onResize(){
-        this.itemsPerPage = 0;
-        this.updateIcons();
-      },
-      // Fills the empty container with items 
-      // It does 10 at a time then lets it render through promises
-      // Stops when it gets a scroll
-      // Store the items' number (itemsPerPage) as reference for next additions
-      firstIconsFragments(prom, height){
-        if ( !this.scroller ){
-          let scroll = this.getRef('scroll');
-          if ( scroll ){
-            this.scroller = scroll;
+      addIcons() {
+        if ( this.icons.length) {
+          this.start = this.numberShown;
+          this.end = this.start + this.iconsPerPage;
+          if ( this.end > this.source.length ){
+            this.end = this.source.length;
           }
-        }
-        if ( this.scroller ){
-          let containerSize = this.scroller.containerHeight;
-          let contentSize = this.scroller.contentHeight;
-          if ( !height && !containerSize ){
-            this.scroller.onResize();
-          }
-          if ( !height ){
-            height = contentSize > containerSize ? contentSize + containerSize : containerSize;
-          }
-          let start = this.currentIcons.length;
-          let end = start + 10;
-          if ( end > this.icons.length ){
-            end = this.icons.length;
-          }
-          if ( end <= start ){
-            return;
-          }
-          for ( let i = start; i < end; i++ ){
-            this.currentIcons.push(this.icons[i]);
-          }
-          return prom.then(() => {
-            let ul = this.getRef('ul');
-            bbn.fn.log('--------', height, contentSize, containerSize, ul.clientHeight, '*********');
-            if ( contentSize <= height ){
-              this.scroller.onResize().then(() => {
-                let prom = new Promise((resolve, reject) => {
-                  this.$nextTick(() => {
-                    resolve('ok')
-                  })
-                });
-                this.firstIconsFragments(prom, height);
-              });
-            }
-            else{
-              this.scroller.onResize().then(() => {
-                this.itemsPerPage = this.currentIcons.length;
-              });
-            }
-          });
-        }
-      },
-      // Adds itemsPerPage icons to currentIcons
-      addIcons(){
-        if ( this.icons.length && this.scroller ){
-          let start = this.currentIcons.length;
-          let end = start + this.itemsPerPage;
-          if ( end > this.icons.length ){
-            end = this.icons.length;
-          }
-          for ( let i = start; i < end; i++ ){
-            this.currentIcons.push(this.icons[i]);
+          for ( let i = this.start; i < this.end; i++ ){
+            this.numberShown++;
           }
           this.$nextTick(() => {
-            this.scroller.onResize();
-          })
+            this.getRef('scroll').onResize(true);
+          });
         }
       },
-      // Initiate the launch
-      updateIcons(){
-        this.currentIcons.splice(0, this.currentIcons.length);
-        if ( this.icons.length ){
-          let promise = new Promise((resolve, reject) => {
-            this.$nextTick(() => {
-              resolve('ok')
-            })
-          });
-          this.firstIconsFragments(promise);
+      setIconsPerPage() {
+        if (this.icons.length) {
+          let firstItem = this.getRef("item-1");
+          let section = this.sectionSize;
+          let iconsPerRow = 0;
+          let iconsPerColumn = 0;
+          for (; iconsPerRow * section < this.currentWidth ; iconsPerRow++);
+          for (; iconsPerColumn * section < this.containerSize ; iconsPerColumn++);
+          this.iconsPerPage = iconsPerColumn * iconsPerRow * 2;
         }
+        return;
+      },
+      init() {
+        let scroll =  this.getRef('scroll');
+        this.currentWidth = scroll.containerWidth;
+        this.scrollSize = scroll.contentHeight;
+        this.containerSize = scroll.containerHeight;
+        this.setIconsPerPage();
+        if (!this.isInit && this.iconsPerPage) {
+          this.isInit = true;
+          this.addIcons();
+        }
+      },
+      update() {
+        this.keepCool(
+          () => {
+            this.init();
+          }, "init", 350);
+      },
+      scrolling() {
+        this.scrolltop = this.getRef('scroll').getRef('scrollContainer').scrollTop;
+      },
+      resize() {
+        this.currentWidth = this.getRef('scroll').containerWidth;
+        this.update();
       },
       copyIcon(icon){
         bbn.fn.copy(icon);
-    		appui.success(bbn._("Copied to clipboard"));
-      }
+        appui.success(bbn._("Copied to clipboard"));
+      },
     },
     watch: {
       searchIcon(newVal){
         this.$nextTick(() => {
-          this.updateIcons();
+          this.update();
         });
-      }
+      },
+      search() {
+        this.numberShown = this.itemsPerPage;
+        this.updateData();
+      },
     }
-  }
-})()
+  };
+})();
