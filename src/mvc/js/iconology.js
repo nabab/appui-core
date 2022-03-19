@@ -37,7 +37,8 @@
         return this.totIcons;
       }
     },
-    methods:{
+    methods:
+    {
       addIcons() {
         if ( this.icons.length) {
           this.start = this.numberShown;
