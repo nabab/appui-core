@@ -248,8 +248,7 @@ use bbn\Str;
              @setimessage="setImessage"
              :source="list"
              :search-bar="searchBar"
-             :browser-notification="browserNotification"
-  >
+             :browser-notification="browserNotification">
   </bbn-appui>
 </div>
 <noscript>
