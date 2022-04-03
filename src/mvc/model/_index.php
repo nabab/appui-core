@@ -10,9 +10,11 @@ $vfile = $model->dataPath() . 'version.txt';
 if (!is_file($vfile)) {
   file_put_contents($vfile, '1');
   $version = 1;
-} else {
+}
+else {
   $version = intval(file_get_contents($vfile));
 }
+
 $chat = false;
 if ($model->hasPlugin('appui-chat')) {
   $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
