@@ -40,7 +40,7 @@
              :url="url || (core_root + 'home')"
              :logo="currentLogo"
              :salt="formData.appui_salt"
-             :password-link="core_root + 'login/index'"
+             :change-url="core_root + 'login/index'"
              :lost-url="core_root + 'login/index'"
              :secure-key="key"
              :secure-id="id"
