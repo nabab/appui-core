@@ -21,7 +21,6 @@
         },
         "fields": {
             "id": {
-                "position": 1,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -29,7 +28,6 @@
                 "maxlength": 16
             },
             "name": {
-                "position": 2,
                 "type": "varchar",
                 "null": 0,
                 "key": null,
@@ -75,7 +73,6 @@
         },
         "fields": {
             "id": {
-                "position": 1,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -83,7 +80,6 @@
                 "maxlength": 16
             },
             "id_client": {
-                "position": 2,
                 "type": "binary",
                 "null": 0,
                 "key": "MUL",
@@ -91,7 +87,6 @@
                 "maxlength": 16
             },
             "db": {
-                "position": 3,
                 "type": "varchar",
                 "null": 1,
                 "key": null,
@@ -100,7 +95,6 @@
                 "maxlength": 80
             },
             "name": {
-                "position": 4,
                 "type": "varchar",
                 "null": 0,
                 "key": null,
@@ -108,7 +102,6 @@
                 "maxlength": 50
             },
             "config": {
-                "position": 5,
                 "type": "longtext",
                 "null": 1,
                 "key": null,
@@ -116,7 +109,6 @@
                 "default": "NULL"
             },
             "lang": {
-                "position": 6,
                 "type": "varchar",
                 "null": 0,
                 "key": null,
@@ -208,7 +200,6 @@
         },
         "fields": {
             "id": {
-                "position": 1,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -216,7 +207,6 @@
                 "maxlength": 16
             },
             "id_note": {
-                "position": 2,
                 "type": "binary",
                 "null": 0,
                 "key": "MUL",
@@ -224,7 +214,6 @@
                 "maxlength": 16
             },
             "id_option": {
-                "position": 3,
                 "type": "binary",
                 "null": 0,
                 "key": "MUL",
@@ -232,7 +221,6 @@
                 "maxlength": 16
             },
             "id_user": {
-                "position": 4,
                 "type": "binary",
                 "null": 1,
                 "key": "MUL",
@@ -241,7 +229,6 @@
                 "maxlength": 16
             },
             "id_group": {
-                "position": 5,
                 "type": "binary",
                 "null": 1,
                 "key": "MUL",
@@ -250,7 +237,6 @@
                 "maxlength": 16
             },
             "start": {
-                "position": 6,
                 "type": "datetime",
                 "null": 1,
                 "key": null,
@@ -258,7 +244,6 @@
                 "default": "NULL"
             },
             "end": {
-                "position": 7,
                 "type": "datetime",
                 "null": 1,
                 "key": null,
@@ -319,7 +304,6 @@
         },
         "fields": {
             "id_imessage": {
-                "position": 1,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -327,7 +311,6 @@
                 "maxlength": 16
             },
             "id_user": {
-                "position": 2,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -335,7 +318,6 @@
                 "maxlength": 16
             },
             "hidden": {
-                "position": 3,
                 "type": "tinyint",
                 "null": 0,
                 "key": null,
@@ -343,7 +325,6 @@
                 "maxlength": 1
             },
             "moment": {
-                "position": 4,
                 "type": "datetime",
                 "null": 0,
                 "key": null,
@@ -389,7 +370,6 @@
         },
         "fields": {
             "id": {
-                "position": 1,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -397,7 +377,6 @@
                 "maxlength": 16
             },
             "id_user": {
-                "position": 2,
                 "type": "binary",
                 "null": 1,
                 "key": "MUL",
@@ -406,14 +385,12 @@
                 "maxlength": 16
             },
             "time": {
-                "position": 3,
                 "type": "bigint",
                 "null": 0,
                 "key": null,
                 "maxlength": 14
             },
             "path": {
-                "position": 4,
                 "type": "varchar",
                 "null": 0,
                 "key": null,
@@ -421,7 +398,6 @@
                 "maxlength": 1000
             },
             "params": {
-                "position": 5,
                 "type": "varchar",
                 "null": 1,
                 "key": null,
@@ -430,7 +406,6 @@
                 "maxlength": 1000
             },
             "post": {
-                "position": 6,
                 "type": "json",
                 "null": 1,
                 "key": null,
@@ -438,7 +413,6 @@
                 "default": "NULL"
             },
             "referer": {
-                "position": 7,
                 "type": "varchar",
                 "null": 1,
                 "key": null,
@@ -447,7 +421,6 @@
                 "maxlength": 1000
             },
             "error": {
-                "position": 8,
                 "type": "mediumtext",
                 "null": 1,
                 "key": null,
@@ -523,7 +496,6 @@
         },
         "fields": {
             "id": {
-                "position": 1,
                 "type": "binary",
                 "null": 0,
                 "key": "PRI",
@@ -531,7 +503,6 @@
                 "maxlength": 16
             },
             "name": {
-                "position": 2,
                 "type": "varchar",
                 "null": 1,
                 "key": null,
@@ -540,7 +511,6 @@
                 "maxlength": 50
             },
             "public": {
-                "position": 3,
                 "type": "tinyint",
                 "null": 0,
                 "key": null,
@@ -548,7 +518,6 @@
                 "maxlength": 1
             },
             "id_user": {
-                "position": 4,
                 "type": "binary",
                 "null": 1,
                 "key": "MUL",
@@ -557,7 +526,6 @@
                 "maxlength": 16
             },
             "id_alias": {
-                "position": 5,
                 "type": "binary",
                 "null": 1,
                 "key": "MUL",
@@ -566,7 +534,6 @@
                 "maxlength": 16
             },
             "next": {
-                "position": 6,
                 "type": "datetime",
                 "null": 1,
                 "key": null,
@@ -574,7 +541,6 @@
                 "default": "CURRENT_TIMESTAMP"
             },
             "frequency": {
-                "position": 7,
                 "type": "int",
                 "null": 0,
                 "key": null,
@@ -582,7 +548,6 @@
                 "maxlength": 10
             },
             "duration": {
-                "position": 8,
                 "type": "int",
                 "null": 1,
                 "key": null,
@@ -590,7 +555,6 @@
                 "maxlength": 10
             },
             "request": {
-                "position": 9,
                 "type": "text",
                 "null": 1,
                 "key": null,
@@ -654,7 +618,6 @@
         },
         "fields": {
             "revision": {
-                "position": 1,
                 "type": "int",
                 "null": 0,
                 "key": "PRI",
@@ -662,7 +625,6 @@
                 "maxlength": 10
             },
             "repo": {
-                "position": 2,
                 "type": "varchar",
                 "null": 0,
                 "key": "PRI",
@@ -670,7 +632,6 @@
                 "maxlength": 255
             },
             "author": {
-                "position": 3,
                 "type": "varchar",
                 "null": 0,
                 "key": null,
@@ -678,7 +639,6 @@
                 "maxlength": 100
             },
             "date_rev": {
-                "position": 4,
                 "type": "datetime",
                 "null": 0,
                 "key": null,
@@ -686,7 +646,6 @@
                 "generation": ""
             },
             "info": {
-                "position": 5,
                 "type": "text",
                 "null": 0,
                 "key": null,
