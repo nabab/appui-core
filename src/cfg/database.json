@@ -5,12 +5,6 @@
                 "columns": [
                     "id"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             }
         },
@@ -42,19 +36,12 @@
                 "columns": [
                     "id"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             },
             "id_client": {
                 "columns": [
                     "id_client"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_clients",
                 "ref_column": "id",
                 "constraint": "bbn_projects_ibfk_2",
@@ -124,19 +111,12 @@
                 "columns": [
                     "id"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             },
             "id_note": {
                 "columns": [
                     "id_note"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_notes",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_1",
@@ -148,7 +128,6 @@
                 "columns": [
                     "id_option"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_options",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_2",
@@ -160,7 +139,6 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_3",
@@ -172,7 +150,6 @@
                 "columns": [
                     "id_group"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_users_groups",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_ibfk_4",
@@ -259,19 +236,12 @@
                     "id_imessage",
                     "id_user"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": "bbn_imessages_users_ibfk_1",
-                "update": "CASCADE",
-                "delete": "CASCADE",
                 "unique": 1
             },
             "id_imessage": {
                 "columns": [
                     "id_imessage"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_imessages",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_users_ibfk_1",
@@ -283,7 +253,6 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_imessages_users_ibfk_2",
@@ -339,19 +308,12 @@
                 "columns": [
                     "id"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             },
             "id_user": {
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_mvc_logs_ibfk_2",
@@ -435,31 +397,18 @@
                 "columns": [
                     "id"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             },
             "id_string": {
                 "columns": [
                     "id_string"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             },
             "id_alias": {
                 "columns": [
                     "id_alias"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_observers",
                 "ref_column": "id",
                 "constraint": "bbn_observers_ibfk_2",
@@ -471,7 +420,6 @@
                 "columns": [
                     "id_user"
                 ],
-                "ref_db": null,
                 "ref_table": "bbn_users",
                 "ref_column": "id",
                 "constraint": "bbn_observers_ibfk_3",
@@ -599,12 +547,6 @@
                     "revision",
                     "repo"
                 ],
-                "ref_db": null,
-                "ref_table": null,
-                "ref_column": null,
-                "constraint": null,
-                "update": null,
-                "delete": null,
                 "unique": 1
             }
         },
