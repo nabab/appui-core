@@ -247,6 +247,7 @@ use bbn\Str;
              :plugins="plugins"
              @setimessage="setImessage"
              :source="list"
+             :splittable="true"
              :search-bar="searchBar"
              :browser-notification="browserNotification">
   </bbn-appui>
