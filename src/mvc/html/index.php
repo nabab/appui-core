@@ -176,6 +176,7 @@ use bbn\Str;
     // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
     .then((registration) => {
+      window.bbnSW = registration;
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         installingWorker.onstatechange = () => {
