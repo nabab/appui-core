@@ -83,14 +83,12 @@
       "config": {
         "type": "json",
         "null": 1,
-        "key": null,
         "default": "NULL",
         "defaultExpression": 1
       },
       "lang": {
         "type": "varchar",
         "null": 0,
-        "key": null,
         "default": "en",
         "maxlength": 2
       }
