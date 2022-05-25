@@ -455,7 +455,7 @@
       "next": {
         "type": "datetime",
         "null": 1,
-        "default": "NOW",
+        "default": "NOW()",
         "defaultExpression": 1
       },
       "frequency": {
