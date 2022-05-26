@@ -417,7 +417,6 @@
         "type": "binary",
         "null": 0,
         "key": "PRI",
-        "signed": true,
         "maxlength": 16
       },
       "name": {
