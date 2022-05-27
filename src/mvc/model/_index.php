@@ -49,58 +49,11 @@ $data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\N
 $data['options']['categories'] = $model->inc->options->fullOptions();
 
 if ($model->hasPlugin('appui-hr')) {
-  $data['options']['hr']['absences'] = $model->inc->options->fullOptions('absences', 'hr', 'appui');
+  $hr = new \bbn\Appui\Hr($model->db);
+  $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getAppuiOptionId('absences'));
   $data['app'] = X::mergeArrays($data['app'], [
-    'staff' => $model->db->rselectAll([
-      'table' => 'bbn_hr_staff',
-      'fields' => [
-        'value' => 'bbn_people.id',
-        'text' => 'bbn_people.fullname',
-        'id_user'
-      ],
-      'join' => [[
-        'table' => 'bbn_people',
-        'on' => [
-          'conditions' => [[
-            'field' => 'bbn_hr_staff.id',
-            'exp' => 'bbn_people.id'
-          ]]
-        ]
-      ], [
-        'table' => 'bbn_history_uids',
-        'on' => [
-          'conditions' => [[
-            'field' => 'bbn_people.id',
-            'exp' => 'bbn_history_uids.bbn_uid'
-          ]]
-        ]
-      ]],
-      'order' => [
-        'text' => 'ASC',
-        'id' => 'ASC'
-      ]
-    ]),
-    'staffActive' => $model->db->rselectAll([
-      'table' => 'bbn_hr_staff',
-      'fields' => [
-        'value' => 'bbn_people.id',
-        'text' => 'bbn_people.fullname',
-        'id_user'
-      ],
-      'join' => [[
-        'table' => 'bbn_people',
-        'on' => [
-          'conditions' => [[
-            'field' => 'bbn_hr_staff.id',
-            'exp' => 'bbn_people.id'
-          ]]
-        ]
-      ]],
-      'order' => [
-        'text' => 'ASC',
-        'id' => 'ASC'
-      ]
-    ])
+    'staff' => $hr->getStaff(),
+    'staffActive' => $hr->getActiveStaff()
   ]);
 }
 
