@@ -21,6 +21,7 @@ if ($model->hasPlugin('appui-chat')) {
   $chat = $cchat->getUserStatus();
 }
 $data = X::mergeArrays($model->data, [
+  'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
   'current_menu' => $menu->getDefault(),
   'menus' => count(($m = $menu->getMenus())) > 1 ? $m : [],

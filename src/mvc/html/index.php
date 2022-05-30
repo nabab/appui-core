@@ -236,7 +236,7 @@ use bbn\Str;
 </head>
 <body>
 <div id="nojs_bbn"
-     style="background: #fff url(<?=$static_path?>/img/logo_big.png) no-repeat center">
+     style="background: #fff url(<?= $logo_big ?>) no-repeat center; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
   <div id="error_message"></div>
 </div>
 <div class="appui">
@@ -246,6 +246,7 @@ use bbn\Str;
              :current-menu="currentMenu"
              :shortcuts="shortcuts"
              :plugins="plugins"
+             def="home"
              @setimessage="setImessage"
              :source="list"
              :splittable="true"
