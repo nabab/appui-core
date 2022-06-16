@@ -39,6 +39,7 @@ $ctrl->addAuthorizedRoute(
   $cr.'login',
   $cr.'login/index',
   $cr.'service/index',
+  $cr.'service',
   $cr.'poller'
 );
 if ($path === $cr.'logout') {
@@ -81,6 +82,10 @@ elseif ($ctrl->getMode() === 'dom') {
     //die(var_dump($ctrl->getRequest()));
   }
   elseif (!$ctrl->inc->user->checkSession()) {
+    if ($ctrl->getPath() === $cr.'service') {
+      return 1;
+    }
+
     $rerouted = false;
     if ($ctrl->hasPlugin('appui-gdpr')) {
       $cookie = $ctrl->getCookie();

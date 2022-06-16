@@ -3,7 +3,7 @@
 return $model->getSetFromCache(
   function () use ($model) {
     return [
-      'version' => 666,
+      'version' => file_get_contents(BBN_DATA_PATH . 'version.txt') ?: '666',
       'site_url' => BBN_URL,
       'site_title' => BBN_SITE_TITLE,
       'app_name' => BBN_APP_NAME,
@@ -21,5 +21,5 @@ return $model->getSetFromCache(
   },
   [],
   '',
-  3600
+  10
 );

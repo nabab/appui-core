@@ -8,27 +8,34 @@ $plugins = [];
 foreach ($routes as $r) {
   $plugins[$r['name']] = $r['url'];
 }
-
-$data = $ctrl->getModel(APPUI_CORE_ROOT.'/_index');
+if ($ctrl->inc->user->getId()) {
+  $data = $ctrl->getModel(APPUI_CORE_ROOT.'/_index');
+  $ctrl->addData([
+    'version' => $data['version'],
+    'cdn_lib' => $data['cdn_lib'],
+    'script_src' => $data['script_src']
+  ]);
+}
 $ctrl->addData([
-  'version' => $data['version'],
   'shared_path' => BBN_SHARED_PATH,
   'static_path' => BBN_STATIC_PATH,
-  'cdn_lib' => $data['cdn_lib'],
   'site_url' => BBN_URL,
-  'script_src' => $data['script_src'],
   'plugins' => $plugins
 ]);
+if (!empty($ctrl->post['connect'])) {
+  $ctrl->setMode('json');
+  $ctrl->obj = $ctrl->data;
+}
+else {
+  $script = $ctrl->getView(APPUI_CORE_ROOT.'/index', 'js');
+  $json = json_encode(
+    array_merge(
+      $ctrl->data,
+      ['script' => $script]
+    ),
+    JSON_PRETTY_PRINT
+  );
+  $js = $ctrl->getView(APPUI_CORE_ROOT.'/service/index', 'js');
+  echo 'let data = '.$json.';'.PHP_EOL.$js;
+}
 
-$script = $ctrl->getView(APPUI_CORE_ROOT.'/index', 'js');
-$json = json_encode(
-  array_merge(
-    $ctrl->data,
-    ['script' => $script]
-  ),
-  JSON_PRETTY_PRINT
-);
-$js = $ctrl->getView(APPUI_CORE_ROOT.'/service/index', 'js');
-echo 'let data = '.$json.';'.PHP_EOL.$js;
-header('Content-type: text/javascript; charset=utf-8');
-die();

@@ -10,61 +10,67 @@
  * @var {String} CACHE_NAME The name of the version
  * @example 242
  **/
-(function(data){
-        /**
-         * @const {String} CACHE_NAME The cache name
-         * @example "v39"
-         */
-  const CACHE_NAME = 'v' + data.version,
-        /**
-         * @const {String} CDN The URL of the CDN
-         * @example "https://cdn.bbn.io/"
-         **/
-        CDN = data.shared_path,
-        /**
-         * @const {String} libFile A coma separated list of libraries for the CDN
-         * @example "bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
-         */
-        libFile = data.cdn_lib,
-        /** @const {Array} precacheResources Static js files to load */
-        precacheResources = [
-          data.script_src
-        ],
-        /** @const {String} poller The poller URL */
-        poller = data.plugins['appui-core'] + '/poller';
+(function(data) {
 
-      /** @var {Number} offlineTimeout One hour after which the user should be offline */
-  let offlineTimeout = 3600000,
-      /** @var {Boolean} isRunning True if is running */
-      isRunning = false,
-      /** @var {Boolean} isFocused True if is focused */
-      isFocused = false,
-      /** @var {Boolean} errorState True if the poller is in error state */
-      errorState = false,
-      /** @var {Number} lastFocused A timestamp of the last time the window was focused */
-      lastFocused = (new Date()).getTime(),
-      /** @var {Number} lastChat  A timestamp of the last time a chat has been received */
-      lastChat = 0,
-      /** @var {Object} observers The observers list */
-      observers = {},
-      /** @var {Number} retries The number of attempts done to connect */
-      retries = 0,
-      /** @var {Array} windows The list of client windows with objects with id and token */
-      windows = {},
-      /** @var {Number} aborter An object allowing to abort the current query */
-      aborter,
-      /** @var {Boolean} isConnected True if is connected */
-      isConnected = false,
-      /** @var {Number} interval The interval length for setInterval */
-      interval,
-      /** @var {Object} intervalObj The interval object for launching the poller */
-      intervalObj,
-      /** @var {Boolean} noResp True if the server doesn't answer */
-      noResp = false,
-      /** @var {Object} lastClientMessage The last client message processed */
-      lastClientMessage = {},
-      /** @var {Object} lastResponse The last response processed */
-      lastResponse = {};
+  /**
+   * @const {String} CACHE_NAME The cache name
+   * @example "v39"
+   */
+  const CACHE_NAME = 'v' + data.version;
+
+  /**
+   * @const {String} CDN The URL of the CDN
+   * @example "https://cdn.bbn.io/"
+   **/
+  const CDN = data.shared_path;
+
+  /**
+   * @const {String} libFile A coma separated list of libraries for the CDN
+   * @example "bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
+   */
+  const libFile = data.cdn_lib;
+
+  /** @const {Array} precacheResources Static js files to load */
+  const precacheResources = [
+    data.script_src
+  ];
+
+  /** @const {String} poller The poller URL */
+  const poller = data.plugins['appui-core'] + '/poller';
+
+  /** @var {Number} offlineTimeout One hour after which the user should be offline */
+  let offlineTimeout = 3600000;
+  /** @var {Boolean} isRunning True if is running */
+  let isRunning = false;
+  /** @var {Boolean} isFocused True if is focused */
+  let isFocused = false;
+  /** @var {Boolean} errorState True if the poller is in error state */
+  let errorState = false;
+  /** @var {Number} lastFocused A timestamp of the last time the window was focused */
+  let lastFocused = (new Date()).getTime();
+  /** @var {Number} retries The number of attempts done to connect */
+  let retries = 0;
+  /** @var {Array} windows The list of client windows with objects with id and token */
+  let windows = {};
+  /** @var {Number} aborter An object allowing to abort the current query */
+  let aborter;
+  /** @var {Boolean} isConnected True if is connected */
+  let isConnected = false;
+  /** @var {Number} interval The interval length for setInterval */
+  let interval;
+  /** @var {Object} intervalObj The interval object for launching the poller */
+  let intervalObj;
+
+  /** @var {Number} lastChat  A timestamp of the last time a chat has been received */
+  let lastChat = 0;
+  /** @var {Object} observers The observers list */
+  let observers = {};
+  /** @var {Boolean} noResp True if the server doesn't answer */
+  let noResp = false;
+  /** @var {Object} lastClientMessage The last client message processed */
+  let lastClientMessage = {};
+  /** @var {Object} lastResponse The last response processed */
+  let lastResponse = {};
 
   /**
    * Logs in the console in a special format evidencing it comes from the service worker.

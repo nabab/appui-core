@@ -62,7 +62,7 @@ if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_
   $data = X::mergeArrays($data, $custom_data);
 }
 $data['script_src'] = BBN_SHARED_PATH . '?' . http_build_query([
-  'lang' => $data['lang'],
+  'lang' => $data['lang'] ?? BBN_LANG,
   'lib' => $data['cdn_lib'],
   'test' => !BBN_IS_PROD,
   'dirs' => $data['cdn_dirs'] ?? '',
