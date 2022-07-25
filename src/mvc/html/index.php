@@ -179,6 +179,7 @@ use bbn\Str;
       window.bbnSW = registration;
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
+        //console.log("SW: STATE CHANGING " + installingWorker.state);
         installingWorker.onstatechange = () => {
           if (!hasBeenAsked
             && !isReloading
@@ -206,7 +207,7 @@ use bbn\Str;
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn-vue-version');
-            bbn.fn.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            //console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
