@@ -1,13 +1,3 @@
-bbn.vue.init({
-  env: {
-    mode: 'dev',
-    lang: data.lang,
-    connection_failures: 0,
-    connection_max_failures: 10,
-		logging: data.is_dev || data.is_test,
-    mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod')
-  }
-});
 const svg = `<svg width="100%" version="1.1" viewBox="0 0 37.921 30" xmlns="http://www.w3.org/2000/svg">
   <g transform="translate(-52.823 -101.69)">
     <g transform="translate(50.748 97.989)">
@@ -18,8 +8,16 @@ const svg = `<svg width="100%" version="1.1" viewBox="0 0 37.921 30" xmlns="http
   </g>
  </svg>
 `;
-window.app = new Vue({
-  el: 'div.appui-login',
+bbn.vue.init('div.appui-login', {
+  env: {
+    mode: 'dev',
+    lang: data.lang,
+    connection_failures: 0,
+    connection_max_failures: 10,
+		logging: data.is_dev || data.is_test,
+    mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod')
+  }
+}, [{
   props: {
     zIndex: {
       type: Number,
@@ -97,4 +95,4 @@ window.app = new Vue({
   beforeDestroy(){
     window.removeEventListener('resize', this.setHeight);
   },
-});
+}]);

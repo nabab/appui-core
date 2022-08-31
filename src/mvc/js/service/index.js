@@ -89,15 +89,15 @@
   /**
    * Send debug data to the windows.
    *
-   * @param {Object} data
+   * @param {Object} o
    */
-  function debug(data) {
+  function debug(o) {
     // Get the current windows list
     self.clients.matchAll({
       includeUncontrolled: true
     }).then(clientList => {
       // Set the 'windows' property
-      data.windows = windows;
+      o.windows = windows;
       // Try to send the 'log' message to the clients
       clientList.forEach(client => {
         if (windows[client.id]) {
@@ -105,7 +105,7 @@
             client.postMessage({
               client: client.id,
               type: 'log',
-              data: data
+              data: o
             });
           }
           catch (e) {

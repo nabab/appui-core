@@ -1,50 +1,46 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
-    bbn.vue.init({
-      env: {
-        logging: data.is_dev || data.is_test ? true : false,
-        isDev: data.is_dev ? true : false,
-        mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
-        lang: data.lang,
-        siteTitle: data.site_title,
-        wp_url: data.wp_url,
-        token: data.token,
-        connection_failures: 0,
-        connection_max_failures: 10,
-        money: data.money,
-        appPrefix: data.app_prefix,
-        appName: data.app_name,
-        plugins: data.plugins,
-        cdn: data.shared_path
-      },
-      lng: data.lng || {},
-      opt: data.options || {}
-    });
+    bbn.fn.log("DATA", data);
     let js_data = {};
     if (data.js_data) {
       js_data = eval(data.js_data) || {};
     }
 
-    if ( !js_data.appuiMixin ){
-      js_data.appuiMixin = {
-        header: true,
-        nav: true,
-        clipboard: true,
-        status: true,
-        list: [
-          {
-            url: data.plugins['appui-core'] + '/home',
-            title: bbn._("Home"),
-            load: true,
-            static: true,
-            icon: 'nf nf-fa-home'
-          }
-        ],
-        searchBar: false,
-        broserNotification: true
-      };
+    bbn.fn.log(js_data, 'js_data');
+    if (!js_data.appuiMixin) {
+      js_data.appuiMixin = {};
     }
+
+    let lst = [];
+    if (data.plugins['appui-dashboard']) {
+      lst.push({
+        url: data.plugins['appui-dashboard'] + '/home',
+        title: bbn._("Dashboard"),
+        load: true,
+        static: true,
+        icon: 'nf nf-fa-tachometer_alt'
+      });
+    }
+    else {
+      lst.push({
+        url: data.plugins['appui-core'] + '/home',
+        title: bbn._("Home"),
+        load: true,
+        static: true,
+        icon: 'nf nf-fa-home'
+      })
+    }
+
+    js_data.appuiMixin = bbn.fn.extend({
+      header: true,
+      nav: true,
+      clipboard: true,
+      status: true,
+      list: lst,
+      searchBar: false,
+      broserNotification: true
+    }, js_data.appuiMixin);
 
     if ( !js_data.componentsMixin ){
       js_data.componentsMixin = {};
@@ -135,59 +131,45 @@
           icon: 'nf nf-fa-dashboard'
         }],
         rightShortcuts: rightShortcuts,
-        theme: data.theme
-      }
-    });
-
-    let appuiMixin = {
-      data: {
+        theme: data.theme,
         options: data.options,
         menus: data.menus,
         plugins: data.plugins,
         currentMenu: data.current_menu,
         shortcuts: data.shortcuts,
-        browserNotification: true,
-        app: {
-          data(){
-            return data.app
-          },
-          computed: {
-            userName(){
-              return bbn.fn.getField(this.users, 'text', {value: this.user.id}) || bbn._('Unknown')
-            }
-          },
-          methods: {
-            link_email: function(em){
-              return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
-            },
+      }
+    });
 
-            getUserName: function(id){
-              return bbn.fn.getField(this.users, "text", "value", id);
-            },
+    bbn.fn.log(data, "SATA");
+    let appuiMixin = {
+      data(){
+        return data.app
+      },
+      computed: {
+        userName(){
+          return bbn.fn.getField(this.users, 'text', {value: this.user.id}) || bbn._('Unknown')
+        }
+      },
+      methods: {
+        link_email: function(em){
+          return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
+        },
 
-            getUserGroup: function(id){
-              return bbn.fn.getField(this.users, "id_group", "value", id);
-            },
+        getUserName: function(id){
+          return bbn.fn.getField(this.users, "text", "value", id);
+        },
 
-            getActiveUsers() {
-              if ( bbn.fn.isArray(appui.app.users) ){
-                return bbn.fn.order(appui.app.users.filter(user => {
-                  return !!user.active;
-                }), 'text', 'ASC');
-              }
-              return [];
-            },
+        getUserGroup: function(id){
+          return bbn.fn.getField(this.users, "id_group", "value", id);
+        },
 
-            historique_type: function(d){
-              var op;
-              if ( (typeof(d.operation) !== 'undefined') &&
-                (op = bbn.fn.getRow(this.historiques, "value", d.operation)) ){
-                return '<span style="color:' + op.color + '">' + op.text + '</span>';
-              }
-              return "";
-            },
-
+        getActiveUsers() {
+          if ( bbn.fn.isArray(appui.app.users) ){
+            return bbn.fn.order(appui.app.users.filter(user => {
+              return !!user.active;
+            }), 'text', 'ASC');
           }
+          return [];
         }
       },
       methods: {
@@ -206,6 +188,27 @@
       }
     };
 
+    bbn.vue.init('div.appui', {
+      env: {
+        logging: data.is_dev || data.is_test ? true : false,
+        isDev: data.is_dev ? true : false,
+        mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
+        lang: data.lang,
+        siteTitle: data.site_title,
+        wp_url: data.wp_url,
+        token: data.token,
+        connection_failures: 0,
+        connection_max_failures: 10,
+        money: data.money,
+        appPrefix: data.app_prefix,
+        appName: data.app_name,
+        plugins: data.plugins,
+        cdn: data.shared_path
+      },
+      lng: data.lng || {},
+      opt: data.options || {}
+    }, [appuiMixin]);
+
     if (window.dayjs !== undefined) {
       dayjs.updateLocale(bbn.env.lang, {
         calendar: {
@@ -219,6 +222,7 @@
       });
     }
 
+    /*
     new Vue({
       el: 'div.appui',
       mixins: [appuiMixin, js_data.appuiMixin],
@@ -231,5 +235,6 @@
         }
       }
     });
+    */
   };
 })();

@@ -34,7 +34,7 @@
 <body>
 <div class="appui-login bbn-overlay" style="transition: opacity 5s">
   <bbn-popup ref="popup"
-             @hook:mounted="init">
+             @vue:mounted="init">
   </bbn-popup>
   <bbn-login v-if="popup"
              :url="url || (core_root + 'home')"
@@ -53,7 +53,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'bbn-css|latest|'.$theme.',bbn-vue',
+  'lib' => 'bbn-css|latest|' . $theme . ',bbn-vue',
   'test' => !!$test
 ])?>"></script>
 <?=$script?>
