@@ -142,11 +142,14 @@ if (($path !== $cr.'poller')
 // The current path
 $url = $ctrl->getUrl();
 
+/** @var string BBN_BASEURL */
+
 // Case where we have a bbn-router (nav)
-if (defined('BBN_BASEURL')
-    && (empty(BBN_BASEURL)
-    || (strpos($url, BBN_BASEURL) === 0))
-) {
+if (!defined('BBN_BASEURL')) {
+  define('BBN_BASEURL', '');
+}
+
+if (empty(BBN_BASEURL) || (strpos($url, BBN_BASEURL) === 0)) {
   // Length of the baseURL from the bbn-router(nav) sending the request
   $len = strlen(BBN_BASEURL);
   // So we will give the first file matching after the base URL sent
@@ -167,7 +170,6 @@ if (defined('BBN_BASEURL')
           && ($route['path'] === $route['request'])
       ) {
         if ($route['path'] !== $ctrl->getPath()) {
-          $ctrl->baseURL = BBN_BASEURL;
           $ctrl->reroute(
             $start.$new,
             $ctrl->post,
@@ -179,8 +181,6 @@ if (defined('BBN_BASEURL')
       }
     }
   }
-
-  $ctrl->baseURL = BBN_BASEURL;
 }
 
 /** @var bbn\User\Preferences $pref */
