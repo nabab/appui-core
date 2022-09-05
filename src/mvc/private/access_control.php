@@ -145,11 +145,7 @@ $url = $ctrl->getUrl();
 /** @var string BBN_BASEURL */
 
 // Case where we have a bbn-router (nav)
-if (!defined('BBN_BASEURL')) {
-  define('BBN_BASEURL', '');
-}
-
-if (empty(BBN_BASEURL) || (strpos($url, BBN_BASEURL) === 0)) {
+if (defined('BBN_BASEURL') && (empty(BBN_BASEURL) || (strpos($url, BBN_BASEURL) === 0))) {
   // Length of the baseURL from the bbn-router(nav) sending the request
   $len = strlen(BBN_BASEURL);
   // So we will give the first file matching after the base URL sent
