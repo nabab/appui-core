@@ -2278,6 +2278,128 @@
             "cfg": {
               "show_code": 1
             }
+          },
+          {
+            "text": "Softwares",
+            "items": [
+              {
+                "id_alias": [
+                  "database",
+                  "appui"
+                ],
+                "text": "dBeaver",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "event",
+                  "appui"
+                ],
+                "text": "Google Calendar",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "write",
+                  "appui"
+                ],
+                "text": "LibreOffice write",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "event",
+                  "appui"
+                ],
+                "text": "Mozilla Lightning",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "spreadsheet",
+                  "appui"
+                ],
+                "text": "Office365 Excel",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "write",
+                  "appui"
+                ],
+                "text": "Office365 Word",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "email",
+                  "appui"
+                ],
+                "text": "Outlook",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "database",
+                  "appui"
+                ],
+                "text": "PHPMyAdmin",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "note",
+                  "appui"
+                ],
+                "text": "Slack",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "email",
+                  "appui"
+                ],
+                "text": "Thunderbird",
+                "cfg": {
+                  "show_code": 1
+                }
+              },
+              {
+                "id_alias": [
+                  "meeting",
+                  "appui"
+                ],
+                "text": "Zoom",
+                "cfg": {
+                  "show_code": 1
+                }
+              }
+            ],
+            "cfg": {
+              "show_alias": 1,
+              "id_root_alias": [
+                "appui"
+              ],
+              "alias_name": "Plugin"
+            }
           }
         ]
       },
