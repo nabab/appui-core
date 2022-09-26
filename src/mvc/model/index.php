@@ -12,6 +12,7 @@ use bbn\X;
 // Language ?
 // Separate user data and common data
 // Separate plugins
+/*
 
 $menu = new \bbn\Appui\Menu();
 $mgr = new \bbn\User\Manager($model->inc->user);
@@ -533,3 +534,4 @@ if ( $model->inc->user->check() ){
       }
     },
   }
+  */

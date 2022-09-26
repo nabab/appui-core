@@ -252,7 +252,12 @@ use bbn\Str;
              :source="list"
              :splittable="true"
              :search-bar="searchBar"
-             :browser-notification="browserNotification">
+             :header="true"
+             :nav="true"
+             :clipboard="true"
+             :status="true"
+             :search-bar="false"
+             :browser-notification="true">
   </bbn-appui>
 </div>
 <noscript>

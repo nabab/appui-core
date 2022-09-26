@@ -32,15 +32,9 @@
       })
     }
 
-    js_data.appuiMixin = bbn.fn.extend({
-      header: true,
-      nav: true,
-      clipboard: true,
-      status: true,
+    js_data.appuiMixin = bbn.fn.extendOut(js_data.appuiMixin, {
       list: lst,
-      searchBar: false,
-      broserNotification: true
-    }, js_data.appuiMixin);
+    });
 
     if ( !js_data.componentsMixin ){
       js_data.componentsMixin = {};
@@ -140,7 +134,6 @@
       }
     });
 
-    bbn.fn.log(data, "SATA");
     let appuiMixin = {
       data(){
         return data.app
