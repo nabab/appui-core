@@ -88,10 +88,12 @@ use bbn\Str;
     script.id = "bbn_script";
     script.src = scriptSrc;
     // All will be initiated when the libraries are loaded
-    script.onload = function(){
+    script.onload = function() {
+      console.log("SCRIPT ONLOAD");
       loaded = true;
       // Check that bbn is defined
       if ('bbn' in window) {
+        console.log("BBN OK");
         if (bbn.fn.isMobile()) {
           document.body.classList.add('bbn-mobile');
           if ( bbn.fn.isTabletDevice() ){
@@ -124,6 +126,7 @@ use bbn\Str;
       }
       // If bbn is not defined we reload the window
       else {
+        console.log("SCRI{PT PAS OK");
         let attempts = window.localStorage.getItem('bbn-load') || 0;
         // and avoid to do it more than 3 times
         if ( attempts < 3 ){
@@ -140,9 +143,11 @@ use bbn\Str;
   };
 
   let init = (d) => {
+    console.log("INIT");
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
+      console.log("DATA OK");
       bbn.vue.version = d.data.version;
       let userOnStorage = window.localStorage.getItem('bbn-user-id');
       if (d.data.app
@@ -173,6 +178,7 @@ use bbn\Str;
 
   // Only if service worker is enabled and not already registered
   if (hasServiceWorker) {
+    console.log("SERVICE WORKER OK");
     // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
     .then((registration) => {
@@ -207,7 +213,7 @@ use bbn\Str;
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn-vue-version');
-            //console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
@@ -229,7 +235,9 @@ use bbn\Str;
     // Adding the function onDOMContentLoaded
     document.addEventListener('DOMContentLoaded', onDomLoaded);
   }
+
   document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM LOADED");
     DOMLoaded = true;
   });
 })();
@@ -238,11 +246,10 @@ use bbn\Str;
 <body>
 <div id="nojs_bbn"
      style="background: #fff url(<?= $logo_big ?>) no-repeat center; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
-  <div id="error_message"></div>
+  <div id="error_message"></dv>
 </div>
 <div class="appui">
-  <bbn-appui :cfg="app"
-             :options="options"
+  <bbn-appui :options="options"
              :menus="menus"
              :current-menu="currentMenu"
              :shortcuts="shortcuts"

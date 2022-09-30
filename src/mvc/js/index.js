@@ -105,6 +105,7 @@
       }
     }];
 
+    /*
     bbn.vue.initDefaults({
       appui: {
         root: data.root,
@@ -133,6 +134,7 @@
         shortcuts: data.shortcuts,
       }
     });
+    */
 
     let appuiMixin = {
       data(){
@@ -200,7 +202,9 @@
       },
       lng: data.lng || {},
       opt: data.options || {}
-    }, [appuiMixin]);
+    }, [appuiMixin, {data() {
+      return data;
+    }}]);
 
     if (window.dayjs !== undefined) {
       dayjs.updateLocale(bbn.env.lang, {

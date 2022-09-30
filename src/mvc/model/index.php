@@ -12,7 +12,7 @@ use bbn\X;
 // Language ?
 // Separate user data and common data
 // Separate plugins
-/*
+
 
 $menu = new \bbn\Appui\Menu();
 $mgr = new \bbn\User\Manager($model->inc->user);
@@ -33,6 +33,7 @@ if ($model->hasPlugin('appui-chat')) {
   $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
   $chat = $cchat->getUserStatus();
 }
+
 $data = [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
@@ -71,9 +72,11 @@ if ($model->hasPlugin('appui-hr')) {
   ]);
 }
 
+/*
 if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
   $data = X::mergeArrays($data, $custom_data);
 }
+*/
 
 $data['script_src'] = BBN_SHARED_PATH . '?' . http_build_query([
   'lang' => $data['lang'] ?? BBN_LANG,
