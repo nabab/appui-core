@@ -8,6 +8,7 @@
  * @var $ctrl \bbn\Mvc\Controller
  */
 
+/*
 $shortcuts = $ctrl->getModel($ctrl->pluginUrl('appui-menu').'/shortcuts/list');
 $routes = $ctrl->getRoutes();
 $plugins = [];
@@ -30,6 +31,26 @@ else {
   $ctrl->addJs();
   $ctrl->data['js_data'] = $ctrl->customPluginView('index', 'js', $ctrl->data, 'appui-core');
   $ctrl->obj->data = $ctrl->data;
+}
+*/
+
+/** @var string */
+if (!empty($ctrl->post['get'])) {
+  $ctrl->action();
+  if (!empty($ctrl->post['js'])) {
+    $ctrl->obj->data->script = $ctrl->getView(APPUI_CORE_ROOT.'/index', 'js');
+  }
+  
+}
+else {
+  $appui = new bbn\Appui();
+  echo $appui->createUI('', [
+    'animate-css',
+    'font-mfizz',
+    'webmin-font',
+    'jsPDF',
+    'html2canvas'
+  ]);
 }
 
 

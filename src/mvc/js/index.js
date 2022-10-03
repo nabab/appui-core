@@ -1,7 +1,6 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
-    bbn.fn.log("DATA", data);
     let js_data = {};
     if (data.js_data) {
       js_data = eval(data.js_data) || {};

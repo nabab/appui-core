@@ -8,42 +8,39 @@
  * @var $model \bbn\Mvc\Model
  */
 use bbn\X;
+use bbn\Appui\Menu;
+use bbn\User\Manager;
+
 
 // Language ?
 // Separate user data and common data
 // Separate plugins
 
+$res = ['success' => false];
 
-$menu = new \bbn\Appui\Menu();
-$mgr = new \bbn\User\Manager($model->inc->user);
-$is_dev = $model->inc->user->isDev();
-$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'default');
+if ($model->hasInc('user') &&  $model->inc->user->check()) {
+  if ($model->hasPlugin('appui-menu')) {
+    $menu = new Menu();
+  }
 
-$vfile = $model->dataPath() . 'version.txt';
-if (!is_file($vfile)) {
-  file_put_contents($vfile, '1');
-  $version = 1;
-}
-else {
-  $version = intval(file_get_contents($vfile));
-}
+  $mgr = new Manager($model->inc->user);
+  $appui = new bbn\Appui();
+  $data = $appui->getPublicVars();
 
-$chat = false;
-if ($model->hasPlugin('appui-chat')) {
-  $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
-  $chat = $cchat->getUserStatus();
-}
 
-$data = [
-  'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
-  'version' => $version,
-  'current_menu' => $menu->getDefault(),
-  'menus' => count(($m = $menu->getMenus())) > 1 ? $m : [],
-  //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
-  'options' => $model->inc->options->jsCategories(),
-  'theme' => $theme,
-  'cdn_lib' => 'animate-css,bbn-css|latest|' . $theme . ',bbn-vue,font-mfizz,webmin-font,jsPDF,html2canvas',
-  'app' => [
+  $chat = false;
+  if ($model->hasPlugin('appui-chat')) {
+    $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
+    $chat = $cchat->getUserStatus();
+  }
+
+  if (isset($menu)) {
+    $data['current_menu'] = $menu->getDefault() ;
+    $data['menus'] = count(($m = $menu->getMenus())) > 1 ? $m : [];
+  }
+
+  $data['options'] = $model->inc->options->jsCategories();
+  $data['app'] = [
     'users' => $mgr->fullList(),
     'groups' => $mgr->groups(),
     'user' => [
@@ -57,271 +54,37 @@ $data = [
     'group' => $mgr->getGroup($model->inc->user->getGroup()),
     'userId' => $model->inc->user->getId(), // Deprecated
     'groupId' => $model->inc->user->getGroup() // Deprecated
-  ]
-];
-
-$data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getAppuiOptionId('media'));
-$data['options']['categories'] = $model->inc->options->fullOptions();
-
-if ($model->hasPlugin('appui-hr')) {
-  $hr = new \bbn\Appui\Hr($model->db);
-  $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getAppuiOptionId('absences'));
-  $data['app'] = X::mergeArrays($data['app'], [
-    'staff' => $hr->getStaff(),
-    'staffActive' => $hr->getActiveStaff()
-  ]);
-}
-
-/*
-if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
-  $data = X::mergeArrays($data, $custom_data);
-}
-*/
-
-$data['script_src'] = BBN_SHARED_PATH . '?' . http_build_query([
-  'lang' => $data['lang'] ?? BBN_LANG,
-  'lib' => $data['cdn_lib'],
-  'test' => !BBN_IS_PROD,
-  'dirs' => $data['cdn_dirs'] ?? '',
-  'v' => $data['version']
-]);
-
-$data['shortcuts'] = $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list');
-$routes = $model->getRoutes();
-$plugins = [];
-foreach ( $routes as $r ){
-  $plugins[$r['name']] = $r['url'];
-}
-
-$data['plugins'] = $plugins;
-
-// From APST
-
-if ( $model->inc->user->check() ){
-
-  $br_obj = new \apst\bureau($model->db);
-  $lettre = new \bbn\Appui\Masks($model->db);
-  $pm = new \bbn\Appui\Task($model->db);
-
-  if ( !($pdf_cfg = $model->inc->user->getCfg('pdf_cfg')) ){
-    $pdf_cfg = [
-      'infos' => true,
-      'actionnariat' => true,
-      'succursales' => true,
-      'marques' => true,
-      'cgar' => true,
-      'pad' => true,
-      'finances' => true,
-    ];
-    $model->inc->user->setCfg(['pdf_cfg' => $pdf_cfg])->saveCfg();
-  }
-
-  $id_justificatifs = \bbn\Appui\Masks::getOptionId('LTJUS');
-  $justificatifs = $lettre->getTextValue($id_justificatifs, true);
-  if ( $justificatif_defaut = $lettre->getDefault($id_justificatifs) ){
-    $justificatif_defaut = $justificatif_defaut['id_note'];
-  }
-  else{
-    $justificatifs = [];
-    $justificatif_defaut = '';
-  }
-
-  $champs_dva = $model->inc->outils->champs_dva();
-  $champs = [
-    29 => $model->inc->outils->form_document(29),
-    35 => $model->inc->outils->form_document(35),
-    37 => $model->inc->outils->form_document(37)
   ];
-  $bureaux = array_map(
-    function($a){
-      return [
-        'text' => $a['name'],
-        'value' => $a['id']
-      ];
-    },
-    $br_obj->getAll()
-  );
 
-  $d = [
-    'root' => '',
-    'wp_url' => BBN_WP_URL,
-    'cdn_dirs' => 'APST-UI/css',
-    'logo' => $model->data['static_path'] . 'img/logo.png',
-    'logo_big' => $model->data['static_path'] . 'img/logo_big.png',
-    'money' => [
-      'kilo' => false,
-      'currency' => '€',
-      'novalue' => '-',
-      'decimal' => ',',
-      'thousands' => ' ',
-      'precision' => 0
-    ],
-    'options' => [
-      'bbn_tasks' => \bbn\Appui\Task::getOptions(),
-      'tasks' => [
-        'roles' => \bbn\Appui\Task::getAppuiOptionsIds('roles'),
-        'states' => \bbn\Appui\Task::getAppuiOptionsIds('states'),
-        'options' => [
-          'states' => \bbn\Appui\Task::getAppuiOptionsTextValue('states'),
-          'roles' => \bbn\Appui\Task::getAppuiOptionsTextValue('roles'),
-          'cats' => \bbn\Appui\Task::catCorrespondances()
-        ],
-        'categories' => $model->inc->options->map(function($a){
-          $a['is_parent'] = !empty($a['items']);
-          if ( $a['is_parent'] ){
-            $a['expanded'] = true;
-          }
-          return $a;
-        }, $pm->categories(), 1),
-        'priority_colors' => [
-          '#F00',
-          '#F40',
-          '#F90',
-          '#FC0',
-          '#9B3',
-          '#7A4',
-          '#5A5',
-          '#396',
-          '#284',
-          '#063'
-        ]
-      ]
-    ],
-    'app' => [
-      'cotis_graph' => null,
-      'statuts' => [[
-        'text' => 'Prospect',
-        'value' => 'prospect',
-        'color' => '#A78C2B'
-      ], [
-        'text' => 'Adhérent',
-        'value' => 'adherent',
-        'color' => '#00BD00'
-      ], [
-        'text' => 'Groupe',
-        'value' => 'groupe',
-        'color' => '#06A6A8'
-      ], [
-        'text' => 'Radié',
-        'value' => 'radie',
-        'color' => '#AC0606'
-      ]],
-      'mois' => [[
-        'value' => 1,
-        'text' => 'janvier'
-      ], [
-        'value' => 2,
-        'text' => 'février'
-      ], [
-        'value' => 3,
-        'text' => 'mars'
-      ], [
-        'value' => 4,
-        'text' => 'avril'
-      ], [
-        'value' => 5,
-        'text' => 'mai'
-      ], [
-        'value' => 6,
-        'text' => 'juin'
-      ], [
-        'value' => 7,
-        'text' => 'juillet'
-      ], [
-        'value' => 8,
-        'text' => 'août'
-      ], [
-        'value' => 9,
-        'text' => 'septembre'
-      ], [
-        'value' => 10,
-        'text' => 'octobre'
-      ], [
-        'value' => 11,
-        'text' => 'novembre'
-      ], [
-        'value' => 12,
-        'text' => 'décembre'
-      ]],
-      'historiques' => [[
-        'text' => 'Insertion',
-        'value' => 'INSERT',
-        'color' => 'green'
-      ], [
-        'text' => 'Modification',
-        'value' => 'UPDATE',
-        'color' => 'blue'
-      ], [
-        'text' => 'Suppression',
-        'value' => 'DELETE',
-        'color' => 'red'
-      ], [
-        'text' => 'Restauration',
-        'value' => 'RESTORE',
-        'color' => 'orange'
-      ]],
-      'defaultCountry' => $model->inc->options->fromCode('FR', 'countries'),
-      'modeles_courriers' => $lettre->getTextValue(\bbn\Appui\Masks::getOptionId('LTCOU')),
-      'justificatifs' => $justificatifs,
-      'justificatif_defaut' => $justificatif_defaut,
-      'bureaux' => $bureaux,
-      'tables' => array_filter($model->db->getTables(), function($a){
-        return strpos($a, 'apst_') === 0;
-      }),
-      'civs' => [[
-        'value' => 'M',
-        'text' => 'Monsieur'
-      ], [
-        'value' => 'MME',
-        'text' => 'Madame'
-      ], [
-        'value' => 'MLLE',
-        'text' => 'Mademoiselle'
-      ], [
-        'value' => 'MME/M',
-        'text' => 'Madame/Monsieur'
-      ], [
-        'value' => 'ME',
-        'text' => 'Maître'
-      ], [
-        'value' => 'MMES',
-        'text' => 'Mesdames'
-      ], [
-        'value' => 'MM',
-        'text' => 'Messieurs'
-      ], [
-        'value' => 'I',
-        'text' => 'Indéterminé'
-      ]],
-      'pdf_cfg' => $pdf_cfg,
-      'docs' => $model->inc->options->options('documents'),
-      'docsFull' => $model->inc->options->fullOptions('documents'),
-      'regions' => $model->inc->options->fullTree('regions'),
-      'champs_dva' => $model->inc->outils->champs_dva(),
-      'champs' => [
-        29 => $model->inc->outils->form_document(29),
-        35 => $model->inc->outils->form_document(35),
-        37 => $model->inc->outils->form_document(37),
-        'dva_prev' => $model->inc->outils->form_document('dva_prev')
-      ],
-      'cotis_dates' => $model->inc->outils->get_active_cotis_dates(),
-      'has_cotis_valid_perm' => $model->inc->perm->has('cotisations/validations')
-    ],
-    'lng' => [
-      "Today" => _("Aujourd'hui"),
-      "Tomorrow" => _("Demain"),
-      "Yesterday" => _("Hier"),
-      "Today at" => _("Aujourd'hui à"),
-      "Tomorrow at" => _("Demain à"),
-      "Yesterday at" => _("Hier à"),
-      'at' => _("à"),
-      'last' => _('dernier')
-    ]
+  $data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getAppuiOptionId('media'));
+  $data['options']['categories'] = $model->inc->options->fullOptions();
+
+  if ($model->hasPlugin('appui-hr')) {
+    $hr = new \bbn\Appui\Hr($model->db);
+    $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getAppuiOptionId('absences'));
+    $data['app'] = X::mergeArrays($data['app'], [
+      'staff' => $hr->getStaff(),
+      'staffActive' => $hr->getActiveStaff()
+    ]);
+  }
+
+  if ($model->hasPlugin('appui-menu')) {
+    $data['shortcuts'] = $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list');
+  }
+  $routes = $model->getRoutes();
+  $plugins = [];
+  foreach ( $routes as $r ){
+    $plugins[$r['name']] = $r['url'];
+  }
+
+  $data['plugins'] = $plugins;
+  $res = [
+    'success' => true,
+    'data' => $data
   ];
-  //die(\bbn\X::hdump(\bbn\X::convertUids($d)));
-
-  return X::mergeArrays($data, $d);
 }
+
+return $res;
 
 /*
     appuiMixin: {

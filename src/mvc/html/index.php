@@ -18,38 +18,38 @@ use bbn\Str;
  */
 
 ?><!DOCTYPE html>
-<html class="no-js" lang="<?=$lang?>">
+<html class="no-js" lang="<?= $lang ?>">
 <head>
-<base href="<?=$site_url?>" target="_self">
+<base href="<?= $site_url ?>" target="_self">
 
 <meta charset="utf-8">
 <!-- Always force latest IE rendering engine (even in intranet) & Chrome Frame -->
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="author" content="BBN Solutions">
-<meta name="Copyright" content="<?=_("All rights reserved.")?>">
-<meta http-equiv="expires" content="Fri, 22 Jul 2002 11:12:01 GMT">
-<meta http-equiv="Cache-control" content="private">
-<meta http-equiv="cache-control" content="no-store">
-<link rel="apple-touch-icon" sizes="57x57" href="<?=$static_path?>img/favicon/apple-touch-icon-57x57.png">
-<link rel="apple-touch-icon" sizes="60x60" href="<?=$static_path?>img/favicon/apple-touch-icon-60x60.png">
-<link rel="apple-touch-icon" sizes="72x72" href="<?=$static_path?>img/favicon/apple-touch-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="76x76" href="<?=$static_path?>img/favicon/apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" sizes="114x114" href="<?=$static_path?>img/favicon/apple-touch-icon-114x114.png">
-<link rel="apple-touch-icon" sizes="120x120" href="<?=$static_path?>img/favicon/apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" sizes="144x144" href="<?=$static_path?>img/favicon/apple-touch-icon-144x144.png">
-<link rel="apple-touch-icon" sizes="152x152" href="<?=$static_path?>img/favicon/apple-touch-icon-152x152.png">
-<link rel="apple-touch-icon" sizes="180x180" href="<?=$static_path?>img/favicon/apple-touch-icon-180x180.png">
-<link rel="icon" type="image/png" href="<?=$static_path?>img/favicon/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="<?=$static_path?>img/favicon/android-chrome-192x192.png" sizes="192x192">
-<link rel="icon" type="image/png" href="<?=$static_path?>img/favicon/favicon-16x16.png" sizes="16x16">
+<meta name="Copyright" content="<?= _("All rights reserved.") ?>">
+<!--meta http-equiv="expires" content="Fri, 22 Jul 2002 11:12:01 GMT"-->
+<!--meta http-equiv="Cache-control" content="private"-->
+<!--meta http-equiv="Cache-control" content="no-store"-->
+<link rel="apple-touch-icon" sizes="57x57" href="<?= $static_path ?>img/favicon/apple-touch-icon-57x57.png">
+<link rel="apple-touch-icon" sizes="60x60" href="<?= $static_path ?>img/favicon/apple-touch-icon-60x60.png">
+<link rel="apple-touch-icon" sizes="72x72" href="<?= $static_path ?>img/favicon/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon" sizes="76x76" href="<?= $static_path ?>img/favicon/apple-touch-icon-76x76.png">
+<link rel="apple-touch-icon" sizes="114x114" href="<?= $static_path ?>img/favicon/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon" sizes="120x120" href="<?= $static_path ?>img/favicon/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon" sizes="144x144" href="<?= $static_path ?>img/favicon/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon" sizes="152x152" href="<?= $static_path ?>img/favicon/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="<?= $static_path ?>img/favicon/apple-touch-icon-180x180.png">
+<link rel="icon" type="image/png" href="<?= $static_path ?>img/favicon/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="<?= $static_path ?>img/favicon/android-chrome-192x192.png" sizes="192x192">
+<link rel="icon" type="image/png" href="<?= $static_path ?>img/favicon/favicon-16x16.png" sizes="16x16">
 <link rel="manifest" href="manifest.json">
-<link rel="mask-icon" href="<?=$static_path?>img/favicon/safari-pinned-tab.svg" color="#5bbad5">
+<link rel="mask-icon" href="<?= $static_path ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5">
 <meta name="msapplication-TileColor" content="#9f00a7">
-<meta name="msapplication-TileImage" content="<?=$static_path?>img/favicon/mstile-144x144.png">
+<meta name="msapplication-TileImage" content="<?= $static_path ?>img/favicon/mstile-144x144.png">
 <meta name="theme-color" content="#ffffff">
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, User-scalable=yes">
-<title><?=$site_title?></title>
-<style><?=$custom_css?></style>
+<title><?= $site_title ?></title>
+<style><?= $custom_css ?></style>
 <script>
 (() => {
   /** @var {String} errorMsg An error message to display */
@@ -62,7 +62,7 @@ use bbn\Str;
   const hasServiceWorker = !!('serviceWorker' in navigator);
 
   /** @var {String} scriptSrc The script source */
-  const scriptSrc = <?=str::asVar($script_src)?>;
+  const scriptSrc = <?= str::asVar($script_src) ?>;
 
   /** @var {Boolean} hasBeenAsked True if it already has been asked to reload because the version is new */
   let hasBeenAsked = false;
@@ -78,19 +78,26 @@ use bbn\Str;
 
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
   let onDomLoaded = () => {
-    let script = document.getElementById('bbn_script');
-    if (script) {
-      script.remove();
+    if (loaded) {
+      console.log("THE SCRIPT IS ALREADY LOADED!");
+      return;
     }
 
-    script = document.createElement("script");
+    if (!DOMLoaded) {
+      console.log("THE DOM IS NOT LOADED!");
+      return;
+    }
+
+    // Adding
+    let script = document.createElement("script");
     script.type = "text/javascript";
     script.id = "bbn_script";
     script.src = scriptSrc;
+
     // All will be initiated when the libraries are loaded
     script.onload = function() {
-      console.log("SCRIPT ONLOAD");
       loaded = true;
+      console.log("LIBRARIES LOADED");
       // Check that bbn is defined
       if ('bbn' in window) {
         console.log("BBN OK");
@@ -106,7 +113,12 @@ use bbn\Str;
           navigator.serviceWorker.addEventListener('message', function(event) {
             if ( event.data && event.data.data ){
               let d = event.data;
+              let data;
               if ( d.type === 'init' ){
+                if (!d.data) {
+                  
+                }
+
                 init(d.data);
               }
               else if ('appui' in window){
@@ -115,6 +127,7 @@ use bbn\Str;
               }
             }
           });
+          // 
           bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
             navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>", data: d});
           });
@@ -143,7 +156,7 @@ use bbn\Str;
   };
 
   let init = (d) => {
-    console.log("INIT");
+    bbn.fn.log("INIT", d);
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
@@ -179,6 +192,11 @@ use bbn\Str;
   // Only if service worker is enabled and not already registered
   if (hasServiceWorker) {
     console.log("SERVICE WORKER OK");
+    document.addEventListener('DOMContentLoaded', () => {
+      DOMLoaded = true;
+      console.log("DOM LOADED");
+    });
+
     // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
     .then((registration) => {
@@ -193,11 +211,11 @@ use bbn\Str;
           ) {
             if (('appui' in window)) {
               hasBeenAsked = true;
-              if ( confirm(
-                <?=str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
-                <?=str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
-                <?=str::asVar(_("Do you want to do it now?"))?>
-              ) ){
+              if (confirm(
+                <?= str::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
+                <?= str::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
+                <?= str::asVar(_("Do you want to do it now?")) ?>
+              )) {
                 isReloading = true;
                 location.reload();
               }
@@ -213,33 +231,27 @@ use bbn\Str;
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn-vue-version');
-            console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            console.log(<?= str::asVar(_("POLLING FROM SERVICE WORKER VERSION")) ?> + ' ' + v);
             appui.poll();
           }
         };
       };
-      if (navigator.serviceWorker.controller && !loaded) {
-        if (!DOMLoaded) {
-          document.addEventListener('DOMContentLoaded', onDomLoaded)
-        }
-        else {
-          onDomLoaded();
-        }
+      if (navigator.serviceWorker.controller && !loaded && DOMLoaded) {
+        onDomLoaded();
       }
     })
     .catch((error) => {
-      console.log(<?=str::asVar(_("Service worker registration failed, error"))?>, error);
+      console.log(<?= str::asVar(_("Service worker registration failed, error")) ?>, error);
     });
   }
   else {
     // Adding the function onDOMContentLoaded
-    document.addEventListener('DOMContentLoaded', onDomLoaded);
+    document.addEventListener('DOMContentLoaded', () => {
+      DOMLoaded = true;
+      onDomLoaded();
+    });
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOM LOADED");
-    DOMLoaded = true;
-  });
 })();
 </script>
 </head>

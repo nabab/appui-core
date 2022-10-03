@@ -10,7 +10,7 @@
  * @var {String} CACHE_NAME The name of the version
  * @example 242
  **/
-(function(data) {
+(data => {
 
   /**
    * @const {String} CACHE_NAME The cache name
@@ -37,6 +37,8 @@
 
   /** @const {String} poller The poller URL */
   const poller = data.plugins['appui-core'] + '/poller';
+
+  let appData = null;
 
   /** @var {Number} offlineTimeout One hour after which the user should be offline */
   let offlineTimeout = 3600000;
@@ -284,7 +286,26 @@
               client.postMessage({
                 client: event.source.id,
                 type: 'init',
-                data: event.data.data
+                data: appData
+              });
+            }
+          })
+          break;
+
+        // Syncing the data
+        case 'data':
+          if (event.data.data) {
+            appData = event.data.data;
+          }
+
+          // Find the correct window
+          clientList.forEach(client => {
+            if (client.id === event.source.id) {
+              // Send the init message with the fetched data
+              client.postMessage({
+                client: event.source.id,
+                type: 'init',
+                data: appData
               });
             }
           })
@@ -474,7 +495,7 @@
           }
         }
       }
-      if (!clientList.length) {
+        if (!clientList.length) {
         log("There is no client, should I claim them?");
       }
       // Set lastResponse
