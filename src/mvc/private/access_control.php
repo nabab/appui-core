@@ -40,6 +40,7 @@ $ctrl->addAuthorizedRoute(
   $cr.'login/index',
   $cr.'service/index',
   $cr.'service',
+  $cr.'components',
   $cr.'poller'
 );
 if ($path === $cr.'logout') {
