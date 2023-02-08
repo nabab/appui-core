@@ -3,14 +3,14 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: info@bbn.so\n"
 "last-Translator: BBN Solutions <support@bbn.solutions>\n"
-"Language-Team: DE <DE@li.org>\n"
+"Language-Team: FR <FR@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-02-03 12:34+0100\n"
-"POT-Revision-Date: 2023-02-03 12:34+0100\n"
-"Language: de\n"
-"X-Domain: appui-core55\n"
+"POT-Creation-Date: 2023-02-08 15:59+0100\n"
+"POT-Revision-Date: 2023-02-08 15:59+0100\n"
+"Language: fr\n"
+"X-Domain: appui-core56\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/cli/treat_errors.php
@@ -35,7 +35,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/config/settings/settings.js
 msgid "on"
-msgstr ""
+msgstr "Le/À"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/config/settings/settings.js
 msgid "Setting modification"
@@ -48,7 +48,7 @@ msgstr ""
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/config/settings/settings.php
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Description"
-msgstr ""
+msgstr "Description"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "MySQL"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "Connected"
-msgstr ""
+msgstr "Connecté"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.js
 msgid "Not connected"
@@ -72,19 +72,19 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Engine"
-msgstr ""
+msgstr "Type de base"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Host"
-msgstr ""
+msgstr "Hôte"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Username"
-msgstr ""
+msgstr "Nom complet"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Password"
-msgstr ""
+msgstr "Mot de passe"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/db/db.php
 msgid "Test connection"
@@ -92,35 +92,35 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/plugins/plugins.php
 msgid "Check all"
-msgstr ""
+msgstr "Tout cocher"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/form/plugins/plugins.php
 msgid "Uncheck all"
-msgstr ""
+msgstr "Tout décocher"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/input/icon/icon.js
 msgid "Icon Picker"
-msgstr ""
+msgstr "Sélecteur d'icône"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/input/icon/icon.php
 msgid "Browse"
-msgstr ""
+msgstr "Parcourir"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
 msgid "Search in"
-msgstr ""
+msgstr "Chercher dans"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
 msgid "icons"
-msgstr ""
+msgstr "Icônes"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.php
 msgid "LOADING ICONS"
-msgstr ""
+msgstr "CHARGEMENT DES ICÔNES"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "General"
-msgstr ""
+msgstr "Général"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Environments"
@@ -128,7 +128,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Routes"
-msgstr ""
+msgstr "Routes"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "New route"
@@ -136,27 +136,27 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Real path"
-msgstr ""
+msgstr "Chemin du fichier"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Action"
-msgstr ""
+msgstr "Action"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Edit"
-msgstr ""
+msgstr "Modifier"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Delete"
-msgstr ""
+msgstr "Supprimer"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Plugins"
-msgstr ""
+msgstr "Plugins"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Official plugins"
@@ -164,7 +164,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Other plugins"
@@ -176,7 +176,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Root"
-msgstr ""
+msgstr "Racine"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/config.php
 msgid "Packages"
@@ -194,19 +194,19 @@ msgstr ""
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/error/download/index.php
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "All rights reserved."
-msgstr ""
+msgstr "Tous droits réservés."
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "The application has been updated but you still use an old version."
-msgstr ""
+msgstr "Vous utilisez une ancienne version de l'application."
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "You need to refresh the page to upgrade."
-msgstr ""
+msgstr "Vous devez rafraîchir la page pour mettre à jour."
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "Do you want to do it now?"
-msgstr ""
+msgstr "Voulez-vous le faire maintenant?"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/index.php
 msgid "POLLING FROM SERVICE WORKER VERSION"
@@ -230,7 +230,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/error/download/index.php
 msgid "Sorry we couldn't download the file"
-msgstr ""
+msgstr "Sorry we couldn't download the file"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/html/login/index.php
 msgid "The login page"
@@ -279,43 +279,43 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/iconology_old.js
 msgid "Copied class of the icon"
-msgstr ""
+msgstr "La classe de l'icône a été copiée"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Home"
-msgstr ""
+msgstr "Accueil"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "My profile"
-msgstr ""
+msgstr "Mon profil"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Help"
-msgstr ""
+msgstr "Aide"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Full screen"
-msgstr ""
+msgstr "Plein écran"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Log out"
-msgstr ""
+msgstr "Se déconnecter"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Dashboard"
-msgstr ""
+msgstr "Tableau de bord"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Unknown"
-msgstr ""
+msgstr "Inconnu"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Saved"
-msgstr ""
+msgstr "Sauvegardé"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Error"
-msgstr ""
+msgstr "Erreur"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "Yesterday at"
@@ -331,7 +331,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "last"
-msgstr ""
+msgstr "Dernier"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/index.js
 msgid "at"
@@ -347,19 +347,19 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "An email has been sent to"
-msgstr ""
+msgstr "Un eMail vient d'être envoyé à"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "Refresh the page to be able to log in or click"
-msgstr ""
+msgstr "Recharger la page afin de pouvoir vous connecter à nouveau ou bien cliquer"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/js/login/index.js
 msgid "HERE"
-msgstr ""
+msgstr "ICI"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/model/appui/actions/gen_cert.php
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/model/appui/actions/register.php
@@ -385,15 +385,15 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/private/access_control.php
 msgid "Unauthorized"
-msgstr ""
+msgstr "Non authorisé"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/private/access_control.php
 msgid "Sorry but you don't have the permission for %s"
-msgstr ""
+msgstr "Désolé mais vous n'avez pas la permission pour %s"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/public/config.php
 msgid "Configuration"
-msgstr ""
+msgstr "Configuration"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/public/home.php
 msgid "Welcome in App-UI"
@@ -401,7 +401,7 @@ msgstr ""
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/public/observers.php
 msgid "Observers"
-msgstr ""
+msgstr "Observateurs"
 
 #: /home/okrim/_COMPOSER/dev/vendor/bbn/appui-core/src/mvc/public/appui/home.php
 msgid "App-UI communication"
