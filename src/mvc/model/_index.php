@@ -15,11 +15,13 @@ else {
   $version = intval(file_get_contents($vfile));
 }
 
-$chat = false;
+$chat = [];
+/*
 if ($model->hasPlugin('appui-chat')) {
   $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
   $chat = $cchat->getUserStatus();
 }
+*/
 $data = X::mergeArrays($model->data, [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
