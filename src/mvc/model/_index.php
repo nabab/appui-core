@@ -15,13 +15,13 @@ else {
   $version = intval(file_get_contents($vfile));
 }
 
-$chat = [];
-/*
 if ($model->hasPlugin('appui-chat')) {
+  $chat = true;
+  /*
   $cchat = new \bbn\Appui\Chat($model->db, $model->inc->user);
   $chat = $cchat->getUserStatus();
+  */
 }
-*/
 $data = X::mergeArrays($model->data, [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
@@ -52,12 +52,14 @@ $data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\N
 $data['options']['categories'] = $model->inc->options->fullOptions();
 
 if ($model->hasPlugin('appui-hr')) {
+  /*
   $hr = new \bbn\Appui\Hr($model->db);
   $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getAppuiOptionId('absences'));
   $data['app'] = X::mergeArrays($data['app'], [
     'staff' => $hr->getStaff(),
     'staffActive' => $hr->getActiveStaff()
   ]);
+  */
 }
 
 if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
