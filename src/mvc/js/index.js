@@ -18,7 +18,7 @@
         plugins: data.plugins,
         cdn: data.shared_path
       },
-      lng: data.lng || {},
+      lng: bbn.fn.extend(true, {}, data.lng || {}),
       opt: data.options || {}
     });
     let js_data = {};
