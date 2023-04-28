@@ -141,6 +141,7 @@
 
     let appuiMixin = {
       data: {
+        defaultPath: data.default_path,
         options: data.options,
         menus: data.menus,
         plugins: data.plugins,

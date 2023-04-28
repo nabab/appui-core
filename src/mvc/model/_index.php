@@ -23,6 +23,7 @@ if ($model->hasPlugin('appui-chat')) {
   */
 }
 $data = X::mergeArrays($model->data, [
+  'default_path' => defined('BBN_DEFAULT_PATH') ? BBN_DEFAULT_PATH : '',
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
   'current_menu' => $menu->getDefault(),

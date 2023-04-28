@@ -247,7 +247,7 @@ use bbn\Str;
              :current-menu="currentMenu"
              :shortcuts="shortcuts"
              :plugins="plugins"
-             def="home"
+             :def="defaultPath"
              @setimessage="setImessage"
              :source="list"
              :splittable="true"
