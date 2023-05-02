@@ -26,7 +26,7 @@
 
   /**
    * @const {String} libFile A coma separated list of libraries for the CDN
-   * @example "bbn-css|latest|dark,bbn-vue,font-mfizz,devicon,webmin-font,jsPDF"
+   * @example "bbn-css|latest|dark,bbn-js,font-mfizz,devicon,webmin-font,jsPDF"
    */
   const libFile = data.cdn_lib;
 

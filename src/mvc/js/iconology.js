@@ -5,9 +5,9 @@
 (()=>{
   return {
     mixins: [
-      bbn.vue.basicComponent,
-      bbn.vue.resizerComponent,
-      bbn.vue.keepCoolComponent
+      bbn.wc.mixins.basic,
+      bbn.wc.mixins.resizer,
+      bbn.wc.mixins.keepCool
     ],
     data(){
       return {

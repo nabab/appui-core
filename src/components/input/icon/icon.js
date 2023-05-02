@@ -1,6 +1,6 @@
 (() => {
   return {
-    mixins: [bbn.vue.basicComponent, bbn.vue.inputComponent],
+    mixins: [bbn.wc.mixins.basicComponent, bbn.wc.mixins.inputComponent],
     data(){
       return {
         currentValue: this.value,

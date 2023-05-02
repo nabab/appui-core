@@ -30,7 +30,7 @@
     methods: {
       selectIcon(icon){
         this.source.obj[this.source.field] = icon;
-        bbn.vue.closest(this, 'bbn-popup').close();
+        this.closest('bbn-popup').close();
       }
     },
     created(){
