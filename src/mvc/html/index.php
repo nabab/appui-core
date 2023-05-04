@@ -51,7 +51,6 @@ use bbn\Str;
 <title><?=$site_title?></title>
 <style><?=$custom_css?></style>
 <script type="text/javascript" src="<?= $script_src ?>"></script>
-<?php $theme = 'dark'; include_once('/home/nabab/web/domains/components/public_html/header.php'); ?>
 <script>
 (() => {
   /** @var {String} errorMsg An error message to display */
