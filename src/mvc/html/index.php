@@ -133,6 +133,8 @@ use bbn\Str;
   */
 
   let init = (d) => {
+    bbn.fn.warning("INIT");
+    bbn.fn.log(d)
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
@@ -244,12 +246,24 @@ use bbn\Str;
              @setimessage="setImessage"
              :source="list"
              :splittable="true"
+             :nav="true"
              :header="true"
              :search-bar="searchBar"
              :browser-notification="browserNotification"
-             :status="true"
-
-             >
+             :status="true">
+<?php
+  if (!empty($slots)) {
+    foreach ($slots as $name => $slot) {
+      foreach ($slot as $plugin => $o) { ?>
+        <bbn-anon slot="<?= $name ?>"
+                  bbn-cfg="slots.<?= $name ?>['<?= $plugin ?>']">
+          <?= $o->html ?>
+        </bbn-anon>
+        <?php
+      }
+    }
+  }
+?>
   </bbn-appui>
 </div>
 <noscript>

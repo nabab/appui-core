@@ -8,15 +8,40 @@
  * @var $ctrl \bbn\Mvc\Controller
  */
 
+
 $shortcuts = $ctrl->getModel($ctrl->pluginUrl('appui-menu').'/shortcuts/list');
 $routes = $ctrl->getRoutes();
 $plugins = [];
+$slots = [];
+$availableSlots = [
+  'before',
+  'headleft',
+  'head',
+  'headright',
+  'central',
+  'status',
+  'after'
+];
+
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
+  foreach ($availableSlots as $as) {
+    if (!isset($slots[$as])) {
+      $slots[$as] = [];
+    }
+    if ($ctrl->controllerExists($r['url'] . '/app-ui/' . $as, true)) {
+      $apCtrl = $ctrl->add($r['url'] . '/app-ui/' . $as, [], true);
+      if ($apCtrl->obj) {
+        $slots[$as][$r['name']] = $apCtrl->obj;
+      }
+    }
+  }
 }
+
 $ctrl->data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index');
 $ctrl->addData([
   'plugins' => $plugins,
+  'slots' => $slots,
   'shortcuts' => $shortcuts
 ]);
 // The whole DOM

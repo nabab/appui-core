@@ -1,6 +1,15 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
+    if (data.slots) {
+      bbn.fn.iterate(data.slots, plugins => {
+        bbn.fn.iterate(plugins, a => {
+          a.script  = eval(a.script);
+        });
+      });
+    }
+
+    bbn.fn.log("DATA SLOTS?", data.slots);
     bbn.fn.init({
       env: {
         logging: data.is_dev || data.is_test ? true : false,
@@ -147,6 +156,7 @@
     let appuiMixin = {
       data() {
         return {
+          slots: data.slots,
           options: data.options,
           menus: data.menus,
           plugins: data.plugins,
