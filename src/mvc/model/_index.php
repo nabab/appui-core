@@ -2,7 +2,6 @@
 
 use bbn\X;
 
-$menu = new \bbn\Appui\Menu();
 $mgr = new \bbn\User\Manager($model->inc->user);
 $is_dev = $model->inc->user->isDev();
 $theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'default');
@@ -25,12 +24,10 @@ if ($model->hasPlugin('appui-chat')) {
 $data = X::mergeArrays($model->data, [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
-  'current_menu' => $menu->getDefault(),
-  'menus' => count(($m = $menu->getMenus())) > 1 ? $m : [],
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
-  'cdn_lib' => 'bbn-css|latest|' . $theme . ',bbn-wc,jsPDF,html2canvas',
+  'cdn_lib' => 'bbn-css|latest|' . $theme . ',bbn-wc',
   'app' => [
     'users' => $mgr->fullList(),
     'groups' => $mgr->groups(),

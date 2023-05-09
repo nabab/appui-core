@@ -1,15 +1,31 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
+    const slots = bbn.fn.createObject();
     if (data.slots) {
-      bbn.fn.iterate(data.slots, plugins => {
-        bbn.fn.iterate(plugins, a => {
-          a.script  = eval(a.script);
+      bbn.fn.iterate(data.slots, (arr, slot) => {
+        slots[slot] = [];
+        bbn.fn.iterate(arr, a => {
+          try {
+            let tmp = eval(a.script);
+            if (bbn.fn.isObject(tmp)) {
+              if (a.content) {
+                tmp.template = a.content;
+              }
+              slots[slot].push({
+                cp: tmp,
+                data: a.data || {}
+              });
+            }
+          }
+          catch (e) {
+            bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, name));
+          }
         });
       });
     }
 
-    bbn.fn.log("DATA SLOTS?", data.slots);
+    bbn.fn.log("DATA SLOTS?", slots, data.slots);
     bbn.fn.init({
       env: {
         logging: data.is_dev || data.is_test ? true : false,
@@ -39,7 +55,6 @@
       js_data.appuiMixin = {
         header: true,
         nav: true,
-        clipboard: true,
         status: true,
         list: [
           {
@@ -50,8 +65,7 @@
             icon: 'nf nf-fa-home'
           }
         ],
-        searchBar: false,
-        broserNotification: true
+        browserNotification: true
       };
     }
 
@@ -91,42 +105,6 @@
     );
     */
 
-    let rightShortcuts = [{
-      url: data.plugins['appui-usergroup'] + '/main',
-      text: bbn._("My profile"),
-      icon: 'nf nf-fa-user'
-    }, {
-      action(){
-        appui.popup().load({
-          url: data.plugins['appui-core'] + '/help',
-          width: '90%',
-          height: '90%',
-          scrollable: false
-        });
-      },
-      text: bbn._("Help"),
-      icon: 'nf nf-mdi-help_circle_outline'
-    }, {
-      action(){
-        bbn.fn.toggleFullScreen();
-      },
-      text: bbn._("Full screen"),
-      icon: 'nf nf-fa-arrows_alt'
-    }, {
-      text: bbn._("Log out"),
-      icon: 'nf nf-fa-sign_out',
-      action(){
-        bbn.fn.post(appui.plugins['appui-core'] + '/logout', d => {
-          if (d.success && d.data && d.data.url) {
-            document.location.href = d.data.url;
-          }
-          else {
-            appui.error();
-          }
-        });
-      }
-    }];
-
     bbn.wc.initDefaults({
       appui: {
         root: data.root,
@@ -143,12 +121,6 @@
         clipboard: true,
         logo: data.logo,
         pollable: (data.pollable === undefined) || data.pollable,
-        leftShortcuts: [{
-          url: data.plugins['appui-dashboard'] + '/home',
-          text: bbn._("Dashboard"),
-          icon: 'nf nf-fa-dashboard'
-        }],
-        rightShortcuts: rightShortcuts,
         theme: data.theme
       }
     });
@@ -156,12 +128,9 @@
     let appuiMixin = {
       data() {
         return {
-          slots: data.slots,
+          slots: slots,
           options: data.options,
-          menus: data.menus,
           plugins: data.plugins,
-          currentMenu: data.current_menu,
-          shortcuts: data.shortcuts,
           browserNotification: true,
           /*
           app: {

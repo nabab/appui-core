@@ -8,47 +8,45 @@
  * @var $ctrl \bbn\Mvc\Controller
  */
 
+use bbn\X;
 
-$shortcuts = $ctrl->getModel($ctrl->pluginUrl('appui-menu').'/shortcuts/list');
 $routes = $ctrl->getRoutes();
 $plugins = [];
-$slots = [];
-$availableSlots = [
-  'before',
-  'headleft',
-  'head',
-  'headright',
-  'central',
-  'status',
-  'after'
+$slots = [
+  'before' => [],
+  'headleft' => [],
+  'head' => [],
+  'headright' => [],
+  'central' => [],
+  'status' => [],
+  'after' => []
 ];
 
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
-  foreach ($availableSlots as $as) {
-    if (!isset($slots[$as])) {
-      $slots[$as] = [];
-    }
-    if ($ctrl->controllerExists($r['url'] . '/app-ui/' . $as, true)) {
-      $apCtrl = $ctrl->add($r['url'] . '/app-ui/' . $as, [], true);
-      if ($apCtrl->obj) {
-        $slots[$as][$r['name']] = $apCtrl->obj;
+  if ($ctrl->controllerExists($r['url'] . '/app-ui', true)) {
+    $apCtrl = $ctrl->add($r['url'] . '/app-ui', [], true);
+    if ($apCtrl->obj && $apCtrl->obj->data) {
+      foreach ($apCtrl->obj->data as $slot => $data) {
+        if (isset($slots[$slot])) {
+          array_push($slots[$slot], ...(is_object($data) ? [$data] : $data));
+        }
       }
     }
   }
 }
 
+
 $ctrl->data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index');
 $ctrl->addData([
   'plugins' => $plugins,
   'slots' => $slots,
-  'shortcuts' => $shortcuts
 ]);
 // The whole DOM
 if (empty($ctrl->post)) {
   $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
   $ctrl->data['token'] = $ctrl->inc->user->addToken();
-  $ctrl->combo($ctrl->data['site_title'], $ctrl->data);
+  $ctrl->combo($ctrl->data['site_title'], true);
 }
 // Only the data
 else {

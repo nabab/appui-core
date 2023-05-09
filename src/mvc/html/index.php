@@ -238,9 +238,6 @@ use bbn\Str;
 <div class="appui">
   <bbn-appui :cfg="app"
              :options="options"
-             :menus="menus"
-             :current-menu="currentMenu"
-             :shortcuts="shortcuts"
              :plugins="plugins"
              def="home"
              @setimessage="setImessage"
@@ -253,12 +250,13 @@ use bbn\Str;
              :status="true">
 <?php
   if (!empty($slots)) {
-    foreach ($slots as $name => $slot) {
-      foreach ($slot as $plugin => $o) { ?>
-        <bbn-anon slot="<?= $name ?>"
-                  bbn-cfg="slots.<?= $name ?>['<?= $plugin ?>']">
-          <?= $o->html ?>
-        </bbn-anon>
+    foreach ($slots as $name => $arr) {
+      foreach ($arr as $i => $o) {
+        ?>
+        <component slot="<?= $name ?>"
+                  :is="slots.<?= $name ?>[<?= $i ?>].cp"
+                  :source="slots.<?= $name ?>[<?= $i ?>].data">
+        </component>
         <?php
       }
     }
