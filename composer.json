@@ -14,10 +14,10 @@
   ],
   "require": {
     "php": ">=7.3",
-    "bbn/bbn": "dev-master",
-    "bbn/appui-component": "dev-master",
-    "bbn/appui-usergroup": "dev-master",
-    "bbn/appui-option": "dev-master",
-    "bbn/appui-menu": "dev-master"
+    "bbn/bbn": "1.0.*",
+    "bbn/appui-component": "1.0.*",
+    "bbn/appui-usergroup": "1.0.*",
+    "bbn/appui-option": "1.0.*",
+    "bbn/appui-menu": "1.0.*"
   }
 }
