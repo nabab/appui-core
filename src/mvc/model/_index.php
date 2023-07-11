@@ -2,10 +2,9 @@
 
 use bbn\X;
 
-$menu = new \bbn\Appui\Menu();
 $mgr = new \bbn\User\Manager($model->inc->user);
 $is_dev = $model->inc->user->isDev();
-$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'default');
+$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'dark');
 $vfile = $model->dataPath() . 'version.txt';
 if (!is_file($vfile)) {
   file_put_contents($vfile, '1');
@@ -23,15 +22,12 @@ if ($model->hasPlugin('appui-chat')) {
   */
 }
 $data = X::mergeArrays($model->data, [
-  'default_path' => defined('BBN_DEFAULT_PATH') ? BBN_DEFAULT_PATH : '',
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
-  'current_menu' => $menu->getDefault(),
-  'menus' => count(($m = $menu->getMenus())) > 1 ? $m : [],
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
-  'cdn_lib' => 'animate-css,bbn-css|latest|' . $theme . ',bbn-vue,font-mfizz,webmin-font,jsPDF,html2canvas',
+  'cdn_lib' => 'bbn-css|latest|' . $theme . ',bbn-cp',
   'app' => [
     'users' => $mgr->fullList(),
     'groups' => $mgr->groups(),

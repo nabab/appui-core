@@ -1,6 +1,6 @@
 (()=>{
   return {
-    mixins: [bbn.vue.resizerComponent],
+    mixins: [bbn.cp.mixins.resizer],
     data(){
       return {
         searchIcon:'',

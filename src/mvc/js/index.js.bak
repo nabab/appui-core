@@ -63,14 +63,14 @@
       js_data.componentsMixin = {};
     }
     bbn.fn.each(data.plugins, (path, name) => {
-      bbn.vue.addPrefix(name, (tag, resolve, reject) => {
-        bbn.vue.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
+      bbn.cp.addPrefix(name, (tag, resolve, reject) => {
+        bbn.cp.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
       });
     });
-    bbn.vue.addPrefix(
+    bbn.cp.addPrefix(
       data.app_prefix,
       (tag, resolve, reject, mixins) => {
-        bbn.vue.queueComponent(
+        bbn.cp.queueComponent(
           tag,
           'components/' + bbn.fn.replaceAll('-', '/', tag).substr((data.app_prefix + '-').length),
           mixins,
@@ -81,7 +81,7 @@
       bbn.fn.extend(true, {}, {
         methods: {
           getTab(){
-            return bbn.vue.closest(this, 'bbns-container');
+            return this.closest('bbns-container');
           },
           popup(){
             return this.getTab().popup.apply(this, arguments);
@@ -126,7 +126,7 @@
     }
     bbn.fn.log("LIST", Data.list);
 
-    bbn.vue.initDefaults({
+    bbn.cp.initDefaults({
       appui: {
         root: data.root,
         list: [{

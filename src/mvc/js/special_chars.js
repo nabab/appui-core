@@ -4,7 +4,7 @@
   **/
 (()=>{
   return {
-    mixins: [bbn.vue.basicComponent, bbn.vue.resizerComponent],
+    mixins: [bbn.cp.mixins.basic, bbn.cp.mixins.resizer],
     data(){
       return {
         scroller: null,

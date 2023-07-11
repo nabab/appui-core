@@ -1,7 +1,31 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
-    bbn.vue.init({
+    const slots = bbn.fn.createObject();
+    if (data.slots) {
+      bbn.fn.iterate(data.slots, (arr, slot) => {
+        slots[slot] = [];
+        bbn.fn.iterate(arr, a => {
+          try {
+            let tmp = eval(a.script);
+            if (bbn.fn.isObject(tmp)) {
+              if (a.content) {
+                tmp.template = a.content;
+              }
+              slots[slot].push({
+                cp: tmp,
+                data: a.data || {}
+              });
+            }
+          }
+          catch (e) {
+            bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, name));
+          }
+        });
+      });
+    }
+
+    bbn.fn.init({
       env: {
         logging: data.is_dev || data.is_test ? true : false,
         isDev: data.is_dev ? true : false,
@@ -30,7 +54,6 @@
       js_data.appuiMixin = {
         header: true,
         nav: true,
-        clipboard: true,
         status: true,
         list: [
           {
@@ -41,8 +64,7 @@
             icon: 'nf nf-fa-home'
           }
         ],
-        searchBar: false,
-        broserNotification: true
+        browserNotification: true
       };
     }
 
@@ -50,16 +72,18 @@
       js_data.componentsMixin = {};
     }
 
+    /*
     bbn.fn.each(data.plugins, (path, name) => {
-      bbn.vue.addPrefix(name, (tag, resolve, reject) => {
-        bbn.vue.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
+      bbn.cp.addPrefix(name, (tag, resolve, reject) => {
+        bbn.cp.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
       });
     });
 
-    bbn.vue.addPrefix(
+
+    bbn.cp.addPrefix(
       data.app_prefix,
       (tag, resolve, reject, mixins) => {
-        bbn.vue.queueComponent(
+        bbn.cp.queueComponent(
           tag,
           'components/' + bbn.fn.replaceAll('-', '/', tag).substr((data.app_prefix + '-').length),
           mixins,
@@ -70,7 +94,7 @@
       bbn.fn.extend(true, {}, {
         methods: {
           getTab(){
-            return bbn.vue.closest(this, 'bbns-container');
+            return this.closest('bbns-container');
           },
           popup(){
             return this.getTab().popup.apply(this, arguments);
@@ -78,117 +102,79 @@
         }
       }, js_data.componentsMixin)
     );
+    */
 
-    let rightShortcuts = [{
-      url: data.plugins['appui-usergroup'] + '/main',
-      text: bbn._("My profile"),
-      icon: 'nf nf-fa-user'
-    }, {
-      action(){
-        appui.popup().load({
-          url: data.plugins['appui-core'] + '/help',
-          width: '90%',
-          height: '90%',
-          scrollable: false
-        });
-      },
-      text: bbn._("Help"),
-      icon: 'nf nf-mdi-help_circle_outline'
-    }, {
-      action(){
-        bbn.fn.toggleFullScreen();
-      },
-      text: bbn._("Full screen"),
-      icon: 'nf nf-fa-arrows_alt'
-    }, {
-      text: bbn._("Log out"),
-      icon: 'nf nf-fa-sign_out',
-      action(){
-        bbn.fn.post(appui.plugins['appui-core'] + '/logout', d => {
-          if (d.success && d.data && d.data.url) {
-            document.location.href = d.data.url;
-          }
-          else {
-            appui.error();
-          }
-        });
-      }
-    }];
-
-    bbn.vue.initDefaults({
+    bbn.cp.initDefaults({
       appui: {
         root: data.root,
         list: [{
           source: data.list || js_data.appuiMixin.list
         }],
+        /*
         nav: true,
         status: true,
         header: true,
         footer: false,
-        clipboard: true,
         broserNotification: true,
+        */
+        clipboard: true,
         logo: data.logo,
         pollable: (data.pollable === undefined) || data.pollable,
-        leftShortcuts: [{
-          url: data.plugins['appui-dashboard'] + '/home',
-          text: bbn._("Dashboard"),
-          icon: 'nf nf-fa-dashboard'
-        }],
-        rightShortcuts: rightShortcuts,
         theme: data.theme
       }
     });
 
     let appuiMixin = {
-      data: {
-        defaultPath: data.default_path,
-        options: data.options,
-        menus: data.menus,
-        plugins: data.plugins,
-        currentMenu: data.current_menu,
-        shortcuts: data.shortcuts,
-        browserNotification: true,
-        app: {
-          data(){
-            return data.app
-          },
-          computed: {
-            userName(){
-              return bbn.fn.getField(this.users, 'text', {value: this.user.id}) || bbn._('Unknown')
+      data() {
+        return {
+          slots: slots,
+          options: data.options,
+          plugins: data.plugins,
+          browserNotification: true,
+          /*
+          app: {
+            data(){
+              return data.app
+            },
+            computed: {
+              userName(){
+                return bbn.fn.getField(this.users, 'text', {value: this.user.id}) || bbn._('Unknown')
+              }
+            },
+            methods: {
+              link_email: function(em){
+                return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
+              },
+
+              getUserName: function(id){
+                return bbn.fn.getField(this.users, "text", "value", id);
+              },
+
+              getUserGroup: function(id){
+                return bbn.fn.getField(this.users, "id_group", "value", id);
+              },
+
+              getActiveUsers() {
+                if ( bbn.fn.isArray(appui.app.users) ){
+                  return bbn.fn.order(appui.app.users.filter(user => {
+                    return !!user.active;
+                  }), 'text', 'ASC');
+                }
+                return [];
+              },
+
+              historique_type: function(d){
+                var op;
+                if ( (typeof(d.operation) !== 'undefined') &&
+                  (op = bbn.fn.getRow(this.historiques, "value", d.operation)) ){
+                  return '<span style="color:' + op.color + '">' + op.text + '</span>';
+                }
+                return "";
+              },
+
             }
-          },
-          methods: {
-            link_email: function(em){
-              return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
-            },
-
-            getUserName: function(id){
-              return bbn.fn.getField(this.users, "text", "value", id);
-            },
-
-            getUserGroup: function(id){
-              return bbn.fn.getField(this.users, "id_group", "value", id);
-            },
-
-            getActiveUsers() {
-              if ( bbn.fn.isArray(appui.app.users) ){
-                return bbn.fn.order(appui.app.users.filter(user => {
-                  return !!user.active;
-                }), 'text', 'ASC');
-              }
-              return [];
-            },
-
-            historique_type: function(d){
-              var op;
-              if ( (typeof(d.operation) !== 'undefined') &&
-                (op = bbn.fn.getRow(this.historiques, "value", d.operation)) ){
-                return '<span style="color:' + op.color + '">' + op.text + '</span>';
-              }
-              return "";
-            },
-
           }
+          */
         }
       },
       methods: {
@@ -220,8 +206,7 @@
       });
     }
 
-    new Vue({
-      el: 'div.appui',
+    window.app = bbn.cp.createApp(document.body.querySelector('div.appui'), {
       mixins: [appuiMixin, js_data.appuiMixin],
       created(){
         if ( this.isMobile ){

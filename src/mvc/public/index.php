@@ -8,22 +8,45 @@
  * @var $ctrl \bbn\Mvc\Controller
  */
 
-$shortcuts = $ctrl->getModel($ctrl->pluginUrl('appui-menu').'/shortcuts/list');
+use bbn\X;
+
 $routes = $ctrl->getRoutes();
 $plugins = [];
+$slots = [
+  'before' => [],
+  'headleft' => [],
+  'head' => [],
+  'headright' => [],
+  'central' => [],
+  'status' => [],
+  'after' => []
+];
+
 foreach ( $routes as $r ){
   $plugins[$r['name']] = $r['url'];
+  if ($ctrl->controllerExists($r['url'] . '/app-ui', true)) {
+    $apCtrl = $ctrl->add($r['url'] . '/app-ui', [], true);
+    if ($apCtrl->obj && $apCtrl->obj->data) {
+      foreach ($apCtrl->obj->data as $slot => $data) {
+        if (isset($slots[$slot])) {
+          array_push($slots[$slot], ...(is_object($data) ? [$data] : $data));
+        }
+      }
+    }
+  }
 }
+
+
 $ctrl->data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index');
 $ctrl->addData([
   'plugins' => $plugins,
-  'shortcuts' => $shortcuts
+  'slots' => $slots,
 ]);
 // The whole DOM
 if (empty($ctrl->post)) {
   $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
   $ctrl->data['token'] = $ctrl->inc->user->addToken();
-  $ctrl->combo($ctrl->data['site_title'], $ctrl->data);
+  $ctrl->combo($ctrl->data['site_title'], true);
 }
 // Only the data
 else {

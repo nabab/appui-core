@@ -42,7 +42,9 @@ use bbn\Str;
 <link rel="icon" type="image/png" href="<?=$static_path?>img/favicon/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="<?=$static_path?>img/favicon/android-chrome-192x192.png" sizes="192x192">
 <link rel="icon" type="image/png" href="<?=$static_path?>img/favicon/favicon-16x16.png" sizes="16x16">
+<?php if (is_file(BBN_PUBLIC . 'manifest.json')) { ?>
 <link rel="manifest" href="manifest.json">
+<?php } ?>
 <link rel="mask-icon" href="<?=$static_path?>img/favicon/safari-pinned-tab.svg" color="#5bbad5">
 <meta name="msapplication-TileColor" content="#9f00a7">
 <meta name="msapplication-TileImage" content="<?=$static_path?>img/favicon/mstile-144x144.png">
@@ -50,6 +52,7 @@ use bbn\Str;
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, User-scalable=yes">
 <title><?=$site_title?></title>
 <style><?=$custom_css?></style>
+<script type="text/javascript" src="<?= $script_src ?>"></script>
 <script>
 (() => {
   /** @var {String} errorMsg An error message to display */
@@ -78,72 +81,66 @@ use bbn\Str;
 
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
   let onDomLoaded = () => {
-    let script = document.getElementById('bbn_script');
-    if (script) {
-      script.remove();
-    }
-
-    script = document.createElement("script");
-    script.type = "text/javascript";
-    script.id = "bbn_script";
-    script.src = scriptSrc;
-    // All will be initiated when the libraries are loaded
-    script.onload = function(){
-      loaded = true;
-      // Check that bbn is defined
-      if ('bbn' in window) {
-        if (bbn.fn.isMobile()) {
-          document.body.classList.add('bbn-mobile');
-          if ( bbn.fn.isTabletDevice() ){
-            document.body.classList.add('bbn-tablet');
-          }
-        }
-        // Init phase
-        // through service worker
-        if (hasServiceWorker && navigator.serviceWorker.controller) {
-          navigator.serviceWorker.addEventListener('message', function(event) {
-            if ( event.data && event.data.data ){
-              let d = event.data;
-              if ( d.type === 'init' ){
-                init(d.data);
-              }
-              else if ('appui' in window){
-                let v = window.localStorage.getItem('bbn-vue-version');
-                appui.receive(d);
-              }
-            }
-          });
-          bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
-            navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>", data: d});
-          });
-        }
-        // Through Ajax
-        else {
-          bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, init);
-        }
-      }
-      // If bbn is not defined we reload the window
-      else {
-        let attempts = window.localStorage.getItem('bbn-load') || 0;
-        // and avoid to do it more than 3 times
-        if ( attempts < 3 ){
-          window.localStorage.setItem('bbn-load', ++attempts);
-          alert("RELOADING??");
-          location.reload();
-        }
-      }
-    };
-    script.onerror = function(){
-      console.log("Impossible to load the libraries script");
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
+    loaded = true;
+    // Check that bbn is defined
+    bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, init);
+    // If bbn is not defined we reload the window
   };
+  /*
+  let onDomLoaded = () => {
+    loaded = true;
+    // Check that bbn is defined
+    if ('bbn' in window) {
+      if (bbn.fn.isMobile()) {
+        document.body.classList.add('bbn-mobile');
+        if ( bbn.fn.isTabletDevice() ){
+          document.body.classList.add('bbn-tablet');
+        }
+      }
+      // Init phase
+      // through service worker
+      if (hasServiceWorker && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.addEventListener('message', function(event) {
+          if ( event.data && event.data.data ){
+            let d = event.data;
+            if ( d.type === 'init' ){
+              init(d.data);
+            }
+            else if ('appui' in window){
+              let v = window.localStorage.getItem('bbn.cp-version');
+              appui.receive(d);
+            }
+          }
+        });
+        bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, d => {
+          navigator.serviceWorker.controller.postMessage({type: "init", token: "<?=$token?>", data: d});
+        });
+      }
+      // Through Ajax
+      else {
+        bbn.fn.post('<?=$plugins['appui-core']?>/index', {get: 1}, init);
+      }
+    }
+    // If bbn is not defined we reload the window
+    else {
+      let attempts = window.localStorage.getItem('bbn-load') || 0;
+      // and avoid to do it more than 3 times
+      if ( attempts < 3 ){
+        window.localStorage.setItem('bbn-load', ++attempts);
+        alert("RELOADING??");
+        location.reload();
+      }
+    }
+  };
+  */
 
   let init = (d) => {
+    bbn.fn.warning("INIT");
+    bbn.fn.log(d)
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
-      bbn.vue.version = d.data.version;
+      bbn.cp.version = d.data.version;
       let userOnStorage = window.localStorage.getItem('bbn-user-id');
       if (d.data.app
         && d.data.app.user
@@ -153,7 +150,7 @@ use bbn\Str;
         window.localStorage.clear();
         window.localStorage.setItem('bbn-user-id', d.data.app.user.id);
       }
-      window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
+      window.localStorage.setItem('bbn.cp-version', bbn.cp.version);
       bbn.version = d.data.version;
     }
 
@@ -172,7 +169,7 @@ use bbn\Str;
   };
 
   // Only if service worker is enabled and not already registered
-  if (hasServiceWorker) {
+  if (hasServiceWorker && false) {
     // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
     .then((registration) => {
@@ -206,7 +203,7 @@ use bbn\Str;
             }
           }
           else if ('appui' in window) {
-            let v = window.localStorage.getItem('bbn-vue-version');
+            let v = window.localStorage.getItem('bbn.cp-version');
             //console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
@@ -243,16 +240,30 @@ use bbn\Str;
 <div class="appui">
   <bbn-appui :cfg="app"
              :options="options"
-             :menus="menus"
-             :current-menu="currentMenu"
-             :shortcuts="shortcuts"
              :plugins="plugins"
-             :def="defaultPath"
+             def="home"
              @setimessage="setImessage"
              :source="list"
              :splittable="true"
+             :nav="true"
+             :header="true"
              :search-bar="searchBar"
-             :browser-notification="browserNotification">
+             :browser-notification="browserNotification"
+             :status="true">
+<?php
+  if (!empty($slots)) {
+    foreach ($slots as $name => $arr) {
+      foreach ($arr as $i => $o) {
+        ?>
+        <component slot="<?= $name ?>"
+                  :is="slots.<?= $name ?>[<?= $i ?>].cp"
+                  :source="slots.<?= $name ?>[<?= $i ?>].data">
+        </component>
+        <?php
+      }
+    }
+  }
+?>
   </bbn-appui>
 </div>
 <noscript>

@@ -33,18 +33,13 @@
 </head>
 <body>
 <div class="appui-login bbn-overlay" style="transition: opacity 5s">
-  <bbn-popup ref="popup"
-             @hook:mounted="init">
-  </bbn-popup>
-  <bbn-login v-if="popup"
-             :url="url || (core_root + 'home')"
+  <bbn-login :url="url || (core_root + 'home')"
              :logo="currentLogo"
              :salt="formData.appui_salt"
              :change-url="core_root + 'login/index'"
              :lost-url="core_root + 'login/index'"
              :secure-key="key"
              :secure-id="id"
-             :popup="$refs.popup"
              ref="login"
              action-name="action"
              salt-name="appui_salt"
@@ -53,7 +48,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'bbn-css|latest|'.$theme.',bbn-vue',
+  'lib' => 'bbn-css|latest|'.$theme.',bbn-js,bbn-cp',
   'test' => !!$test
 ])?>"></script>
 <?=$script?>
