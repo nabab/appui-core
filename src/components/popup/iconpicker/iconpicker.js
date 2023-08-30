@@ -13,6 +13,8 @@
         allIcons: [],
         total: 0,
         toSearch: '',
+        toSearchFix: '',
+        timeout: false,
         root: appui.plugins['appui-core'] + '/'
       }
     },
@@ -21,9 +23,10 @@
         return bbn._('Search in') + ' ' + this.total.toString() + ' ' + bbn._('icons');
       },
       icons(){
-        if ( this.toSearch ){
-          return this.allIcons.filter(icon => icon.search(this.toSearch.toLowerCase()) > -1);
+        if ( this.toSearchFix ){
+          return this.allIcons.filter(icon => icon.search(this.toSearchFix.toLowerCase()) > -1);
         }
+
         return this.allIcons;
       }
     },
@@ -32,6 +35,16 @@
         this.source.obj[this.source.field] = icon;
         this.closest('bbn-popup').close();
       }
+    },
+    watch: {
+      toSearch(newVal) {
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(() => {
+          this.toSearchFix = newVal;
+        }, 500);
+      },
     },
     created(){
       this.post(this.root + 'iconology/iconpicker', (d) => {

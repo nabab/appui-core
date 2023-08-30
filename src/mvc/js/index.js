@@ -106,6 +106,7 @@
 
     bbn.cp.initDefaults({
       appui: {
+        /*
         root: data.root,
         list: [{
           source: data.list || js_data.appuiMixin.list
@@ -116,11 +117,11 @@
         header: true,
         footer: false,
         broserNotification: true,
-        */
         clipboard: true,
         logo: data.logo,
         pollable: (data.pollable === undefined) || data.pollable,
         theme: data.theme
+        */
       }
     });
 

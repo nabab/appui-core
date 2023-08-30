@@ -4,6 +4,7 @@
       <bbn-input style="width: 25em"
                  :placeholder="getTotal"
                  v-model="toSearch"
+                 :nullable="true"
       ></bbn-input>
     </div>
     <div class="bbn-flex-fill">

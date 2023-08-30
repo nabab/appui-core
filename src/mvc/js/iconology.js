@@ -13,6 +13,7 @@
       return {
         scroller: null,
         searchIcon:'',
+        searchFix: '',
         totIcons: this.source.icons,
         ready: true,
         sectionSize: 125,
@@ -24,14 +25,15 @@
         isInit: false,
         scrolltop: 0,
         numberShown: 10,
+        timeout: false,
       };
     },
     computed: {
       // The array from which the source (currentIcons)is built
       icons(){
         // Filtered
-        if ( this.searchIcon ){
-          return this.totIcons.filter(icon => icon.search(this.searchIcon.toLowerCase()) > -1);
+        if ( this.searchFix ){
+          return this.totIcons.filter(icon => icon.search(this.searchFix.toLowerCase()) > -1);
         }
         // or not
         return this.totIcons;
@@ -96,10 +98,16 @@
       },
     },
     watch: {
-      searchIcon(newVal){
-        this.$nextTick(() => {
-          this.update();
-        });
+      searchIcon(newVal) {
+        if (this.timeout) {
+          clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(() => {
+          this.searchFix = newVal;
+        }, 500);
+      },
+      searchFix(newVal) {
+        this.update();
       },
       search() {
         this.numberShown = this.itemsPerPage;
