@@ -22,17 +22,18 @@ $slots = [
   'after' => []
 ];
 
-foreach ( $routes as $r ){
+foreach ($routes as $r) {
   $plugins[$r['name']] = $r['url'];
-  if ($ctrl->controllerExists($r['url'] . '/app-ui', true)) {
-    $apCtrl = $ctrl->add($r['url'] . '/app-ui', [], true);
-    if ($apCtrl->obj && $apCtrl->obj->data) {
-      foreach ($apCtrl->obj->data as $slot => $data) {
+
+  if ($appuiElements = $ctrl->getSubpluginModelGroup('app-ui', $r['name'], 'appui-core')) {
+    foreach ($appuiElements as $obj) {
+      foreach ($obj as $slot => $data) {
         if (isset($slots[$slot])) {
-          array_push($slots[$slot], ...(is_object($data) ? [$data] : $data));
+          array_push($slots[$slot], ...(X::isAssoc($data) ? [$data] : $data));
         }
       }
     }
+    //X::ddump("YYY", $slots);
   }
 }
 

@@ -13,7 +13,7 @@
                 tmp.template = a.content;
               }
               slots[slot].push({
-                cp: tmp,
+                cp: bbnData.immunizeValue(tmp),
                 data: a.data || {}
               });
             }

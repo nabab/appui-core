@@ -10,6 +10,14 @@ if (
 ){
   return ['success' => $mgr->makeHotlink($id, 'password')];
 }
+elseif ($model->hasData(['pass1', 'pass2', 'key'], true)) {
+  if ($model->inc->user->checkSession()) {
+    return ['success' => true];
+  }
+  else {
+    return ['success' => false, 'error' => $model->inc->user->getError()];
+  }
+}
 else {
   return [
     'site_url' => BBN_URL,
