@@ -30,7 +30,7 @@
             text: bbn._("Increase version"),
             icon: 'nf nf-oct-versions',
             action: () => {
-              bbn.fn.post(this.plugins['appui-core'] + '/service/increase').then(() => {
+              bbn.fn.post(appui.plugins['appui-core'] + '/service/increase').then(() => {
                 if (window.bbnSW) {
                   window.bbnSW.unregister().then(() => {
                     document.location.reload();
