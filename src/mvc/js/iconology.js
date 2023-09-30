@@ -94,7 +94,7 @@
       },
       copyIcon(icon){
         bbn.fn.copy(icon);
-        appui.success(bbn._("Copied to clipboard"));
+        appui.success(bbn._("Icon class") + ' ' + icon + ' ' + bbn._("Copied to clipboard"));
       },
     },
     watch: {
