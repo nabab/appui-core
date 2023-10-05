@@ -42,7 +42,8 @@
           currentLogo: data.logo || svg,
           clientHeight: document.documentElement.clientHeight,
           isMobile: bbn.fn.isMobile(),
-          isTablet: bbn.fn.isTabletDevice()
+          isTablet: bbn.fn.isTabletDevice(),
+          custom: data.custom || ''
         }, data);
       },
       methods: {

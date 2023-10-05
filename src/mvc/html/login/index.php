@@ -43,7 +43,8 @@
              ref="login"
              action-name="action"
              salt-name="appui_salt"
-             :mode="key ? 'change' : 'login'">
+             :mode="key ? 'change' : 'login'"
+             :custom="custom">
   </bbn-login>
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
