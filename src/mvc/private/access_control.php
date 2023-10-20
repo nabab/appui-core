@@ -1,6 +1,10 @@
 <?php
 /** @var \bbn\Mvc\Controller $ctrl The controller */
 $cr = $ctrl->pluginUrl('appui-core').'/';
+$url = $ctrl->getUrl();
+if ($url === 'wp-content/uploads/2022/01/Partenaires-janvier-2022.jpg'){
+  die(var_dump('ciao'));
+}
 
 if (($definitions = $ctrl->getCachedModel($cr.'_definitions', 86400))
     && isset($definitions['data'])
@@ -71,6 +75,19 @@ elseif ($ctrl->inc->user->isReset()) {
 }
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->getMode() === 'dom') {
+  // Check registered URL
+  $urlCls = new \bbn\Appui\Url($ctrl->db);
+  if ($urlCls->urlExists($ctrl->getUrl())) {
+    $fullUrl = $urlCls->getFullUrl($urlCls->urlToId($ctrl->getUrl()));
+    switch ($fullUrl['type_url']) {
+      case 'media':
+        $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($ctrl->getUrl(), '/'));
+        return true;
+      case 'note':
+        break;
+    }
+  }
+
   if ($ctrl->hasPlugin('appui-api')
       && ($api = $ctrl->pluginUrl('appui-api'))
       && (      ($ctrl->getRequest() === $api)
@@ -142,6 +159,7 @@ if (($path !== $cr.'poller')
 
 // The current path
 $url = $ctrl->getUrl();
+
 
 /** @var string BBN_BASEURL */
 
