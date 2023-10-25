@@ -2,9 +2,6 @@
 /** @var \bbn\Mvc\Controller $ctrl The controller */
 $cr = $ctrl->pluginUrl('appui-core').'/';
 $url = $ctrl->getUrl();
-if ($url === 'wp-content/uploads/2022/01/Partenaires-janvier-2022.jpg'){
-  die(var_dump('ciao'));
-}
 
 if (($definitions = $ctrl->getCachedModel($cr.'_definitions', 86400))
     && isset($definitions['data'])
