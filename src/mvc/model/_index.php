@@ -27,7 +27,7 @@ $data = X::mergeArrays($model->data, [
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
-  'cdn_lib' => 'bbn-css|latest|' . $theme . ',bbn-cp',
+  'cdn_lib' => 'axios,dayjs,bbn-css|latest|' . $theme . ',bbn-cp',
   'app' => [
     'users' => $mgr->fullList(),
     'groups' => $mgr->groups(),
@@ -62,11 +62,9 @@ if ($model->hasPlugin('appui-hr')) {
 if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
   $data = X::mergeArrays($data, $custom_data);
 }
-$data['script_src'] = BBN_SHARED_PATH . '?' . http_build_query([
+$data['script_src'] = BBN_SHARED_PATH . 'dev/bbn-cp/v2/dist/bbn-cp.js?' . http_build_query([
   'lang' => $data['lang'] ?? BBN_LANG,
-  'lib' => $data['cdn_lib'],
   'test' => !BBN_IS_PROD,
-  'dirs' => $data['cdn_dirs'] ?? '',
   'v' => $data['version']
 ]);
 return $data;

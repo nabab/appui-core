@@ -19,7 +19,8 @@
             }
           }
           catch (e) {
-            bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, name));
+            bbn.fn.log(a, slot, e);
+            bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
           }
         });
       });

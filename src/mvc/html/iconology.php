@@ -18,6 +18,7 @@
         <li v-for="(icon, idx) in icons"
             v-if="idx < numberShown"
             class="bbn-block"
+            :key="icon"
             :ref="'item-'+ idx">
           <bbn-button :title= "icon"
                       :icon="icon"

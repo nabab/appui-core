@@ -92,7 +92,8 @@
         this.currentWidth = this.getRef('scroll').containerWidth;
         this.update();
       },
-      copyIcon(icon){
+      copyIcon(icon) {
+        bbn.fn.log("ICON", icon)
         bbn.fn.copy(icon);
         appui.success(bbn._("Icon class") + ' ' + icon + ' ' + bbn._("Copied to clipboard"));
       },
