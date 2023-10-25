@@ -1,7 +1,6 @@
 <?php
 /** @var \bbn\Mvc\Controller $ctrl The controller */
 $cr = $ctrl->pluginUrl('appui-core').'/';
-$url = $ctrl->getUrl();
 
 if (($definitions = $ctrl->getCachedModel($cr.'_definitions', 86400))
     && isset($definitions['data'])
