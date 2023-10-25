@@ -54,7 +54,7 @@
 </div>
 <script type="text/javascript" src="<?=$shared_path?>?<?=http_build_query([
   'lang' => $lang,
-  'lib' => 'bbn-css|latest|'.$theme.',bbn-vue',
+  'lib' => 'bbn-css|master|'.$theme.',bbn-vue',
   'test' => !!$test
 ])?>"></script>
 <?=$script?>
