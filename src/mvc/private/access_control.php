@@ -73,11 +73,27 @@ elseif ($ctrl->inc->user->isReset()) {
 elseif ($ctrl->getMode() === 'dom') {
   // Check registered URL
   $urlCls = new \bbn\Appui\Url($ctrl->db);
-  if ($urlCls->urlExists($ctrl->getUrl())) {
-    $fullUrl = $urlCls->getFullUrl($urlCls->urlToId($ctrl->getUrl()));
+  $request = $ctrl->getRequest();
+  // Removing modifiers for image URL
+  $reg = '/(\.bbn-[\-\dwhc]+\.)/';
+  if (preg_match($reg, $request, $match)) {
+    $request = preg_replace($reg, '.', $request);
+  }
+
+  if ($fullUrl = $urlCls->retrieveUrl($request, true)) {
+    if ($fullUrl['url'] !== $fullUrl['original']) {
+      if (($fullUrl['type_url'] === 'media') && !empty($match[1])) {
+        $exts = Str::fileExt($fullUrl['url'], true);
+        $fullUrl['url'] = dirname($fullUrl['url']) . '/' . $exts[0] . $match[1] . $exts[1];
+      }
+
+      header("Location: /" . $fullUrl['url']);
+      exit();
+    }
+
     switch ($fullUrl['type_url']) {
       case 'media':
-        $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($ctrl->getUrl(), '/'));
+        $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($fullUrl['url'], '/'));
         return true;
       case 'note':
         break;
