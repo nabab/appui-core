@@ -61,7 +61,7 @@
             url: data.plugins['appui-core'] + '/home',
             title: bbn._("Home"),
             load: true,
-            static: true,
+            fixed: true,
             icon: 'nf nf-fa-home'
           }
         ],
