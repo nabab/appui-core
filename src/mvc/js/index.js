@@ -210,6 +210,12 @@
 
     window.app = bbn.cp.createApp(document.body.querySelector('div.appui'), {
       mixins: [appuiMixin, js_data.appuiMixin],
+      methods: {
+        init() {
+          bbn.fn.log("INITTTT€")
+          this.$el.parentNode.style.opacity = 1;
+        }
+      },
       created(){
         if ( this.isMobile ){
           document.body.classList.add('bbn-mobile');
@@ -217,7 +223,7 @@
         if ( this.isTablet ){
           document.body.classList.add('bbn-tablet');
         }
-      }
+      },
     });
   };
 })();

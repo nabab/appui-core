@@ -17,7 +17,7 @@
         bbn.fn.log('test: ' + url);
       },
       unfoldRf(node) {
-        bbn.fn.log(node.getPath());
+        //bbn.fn.log(node.getPath());
         this.getRef('to').openPath(node.getPath());
       }
     },
@@ -32,7 +32,6 @@
           bbn.fn.post(
             {type: v},
             d => {
-              bbn.fn.log()
               if (d.rf) {
                 this.rf = d.rf;
                 this.ro = d.ro;

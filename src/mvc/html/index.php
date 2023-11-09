@@ -135,8 +135,8 @@ use bbn\Str;
   */
 
   let init = (d) => {
-    bbn.fn.warning("INIT");
-    bbn.fn.log(d)
+    //bbn.fn.warning("INIT");
+    //bbn.fn.log(d)
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
@@ -237,34 +237,38 @@ use bbn\Str;
      style="background: #fff url(<?= $logo_big ?>) no-repeat center; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
   <div id="error_message"></div>
 </div>
-<div class="appui">
-  <bbn-appui :cfg="app"
-             :options="options"
-             :plugins="plugins"
-             def="home"
-             @setimessage="setImessage"
-             :source="list"
-             :splittable="true"
-             :nav="true"
-             :header="true"
-             :search-bar="searchBar"
-             :browser-notification="browserNotification"
-             :status="true">
-<?php
-  if (!empty($slots)) {
-    foreach ($slots as $name => $arr) {
-      foreach ($arr as $i => $o) {
-        ?>
-        <component slot="<?= $name ?>"
-                  :is="slots.<?= $name ?>[<?= $i ?>].cp"
-                  :source="slots.<?= $name ?>[<?= $i ?>].data">
-        </component>
-        <?php
+<div class="appui-container"
+     style="opacity: 0;">
+  <div class="appui">
+    <bbn-appui :cfg="app"
+              :options="options"
+              :plugins="plugins"
+              def="home"
+              @setimessage="setImessage"
+              :source="list"
+              :splittable="true"
+              :nav="true"
+              :header="true"
+              :search-bar="searchBar"
+              :browser-notification="browserNotification"
+              @route1="init"
+              :status="true">
+  <?php
+    if (!empty($slots)) {
+      foreach ($slots as $name => $arr) {
+        foreach ($arr as $i => $o) {
+          ?>
+          <component slot="<?= $name ?>"
+                    :is="slots.<?= $name ?>[<?= $i ?>].cp"
+                    :source="slots.<?= $name ?>[<?= $i ?>].data">
+          </component>
+          <?php
+        }
       }
     }
-  }
-?>
-  </bbn-appui>
+  ?>
+    </bbn-appui>
+  </div>
 </div>
 <noscript>
   <?= $noscript ?? '' ?>

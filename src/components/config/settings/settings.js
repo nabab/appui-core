@@ -30,7 +30,7 @@
     },
     methods: {
       success(data){
-        bbn.fn.log(data);
+        //bbn.fn.log(data);
         this.source.settings[data.name] = data.value;
       },
       open(item){
