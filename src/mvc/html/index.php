@@ -1,10 +1,5 @@
 <?php
 /**
- * 
- */
-
-use bbn\Str;
-/**
  * @var string $lang        The current Language
  * @var string $site_url    The website's URL
  * @var string $static_path The URL to the static libraries
@@ -65,7 +60,7 @@ use bbn\Str;
   const hasServiceWorker = !!('serviceWorker' in navigator);
 
   /** @var {String} scriptSrc The script source */
-  const scriptSrc = <?=str::asVar($script_src)?>;
+  const scriptSrc = <?=Str::asVar($script_src ?: '')?>;
 
   /** @var {Boolean} hasBeenAsked True if it already has been asked to reload because the version is new */
   let hasBeenAsked = false;
@@ -169,14 +164,14 @@ use bbn\Str;
   };
 
   // Only if service worker is enabled and not already registered
-  if (hasServiceWorker && false) {
+  if (hasServiceWorker) {
     // Registration of the service worker
     navigator.serviceWorker.register('/sw', {scope: '/'})
     .then((registration) => {
       window.bbnSW = registration;
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        //console.log("SW: STATE CHANGING " + installingWorker.state);
+        console.log("SW: STATE CHANGING " + installingWorker.state);
         installingWorker.onstatechange = () => {
           if (!hasBeenAsked
             && !isReloading
@@ -185,9 +180,9 @@ use bbn\Str;
             if (('appui' in window)) {
               hasBeenAsked = true;
               if ( confirm(
-                <?=str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
-                <?=str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
-                <?=str::asVar(_("Do you want to do it now?"))?>
+                <?=Str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
+                <?=Str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
+                <?=Str::asVar(_("Do you want to do it now?"))?>
               ) ){
                 isReloading = true;
                 location.reload();
@@ -204,7 +199,7 @@ use bbn\Str;
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn.cp-version');
-            //console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
+            console.log(<?=Str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }
         };
@@ -219,7 +214,7 @@ use bbn\Str;
       }
     })
     .catch((error) => {
-      console.log(<?=str::asVar(_("Service worker registration failed, error"))?>, error);
+      console.log(<?=Str::asVar(_("Service worker registration failed, error"))?>, error);
     });
   }
   else {
