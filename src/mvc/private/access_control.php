@@ -93,8 +93,15 @@ elseif ($ctrl->getMode() === 'dom') {
 
     switch ($fullUrl['type_url']) {
       case 'media':
-        $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($fullUrl['url'], '/'));
-        return true;
+        $mediaCls = new \bbn\Appui\Medias($ctrl->db);
+        if (($idMedia = $mediaCls->urlToId($fullUrl['url']))
+          && ($m = $mediaCls->getMedia($idMedia, true))
+          && !empty($m['is_image'])
+        ) {
+          $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($fullUrl['url'], '/'));
+          return true;
+        }
+        break;
       case 'note':
         break;
     }
