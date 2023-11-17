@@ -84,6 +84,7 @@
                 })
               }, 500);
               setTimeout(() => {
+                this.$root.classList.add('bbn-middle');
                 this.$root.innerHTML = `
         <h2>`+ bbn._('Refresh the page to be able to log in or click') + ` <a class="bbn-p" onclick="window.location.reload();">` + bbn._('HERE') + `</a></h2>`;
               }, 1200000);
