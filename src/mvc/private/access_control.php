@@ -149,6 +149,12 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
+  if (($err = $ctrl->inc->user->getError())
+    && !empty($err['code'])
+    && ($err['code'] == 17)
+  ) {
+    die(json_encode(['saltError' => true]));
+  }
   die(json_encode(['disconnected' => true]));
 }
 
