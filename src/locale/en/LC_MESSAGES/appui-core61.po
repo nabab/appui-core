@@ -1,0 +1,418 @@
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/cli/treat_errors.php
+msgid "IMPOSSIBLE TO GET THE JSON CONTENT FOR ERROR RECYCLING!"
+msgstr "IMPOSSIBLE TO GET THE JSON CONTENT FOR ERROR RECYCLING!"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/cli/treat_errors.php
+msgid "IMPOSSIBLE TO PARSE THE APACHE LOG FILE!"
+msgstr "IMPOSSIBLE TO PARSE THE APACHE LOG FILE!"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/cli/treat_errors.php
+msgid "Log file partially truncated"
+msgstr "Log file partially truncated"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/cli/treat_errors.php
+msgid "JSON error log file updated with"
+msgstr "JSON error log file updated with"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/cli/treat_errors.php
+msgid "new errors for a total of"
+msgstr "new errors for a total of"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/config/settings/settings.js
+msgid "on"
+msgstr "On"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/config/settings/settings.js
+msgid "Setting modification"
+msgstr "Setting modification"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/config/settings/settings.js
+msgid "Setting visualization"
+msgstr "Setting visualization"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/config/settings/settings.php
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Description"
+msgstr "Description"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/config/settings/settings.php
+msgid "View"
+msgstr "View"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/config/settings/settings.php
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Edit"
+msgstr "Edit"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.js
+msgid "MySQL"
+msgstr "MySQL"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.js
+msgid "SQLite"
+msgstr "SQLite"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.js
+msgid "Connected"
+msgstr "Connected"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.js
+msgid "Not connected"
+msgstr "Not connected"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.js
+msgid "You have to test the connection"
+msgstr "You have to test the connection"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.php
+msgid "Engine"
+msgstr "Engine"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.php
+msgid "Host"
+msgstr "Host"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.php
+msgid "Username"
+msgstr "Username"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.php
+msgid "Password"
+msgstr "Password"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/db/db.php
+msgid "Test connection"
+msgstr "Test connection"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/plugins/plugins.php
+msgid "Check all"
+msgstr "Check all"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/form/plugins/plugins.php
+msgid "Uncheck all"
+msgstr "Uncheck all"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/input/icon/icon.js
+msgid "Icon Picker"
+msgstr "Icon Picker"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/input/icon/icon.php
+msgid "Browse"
+msgstr "Browse"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
+msgid "Search in"
+msgstr "Search in"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.js
+msgid "icons"
+msgstr "icons"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/components/popup/iconpicker/iconpicker.php
+msgid "LOADING ICONS"
+msgstr "LOADING ICONS"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "General"
+msgstr "General"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Environments"
+msgstr "Environments"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Routes"
+msgstr "Routes"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "New route"
+msgstr "New route"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "URL"
+msgstr "URL"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Real path"
+msgstr "Real path"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Action"
+msgstr "Action"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Delete"
+msgstr "Delete"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Plugins"
+msgstr "Plugins"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Official plugins"
+msgstr "Official plugins"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Name"
+msgstr "Name"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Other plugins"
+msgstr "Other plugins"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "New plugin"
+msgstr "New plugin"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Root"
+msgstr "Root"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Packages"
+msgstr "Packages"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Composer"
+msgstr "Composer"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Add a new package"
+msgstr "Add a new package"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "This is the current environment"
+msgstr "This is the current environment"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Application"
+msgstr "Application"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/config.php
+msgid "Library"
+msgstr "Library"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/index.php
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/error/download/index.php
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+msgid "All rights reserved."
+msgstr "All rights reserved."
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/index.php
+msgid "The application has been updated but you still use an old version."
+msgstr "The application has been updated but you still use an old version."
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/index.php
+msgid "You need to refresh the page to upgrade."
+msgstr "You need to refresh the page to upgrade."
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/index.php
+msgid "Do you want to do it now?"
+msgstr "Do you want to do it now?"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/index.php
+msgid "POLLING FROM SERVICE WORKER VERSION"
+msgstr "POLLING FROM SERVICE WORKER VERSION"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/index.php
+msgid "Service worker registration failed, error"
+msgstr "Service worker registration failed, error"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/appui/home.php
+msgid "There is no certificate present in your config directory!"
+msgstr "There is no certificate present in your config directory!"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/appui/home.php
+msgid "Generate a certificate"
+msgstr "Generate a certificate"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/appui/home.php
+msgid "Welcome in the communication tools!"
+msgstr "Welcome in the communication tools!"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/error/download/index.php
+msgid "Sorry we couldn't download the file"
+msgstr "Sorry we couldn't download the file"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/login/index.php
+msgid "The login page"
+msgstr "The login page"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/update/options.php
+msgid "Choose a type to see the options"
+msgstr "Choose a type to see the options"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/update/options.php
+msgid "Default (from files)"
+msgstr "Default (from files)"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/update/options.php
+msgid "Loading..."
+msgstr "Loading..."
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/html/update/options.php
+msgid "Current (from options)"
+msgstr "Current (from options)"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/config.js
+msgid "in"
+msgstr "in"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/config.js
+msgid "All the fields are mandatory"
+msgstr "All the fields are mandatory"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/config.js
+msgid "This URL is already registered"
+msgstr "This URL is already registered"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/config.js
+msgid "This URL is already registered as a plugin"
+msgstr "This URL is already registered as a plugin"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/config.js
+msgid "Modification saved successfully"
+msgstr "Modification saved successfully"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/iconology.js
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/special_chars.js
+msgid "Copied to clipboard"
+msgstr "Copied to clipboard"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/iconology_old.js
+msgid "Copied class of the icon"
+msgstr "Copied class of the icon"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Home"
+msgstr "Home"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "My profile"
+msgstr "My profile"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Help"
+msgstr "Help"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Full screen"
+msgstr "Full screen"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Log out"
+msgstr "Log out"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Unknown"
+msgstr "Unknown"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Saved"
+msgstr "Saved"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Error"
+msgstr "Error"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Yesterday at"
+msgstr "Yesterday at"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Today at"
+msgstr "Today at"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "Tomorrow at"
+msgstr "Tomorrow at"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "last"
+msgstr "Last"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/index.js
+msgid "at"
+msgstr "at"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/appui/home.js
+msgid "Handshake successful with App-UI central server"
+msgstr "Handshake successful with App-UI central server"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/appui/home.js
+msgid "Impossible to contact the App-UI central server"
+msgstr "Impossible to contact the App-UI central server"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/login/index.js
+msgid "An email has been sent to"
+msgstr "An email has been sent to"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/login/index.js
+msgid "Info"
+msgstr "Info"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/login/index.js
+msgid "Refresh the page to be able to log in or click"
+msgstr "Refresh the page to be able to log in or click"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/js/login/index.js
+msgid "HERE"
+msgstr "HERE"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/gen_cert.php
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/register.php
+msgid "Certificate created"
+msgstr "Certificate created"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/gen_cert.php
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/register.php
+msgid "Failed to create SSL certificate"
+msgstr "Failed to create SSL certificate"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/gen_cert.php
+msgid "The certificate exists"
+msgstr "The certificate exists"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/register.php
+msgid "Application registered with ID"
+msgstr "Application registered with ID"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/model/appui/actions/register.php
+msgid "The application didn't register!"
+msgstr "The application didn't register!"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/private/access_control.php
+msgid "Unauthorized"
+msgstr "Unauthorized"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/private/access_control.php
+msgid "Sorry but you don't have the permission for %s"
+msgstr "Sorry but you don't have the permission for %s"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/public/config.php
+msgid "Configuration"
+msgstr "Configuration"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/public/home.php
+msgid "Welcome in App-UI"
+msgstr "Welcome in App-UI"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/public/observers.php
+msgid "Observers"
+msgstr "Observers"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/public/appui/home.php
+msgid "App-UI communication"
+msgstr "App-UI communication"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/public/picker/component.php
+msgid "Component picker"
+msgstr "Component picker"
+
+#: /home/app-prod/app-ui/vendor/bbn/appui-core/src/mvc/public/update/options.php
+msgid "Options update"
+msgstr "Options update"
