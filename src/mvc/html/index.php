@@ -108,7 +108,6 @@ use bbn\Str;
                 init(d.data);
               }
               else if ('appui' in window){
-                let v = window.localStorage.getItem('bbn-vue-version');
                 appui.receive(d);
               }
             }
@@ -128,7 +127,7 @@ use bbn\Str;
         // and avoid to do it more than 3 times
         if ( attempts < 3 ){
           window.localStorage.setItem('bbn-load', ++attempts);
-          alert("RELOADING??");
+          console.log("RELOADING??");
           location.reload();
         }
       }
@@ -140,10 +139,12 @@ use bbn\Str;
   };
 
   let init = (d) => {
+    bbn.fn.warning("INIT");
+    bbn.fn.log([d.data.version, bbn.vue.version, bbn.version])
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
     if ( d.data && d.data.version ){
-      bbn.vue.version = d.data.version;
+      bbn.app.version = d.data.version;
       let userOnStorage = window.localStorage.getItem('bbn-user-id');
       if (d.data.app
         && d.data.app.user
@@ -153,8 +154,6 @@ use bbn\Str;
         window.localStorage.clear();
         window.localStorage.setItem('bbn-user-id', d.data.app.user.id);
       }
-      window.localStorage.setItem('bbn-vue-version', bbn.vue.version);
-      bbn.version = d.data.version;
     }
 
     let res = {};
@@ -186,14 +185,18 @@ use bbn\Str;
             && ['activated', 'installed'].includes(installingWorker.state)
           ) {
             if (('appui' in window)) {
-              hasBeenAsked = true;
-              if ( confirm(
-                <?=str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
-                <?=str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
-                <?=str::asVar(_("Do you want to do it now?"))?>
-              ) ){
-                isReloading = true;
-                location.reload();
+              bbn.fn.log("SW: STATE CHANGED " + installingWorker.state, window.localStorage.getItem('bbn-user-id'), window.localStorage.getItem('bbn-app-version'), bbn?.app?.version);
+              if (parseInt(bbn.app.version) !== parseInt(window.localStorage.getItem('bbn-app-version'))) {
+                hasBeenAsked = true;
+                if ( confirm(
+                  <?=str::asVar(_("The application has been updated but you still use an old version."))?> + "\n" +
+                  <?=str::asVar(_("You need to refresh the page to upgrade."))?> + "\n" +
+                  <?=str::asVar(_("Do you want to do it now?"))?>
+                ) ){
+                  window.localStorage.setItem('bbn-app-version', bbn.app.version);
+                  isReloading = true;
+                  location.reload();
+                }
               }
             }
             else if ((installingWorker.state === 'activated') && !loaded) {
@@ -206,7 +209,7 @@ use bbn\Str;
             }
           }
           else if ('appui' in window) {
-            let v = window.localStorage.getItem('bbn-vue-version');
+            let v = window.localStorage.getItem('bbn-app-version');
             //console.log(<?=str::asVar(_("POLLING FROM SERVICE WORKER VERSION"))?> + ' ' + v);
             appui.poll();
           }

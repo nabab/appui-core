@@ -93,15 +93,8 @@ elseif ($ctrl->getMode() === 'dom') {
 
     switch ($fullUrl['type_url']) {
       case 'media':
-        $mediaCls = new \bbn\Appui\Medias($ctrl->db);
-        if (($idMedia = $mediaCls->urlToId($fullUrl['url']))
-          && ($m = $mediaCls->getMedia($idMedia, true))
-          && !empty($m['is_image'])
-        ) {
-          $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($fullUrl['url'], '/'));
-          return true;
-        }
-        break;
+        $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($fullUrl['url'], '/'));
+        return true;
       case 'note':
         break;
     }
@@ -149,12 +142,6 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
-  if (($err = $ctrl->inc->user->getError())
-    && !empty($err['code'])
-    && ($err['code'] == 17)
-  ) {
-    die(json_encode(['saltError' => true]));
-  }
   die(json_encode(['disconnected' => true]));
 }
 
@@ -239,10 +226,7 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
   if ($ctrl->inc->perm->has($id_option)) {
     return true;
   }
-  elseif ($ctrl->inc->user->isDev()) {
-    return false;
-  }
-  else {
+  elseif (!$ctrl->inc->user->isDev()) {
     $ctrl->obj->errorTitle = _("Unauthorized");
     $ctrl->obj->error      = sprintf(_("Sorry but you don't have the permission for %s"), $ctrl->getPath());
   }
