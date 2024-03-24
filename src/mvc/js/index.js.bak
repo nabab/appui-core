@@ -194,8 +194,8 @@
             },
 
             getActiveUsers() {
-              if ( bbn.fn.isArray(appui.app.users) ){
-                return bbn.fn.order(appui.app.users.filter(user => {
+              if ( bbn.fn.isArray(appui.users) ){
+                return bbn.fn.order(appui.users.filter(user => {
                   return !!user.active;
                 }), 'text', 'ASC');
               }

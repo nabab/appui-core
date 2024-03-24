@@ -1,6 +1,7 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
+    bbn.fn.log(["DATA SENT TO INDEX JS", data]);
     const slots = bbn.fn.createObject();
     if (data.slots) {
       bbn.fn.iterate(data.slots, (arr, slot) => {
@@ -41,7 +42,8 @@
         appPrefix: data.app_prefix,
         appName: data.app_name,
         plugins: data.plugins,
-        cdn: data.shared_path
+        cdn: data.shared_path,
+        theme: data.theme
       },
       lng: bbn.fn.extend(true, {}, data.lng || {}),
       opt: data.options || {}
@@ -49,13 +51,15 @@
     let js_data = {};
     if (data.js_data) {
       js_data = eval(data.js_data) || {};
+      bbn.fn.log("JSDATA CREATED", js_data);
     }
 
-    if ( !js_data.appuiMixin ){
-      js_data.appuiMixin = {
+    if (!js_data.cfg) {
+      js_data.cfg = {
         header: true,
         nav: true,
         status: true,
+        splittable: true,
         list: [
           {
             url: data.plugins['appui-core'] + '/home',
@@ -69,10 +73,35 @@
       };
     }
 
-    if ( !js_data.componentsMixin ){
-      js_data.componentsMixin = {};
-    }
+    bbn.fn.log("JSDATA", js_data);
 
+    const urlPrefix = 'components/';
+    bbn.fn.each(data.plugins, (path, name) => {
+      bbn.cp.addUrlAsPrefix(
+        name,
+        urlPrefix
+      );
+    });
+    const methods = {
+      getTab(){
+        return this.closest('bbns-container');
+      },
+      popup(){
+        return this.getTab().popup.apply(this, arguments);
+      }
+    };
+    if (js_data.app && js_data.app.methods) {
+      for (let n in js_data.app.methods) {
+        methods[n] = (...args) => appui.app[n](...args)
+      }
+    }
+    bbn.cp.addUrlAsPrefix(
+      bbn.env.appPrefix,
+      urlPrefix,
+      {methods}
+    );
+
+  
     /*
     bbn.fn.each(data.plugins, (path, name) => {
       bbn.cp.addPrefix(name, (tag, resolve, reject) => {
@@ -126,75 +155,6 @@
       }
     });
 
-    let appuiMixin = {
-      data() {
-        return {
-          slots: slots,
-          options: data.options,
-          plugins: data.plugins,
-          browserNotification: true,
-          /*
-          app: {
-            data(){
-              return data.app
-            },
-            computed: {
-              userName(){
-                return bbn.fn.getField(this.users, 'text', {value: this.user.id}) || bbn._('Unknown')
-              }
-            },
-            methods: {
-              link_email: function(em){
-                return em ? '<a href="mailto:'+em+'">'+em+'</a>' : '<em>non défini</em>';
-              },
-
-              getUserName: function(id){
-                return bbn.fn.getField(this.users, "text", "value", id);
-              },
-
-              getUserGroup: function(id){
-                return bbn.fn.getField(this.users, "id_group", "value", id);
-              },
-
-              getActiveUsers() {
-                if ( bbn.fn.isArray(appui.app.users) ){
-                  return bbn.fn.order(appui.app.users.filter(user => {
-                    return !!user.active;
-                  }), 'text', 'ASC');
-                }
-                return [];
-              },
-
-              historique_type: function(d){
-                var op;
-                if ( (typeof(d.operation) !== 'undefined') &&
-                  (op = bbn.fn.getRow(this.historiques, "value", d.operation)) ){
-                  return '<span style="color:' + op.color + '">' + op.text + '</span>';
-                }
-                return "";
-              },
-
-            }
-          }
-          */
-        }
-      },
-      methods: {
-        setImessage(e){
-          if ( (e.hidden !== undefined) && e.id ){
-            bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
-              if ( r.success ){
-                appui.success(bbn._('Saved'));
-              }
-              else {
-                appui.error(bbn._('Error'));
-              }
-            });
-          }
-        }
-      }
-    };
-
     if (window.dayjs !== undefined) {
       dayjs.updateLocale(bbn.env.lang, {
         calendar: {
@@ -209,10 +169,39 @@
     }
 
     window.app = bbn.cp.createApp(document.body.querySelector('div.appui'), {
-      mixins: [appuiMixin, js_data.appuiMixin],
+      data() {
+        return {
+          slots: slots,
+          options: data.options,
+          plugins: data.plugins,
+          browserNotification: true,
+          cfg: js_data.cfg,
+          app: {
+            ...js_data.app,
+            data() {
+              return data.app
+            }
+          },
+          users: data.users,
+          user: data.user,
+          groups: data.groups,
+        }
+      },
       methods: {
         init() {
           this.$el.parentNode.style.opacity = 1;
+        },
+        setImessage(e){
+          if ( (e.hidden !== undefined) && e.id ){
+            bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
+              if ( r.success ){
+                appui.success(bbn._('Saved'));
+              }
+              else {
+                appui.error(bbn._('Error'));
+              }
+            });
+          }
         }
       },
       created(){

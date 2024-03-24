@@ -3,5 +3,5 @@
   <i :class="['bbn-xxl', 'bbn-right-space', currentValue]"
        :title="currentValue"
        v-if="currentValue"/>
-  <bbn-button @click="browse"><?=_("Browse")?></bbn-button>
+  <bbn-button @click="browse"><?= _("Browse") ?></bbn-button>
 </div>

@@ -18,7 +18,7 @@
         </div>
       </bbn-scroll>
       <div v-else class="bbn-overlay bbn-middle">
-        <?=_('LOADING ICONS')?>
+        <?= _('LOADING ICONS') ?>
       </div>
     </div>
   </div>

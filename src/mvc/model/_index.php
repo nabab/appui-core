@@ -1,10 +1,14 @@
 <?php
 
 use bbn\X;
+use bbn\User\Manager;
+use bbn\Mvc\Model;
 
-$mgr = new \bbn\User\Manager($model->inc->user);
+/** @var Model $model  */
+
+$mgr = new Manager($model->inc->user);
 $is_dev = $model->inc->user->isDev();
-$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'dark');
+$theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? BBN_THEME : 'default');
 $vfile = $model->dataPath() . 'version.txt';
 if (!is_file($vfile)) {
   file_put_contents($vfile, '1');
@@ -28,30 +32,26 @@ $data = X::mergeArrays($model->data, [
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
   'cdn_lib' => 'axios,dayjs,bbn-css|latest|' . $theme . ',bbn-cp',
-  'app' => [
-    'users' => $mgr->fullList(),
-    'groups' => $mgr->groups(),
-    'user' => [
-      'id' => $model->inc->user->getId(),
-      'isAdmin' => $model->inc->user->isAdmin(),
-      'isDev' => $model->inc->user->isDev(),
-      'name' => $mgr->getName($model->inc->user->getId()),
-      'email' => $mgr->getEmail($model->inc->user->getId()),
-      'chat' => $chat
-    ],
-    'group' => $mgr->getGroup($model->inc->user->getGroup()),
-    'userId' => $model->inc->user->getId(), // Deprecated
-    'groupId' => $model->inc->user->getGroup() // Deprecated
+  'users' => $mgr->fullList(),
+  'groups' => $mgr->groups(),
+  'user' => [
+    'id' => $model->inc->user->getId(),
+    'isAdmin' => $model->inc->user->isAdmin(),
+    'isDev' => $model->inc->user->isDev(),
+    'name' => $mgr->getName($model->inc->user->getId()),
+    'email' => $mgr->getEmail($model->inc->user->getId()),
+    'chat' => $chat,
+    'id_group' => $model->inc->user->getGroup() // Deprecated
   ]
 ]);
 
-$data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getAppuiOptionId('media'));
+$data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getOptionId('media'));
 $data['options']['categories'] = $model->inc->options->fullOptions();
 
 if ($model->hasPlugin('appui-hr')) {
   /*
   $hr = new \bbn\Appui\Hr($model->db);
-  $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getAppuiOptionId('absences'));
+  $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getOptionId('absences'));
   $data['app'] = X::mergeArrays($data['app'], [
     'staff' => $hr->getStaff(),
     'staffActive' => $hr->getActiveStaff()

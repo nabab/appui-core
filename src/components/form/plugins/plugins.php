@@ -8,11 +8,11 @@
   <div class="bbn-w-100 bbn-padded">
     <div class="bbn-w-100">
       <bbn-button @click="checkAll"
-                  title="<?=_("Check all")?>"
+                  title="<?= _("Check all") ?>"
                   style="padding: 0 4px"
                   icon="nf nf-fa-check_square"/>
       <bbn-button @click="uncheckAll"
-                  title="<?=_("Uncheck all")?>"
+                  title="<?= _("Uncheck all") ?>"
                   style="padding: 0 4px"
                   icon="nf nf-fa-square"/>
     </div>

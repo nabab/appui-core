@@ -6,7 +6,7 @@
         <div class="bbn-label">
           <div v-if="item.desc"
                class="bbn-p bbn-spadded bbn-iblock"
-               @click="getPopup().alert(item.desc, '<?=_('Description')?>')"
+               @click="getPopup().alert(item.desc, '<?= _('Description') ?>')"
                :title="_('Description')">
             <i class="nf nf-mdi-help_circle_outline"></i>
           </div>

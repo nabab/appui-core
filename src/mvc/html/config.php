@@ -4,7 +4,7 @@
             :autoload="false"
 >
 	<bbn-container url="general"
-                 title="<?=_('General')?>"
+                 title="<?= _('General') ?>"
                  :static="true"
                  :scrollable="true">
     <appui-core-config-settings :source="{
@@ -16,7 +16,7 @@
     </appui-core-config-settings>
   </bbn-container>
   <bbn-container url="environments"
-                 title="<?=_('Environments')?>"
+                 title="<?= _('Environments') ?>"
                  :static="true"
                  :scrollable="true">
       <div class="bbn-w-100 bbn-c bbn-padded">
@@ -39,35 +39,35 @@
       </appui-core-config-settings>
   </bbn-container>
   <bbn-container url="routes"
-                 title="<?=_('Routes')?>"
+                 title="<?= _('Routes') ?>"
                  :static="true">
     <bbn-table :source="source.aliases"
                ref="aliases-table"
                :toolbar="[{
-                         text: '<?=_('New route')?>',
+                         text: '<?= _('New route') ?>',
                          action: 'insert'
                          }]"
                @saverow="routeSave"
                :editable="true">
       <bbns-column field="url"
-                   title="<?=_('URL')?>"
+                   title="<?= _('URL') ?>"
                    :width="350">
       </bbns-column>
       <bbns-column field="path"
-                   title="<?=_('Real path')?>">
+                   title="<?= _('Real path') ?>">
       </bbns-column>
       <bbns-column field="path"
                    :width="100"
                    class="bbn-c"
-                   title="<?=_('Action')?>"
+                   title="<?= _('Action') ?>"
                    :sortable="false"
                    :buttons="[{
-                               text: '<?=_('Edit')?>',
+                               text: '<?= _('Edit') ?>',
                              	 icon: 'nf nf-fa-edit',
                              	 notext: true,
                                action: 'edit'
                              }, {
-                               text: '<?=_('Delete')?>',
+                               text: '<?= _('Delete') ?>',
                              	 icon: 'nf nf-fa-times',
                              	 notext: true,
                                action: 'delete'
@@ -76,7 +76,7 @@
     </bbn-table>
   </bbn-container>
   <bbn-container url="plugins"
-                 title="<?=_('Plugins')?>"
+                 title="<?= _('Plugins') ?>"
                  :static="true">
     <bbn-router class="bbn-overlay"
                 default="official"
@@ -84,33 +84,33 @@
                 :autoload="false"
     >
       <bbn-container url="official"
-                     title="<?=_('Official plugins')?>"
+                     title="<?= _('Official plugins') ?>"
                      :static="true">
         <bbn-table :source="advisedSource"
                    :editable="true">
-          <bbns-column title="<?=_('Name')?>"
+          <bbns-column title="<?= _('Name') ?>"
                        :width="150"
                        field="sname">
           </bbns-column>
-          <bbns-column title="<?=_('URL')?>"
+          <bbns-column title="<?= _('URL') ?>"
                        field="url"
                        :width="250">
           </bbns-column>
-          <bbns-column title="<?=_('Description')?>"
+          <bbns-column title="<?= _('Description') ?>"
                        field="description">
           </bbns-column>
           <bbns-column field="path"
                        :width="100"
                        class="bbn-c"
-                       title="<?=_('Action')?>"
+                       title="<?= _('Action') ?>"
                        :sortable="false"
                        :buttons="[{
-                                   text: '<?=_('Edit')?>',
+                                   text: '<?= _('Edit') ?>',
                                    action: 'edit',
                                    icon: 'nf nf-fa-edit',
                                    notext: true
                                  }, {
-                                   text: '<?=_('Delete')?>',
+                                   text: '<?= _('Delete') ?>',
                                    action: 'delete',
                                    icon: 'nf nf-fa-times',
                                    notext: true
@@ -119,43 +119,43 @@
         </bbn-table>
       </bbn-container>
       <bbn-container url="other"
-                     title="<?=_('Other plugins')?>"
+                     title="<?= _('Other plugins') ?>"
                      :static="true">
         <bbn-table :source="devSource"
                    ref="oplugins-table"
                    :toolbar="[{
-                             text: '<?=_('New plugin')?>',
+                             text: '<?= _('New plugin') ?>',
                              action: 'insert'
                              }]"
                    :editable="true">
-          <bbns-column title="<?=_('Name')?>"
+          <bbns-column title="<?= _('Name') ?>"
                        :width="200"
                        field="name">
           </bbns-column>
-          <bbns-column title="<?=_('Root')?>"
+          <bbns-column title="<?= _('Root') ?>"
                        :width="100"
                        :source="[{text: _('Application'), value: 'app'}, {text: _('Library'), value: 'lib'}]"
                        field="root">
           </bbns-column>
-          <bbns-column title="<?=_('URL')?>"
+          <bbns-column title="<?= _('URL') ?>"
                        :width="250"
                        field="url">
           </bbns-column>
-          <bbns-column title="<?=_('Description')?>"
+          <bbns-column title="<?= _('Description') ?>"
                        field="description">
           </bbns-column>
           <bbns-column field="path"
                        :width="100"
                        class="bbn-c"
-                       title="<?=_('Action')?>"
+                       title="<?= _('Action') ?>"
                        :sortable="false"
                        :buttons="[{
-                                   text: '<?=_('Edit')?>',
+                                   text: '<?= _('Edit') ?>',
                                    action: 'edit',
                                    icon: 'nf nf-fa-edit',
                                    notext: true
                                  }, {
-                                   text: '<?=_('Delete')?>',
+                                   text: '<?= _('Delete') ?>',
                                    action: 'delete',
                                    icon: 'nf nf-fa-times',
                                    notext: true
@@ -166,18 +166,16 @@
     </bbn-router>
   </bbn-container>
   <bbn-container url="packages"
-                  title="<?=_('Packages')?>"
+                  title="<?= _('Packages') ?>"
                  :static="true"
                  :scrollable="true">
     <div class="bbn-padded">
-      <h2>
-        <?=_('Composer')?>
-      </h2>
+      <h2>Composer</h2>
       <div class="bbn-grid-fields">
-        <label><?=_('Name')?></label>
+        <label><?= _('Name') ?></label>
         <bbn-input v-model="source.composer.name"></bbn-input>
 
-        <label><?=_('Description')?></label>
+        <label><?= _('Description') ?></label>
         <bbn-textarea v-model="source.composer.description" class="bbn-w-100" :rows="3"></bbn-textarea>
 
         <template v-for="pack in source.packages">
@@ -195,7 +193,7 @@
       </div>
       <div class="bbn-vpadded bbn-w-100">
         <bbn-button icon="nf nf-fa-plus"
-                    text="<?=_('Add a new package')?>"
+                    text="<?= _('Add a new package') ?>"
                     @click="addPackage()">
         </bbn-button>
       </div>

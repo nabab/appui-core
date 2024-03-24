@@ -55,17 +55,3 @@ else {
   $ctrl->data['js_data'] = $ctrl->customPluginView('index', 'js', $ctrl->data, 'appui-core');
   $ctrl->obj->data = $ctrl->data;
 }
-
-
-/*
-echo "HELLO hey";
-$items = $ctrl->inc->options->items($ctrl->inc->options->getRoot());
-\bbn\X::hdump(\bbn\Str::isUid($ctrl->inc->options->getRoot()));
-\bbn\X::hdump(\bbn\Str::isUid($ctrl->inc->options->getDefault()));
-\bbn\X::hdump(bin2hex($ctrl->inc->options->getRoot()));
-\bbn\X::hdump(bin2hex($ctrl->inc->options->getDefault()));
-\bbn\X::hdump(count($ctrl->inc->options->nativeOption($ctrl->inc->options->getRoot())));
-\bbn\X::hdump(count($items));
-\bbn\X::hdump(\bbn\X::convertUids($items));
-\bbn\X::hdump(\bbn\X::convertUids($ctrl->inc->options->fullOptions($items[0])));
-*/

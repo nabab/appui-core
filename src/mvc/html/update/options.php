@@ -1,7 +1,7 @@
 <!-- HTML Document -->
 <div class="bbn-overlay bbn-flex-height">
   <div class="bbn-padded bbn-lg bbn-c bbn-w-100">
-    <bbn-dropdown placeholder="<?=_("Choose a type to see the options")?>"
+    <bbn-dropdown placeholder="<?= _("Choose a type to see the options") ?>"
                   :source="types"
                   v-model="currentType"/>
   </div>
@@ -9,7 +9,7 @@
     <div class="bbn-w-50 bbn-h-100">
       <div class="bbn-overlay bbn-flex-height">
         <div class="bbn-header bbn-b bbn-lg bbn-spadded bbn-c">
-          <?=_("Default (from files)")?>
+          <?= _("Default (from files)") ?>
         </div>
         <div class="bbn-flex-fill">
           <div class="bbn-100 bbn-padded"
@@ -23,7 +23,7 @@
           </div>
           <div v-else
                class="bbn-overlay bbn-middle bbn-xl">
-            <?=_("Loading...")?>
+            <?= _("Loading") ?>...
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@
     <div class="bbn-w-50 bbn-h-100">
       <div class="bbn-overlay bbn-flex-height">
         <div class="bbn-header bbn-b bbn-lg bbn-spadded bbn-c">
-          <?=_("Current (from options)")?>
+          <?= _("Current (from options)") ?>
         </div>
         <div class="bbn-flex-fill">
           <div class="bbn-100 bbn-padded"
@@ -45,7 +45,7 @@
           </div>
           <div v-else
                class="bbn-overlay bbn-middle bbn-xl">
-            <?=_("Loading...")?>
+            <?= _("Loading") ?>...
           </div>
         </div>
       </div>

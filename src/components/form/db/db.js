@@ -9,10 +9,10 @@
     data(){
       return {
         engines: [{
-          text: bbn._('MySQL'),
+          text: 'MySQL',
           value: 'mysql'
         }, {
-          text: bbn._('SQLite'),
+          text: 'SQLite',
           value: 'sqlite'
         }],
         verified: false
