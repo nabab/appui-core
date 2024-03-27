@@ -62,7 +62,7 @@ if ($model->hasPlugin('appui-hr')) {
 if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
   $data = X::mergeArrays($data, $custom_data);
 }
-$data['script_src'] = BBN_SHARED_PATH . 'dev/bbn-cp/v2/dist/bbn-cp.js?' . http_build_query([
+$data['script_src'] = BBN_SHARED_PATH . 'lib/bbn-cp/v2/dist/bbn-cp.js?' . http_build_query([
   'lang' => $data['lang'] ?? BBN_LANG,
   'test' => !BBN_IS_PROD,
   'v' => $data['version']

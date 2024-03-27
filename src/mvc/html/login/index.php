@@ -47,7 +47,7 @@
              :custom="custom">
   </bbn-login>
 </div>
-<script type="text/javascript" src="<?= $shared_path ?>dev/bbn-cp/v2/dist/bbn-cp.js?<?=http_build_query([
+<script type="text/javascript" src="<?= $shared_path ?>lib/bbn-cp/v2/dist/bbn-cp.js?<?=http_build_query([
   'lang' => $lang,
   'test' => !!$test
 ])?>"></script>
