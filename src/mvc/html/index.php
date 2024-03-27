@@ -60,7 +60,7 @@
   const hasServiceWorker = !!('serviceWorker' in navigator);
 
   /** @var {String} scriptSrc The script source */
-  const scriptSrc = <?= Str::asVar($script_src ?: '') ?>;
+  const scriptSrc = <?= st::asVar($script_src ?: '') ?>;
 
   /** @var {Boolean} hasBeenAsked True if it already has been asked to reload because the version is new */
   let hasBeenAsked = false;
@@ -181,9 +181,9 @@
             if (('appui' in window)) {
               hasBeenAsked = true;
               if ( confirm(
-                <?= Str::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
-                <?= Str::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
-                <?= Str::asVar(_("Do you want to do it now?")) ?>
+                <?= st::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
+                <?= st::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
+                <?= st::asVar(_("Do you want to do it now?")) ?>
               ) ){
                 isReloading = true;
                 location.reload();
@@ -200,7 +200,7 @@
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn.cp-version');
-            console.log(<?= Str::asVar(_("Polling from service worker")) ?> + ' ' + _("version") + ' ' + v);
+            console.log(<?= st::asVar(_("Polling from service worker")) ?> + ' ' + _("version") + ' ' + v);
             appui.poll();
           }
         };
@@ -215,7 +215,7 @@
       }
     })
     .catch((error) => {
-      console.log(<?= Str::asVar(_("Service worker registration failed, error")) ?>, error);
+      console.log(<?= st::asVar(_("Service worker registration failed, error")) ?>, error);
     });
   }
   else {

@@ -5,7 +5,7 @@
 >
 	<bbn-container url="general"
                  title="<?= _('General') ?>"
-                 :static="true"
+                 :fixed="true"
                  :scrollable="true">
     <appui-core-config-settings :source="{
                                          schema: source.schema.settings,
@@ -17,7 +17,7 @@
   </bbn-container>
   <bbn-container url="environments"
                  title="<?= _('Environments') ?>"
-                 :static="true"
+                 :fixed="true"
                  :scrollable="true">
       <div class="bbn-w-100 bbn-c bbn-padded">
         <bbn-dropdown :source="envs"
@@ -40,7 +40,7 @@
   </bbn-container>
   <bbn-container url="routes"
                  title="<?= _('Routes') ?>"
-                 :static="true">
+                 :fixed="true">
     <bbn-table :source="source.aliases"
                ref="aliases-table"
                :toolbar="[{
@@ -77,7 +77,7 @@
   </bbn-container>
   <bbn-container url="plugins"
                  title="<?= _('Plugins') ?>"
-                 :static="true">
+                 :fixed="true">
     <bbn-router class="bbn-overlay"
                 default="official"
                 :nav="true"
@@ -85,7 +85,7 @@
     >
       <bbn-container url="official"
                      title="<?= _('Official plugins') ?>"
-                     :static="true">
+                     :fixed="true">
         <bbn-table :source="advisedSource"
                    :editable="true">
           <bbns-column title="<?= _('Name') ?>"
@@ -120,7 +120,7 @@
       </bbn-container>
       <bbn-container url="other"
                      title="<?= _('Other plugins') ?>"
-                     :static="true">
+                     :fixed="true">
         <bbn-table :source="devSource"
                    ref="oplugins-table"
                    :toolbar="[{
@@ -167,7 +167,7 @@
   </bbn-container>
   <bbn-container url="packages"
                   title="<?= _('Packages') ?>"
-                 :static="true"
+                 :fixed="true"
                  :scrollable="true">
     <div class="bbn-padded">
       <h2>Composer</h2>
