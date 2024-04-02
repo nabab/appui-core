@@ -414,7 +414,7 @@
       }
       // Error in case the token does not match the window token
       if (windows[senderID].token !== d.token) {
-        throw new Error("The token doesn't correspond");
+        throw Error("The token doesn't correspond");
       }
     }
     // Set the last client message

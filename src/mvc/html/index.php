@@ -205,7 +205,7 @@
           }
         };
       };
-      if (navigator.serviceWorker.controller && !loaded) {
+      if (!loaded) {
         if (!DOMLoaded) {
           document.addEventListener('DOMContentLoaded', onDomLoaded)
         }

@@ -51,7 +51,7 @@
     let js_data = {};
     if (data.js_data) {
       js_data = eval(data.js_data) || {};
-      bbn.fn.log("JSDATA CREATED", js_data);
+      //bbn.fn.log("JSDATA CREATED", js_data);
     }
 
     if (!js_data.cfg) {
@@ -72,8 +72,6 @@
         browserNotification: true
       };
     }
-
-    bbn.fn.log("JSDATA", js_data);
 
     const urlPrefix = 'components/';
     bbn.fn.each(data.plugins, (path, name) => {

@@ -8,7 +8,8 @@
         lang: data.lang,
         connection_failures: 0,
         connection_max_failures: 10,
-        cdn: data.shared_path
+        cdn: data.shared_path,
+        theme: 'default'
       },
       lng: bbn.fn.extend(true, {}, data.lng || {}),
       opt: data.options || {}
