@@ -49,13 +49,13 @@ $data = X::mergeArrays($model->data, [
   ]
 ]);
 
-$data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getAppuiOptionId('media'));
+$data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getOptionId('media'));
 $data['options']['categories'] = $model->inc->options->fullOptions();
 
 if ($model->hasPlugin('appui-hr')) {
   /*
   $hr = new \bbn\Appui\Hr($model->db);
-  $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getAppuiOptionId('absences'));
+  $data['options']['hr']['absences'] = $model->inc->options->fullOptions(\bbn\Appui\Hr::getOptionId('absences'));
   $data['app'] = X::mergeArrays($data['app'], [
     'staff' => $hr->getStaff(),
     'staffActive' => $hr->getActiveStaff()

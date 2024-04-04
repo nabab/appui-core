@@ -307,6 +307,7 @@
             // Check if the window exists
             && windows[event.source.id]
           ){
+
             // Create 'channels' window property if not exists
             if (!('channels' in windows[event.source.id])) {
               windows[event.source.id].channels = [];
@@ -322,12 +323,8 @@
         case 'unregisterChannel':
           // Check if the channel name is gived
           if (event.data.channel
-            // Check if the window exists
-            && windows[event.source.id]
-            // Check if 'channels' window property exists
-            && windows[event.source.id].channels
             // Check if the channel exists into the window channels list
-            && windows[event.source.id].channels.includes(event.data.channel)
+            && (windows[event.source.id]?.channels || []).includes(event.data.channel)
           ){
             // Remove the channel form the window channels list
             windows[event.source.id].channels.splice(
@@ -335,6 +332,7 @@
               1
             );
           }
+
           break;
 
         // The message type used for send a message to all windows registered to a specific channel
@@ -344,11 +342,9 @@
             // Browse all windows
             clientList.forEach(client => {
               // Check if the window id is different from the sender one
+              // Check if the window is registered to gived channel
               if ((client.id !== event.source.id)
-              // Check if the window exists into windows list
-                && windows[client.id]
-                // Check if the window is registered to gived channel
-                && windows[client.id].channels.includes(event.data.channel)
+                && (windows[client.id]?.channels || []).includes(event.data.channel)
               ) {
                 // Send message to the window
                 client.postMessage({
