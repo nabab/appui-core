@@ -74,5 +74,6 @@ else {
   $ctrl
     ->setColor('purple', 'white')
     ->setIcon('nf nf-fa-font')
+    ->setObj(['scrollable' => false])
     ->combo("Chartology");
 }
