@@ -245,7 +245,7 @@
               :header="cfg.header"
               :nav="cfg.nav"
               :users="users"
-              :users="groups"
+              :groups="groups"
               :user="user"
               :status="cfg.status"
               :splittable="cfg.splittable"
