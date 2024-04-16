@@ -12,7 +12,7 @@
   </div>
   <div class="bbn-flex-fill">
     <bbn-scroll ref="scroll"
-                @reachBottom="addChars"
+                @reachbottom="addChars"
                 @ready="updateChars">
       <ul ref="ul">
         <li v-for="char in currentChars" class="bbn-block">

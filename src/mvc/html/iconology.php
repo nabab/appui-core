@@ -11,7 +11,7 @@
   </div>
   <div class="bbn-flex-fill">
     <bbn-scroll ref="scroll"
-                @reachBottom="addIcons"
+                @reachbottom="addIcons"
                 @scroll="scrolling"
                 @resize="resize">
       <ul ref="ul">
