@@ -16,9 +16,8 @@ else{
   die("Impossible to set up the definitions in the root supercontroller");
 }
 
-if (constant('BBN_APP_PREFIX') && ($idRoot = $ctrl->inc->options->fromCode(constant('BBN_APP_PREFIX'), false))) {
+if (constant('BBN_APP_NAME') && ($idRoot = $ctrl->inc->options->fromCode(constant('BBN_APP_NAME'), false))) {
   $ctrl->inc->options->setDefault($idRoot);
-  bbn\X::ddump("HJHHJH");
 }
 
 if ($ctrl->isCli()) {

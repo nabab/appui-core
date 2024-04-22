@@ -74,5 +74,6 @@ else {
   $ctrl
     ->setColor('purple', 'white')
     ->setIcon('nf nf-fa-image')
+    ->setObj(['scrollable' => false])
     ->combo("Iconology");
 }

@@ -12,7 +12,6 @@
   <div class="bbn-flex-fill">
     <bbn-scroll ref="scroll"
                 @reachbottom="addIcons"
-                @scroll="scrolling"
                 @resize="resize">
       <ul ref="ul">
         <li v-for="(icon, idx) in icons"

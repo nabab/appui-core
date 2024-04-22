@@ -85,9 +85,6 @@
             this.init();
           }, "init", 350);
       },
-      scrolling() {
-        this.scrolltop = this.getRef('scroll').getRef('scrollContainer').scrollTop;
-      },
       resize() {
         this.currentWidth = this.getRef('scroll').containerWidth;
         this.update();
