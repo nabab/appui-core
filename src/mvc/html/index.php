@@ -257,7 +257,7 @@
       foreach ($slots as $name => $arr) {
         foreach ($arr as $i => $o) {
           ?>
-          <component slot="<?= $name ?>"
+          <component bbn-slot:<?= $name ?>
                     :is="slots.<?= $name ?>[<?= $i ?>].cp"
                     :source="slots.<?= $name ?>[<?= $i ?>].data">
           </component>
