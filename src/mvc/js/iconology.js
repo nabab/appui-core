@@ -17,6 +17,7 @@
         totIcons: this.source.icons,
         ready: true,
         sectionSize: 125,
+        numIcons: this.source.icons.length,
         // The real source from the items
         iconsPerPage:  10,
         containerSize: 0,
@@ -31,30 +32,18 @@
     computed: {
       // The array from which the source (currentIcons)is built
       icons(){
-        // Filtered
-        if ( this.searchFix ){
-          return this.totIcons.filter(icon => icon.search(this.searchFix.toLowerCase()) > -1);
-        }
-        // or not
-        return this.totIcons;
+        const icons = this.searchFix ? this.totIcons.filter(icon => icon.search(this.searchFix.toLowerCase()) > -1) : this.totIcons;
+        this.numIcons = icons.length;
+        return icons.slice(0, this.numberShown);
       }
     },
     methods:
     {
       addIcons() {
         if ( this.icons.length) {
-          this.start = this.numberShown;
-          this.end = this.start + this.iconsPerPage;
-          if ( this.end > this.source.length ){
-            this.end = this.source.length;
-          }
-          for ( let i = this.start; i < this.end; i++ ){
-            this.numberShown++;
-          }
-          this.$nextTick(() => {
-            this.getRef('scroll').onResize(true);
-          });
+          this.numberShown += this.iconsPerPage;
         }
+        this.$nextTick(() => this.getRef('scroll').onResize(true))
       },
       setIconsPerPage() {
         if (this.icons.length) {
@@ -65,6 +54,7 @@
           for (; iconsPerRow * section < this.currentWidth ; iconsPerRow++);
           for (; iconsPerColumn * section < this.containerSize ; iconsPerColumn++);
           this.iconsPerPage = iconsPerColumn * iconsPerRow * 2;
+          this.$nextTick(() => this.getRef('scroll').onResize(true))
         }
         return;
       },
@@ -106,9 +96,10 @@
       },
       searchFix(newVal) {
         this.update();
+        this.numberShown = this.iconsPerPage || 10;
+        this.$nextTick(() => this.getRef('scroll').onResize(true))
       },
       search() {
-        this.numberShown = this.itemsPerPage;
         this.updateData();
       },
     }

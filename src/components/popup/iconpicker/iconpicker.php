@@ -6,7 +6,7 @@
                :nullable="true"
                ref="search"/>
     <div class="bbn-iblock bbn-hpadded bbn-l"
-         bbn-text="Math.min(numberShown, icons?.length || 0) + ' icons'"
+         bbn-text="numIcons + ' icons'"
          style="width: 10em"/>
   </div>
   <div class="bbn-flex-fill">

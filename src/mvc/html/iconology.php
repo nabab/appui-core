@@ -6,7 +6,7 @@
                :nullable="true"
                ref="search"/>
     <div class="bbn-iblock bbn-hpadded bbn-l"
-         v-text="icons.length + ' icons'"
+         v-text="numIcons + ' icons'"
          style="width: 10em"/>
   </div>
   <div class="bbn-flex-fill">
@@ -15,7 +15,6 @@
                 @resize="resize">
       <ul ref="ul">
         <li v-for="(icon, idx) in icons"
-            v-if="idx < numberShown"
             class="bbn-block"
             :key="icon"
             :ref="'item-'+ idx">
