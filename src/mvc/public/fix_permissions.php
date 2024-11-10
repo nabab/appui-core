@@ -6,7 +6,7 @@
 
 use bbn\X;
 
-/** @var $ctrl \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 //if (!empty($ctrl->post['go'])) {
   $plugins = $ctrl->getPlugins();
   die(var_dump($plugins));

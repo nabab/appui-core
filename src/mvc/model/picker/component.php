@@ -4,7 +4,7 @@
  *
  **/
 use bbn\X;
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 if ($model->hasData('id')) {
   $fs = new bbn\file\system();

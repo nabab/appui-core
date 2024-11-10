@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $model \bbn\Mvc\Model*/
+/** @var bbn\Mvc\Model $model */
 
 $api = new bbn\Appui\Api($model->inc->user, $model->db);
 return [

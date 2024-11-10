@@ -4,7 +4,7 @@
  *
  **/
 
-/** @var $ctrl \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 echo $ctrl
   ->addData(['static_path' => BBN_STATIC_PATH])
   ->getView().
