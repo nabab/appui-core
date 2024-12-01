@@ -19,7 +19,7 @@
                  title="<?= _('Environments') ?>"
                  :fixed="true"
                  :scrollable="true">
-      <div class="bbn-w-100 bbn-c bbn-padded">
+      <div class="bbn-w-100 bbn-c bbn-padding">
         <bbn-dropdown :source="envs"
                       v-model="envIndex"
                       class="bbn-wider">
@@ -169,7 +169,7 @@
                   title="<?= _('Packages') ?>"
                  :fixed="true"
                  :scrollable="true">
-    <div class="bbn-padded">
+    <div class="bbn-padding">
       <h2>Composer</h2>
       <div class="bbn-grid-fields">
         <label><?= _('Name') ?></label>
@@ -191,7 +191,7 @@
           <div v-text="pack.version"></div>
         </template>
       </div>
-      <div class="bbn-vpadded bbn-w-100">
+      <div class="bbn-vpadding bbn-w-100">
         <bbn-button icon="nf nf-fa-plus"
                     text="<?= _('Add a new package') ?>"
                     @click="addPackage()">

@@ -4,8 +4,8 @@
           :data="source.data"
           :confirm-message="confirmMessage"
           @success="success"
-          :source="plugins">
-  <div class="bbn-w-100 bbn-padded">
+          :source="{plugins}">
+  <div class="bbn-w-100 bbn-padding">
     <div class="bbn-w-100">
       <bbn-button @click="checkAll"
                   title="<?= _("Check all") ?>"
@@ -17,7 +17,7 @@
                   icon="nf nf-fa-square"/>
     </div>
     <div v-for="plugin of source.plugins"
-         class="bbn-w-100 bbn-spadded">
+         class="bbn-w-100 bbn-spadding">
       <bbn-checkbox v-model="plugins[plugin.value]"
                     :label="plugin.text"/>
     </div>

@@ -1,4 +1,4 @@
-<div class="bbn-grid-fields bbn-padded">
+<div class="bbn-grid-fields bbn-padding">
   <label><?= _('Engine') ?></label>
   <div>
     <bbn-dropdown :source="engines"

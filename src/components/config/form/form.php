@@ -5,7 +5,7 @@
            :data="source.data"
            @success="success"
            :action="source.item.editable ? source.root + 'actions/settings' : undefined">
-  <div class="bbn-padded">
+  <div class="bbn-padding">
     <div v-if="source.item.viewable"
          v-text="source.value">
     </div>

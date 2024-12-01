@@ -1,11 +1,11 @@
 <div class="bbn-overlay bbn-flex-height appui-core-special-chars">
-  <div class="bbn-line-breaker bbn-middle bbn-c bbn-padded">
+  <div class="bbn-line-breaker bbn-middle bbn-c bbn-padding">
     <bbn-input :placeholder="'Search in ' + totChars.length + ' chars'"
                v-model="searchChar"
                class="search bbn-xl bbn-w-50"
                ref="search"
     ></bbn-input>
-    <div class="bbn-iblock bbn-hpadded bbn-l"
+    <div class="bbn-iblock bbn-hpadding bbn-l"
          v-text="chars.length + ' chars'"
          style="width: 10em">
     </div>

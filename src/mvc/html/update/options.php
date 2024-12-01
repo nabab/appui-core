@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 <div class="bbn-overlay bbn-flex-height">
-  <div class="bbn-padded bbn-lg bbn-c bbn-w-100">
+  <div class="bbn-padding bbn-lg bbn-c bbn-w-100">
     <bbn-dropdown placeholder="<?= _("Choose a type to see the options") ?>"
                   :source="types"
                   v-model="currentType"/>
@@ -8,11 +8,11 @@
   <div class="bbn-flex-fill">
     <div class="bbn-w-50 bbn-h-100">
       <div class="bbn-overlay bbn-flex-height">
-        <div class="bbn-header bbn-b bbn-lg bbn-spadded bbn-c">
+        <div class="bbn-header bbn-b bbn-lg bbn-spadding bbn-c">
           <?= _("Default (from files)") ?>
         </div>
         <div class="bbn-flex-fill">
-          <div class="bbn-100 bbn-padded"
+          <div class="bbn-100 bbn-padding"
                v-if="currentType && !isChanging">
             <bbn-tree :source="rf"
                       :storage="true"
@@ -30,11 +30,11 @@
     </div>
     <div class="bbn-w-50 bbn-h-100">
       <div class="bbn-overlay bbn-flex-height">
-        <div class="bbn-header bbn-b bbn-lg bbn-spadded bbn-c">
+        <div class="bbn-header bbn-b bbn-lg bbn-spadding bbn-c">
           <?= _("Current (from options)") ?>
         </div>
         <div class="bbn-flex-fill">
-          <div class="bbn-100 bbn-padded"
+          <div class="bbn-100 bbn-padding"
                v-if="currentType && !isChanging">
             <bbn-tree :source="ro"
                       :storage="true"

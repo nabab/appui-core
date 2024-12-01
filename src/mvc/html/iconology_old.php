@@ -5,7 +5,7 @@
                class="search"
                ref="search"
     ></bbn-input>
-    <div class="bbn-iblock bbn-hpadded bbn-l" v-text="icons.length + ' icons'" style="width: 10em"></div>
+    <div class="bbn-iblock bbn-hpadding bbn-l" v-text="icons.length + ' icons'" style="width: 10em"></div>
   </div>
   <div class="bbn-flex-fill">
     <bbn-scroll ref="scroll" @reachbottom="addIcons">

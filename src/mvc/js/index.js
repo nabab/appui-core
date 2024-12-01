@@ -1,7 +1,7 @@
 /* jslint esversion: 6 */
 (() => {
   return (data) => {
-    bbn.fn.log(["DATA SENT TO INDEX JS", data]);
+    //bbn.fn.log(["DATA SENT TO INDEX JS", data]);
     const slots = bbn.fn.createObject();
     if (data.slots) {
       bbn.fn.iterate(data.slots, (arr, slot) => {
@@ -77,7 +77,8 @@
     bbn.fn.each(data.plugins, (path, name) => {
       bbn.cp.addUrlAsPrefix(
         name,
-        urlPrefix
+        urlPrefix,
+        bbn.cp.mixins.basic
       );
     });
     const methods = {

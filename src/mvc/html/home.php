@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 
-<div class="bbn-lpadded">
+<div class="bbn-lpadding">
   <h1>
     Welcome
   </h1>

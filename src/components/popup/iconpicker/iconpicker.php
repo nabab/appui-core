@@ -1,11 +1,11 @@
 <div class="bbn-overlay bbn-flex-height appui-core-iconpicker">
-  <div class="bbn-w-100 bbn-middle bbn-c bbn-padded">
+  <div class="bbn-w-100 bbn-middle bbn-c bbn-padding">
     <bbn-input :placeholder="totIcons ? _('Search in %d icons', totIcons.length) : _('Loading...')"
                bbn-model="searchIcon"
                class="search bbn-xl bbn-w-50"
                :nullable="true"
                ref="search"/>
-    <div class="bbn-iblock bbn-hpadded bbn-l"
+    <div class="bbn-iblock bbn-hpadding bbn-l"
          bbn-text="numIcons + ' icons'"
          style="width: 10em"/>
   </div>

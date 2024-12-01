@@ -5,7 +5,7 @@
       <template v-for="(item, idx) in schema.items">
         <div class="bbn-label">
           <div v-if="item.desc"
-               class="bbn-p bbn-spadded bbn-iblock"
+               class="bbn-p bbn-spadding bbn-iblock"
                @click="getPopup().alert(item.desc, '<?= _('Description') ?>')"
                :title="_('Description')">
             <i class="nf nf-mdi-help_circle_outline"></i>
@@ -14,13 +14,13 @@
         </div>
         <div>
           <div v-if="item.viewable"
-               class="bbn-p bbn-spadded bbn-iblock"
+               class="bbn-p bbn-spadding bbn-iblock"
                @click="open(item)"
                :title="_('View')">
             <i class="nf nf-fa-eye"></i>
           </div>
           <div v-else-if="item.editable"
-               class="bbn-p bbn-spadded bbn-iblock"
+               class="bbn-p bbn-spadding bbn-iblock"
                @click="open(item)"
                :title="_('Edit')">
             <i class="nf nf-fa-edit"></i>
