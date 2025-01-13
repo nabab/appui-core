@@ -55,22 +55,28 @@
     }
 
     if (!js_data.cfg) {
-      js_data.cfg = {
-        header: true,
-        nav: true,
-        status: true,
-        splittable: true,
-        list: [
-          {
-            url: data.plugins['appui-core'] + '/home',
-            title: bbn._("Home"),
-            load: true,
-            fixed: true,
-            icon: 'nf nf-fa-home'
-          }
-        ],
-        browserNotification: true
-      };
+      js_data.cfg = {};
+    }
+    const cfg = {
+      header: true,
+      nav: true,
+      status: true,
+      splittable: true,
+      list: [
+        {
+          url: data.plugins['appui-core'] + '/home',
+          title: bbn._("Home"),
+          load: true,
+          fixed: true,
+          icon: 'nf nf-fa-home'
+        }
+      ],
+      browserNotification: true
+    };
+    for (let n in cfg) {
+      if (js_data.cfg?.[n] === undefined) {
+        js_data.cfg[n] = cfg[n];
+      }
     }
 
     const urlPrefix = 'components/';
