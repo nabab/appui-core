@@ -13,10 +13,10 @@
     },
     methods: {
       browse(){
-        this.getPopup().open({
+        this.getPopup({
           width: '80%',
           height: '80%',
-          title: bbn._('Icon Picker'),
+          label: bbn._('Icon Picker'),
           component: 'appui-core-popup-iconpicker',
           source: {
             field: 'icon',

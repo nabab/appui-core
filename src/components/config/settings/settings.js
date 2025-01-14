@@ -34,8 +34,8 @@
         this.source.settings[data.name] = data.value;
       },
       open(item){
-				this.getPopup().open({
-          title: (item.editable ? bbn._('Setting modification') : bbn._('Setting visualization')) + ': ' + item.text,
+				this.getPopup({
+          label: (item.editable ? bbn._('Setting modification') : bbn._('Setting visualization')) + ': ' + item.text,
           component: 'appui-core-config-form',
           width: 450,
           height: bbn.fn.isString(item.editable) ? 300 : 150,

@@ -7,7 +7,7 @@
     <div class="bbn-padding">
       <?= ("You need to have a certificate registered in order to communicate with other servers") ?><br><br>
       <bbn-button @click="register"
-                  text="<?= _("Generate a certificate") ?>"/>
+                  label="<?= _("Generate a certificate") ?>"/>
     </div>
   </div>
   <div class="bbn-w-100 bbn-c" v-else>

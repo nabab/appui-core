@@ -17,7 +17,7 @@
       <ul ref="ul">
         <li v-for="char in currentChars" class="bbn-block">
           <bbn-button :title="char.fullName"
-                      :text="char.char"
+                      :label="char.char"
                       class="btn bbn-xxl"
                       @click="copyChar(char)"
           >

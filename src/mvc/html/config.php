@@ -4,7 +4,7 @@
             :autoload="false"
 >
 	<bbn-container url="general"
-                 title="<?= _('General') ?>"
+                 label="<?= _('General') ?>"
                  :fixed="true"
                  :scrollable="true">
     <appui-core-config-settings :source="{
@@ -16,7 +16,7 @@
     </appui-core-config-settings>
   </bbn-container>
   <bbn-container url="environments"
-                 title="<?= _('Environments') ?>"
+                 label="<?= _('Environments') ?>"
                  :fixed="true"
                  :scrollable="true">
       <div class="bbn-w-100 bbn-c bbn-padding">
@@ -39,7 +39,7 @@
       </appui-core-config-settings>
   </bbn-container>
   <bbn-container url="routes"
-                 title="<?= _('Routes') ?>"
+                 label="<?= _('Routes') ?>"
                  :fixed="true">
     <bbn-table :source="source.aliases"
                ref="aliases-table"
@@ -50,16 +50,16 @@
                @saverow="routeSave"
                :editable="true">
       <bbns-column field="url"
-                   title="<?= _('URL') ?>"
+                   label="<?= _('URL') ?>"
                    :width="350">
       </bbns-column>
       <bbns-column field="path"
-                   title="<?= _('Real path') ?>">
+                   label="<?= _('Real path') ?>">
       </bbns-column>
       <bbns-column field="path"
                    :width="100"
                    class="bbn-c"
-                   title="<?= _('Action') ?>"
+                   label="<?= _('Action') ?>"
                    :sortable="false"
                    :buttons="[{
                                text: '<?= _('Edit') ?>',
@@ -76,7 +76,7 @@
     </bbn-table>
   </bbn-container>
   <bbn-container url="plugins"
-                 title="<?= _('Plugins') ?>"
+                 label="<?= _('Plugins') ?>"
                  :fixed="true">
     <bbn-router class="bbn-overlay"
                 default="official"
@@ -84,25 +84,25 @@
                 :autoload="false"
     >
       <bbn-container url="official"
-                     title="<?= _('Official plugins') ?>"
+                     label="<?= _('Official plugins') ?>"
                      :fixed="true">
         <bbn-table :source="advisedSource"
                    :editable="true">
-          <bbns-column title="<?= _('Name') ?>"
+          <bbns-column label="<?= _('Name') ?>"
                        :width="150"
                        field="sname">
           </bbns-column>
-          <bbns-column title="<?= _('URL') ?>"
+          <bbns-column label="<?= _('URL') ?>"
                        field="url"
                        :width="250">
           </bbns-column>
-          <bbns-column title="<?= _('Description') ?>"
+          <bbns-column label="<?= _('Description') ?>"
                        field="description">
           </bbns-column>
           <bbns-column field="path"
                        :width="100"
                        class="bbn-c"
-                       title="<?= _('Action') ?>"
+                       label="<?= _('Action') ?>"
                        :sortable="false"
                        :buttons="[{
                                    text: '<?= _('Edit') ?>',
@@ -119,7 +119,7 @@
         </bbn-table>
       </bbn-container>
       <bbn-container url="other"
-                     title="<?= _('Other plugins') ?>"
+                     label="<?= _('Other plugins') ?>"
                      :fixed="true">
         <bbn-table :source="devSource"
                    ref="oplugins-table"
@@ -128,26 +128,26 @@
                              action: 'insert'
                              }]"
                    :editable="true">
-          <bbns-column title="<?= _('Name') ?>"
+          <bbns-column label="<?= _('Name') ?>"
                        :width="200"
                        field="name">
           </bbns-column>
-          <bbns-column title="<?= _('Root') ?>"
+          <bbns-column label="<?= _('Root') ?>"
                        :width="100"
                        :source="[{text: _('Application'), value: 'app'}, {text: _('Library'), value: 'lib'}]"
                        field="root">
           </bbns-column>
-          <bbns-column title="<?= _('URL') ?>"
+          <bbns-column label="<?= _('URL') ?>"
                        :width="250"
                        field="url">
           </bbns-column>
-          <bbns-column title="<?= _('Description') ?>"
+          <bbns-column label="<?= _('Description') ?>"
                        field="description">
           </bbns-column>
           <bbns-column field="path"
                        :width="100"
                        class="bbn-c"
-                       title="<?= _('Action') ?>"
+                       label="<?= _('Action') ?>"
                        :sortable="false"
                        :buttons="[{
                                    text: '<?= _('Edit') ?>',
@@ -166,7 +166,7 @@
     </bbn-router>
   </bbn-container>
   <bbn-container url="packages"
-                  title="<?= _('Packages') ?>"
+                  label="<?= _('Packages') ?>"
                  :fixed="true"
                  :scrollable="true">
     <div class="bbn-padding">
@@ -193,7 +193,7 @@
       </div>
       <div class="bbn-vpadding bbn-w-100">
         <bbn-button icon="nf nf-fa-plus"
-                    text="<?= _('Add a new package') ?>"
+                    label="<?= _('Add a new package') ?>"
                     @click="addPackage()">
         </bbn-button>
       </div>
