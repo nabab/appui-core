@@ -21,7 +21,7 @@
     </div>
     <label v-if="test"><?= _('Test connection') ?></label>
     <div v-if="test">
-      <bbn-button icon="nf nf-mdi-lan_connect"
+      <bbn-button icon="nf nf-md-lan_connect"
                   @click="testConnection"
                   :class="{
                           'bbn-bg-red': !verified,

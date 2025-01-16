@@ -8,7 +8,7 @@
                class="bbn-p bbn-spadding bbn-iblock"
                @click="getPopup().alert(item.desc, '<?= _('Description') ?>')"
                :title="_('Description')">
-            <i class="nf nf-mdi-help_circle_outline"></i>
+            <i class="nf nf-md-help_circle_outline"></i>
           </div>
           <span v-text="item.text"></span>
         </div>

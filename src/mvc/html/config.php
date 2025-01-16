@@ -181,7 +181,7 @@
         <template v-for="pack in source.packages">
           <div class="bbn-label">
             <span v-text="pack.name"></span> &nbsp; 
-            <bbn-button icon="nf nf-mdi-help_circle_outline"
+            <bbn-button icon="nf nf-md-help_circle_outline"
                         :notext="true">
             </bbn-button>
             <bbn-button icon="nf nf-fa-times"

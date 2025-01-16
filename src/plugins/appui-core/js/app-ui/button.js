@@ -26,7 +26,7 @@
               );
             },
             text: bbn._("Reload with a fresh view"),
-            icon: 'nf nf-mdi-sync_alert'
+            icon: 'nf nf-md-sync_alert'
           }, {
             text: bbn._("Increase version"),
             icon: 'nf nf-oct-versions',

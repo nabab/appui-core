@@ -102,7 +102,7 @@
         document.location.reload();
       },
       text: bbn._("Reload with a fresh view"),
-        icon: 'nf nf-mdi-sync_alert'
+        icon: 'nf nf-md-sync_alert'
     }, {
       text: bbn._("Log out"),
       icon: 'nf nf-fa-sign_out',
@@ -152,7 +152,7 @@
             });
           },
           text: bbn._("Help"),
-          icon: 'nf nf-mdi-help_circle_outline'
+          icon: 'nf nf-md-help_circle_outline'
         }, {
           url: 'usergroup/main',
           text: bbn._("My profile"),
