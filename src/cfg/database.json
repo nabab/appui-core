@@ -501,6 +501,77 @@
       }
     }
   },
+  "bbn_profiler": {
+    "keys": {
+      "PRIMARY": {
+        "columns": [
+          "id"
+        ],
+        "unique": 1
+      },
+      "id_user": {
+        "columns": [
+          "id_user"
+        ],
+        "ref_table": "bbn_users",
+        "ref_column": "id",
+        "update": "CASCADE",
+        "delete": "CASCADE",
+        "unique": 0
+      }
+    },
+    "cols": {
+      "id": [
+        "PRIMARY"
+      ],
+      "id_user": [
+        "id_user"
+      ]
+    },
+    "fields": {
+      "id": {
+        "position": 1,
+        "type": "binary",
+        "null": 0,
+        "key": "PRI",
+        "maxlength": 16
+      },
+      "id_user": {
+        "position": 2,
+        "type": "binary",
+        "null": 1,
+        "key": "MUL",
+        "default": "NULL",
+        "defaultExpression": false,
+        "maxlength": 16
+      },
+      "url": {
+        "position": 3,
+        "type": "varchar",
+        "null": 0,
+        "maxlength": 1000
+      },
+      "time": {
+        "position": 4,
+        "type": "datetime",
+        "null": 0
+      },
+      "length": {
+        "position": 5,
+        "type": "decimal",
+        "null": 0,
+        "key": null,
+        "signed": 1,
+        "maxlength": 14,
+        "decimals": 4
+      },
+      "content": {
+        "position": 6,
+        "type": "longtext",
+        "null": 0
+      }
+    }
+  },
   "bbn_vcs": {
     "keys": {
       "PRIMARY": {

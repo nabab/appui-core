@@ -4,12 +4,11 @@
  * User: BBN
  * Date: 25/11/2017
  * Time: 06:24
- *
- * @var $ctrl \bbn\Mvc\Controller
  */
 
 use bbn\X;
 
+/** @var bbn\Mvc\Controller $ctrl */
 $routes = $ctrl->getRoutes();
 $plugins = [];
 $slots = [
@@ -37,6 +36,17 @@ foreach ($routes as $r) {
   }
 }
 
+foreach ($slots as &$s) {
+  foreach ($s as &$m) {
+    if (!isset($m['priority'])) {
+      $m['priority'] = 5;
+    }
+  }
+
+  unset($m);
+  X::sortBy($s, 'priority');
+}
+unset($s);
 
 $ctrl->data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index');
 $ctrl->addData([
