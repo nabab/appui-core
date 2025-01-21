@@ -542,7 +542,7 @@
         "null": 1,
         "key": "MUL",
         "default": "NULL",
-        "defaultExpression": false,
+        "defaultExpression": true,
         "maxlength": 16
       },
       "url": {
