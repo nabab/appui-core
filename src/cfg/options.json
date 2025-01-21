@@ -1,2243 +1,2389 @@
 [
-  {
-    "text": "Countries",
-    "code": "countries",
-    "icon": "nf nf-fa-globe",
-    "tekname": "countries",
-    "items": [
-      {
-        "text": "Afghanistan",
-        "code": "AF",
-        "phone": "93"
-      },
-      {
-        "text": "Albania",
-        "code": "AL",
-        "phone": "355"
-      },
-      {
-        "text": "Algeria",
-        "code": "DZ",
-        "phone": "213"
-      },
-      {
-        "text": "American Samoa",
-        "code": "AS",
-        "phone": "1684"
-      },
-      {
-        "text": "Andorra",
-        "code": "AD",
-        "phone": "376"
-      },
-      {
-        "text": "Angola",
-        "code": "AO",
-        "phone": "244"
-      },
-      {
-        "text": "Anguilla",
-        "code": "AI",
-        "phone": "1264"
-      },
-      {
-        "text": "Antarctica",
-        "code": "AQ",
-        "phone": "672"
-      },
-      {
-        "text": "Antigua and Barbuda",
-        "code": "AG",
-        "phone": "1268"
-      },
-      {
-        "text": "Argentina",
-        "code": "AR",
-        "phone": "54"
-      },
-      {
-        "text": "Armenia",
-        "code": "AM",
-        "phone": "374"
-      },
-      {
-        "text": "Aruba",
-        "code": "AW",
-        "phone": "297"
-      },
-      {
-        "text": "Australia",
-        "code": "AU",
-        "phone": "61"
-      },
-      {
-        "text": "Austria",
-        "code": "AT",
-        "phone": "43"
-      },
-      {
-        "text": "Azerbaijan",
-        "code": "AZ",
-        "phone": "994"
-      },
-      {
-        "text": "Bahamas",
-        "code": "BS",
-        "phone": "1242"
-      },
-      {
-        "text": "Bahrain",
-        "code": "BH",
-        "phone": "973"
-      },
-      {
-        "text": "Bangladesh",
-        "code": "BD",
-        "phone": "880"
-      },
-      {
-        "text": "Barbados",
-        "code": "BB",
-        "phone": "1246"
-      },
-      {
-        "text": "Belarus",
-        "code": "BY",
-        "phone": "375"
-      },
-      {
-        "text": "Belgium",
-        "code": "BE",
-        "phone": "32"
-      },
-      {
-        "text": "Belize",
-        "code": "BZ",
-        "phone": "501"
-      },
-      {
-        "text": "Benin",
-        "code": "BJ",
-        "phone": "229"
-      },
-      {
-        "text": "Bermuda",
-        "code": "BM",
-        "phone": "1441"
-      },
-      {
-        "text": "Bhutan",
-        "code": "BT",
-        "phone": "975"
-      },
-      {
-        "text": "Bolivia",
-        "code": "BO",
-        "phone": "591"
-      },
-      {
-        "text": "Bosnia and Herzegovina",
-        "code": "BA",
-        "phone": "387"
-      },
-      {
-        "text": "Botswana",
-        "code": "BW",
-        "phone": "267"
-      },
-      {
-        "text": "Bouvet Island",
-        "code": "BV"
-      },
-      {
-        "text": "Brazil",
-        "code": "BR",
-        "phone": "55"
-      },
-      {
-        "text": "British Indian Ocean Territory",
-        "code": "IO"
-      },
-      {
-        "text": "Brunei Darussalam",
-        "code": "BN",
-        "phone": "673"
-      },
-      {
-        "text": "Bulgaria",
-        "code": "BG",
-        "phone": "359"
-      },
-      {
-        "text": "Burkina Faso",
-        "code": "BF",
-        "phone": "226"
-      },
-      {
-        "text": "Burundi",
-        "code": "BI",
-        "phone": "257"
-      },
-      {
-        "text": "Cambodia",
-        "code": "KH",
-        "phone": "855"
-      },
-      {
-        "text": "Cameroon",
-        "code": "CM",
-        "phone": "237"
-      },
-      {
-        "text": "Canada",
-        "code": "CA",
-        "phone": "1"
-      },
-      {
-        "text": "Cape Verde",
-        "code": "CV",
-        "phone": "238"
-      },
-      {
-        "text": "Cayman Islands",
-        "code": "KY",
-        "phone": "1345"
-      },
-      {
-        "text": "Central African Republic",
-        "code": "CF",
-        "phone": "236"
-      },
-      {
-        "text": "Chad",
-        "code": "TD",
-        "phone": "235"
-      },
-      {
-        "text": "Chile",
-        "code": "CL",
-        "phone": "56"
-      },
-      {
-        "text": "China",
-        "code": "CN",
-        "phone": "86"
-      },
-      {
-        "text": "Christmas Island",
-        "code": "CX",
-        "phone": "61"
-      },
-      {
-        "text": "Cocos (Keeling) Islands",
-        "code": "CC",
-        "phone": "61"
-      },
-      {
-        "text": "Colombia",
-        "code": "CO",
-        "phone": "57"
-      },
-      {
-        "text": "Comoros",
-        "code": "KM",
-        "phone": "269"
-      },
-      {
-        "text": "Congo",
-        "code": "CG",
-        "phone": "242"
-      },
-      {
-        "text": "Congo, The Democratic Republic of the",
-        "code": "CD",
-        "phone": "243"
-      },
-      {
-        "text": "Cook Islands",
-        "code": "CK",
-        "phone": "682"
-      },
-      {
-        "text": "Costa Rica",
-        "code": "CR",
-        "phone": "506"
-      },
-      {
-        "text": "Cote D'Ivoire",
-        "code": "CI",
-        "phone": "225"
-      },
-      {
-        "text": "Croatia",
-        "code": "HR",
-        "phone": "385"
-      },
-      {
-        "text": "Cuba",
-        "code": "CU",
-        "phone": "53"
-      },
-      {
-        "text": "Cyprus",
-        "code": "CY",
-        "phone": "357"
-      },
-      {
-        "text": "Czech Republic",
-        "code": "CZ",
-        "phone": "420"
-      },
-      {
-        "text": "Denmark",
-        "code": "DK",
-        "phone": "45"
-      },
-      {
-        "text": "Djibouti",
-        "code": "DJ",
-        "phone": "253"
-      },
-      {
-        "text": "Dominica",
-        "code": "DM",
-        "phone": "1767"
-      },
-      {
-        "text": "Dominican Republic",
-        "code": "DO",
-        "phone": "1809"
-      },
-      {
-        "text": "Ecuador",
-        "code": "EC",
-        "phone": "593"
-      },
-      {
-        "text": "Egypt",
-        "code": "EG",
-        "phone": "20"
-      },
-      {
-        "text": "El Salvador",
-        "code": "SV",
-        "phone": "503"
-      },
-      {
-        "text": "Equatorial Guinea",
-        "code": "GQ",
-        "phone": "240"
-      },
-      {
-        "text": "Eritrea",
-        "code": "ER",
-        "phone": "291"
-      },
-      {
-        "text": "Estonia",
-        "code": "EE",
-        "phone": "372"
-      },
-      {
-        "text": "Ethiopia",
-        "code": "ET",
-        "phone": "251"
-      },
-      {
-        "text": "Falkland Islands (Malvinas)",
-        "code": "FK",
-        "phone": "500"
-      },
-      {
-        "text": "Faroe Islands",
-        "code": "FO",
-        "phone": "298"
-      },
-      {
-        "text": "Fiji",
-        "code": "FJ",
-        "phone": "679"
-      },
-      {
-        "text": "Finland",
-        "code": "FI",
-        "phone": "358"
-      },
-      {
-        "text": "France",
-        "code": "FR",
-        "phone": "33"
-      },
-      {
-        "text": "French Guiana",
-        "code": "GF"
-      },
-      {
-        "text": "French Polynesia",
-        "code": "PF",
-        "phone": "689"
-      },
-      {
-        "text": "French Southern Territories",
-        "code": "TF"
-      },
-      {
-        "text": "Gabon",
-        "code": "GA",
-        "phone": "241"
-      },
-      {
-        "text": "Gambia",
-        "code": "GM",
-        "phone": "220"
-      },
-      {
-        "text": "Georgia",
-        "code": "GE",
-        "phone": "995"
-      },
-      {
-        "text": "Germany",
-        "code": "DE",
-        "phone": "49"
-      },
-      {
-        "text": "Ghana",
-        "code": "GH",
-        "phone": "233"
-      },
-      {
-        "text": "Gibraltar",
-        "code": "GI",
-        "phone": "350"
-      },
-      {
-        "text": "Greece",
-        "code": "GR",
-        "phone": "30"
-      },
-      {
-        "text": "Greenland",
-        "code": "GL",
-        "phone": "299"
-      },
-      {
-        "text": "Grenada",
-        "code": "GD",
-        "phone": "1473"
-      },
-      {
-        "text": "Guadeloupe",
-        "code": "GP"
-      },
-      {
-        "text": "Guam",
-        "code": "GU",
-        "phone": "1671"
-      },
-      {
-        "text": "Guatemala",
-        "code": "GT",
-        "phone": "502"
-      },
-      {
-        "text": "Guernsey",
-        "code": "GG"
-      },
-      {
-        "text": "Guinea",
-        "code": "GN",
-        "phone": "224"
-      },
-      {
-        "text": "Guinea-Bissau",
-        "code": "GW",
-        "phone": "245"
-      },
-      {
-        "text": "Guyana",
-        "code": "GY",
-        "phone": "592"
-      },
-      {
-        "text": "Haiti",
-        "code": "HT",
-        "phone": "509"
-      },
-      {
-        "text": "Heard Island and Mcdonald Islands",
-        "code": "HM"
-      },
-      {
-        "text": "Holy See (Vatican City State)",
-        "code": "VA",
-        "phone": "39"
-      },
-      {
-        "text": "Honduras",
-        "code": "HN",
-        "phone": "504"
-      },
-      {
-        "text": "Hong Kong",
-        "code": "HK",
-        "phone": "852"
-      },
-      {
-        "text": "Hungary",
-        "code": "HU",
-        "phone": "36"
-      },
-      {
-        "text": "Iceland",
-        "code": "IS",
-        "phone": "354"
-      },
-      {
-        "text": "India",
-        "code": "IN",
-        "phone": "91"
-      },
-      {
-        "text": "Indonesia",
-        "code": "ID",
-        "phone": "62"
-      },
-      {
-        "text": "Iran, Islamic Republic Of",
-        "code": "IR",
-        "phone": "98"
-      },
-      {
-        "text": "Iraq",
-        "code": "IQ",
-        "phone": "964"
-      },
-      {
-        "text": "Ireland",
-        "code": "IE",
-        "phone": "353"
-      },
-      {
-        "text": "Isle of Man",
-        "code": "IM",
-        "phone": "44"
-      },
-      {
-        "text": "Israel",
-        "code": "IL",
-        "phone": "972"
-      },
-      {
-        "text": "Italy",
-        "code": "IT",
-        "phone": "39"
-      },
-      {
-        "text": "Jamaica",
-        "code": "JM",
-        "phone": "1876"
-      },
-      {
-        "text": "Japan",
-        "code": "JP",
-        "phone": "81"
-      },
-      {
-        "text": "Jersey",
-        "code": "JE"
-      },
-      {
-        "text": "Jordan",
-        "code": "JO",
-        "phone": "962"
-      },
-      {
-        "text": "Kazakhstan",
-        "code": "KZ",
-        "phone": "7"
-      },
-      {
-        "text": "Kenya",
-        "code": "KE",
-        "phone": "254"
-      },
-      {
-        "text": "Kiribati",
-        "code": "KI",
-        "phone": "686"
-      },
-      {
-        "text": "Korea, Democratic People's Republic of",
-        "code": "KP",
-        "phone": "850"
-      },
-      {
-        "text": "Korea, Republic of",
-        "code": "KR",
-        "phone": "82"
-      },
-      {
-        "text": "Kuwait",
-        "code": "KW",
-        "phone": "965"
-      },
-      {
-        "text": "Kyrgyzstan",
-        "code": "KG",
-        "phone": "996"
-      },
-      {
-        "text": "land Islands",
-        "code": "AX"
-      },
-      {
-        "text": "Lao People's Democratic Republic",
-        "code": "LA",
-        "phone": "856"
-      },
-      {
-        "text": "Latvia",
-        "code": "LV",
-        "phone": "371"
-      },
-      {
-        "text": "Lebanon",
-        "code": "LB",
-        "phone": "961"
-      },
-      {
-        "text": "Lesotho",
-        "code": "LS",
-        "phone": "266"
-      },
-      {
-        "text": "Liberia",
-        "code": "LR",
-        "phone": "231"
-      },
-      {
-        "text": "Libyan Arab Jamahiriya",
-        "code": "LY",
-        "phone": "218"
-      },
-      {
-        "text": "Liechtenstein",
-        "code": "LI",
-        "phone": "423"
-      },
-      {
-        "text": "Lithuania",
-        "code": "LT",
-        "phone": "370"
-      },
-      {
-        "text": "Luxembourg",
-        "code": "LU",
-        "phone": "352"
-      },
-      {
-        "text": "Macao",
-        "code": "MO",
-        "phone": "853"
-      },
-      {
-        "text": "Macedonia, The Former Yugoslav Republic of",
-        "code": "MK",
-        "phone": "389"
-      },
-      {
-        "text": "Madagascar",
-        "code": "MG",
-        "phone": "261"
-      },
-      {
-        "text": "Malawi",
-        "code": "MW",
-        "phone": "265"
-      },
-      {
-        "text": "Malaysia",
-        "code": "MY",
-        "phone": "60"
-      },
-      {
-        "text": "Maldives",
-        "code": "MV",
-        "phone": "960"
-      },
-      {
-        "text": "Mali",
-        "code": "ML",
-        "phone": "223"
-      },
-      {
-        "text": "Malta",
-        "code": "MT",
-        "phone": "356"
-      },
-      {
-        "text": "Marshall Islands",
-        "code": "MH",
-        "phone": "692"
-      },
-      {
-        "text": "Martinique",
-        "code": "MQ"
-      },
-      {
-        "text": "Mauritania",
-        "code": "MR",
-        "phone": "222"
-      },
-      {
-        "text": "Mauritius",
-        "code": "MU",
-        "phone": "230"
-      },
-      {
-        "text": "Mayotte",
-        "code": "YT",
-        "phone": "262"
-      },
-      {
-        "text": "Mexico",
-        "code": "MX",
-        "phone": "52"
-      },
-      {
-        "text": "Micronesia, Federated States of",
-        "code": "FM",
-        "phone": "691"
-      },
-      {
-        "text": "Moldova, Republic of",
-        "code": "MD",
-        "phone": "373"
-      },
-      {
-        "text": "Monaco",
-        "code": "MC",
-        "phone": "377"
-      },
-      {
-        "text": "Mongolia",
-        "code": "MN",
-        "phone": "976"
-      },
-      {
-        "text": "Montenegro",
-        "code": "ME",
-        "phone": "382"
-      },
-      {
-        "text": "Montserrat",
-        "code": "MS",
-        "phone": "1664"
-      },
-      {
-        "text": "Morocco",
-        "code": "MA",
-        "phone": "212"
-      },
-      {
-        "text": "Mozambique",
-        "code": "MZ",
-        "phone": "258"
-      },
-      {
-        "text": "Myanmar",
-        "code": "MM",
-        "phone": "95"
-      },
-      {
-        "text": "Namibia",
-        "code": "NA",
-        "phone": "264"
-      },
-      {
-        "text": "Nauru",
-        "code": "NR",
-        "phone": "674"
-      },
-      {
-        "text": "Nepal",
-        "code": "NP",
-        "phone": "977"
-      },
-      {
-        "text": "Netherlands",
-        "code": "NL",
-        "phone": "31"
-      },
-      {
-        "text": "Netherlands Antilles",
-        "code": "AN",
-        "phone": "599"
-      },
-      {
-        "text": "New Caledonia",
-        "code": "NC",
-        "phone": "687"
-      },
-      {
-        "text": "New Zealand",
-        "code": "NZ",
-        "phone": "64"
-      },
-      {
-        "text": "Nicaragua",
-        "code": "NI",
-        "phone": "505"
-      },
-      {
-        "text": "Niger",
-        "code": "NE",
-        "phone": "227"
-      },
-      {
-        "text": "Nigeria",
-        "code": "NG",
-        "phone": "234"
-      },
-      {
-        "text": "Niue",
-        "code": "NU",
-        "phone": "683"
-      },
-      {
-        "text": "Norfolk Island",
-        "code": "NF"
-      },
-      {
-        "text": "Northern Mariana Islands",
-        "code": "MP",
-        "phone": "1670"
-      },
-      {
-        "text": "Norway",
-        "code": "NO",
-        "phone": "47"
-      },
-      {
-        "text": "Oman",
-        "code": "OM",
-        "phone": "968"
-      },
-      {
-        "text": "Pakistan",
-        "code": "PK",
-        "phone": "92"
-      },
-      {
-        "text": "Palau",
-        "code": "PW",
-        "phone": "680"
-      },
-      {
-        "text": "Palestinian Territory, Occupied",
-        "code": "PS"
-      },
-      {
-        "text": "Panama",
-        "code": "PA",
-        "phone": "507"
-      },
-      {
-        "text": "Papua New Guinea",
-        "code": "PG",
-        "phone": "675"
-      },
-      {
-        "text": "Paraguay",
-        "code": "PY",
-        "phone": "595"
-      },
-      {
-        "text": "Peru",
-        "code": "PE",
-        "phone": "51"
-      },
-      {
-        "text": "Philippines",
-        "code": "PH",
-        "phone": "63"
-      },
-      {
-        "text": "Pitcairn",
-        "code": "PN",
-        "phone": "870"
-      },
-      {
-        "text": "Poland",
-        "code": "PL",
-        "phone": "48"
-      },
-      {
-        "text": "Portugal",
-        "code": "PT",
-        "phone": "351"
-      },
-      {
-        "text": "Puerto Rico",
-        "code": "PR",
-        "phone": "1"
-      },
-      {
-        "text": "Qatar",
-        "code": "QA",
-        "phone": "974"
-      },
-      {
-        "text": "Reunion",
-        "code": "RE"
-      },
-      {
-        "text": "Romania",
-        "code": "RO",
-        "phone": "40"
-      },
-      {
-        "text": "Russian Federation",
-        "code": "RU",
-        "phone": "7"
-      },
-      {
-        "text": "RWANDA",
-        "code": "RW",
-        "phone": "250"
-      },
-      {
-        "text": "Saint Helena",
-        "code": "SH",
-        "phone": "290"
-      },
-      {
-        "text": "Saint Kitts and Nevis",
-        "code": "KN",
-        "phone": "1869"
-      },
-      {
-        "text": "Saint Lucia",
-        "code": "LC",
-        "phone": "1758"
-      },
-      {
-        "text": "Saint Pierre and Miquelon",
-        "code": "PM",
-        "phone": "508"
-      },
-      {
-        "text": "Saint Vincent and the Grenadines",
-        "code": "VC",
-        "phone": "1784"
-      },
-      {
-        "text": "Samoa",
-        "code": "WS",
-        "phone": "685"
-      },
-      {
-        "text": "San Marino",
-        "code": "SM",
-        "phone": "378"
-      },
-      {
-        "text": "Sao Tome and Principe",
-        "code": "ST",
-        "phone": "239"
-      },
-      {
-        "text": "Saudi Arabia",
-        "code": "SA",
-        "phone": "966"
-      },
-      {
-        "text": "Senegal",
-        "code": "SN",
-        "phone": "221"
-      },
-      {
-        "text": "Serbia",
-        "code": "RS",
-        "phone": "381"
-      },
-      {
-        "text": "Seychelles",
-        "code": "SC",
-        "phone": "248"
-      },
-      {
-        "text": "Sierra Leone",
-        "code": "SL",
-        "phone": "232"
-      },
-      {
-        "text": "Singapore",
-        "code": "SG",
-        "phone": "65"
-      },
-      {
-        "text": "Slovakia",
-        "code": "SK",
-        "phone": "421"
-      },
-      {
-        "text": "Slovenia",
-        "code": "SI",
-        "phone": "386"
-      },
-      {
-        "text": "Solomon Islands",
-        "code": "SB",
-        "phone": "677"
-      },
-      {
-        "text": "Somalia",
-        "code": "SO",
-        "phone": "252"
-      },
-      {
-        "text": "South Africa",
-        "code": "ZA",
-        "phone": "27"
-      },
-      {
-        "text": "South Georgia and the South Sandwich Islands",
-        "code": "GS"
-      },
-      {
-        "text": "Spain",
-        "code": "ES",
-        "phone": "34"
-      },
-      {
-        "text": "Sri Lanka",
-        "code": "LK",
-        "phone": "94"
-      },
-      {
-        "text": "Sudan",
-        "code": "SD",
-        "phone": "249"
-      },
-      {
-        "text": "Suriname",
-        "code": "SR",
-        "phone": "597"
-      },
-      {
-        "text": "Svalbard and Jan Mayen",
-        "code": "SJ"
-      },
-      {
-        "text": "Swaziland",
-        "code": "SZ",
-        "phone": "268"
-      },
-      {
-        "text": "Sweden",
-        "code": "SE",
-        "phone": "46"
-      },
-      {
-        "text": "Switzerland",
-        "code": "CH",
-        "phone": "41"
-      },
-      {
-        "text": "Syrian Arab Republic",
-        "code": "SY",
-        "phone": "963"
-      },
-      {
-        "text": "Taiwan, Province of China",
-        "code": "TW",
-        "phone": "886"
-      },
-      {
-        "text": "Tajikistan",
-        "code": "TJ",
-        "phone": "992"
-      },
-      {
-        "text": "Tanzania, United Republic of",
-        "code": "TZ",
-        "phone": "255"
-      },
-      {
-        "text": "Thailand",
-        "code": "TH",
-        "phone": "66"
-      },
-      {
-        "text": "Timor-Leste",
-        "code": "TL",
-        "phone": "670"
-      },
-      {
-        "text": "Togo",
-        "code": "TG",
-        "phone": "228"
-      },
-      {
-        "text": "Tokelau",
-        "code": "TK",
-        "phone": "690"
-      },
-      {
-        "text": "Tonga",
-        "code": "TO",
-        "phone": "676"
-      },
-      {
-        "text": "Trinidad and Tobago",
-        "code": "TT",
-        "phone": "1868"
-      },
-      {
-        "text": "Tunisia",
-        "code": "TN",
-        "phone": "216"
-      },
-      {
-        "text": "Turkey",
-        "code": "TR",
-        "phone": "90"
-      },
-      {
-        "text": "Turkmenistan",
-        "code": "TM",
-        "phone": "993"
-      },
-      {
-        "text": "Turks and Caicos Islands",
-        "code": "TC",
-        "phone": "1649"
-      },
-      {
-        "text": "Tuvalu",
-        "code": "TV",
-        "phone": "688"
-      },
-      {
-        "text": "Uganda",
-        "code": "UG",
-        "phone": "256"
-      },
-      {
-        "text": "Ukraine",
-        "code": "UA",
-        "phone": "380"
-      },
-      {
-        "text": "United Arab Emirates",
-        "code": "AE",
-        "phone": "971"
-      },
-      {
-        "text": "United Kingdom",
-        "code": "GB",
-        "phone": "44"
-      },
-      {
-        "text": "United States",
-        "code": "US",
-        "phone": "1"
-      },
-      {
-        "text": "United States Minor Outlying Islands",
-        "code": "UM"
-      },
-      {
-        "text": "Uruguay",
-        "code": "UY",
-        "phone": "598"
-      },
-      {
-        "text": "Uzbekistan",
-        "code": "UZ",
-        "phone": "998"
-      },
-      {
-        "text": "Vanuatu",
-        "code": "VU",
-        "phone": "678"
-      },
-      {
-        "text": "Venezuela",
-        "code": "VE",
-        "phone": "58"
-      },
-      {
-        "text": "Viet Nam",
-        "code": "VN",
-        "phone": "84"
-      },
-      {
-        "text": "Virgin Islands, British",
-        "code": "VG",
-        "phone": "1284"
-      },
-      {
-        "text": "Virgin Islands, U.S.",
-        "code": "VI",
-        "phone": "1340"
-      },
-      {
-        "text": "Wallis and Futuna",
-        "code": "WF",
-        "phone": "681"
-      },
-      {
-        "text": "Western Sahara",
-        "code": "EH"
-      },
-      {
-        "text": "Yemen",
-        "code": "YE",
-        "phone": "967"
-      },
-      {
-        "text": "Zambia",
-        "code": "ZM",
-        "phone": "260"
-      },
-      {
-        "text": "Zimbabwe",
-        "code": "ZW",
-        "phone": "263"
-      }
-    ],
-    "cfg": {
-      "show_code": 1
-    }
-  },
-  {
-    "text": "Currencies",
-    "code": "currencies",
-    "icon": "nf nf-md-currency_eur",
-    "items": [
-      {
-        "text": "Afghan Afghani",
-        "code": "AFN",
-        "symbol": "Af",
-        "symbol_native": "\u060b",
-        "plural": "Afghan Afghanis"
-      },
-      {
-        "text": "Albanian Lek",
-        "code": "ALL",
-        "symbol": "ALL",
-        "symbol_native": "Lek",
-        "plural": "Albanian lek\u00eb"
-      },
-      {
-        "text": "Algerian Dinar",
-        "code": "DZD",
-        "symbol": "DA",
-        "symbol_native": "\u062f.\u062c.\u200f",
-        "decimals": 2,
-        "plural": "Algerian dinars"
-      },
-      {
-        "text": "Argentine Peso",
-        "code": "ARS",
-        "symbol": "AR$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Argentine pesos"
-      },
-      {
-        "text": "Armenian Dram",
-        "code": "AMD",
-        "symbol": "AMD",
-        "symbol_native": "\u0564\u0580.",
-        "plural": "Armenian drams"
-      },
-      {
-        "text": "Australian Dollar",
-        "code": "AUD",
-        "symbol": "AU$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Australian dollars"
-      },
-      {
-        "text": "Azerbaijani Manat",
-        "code": "AZN",
-        "symbol": "man.",
-        "symbol_native": "\u043c\u0430\u043d.",
-        "decimals": 2,
-        "plural": "Azerbaijani manats"
-      },
-      {
-        "text": "Bahraini Dinar",
-        "code": "BHD",
-        "symbol": "BD",
-        "symbol_native": "\u062f.\u0628.\u200f",
-        "decimals": 3,
-        "plural": "Bahraini dinars"
-      },
-      {
-        "text": "Bangladeshi Taka",
-        "code": "BDT",
-        "symbol": "Tk",
-        "symbol_native": "\u09f3",
-        "decimals": 2,
-        "plural": "Bangladeshi takas"
-      },
-      {
-        "text": "Belarusian Ruble",
-        "code": "BYN",
-        "symbol": "Br",
-        "symbol_native": "\u0440\u0443\u0431.",
-        "decimals": 2,
-        "plural": "Belarusian rubles"
-      },
-      {
-        "text": "Belize Dollar",
-        "code": "BZD",
-        "symbol": "BZ$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Belize dollars"
-      },
-      {
-        "text": "Bolivian Boliviano",
-        "code": "BOB",
-        "symbol": "Bs",
-        "symbol_native": "Bs",
-        "decimals": 2,
-        "plural": "Bolivian bolivianos"
-      },
-      {
-        "text": "Bosnia-Herzegovina Convertible Mark",
-        "code": "BAM",
-        "symbol": "KM",
-        "symbol_native": "KM",
-        "decimals": 2,
-        "plural": "Bosnia-Herzegovina convertible marks"
-      },
-      {
-        "text": "Botswanan Pula",
-        "code": "BWP",
-        "symbol": "BWP",
-        "symbol_native": "P",
-        "decimals": 2,
-        "plural": "Botswanan pulas"
-      },
-      {
-        "text": "Brazilian Real",
-        "code": "BRL",
-        "symbol": "R$",
-        "symbol_native": "R$",
-        "decimals": 2,
-        "plural": "Brazilian reals"
-      },
-      {
-        "text": "British Pound Sterling",
-        "code": "GBP",
-        "symbol": "\u00a3",
-        "symbol_native": "\u00a3",
-        "decimals": 2,
-        "plural": "British pounds sterling"
-      },
-      {
-        "text": "Brunei Dollar",
-        "code": "BND",
-        "symbol": "BN$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Brunei dollars"
-      },
-      {
-        "text": "Bulgarian Lev",
-        "code": "BGN",
-        "symbol": "BGN",
-        "symbol_native": "\u043b\u0432.",
-        "decimals": 2,
-        "plural": "Bulgarian leva"
-      },
-      {
-        "text": "Burundian Franc",
-        "code": "BIF",
-        "symbol": "FBu",
-        "symbol_native": "FBu",
-        "plural": "Burundian francs"
-      },
-      {
-        "text": "Cambodian Riel",
-        "code": "KHR",
-        "symbol": "KHR",
-        "symbol_native": "\u17db",
-        "decimals": 2,
-        "plural": "Cambodian riels"
-      },
-      {
-        "text": "Canadian Dollar",
-        "code": "CAD",
-        "symbol": "CA$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Canadian dollars"
-      },
-      {
-        "text": "Cape Verdean Escudo",
-        "code": "CVE",
-        "symbol": "CV$",
-        "symbol_native": "CV$",
-        "decimals": 2,
-        "plural": "Cape Verdean escudos"
-      },
-      {
-        "text": "CFA Franc BCEAO",
-        "code": "XOF",
-        "symbol": "CFA",
-        "symbol_native": "CFA",
-        "plural": "CFA francs BCEAO"
-      },
-      {
-        "text": "CFA Franc BEAC",
-        "code": "XAF",
-        "symbol": "FCFA",
-        "symbol_native": "FCFA",
-        "plural": "CFA francs BEAC"
-      },
-      {
-        "text": "Chilean Peso",
-        "code": "CLP",
-        "symbol": "CL$",
-        "symbol_native": "$",
-        "plural": "Chilean pesos"
-      },
-      {
-        "text": "Chinese Yuan",
-        "code": "CNY",
-        "symbol": "CN\u00a5",
-        "symbol_native": "CN\u00a5",
-        "decimals": 2,
-        "plural": "Chinese yuan"
-      },
-      {
-        "text": "Colombian Peso",
-        "code": "COP",
-        "symbol": "CO$",
-        "symbol_native": "$",
-        "plural": "Colombian pesos"
-      },
-      {
-        "text": "Comorian Franc",
-        "code": "KMF",
-        "symbol": "CF",
-        "symbol_native": "FC",
-        "plural": "Comorian francs"
-      },
-      {
-        "text": "Congolese Franc",
-        "code": "CDF",
-        "symbol": "CDF",
-        "symbol_native": "FrCD",
-        "decimals": 2,
-        "plural": "Congolese francs"
-      },
-      {
-        "text": "Costa Rican Col\u00f3n",
-        "code": "CRC",
-        "symbol": "\u20a1",
-        "symbol_native": "\u20a1",
-        "plural": "Costa Rican col\u00f3ns"
-      },
-      {
-        "text": "Croatian Kuna",
-        "code": "HRK",
-        "symbol": "kn",
-        "symbol_native": "kn",
-        "decimals": 2,
-        "plural": "Croatian kunas"
-      },
-      {
-        "text": "Czech Republic Koruna",
-        "code": "CZK",
-        "symbol": "K\u010d",
-        "symbol_native": "K\u010d",
-        "decimals": 2,
-        "plural": "Czech Republic korunas"
-      },
-      {
-        "text": "Danish Krone",
-        "code": "DKK",
-        "symbol": "Dkr",
-        "symbol_native": "kr",
-        "decimals": 2,
-        "plural": "Danish kroner"
-      },
-      {
-        "text": "Djiboutian Franc",
-        "code": "DJF",
-        "symbol": "Fdj",
-        "symbol_native": "Fdj",
-        "plural": "Djiboutian francs"
-      },
-      {
-        "text": "Dominican Peso",
-        "code": "DOP",
-        "symbol": "RD$",
-        "symbol_native": "RD$",
-        "decimals": 2,
-        "plural": "Dominican pesos"
-      },
-      {
-        "text": "Egyptian Pound",
-        "code": "EGP",
-        "symbol": "EGP",
-        "symbol_native": "\u062c.\u0645.\u200f",
-        "decimals": 2,
-        "plural": "Egyptian pounds"
-      },
-      {
-        "text": "Eritrean Nakfa",
-        "code": "ERN",
-        "symbol": "Nfk",
-        "symbol_native": "Nfk",
-        "decimals": 2,
-        "plural": "Eritrean nakfas"
-      },
-      {
-        "text": "Estonian Kroon",
-        "code": "EEK",
-        "symbol": "Ekr",
-        "symbol_native": "kr",
-        "decimals": 2,
-        "plural": "Estonian kroons"
-      },
-      {
-        "text": "Ethiopian Birr",
-        "code": "ETB",
-        "symbol": "Br",
-        "symbol_native": "Br",
-        "decimals": 2,
-        "plural": "Ethiopian birrs"
-      },
-      {
-        "text": "Euro",
-        "code": "EUR",
-        "symbol": "\u20ac",
-        "symbol_native": "\u20ac",
-        "decimals": 2,
-        "plural": "euros"
-      },
-      {
-        "text": "Georgian Lari",
-        "code": "GEL",
-        "symbol": "GEL",
-        "symbol_native": "GEL",
-        "decimals": 2,
-        "plural": "Georgian laris"
-      },
-      {
-        "text": "Ghanaian Cedi",
-        "code": "GHS",
-        "symbol": "GH\u20b5",
-        "symbol_native": "GH\u20b5",
-        "decimals": 2,
-        "plural": "Ghanaian cedis"
-      },
-      {
-        "text": "Guatemalan Quetzal",
-        "code": "GTQ",
-        "symbol": "GTQ",
-        "symbol_native": "Q",
-        "decimals": 2,
-        "plural": "Guatemalan quetzals"
-      },
-      {
-        "text": "Guinean Franc",
-        "code": "GNF",
-        "symbol": "FG",
-        "symbol_native": "FG",
-        "plural": "Guinean francs"
-      },
-      {
-        "text": "Honduran Lempira",
-        "code": "HNL",
-        "symbol": "HNL",
-        "symbol_native": "L",
-        "decimals": 2,
-        "plural": "Honduran lempiras"
-      },
-      {
-        "text": "Hong Kong Dollar",
-        "code": "HKD",
-        "symbol": "HK$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Hong Kong dollars"
-      },
-      {
-        "text": "Hungarian Forint",
-        "code": "HUF",
-        "symbol": "Ft",
-        "symbol_native": "Ft",
-        "plural": "Hungarian forints"
-      },
-      {
-        "text": "Icelandic Kr\u00f3na",
-        "code": "ISK",
-        "symbol": "Ikr",
-        "symbol_native": "kr",
-        "plural": "Icelandic kr\u00f3nur"
-      },
-      {
-        "text": "Indian Rupee",
-        "code": "INR",
-        "symbol": "Rs",
-        "symbol_native": "\u099f\u0995\u09be",
-        "decimals": 2,
-        "plural": "Indian rupees"
-      },
-      {
-        "text": "Indonesian Rupiah",
-        "code": "IDR",
-        "symbol": "Rp",
-        "symbol_native": "Rp",
-        "plural": "Indonesian rupiahs"
-      },
-      {
-        "text": "Iranian Rial",
-        "code": "IRR",
-        "symbol": "IRR",
-        "symbol_native": "\ufdfc",
-        "plural": "Iranian rials"
-      },
-      {
-        "text": "Iraqi Dinar",
-        "code": "IQD",
-        "symbol": "IQD",
-        "symbol_native": "\u062f.\u0639.\u200f",
-        "plural": "Iraqi dinars"
-      },
-      {
-        "text": "Israeli New Sheqel",
-        "code": "ILS",
-        "symbol": "\u20aa",
-        "symbol_native": "\u20aa",
-        "decimals": 2,
-        "plural": "Israeli new sheqels"
-      },
-      {
-        "text": "Jamaican Dollar",
-        "code": "JMD",
-        "symbol": "J$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Jamaican dollars"
-      },
-      {
-        "text": "Japanese Yen",
-        "code": "JPY",
-        "symbol": "\u00a5",
-        "symbol_native": "\uffe5",
-        "plural": "Japanese yen"
-      },
-      {
-        "text": "Jordanian Dinar",
-        "code": "JOD",
-        "symbol": "JD",
-        "symbol_native": "\u062f.\u0623.\u200f",
-        "decimals": 3,
-        "plural": "Jordanian dinars"
-      },
-      {
-        "text": "Kazakhstani Tenge",
-        "code": "KZT",
-        "symbol": "KZT",
-        "symbol_native": "\u0442\u04a3\u0433.",
-        "decimals": 2,
-        "plural": "Kazakhstani tenges"
-      },
-      {
-        "text": "Kenyan Shilling",
-        "code": "KES",
-        "symbol": "Ksh",
-        "symbol_native": "Ksh",
-        "decimals": 2,
-        "plural": "Kenyan shillings"
-      },
-      {
-        "text": "Kuwaiti Dinar",
-        "code": "KWD",
-        "symbol": "KD",
-        "symbol_native": "\u062f.\u0643.\u200f",
-        "decimals": 3,
-        "plural": "Kuwaiti dinars"
-      },
-      {
-        "text": "Latvian Lats",
-        "code": "LVL",
-        "symbol": "Ls",
-        "symbol_native": "Ls",
-        "decimals": 2,
-        "plural": "Latvian lati"
-      },
-      {
-        "text": "Lebanese Pound",
-        "code": "LBP",
-        "symbol": "L.L.",
-        "symbol_native": "\u0644.\u0644.\u200f",
-        "plural": "Lebanese pounds"
-      },
-      {
-        "text": "Libyan Dinar",
-        "code": "LYD",
-        "symbol": "LD",
-        "symbol_native": "\u062f.\u0644.\u200f",
-        "decimals": 3,
-        "plural": "Libyan dinars"
-      },
-      {
-        "text": "Lithuanian Litas",
-        "code": "LTL",
-        "symbol": "Lt",
-        "symbol_native": "Lt",
-        "decimals": 2,
-        "plural": "Lithuanian litai"
-      },
-      {
-        "text": "Macanese Pataca",
-        "code": "MOP",
-        "symbol": "MOP$",
-        "symbol_native": "MOP$",
-        "decimals": 2,
-        "plural": "Macanese patacas"
-      },
-      {
-        "text": "Macedonian Denar",
-        "code": "MKD",
-        "symbol": "MKD",
-        "symbol_native": "MKD",
-        "decimals": 2,
-        "plural": "Macedonian denari"
-      },
-      {
-        "text": "Malagasy Ariary",
-        "code": "MGA",
-        "symbol": "MGA",
-        "symbol_native": "MGA",
-        "plural": "Malagasy Ariaries"
-      },
-      {
-        "text": "Malaysian Ringgit",
-        "code": "MYR",
-        "symbol": "RM",
-        "symbol_native": "RM",
-        "decimals": 2,
-        "plural": "Malaysian ringgits"
-      },
-      {
-        "text": "Mauritian Rupee",
-        "code": "MUR",
-        "symbol": "MURs",
-        "symbol_native": "MURs",
-        "plural": "Mauritian rupees"
-      },
-      {
-        "text": "Mexican Peso",
-        "code": "MXN",
-        "symbol": "MX$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Mexican pesos"
-      },
-      {
-        "text": "Moldovan Leu",
-        "code": "MDL",
-        "symbol": "MDL",
-        "symbol_native": "MDL",
-        "decimals": 2,
-        "plural": "Moldovan lei"
-      },
-      {
-        "text": "Moroccan Dirham",
-        "code": "MAD",
-        "symbol": "MAD",
-        "symbol_native": "\u062f.\u0645.\u200f",
-        "decimals": 2,
-        "plural": "Moroccan dirhams"
-      },
-      {
-        "text": "Mozambican Metical",
-        "code": "MZN",
-        "symbol": "MTn",
-        "symbol_native": "MTn",
-        "decimals": 2,
-        "plural": "Mozambican meticals"
-      },
-      {
-        "text": "Myanma Kyat",
-        "code": "MMK",
-        "symbol": "MMK",
-        "symbol_native": "K",
-        "plural": "Myanma kyats"
-      },
-      {
-        "text": "Namibian Dollar",
-        "code": "NAD",
-        "symbol": "N$",
-        "symbol_native": "N$",
-        "decimals": 2,
-        "plural": "Namibian dollars"
-      },
-      {
-        "text": "Nepalese Rupee",
-        "code": "NPR",
-        "symbol": "NPRs",
-        "symbol_native": "\u0928\u0947\u0930\u0942",
-        "decimals": 2,
-        "plural": "Nepalese rupees"
-      },
-      {
-        "text": "New Taiwan Dollar",
-        "code": "TWD",
-        "symbol": "NT$",
-        "symbol_native": "NT$",
-        "decimals": 2,
-        "plural": "New Taiwan dollars"
-      },
-      {
-        "text": "New Zealand Dollar",
-        "code": "NZD",
-        "symbol": "NZ$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "New Zealand dollars"
-      },
-      {
-        "text": "Nicaraguan C\u00f3rdoba",
-        "code": "NIO",
-        "symbol": "C$",
-        "symbol_native": "C$",
-        "decimals": 2,
-        "plural": "Nicaraguan c\u00f3rdobas"
-      },
-      {
-        "text": "Nigerian Naira",
-        "code": "NGN",
-        "symbol": "\u20a6",
-        "symbol_native": "\u20a6",
-        "decimals": 2,
-        "plural": "Nigerian nairas"
-      },
-      {
-        "text": "Norwegian Krone",
-        "code": "NOK",
-        "symbol": "Nkr",
-        "symbol_native": "kr",
-        "decimals": 2,
-        "plural": "Norwegian kroner"
-      },
-      {
-        "text": "Omani Rial",
-        "code": "OMR",
-        "symbol": "OMR",
-        "symbol_native": "\u0631.\u0639.\u200f",
-        "decimals": 3,
-        "plural": "Omani rials"
-      },
-      {
-        "text": "Pakistani Rupee",
-        "code": "PKR",
-        "symbol": "PKRs",
-        "symbol_native": "\u20a8",
-        "plural": "Pakistani rupees"
-      },
-      {
-        "text": "Panamanian Balboa",
-        "code": "PAB",
-        "symbol": "B\/.",
-        "symbol_native": "B\/.",
-        "decimals": 2,
-        "plural": "Panamanian balboas"
-      },
-      {
-        "text": "Paraguayan Guarani",
-        "code": "PYG",
-        "symbol": "\u20b2",
-        "symbol_native": "\u20b2",
-        "plural": "Paraguayan guaranis"
-      },
-      {
-        "text": "Peruvian Nuevo Sol",
-        "code": "PEN",
-        "symbol": "S\/.",
-        "symbol_native": "S\/.",
-        "decimals": 2,
-        "plural": "Peruvian nuevos soles"
-      },
-      {
-        "text": "Philippine Peso",
-        "code": "PHP",
-        "symbol": "\u20b1",
-        "symbol_native": "\u20b1",
-        "decimals": 2,
-        "plural": "Philippine pesos"
-      },
-      {
-        "text": "Polish Zloty",
-        "code": "PLN",
-        "symbol": "z\u0142",
-        "symbol_native": "z\u0142",
-        "decimals": 2,
-        "plural": "Polish zlotys"
-      },
-      {
-        "text": "Qatari Rial",
-        "code": "QAR",
-        "symbol": "QR",
-        "symbol_native": "\u0631.\u0642.\u200f",
-        "decimals": 2,
-        "plural": "Qatari rials"
-      },
-      {
-        "text": "Romanian Leu",
-        "code": "RON",
-        "symbol": "RON",
-        "symbol_native": "RON",
-        "decimals": 2,
-        "plural": "Romanian lei"
-      },
-      {
-        "text": "Russian Ruble",
-        "code": "RUB",
-        "symbol": "RUB",
-        "symbol_native": "\u20bd.",
-        "decimals": 2,
-        "plural": "Russian rubles"
-      },
-      {
-        "text": "Rwandan Franc",
-        "code": "RWF",
-        "symbol": "RWF",
-        "symbol_native": "FR",
-        "plural": "Rwandan francs"
-      },
-      {
-        "text": "Saudi Riyal",
-        "code": "SAR",
-        "symbol": "SR",
-        "symbol_native": "\u0631.\u0633.\u200f",
-        "decimals": 2,
-        "plural": "Saudi riyals"
-      },
-      {
-        "text": "Serbian Dinar",
-        "code": "RSD",
-        "symbol": "din.",
-        "symbol_native": "\u0434\u0438\u043d.",
-        "plural": "Serbian dinars"
-      },
-      {
-        "text": "Singapore Dollar",
-        "code": "SGD",
-        "symbol": "S$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Singapore dollars"
-      },
-      {
-        "text": "Somali Shilling",
-        "code": "SOS",
-        "symbol": "Ssh",
-        "symbol_native": "Ssh",
-        "plural": "Somali shillings"
-      },
-      {
-        "text": "South African Rand",
-        "code": "ZAR",
-        "symbol": "R",
-        "symbol_native": "R",
-        "decimals": 2,
-        "plural": "South African rand"
-      },
-      {
-        "text": "South Korean Won",
-        "code": "KRW",
-        "symbol": "\u20a9",
-        "symbol_native": "\u20a9",
-        "plural": "South Korean won"
-      },
-      {
-        "text": "Sri Lankan Rupee",
-        "code": "LKR",
-        "symbol": "SLRs",
-        "symbol_native": "SL Re",
-        "decimals": 2,
-        "plural": "Sri Lankan rupees"
-      },
-      {
-        "text": "Sudanese Pound",
-        "code": "SDG",
-        "symbol": "SDG",
-        "symbol_native": "SDG",
-        "decimals": 2,
-        "plural": "Sudanese pounds"
-      },
-      {
-        "text": "Swedish Krona",
-        "code": "SEK",
-        "symbol": "Skr",
-        "symbol_native": "kr",
-        "decimals": 2,
-        "plural": "Swedish kronor"
-      },
-      {
-        "text": "Swiss Franc",
-        "code": "CHF",
-        "symbol": "CHF",
-        "symbol_native": "CHF",
-        "rounding": 0.05,
-        "decimals": 2,
-        "plural": "Swiss francs"
-      },
-      {
-        "text": "Syrian Pound",
-        "code": "SYP",
-        "symbol": "SY\u00a3",
-        "symbol_native": "\u0644.\u0633.\u200f",
-        "plural": "Syrian pounds"
-      },
-      {
-        "text": "Tanzanian Shilling",
-        "code": "TZS",
-        "symbol": "TSh",
-        "symbol_native": "TSh",
-        "plural": "Tanzanian shillings"
-      },
-      {
-        "text": "Thai Baht",
-        "code": "THB",
-        "symbol": "\u0e3f",
-        "symbol_native": "\u0e3f",
-        "decimals": 2,
-        "plural": "Thai baht"
-      },
-      {
-        "text": "Tongan Pa\u02bbanga",
-        "code": "TOP",
-        "symbol": "T$",
-        "symbol_native": "T$",
-        "decimals": 2,
-        "plural": "Tongan pa\u02bbanga"
-      },
-      {
-        "text": "Trinidad and Tobago Dollar",
-        "code": "TTD",
-        "symbol": "TT$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Trinidad and Tobago dollars"
-      },
-      {
-        "text": "Tunisian Dinar",
-        "code": "TND",
-        "symbol": "DT",
-        "symbol_native": "\u062f.\u062a.\u200f",
-        "decimals": 3,
-        "plural": "Tunisian dinars"
-      },
-      {
-        "text": "Turkish Lira",
-        "code": "TRY",
-        "symbol": "TL",
-        "symbol_native": "TL",
-        "decimals": 2,
-        "plural": "Turkish Lira"
-      },
-      {
-        "text": "Ugandan Shilling",
-        "code": "UGX",
-        "symbol": "USh",
-        "symbol_native": "USh",
-        "plural": "Ugandan shillings"
-      },
-      {
-        "text": "Ukrainian Hryvnia",
-        "code": "UAH",
-        "symbol": "\u20b4",
-        "symbol_native": "\u20b4",
-        "decimals": 2,
-        "plural": "Ukrainian hryvnias"
-      },
-      {
-        "text": "United Arab Emirates Dirham",
-        "code": "AED",
-        "symbol": "AED",
-        "symbol_native": "\u062f.\u0625.\u200f",
-        "decimals": 2,
-        "plural": "UAE dirhams"
-      },
-      {
-        "text": "Uruguayan Peso",
-        "code": "UYU",
-        "symbol": "$U",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "Uruguayan pesos"
-      },
-      {
-        "text": "US Dollar",
-        "code": "USD",
-        "symbol": "$",
-        "symbol_native": "$",
-        "decimals": 2,
-        "plural": "US dollars"
-      },
-      {
-        "text": "Uzbekistan Som",
-        "code": "UZS",
-        "symbol": "UZS",
-        "symbol_native": "UZS",
-        "plural": "Uzbekistan som"
-      },
-      {
-        "text": "Venezuelan Bol\u00edvar",
-        "code": "VEF",
-        "symbol": "Bs.F.",
-        "symbol_native": "Bs.F.",
-        "decimals": 2,
-        "plural": "Venezuelan bol\u00edvars"
-      },
-      {
-        "text": "Vietnamese Dong",
-        "code": "VND",
-        "symbol": "\u20ab",
-        "symbol_native": "\u20ab",
-        "plural": "Vietnamese dong"
-      },
-      {
-        "text": "Yemeni Rial",
-        "code": "YER",
-        "symbol": "YR",
-        "symbol_native": "\u0631.\u064a.\u200f",
-        "plural": "Yemeni rials"
-      },
-      {
-        "text": "Zambian Kwacha",
-        "code": "ZMK",
-        "symbol": "ZK",
-        "symbol_native": "ZK",
-        "plural": "Zambian kwachas"
-      },
-      {
-        "text": "Zimbabwean Dollar",
-        "code": "ZWL",
-        "symbol": "ZWL$",
-        "symbol_native": "ZWL$",
-        "plural": "Zimbabwean Dollar"
-      }
-    ]
-  },
-  {
-    "text": "Themes",
-    "code": "themes",
-    "items": [
-      {
-        "text": "Black",
-        "code": "black",
-        "isDark": true
-      },
-      {
-        "text": "Blue",
-        "code": "blue"
-      },
-      {
-        "text": "Dark",
-        "code": "dark",
-        "isDark": true
-      },
-      {
-        "text": "Default",
-        "code": "default"
-      },
-      {
-        "text": "Flat",
-        "code": "flat"
-      },
-      {
-        "text": "Grey",
-        "code": "grey",
-        "isDark": true
-      },
-      {
-        "text": "Grinks",
-        "code": "grinks"
-      },
-      {
-        "text": "Jeans",
-        "code": "jeans"
-      },
-      {
-        "text": "Mirko",
-        "code": "mirko",
-        "isDark": true
-      },
-      {
-        "text": "Moonlight",
-        "code": "moonlight",
-        "isDark": true
-      },
-      {
-        "text": "Moonlight variant",
-        "code": "moonlight-variant",
-        "isDark": true
-      },
-      {
-        "text": "Neutral",
-        "code": "neutral"
-      },
-      {
-        "text": "Turquoise dark",
-        "code": "turquoise-dark",
-        "isDark": true
-      },
-      {
-        "text": "Turquoise dark variant",
-        "code": "turquoise-dark2",
-        "isDark": true
-      },
-      {
-        "text": "Turquoise light",
-        "code": "turquoise-light"
-      },
-      {
-        "text": "Turquoise light variant",
-        "code": "turquoise-light2"
-      },
-      {
-        "text": "Uniform",
-        "code": "uniform"
-      }
-    ],
-    "cfg": {
-      "allow_children": 1,
-      "show_code": 1,
-      "schema": [
-        {
-          "title": "Is dark",
-          "field": "isDark",
-          "type": "boolean",
-          "showable": true,
-          "editable": true,
-          "hidden": false,
-          "width": 70,
-          "options": {
-            "value": true,
-            "novalue": false
-          },
-          "cls": "bbn-c",
-          "default": false
+    {
+        "text": "Packages",
+        "code": "packages",
+        "items": [
+            {
+              "code": "appui-ai",
+              "text": "bbn/appui-ai"
+            },
+            {
+              "code": "appui-billing",
+              "text": "bbn/appui-billing"
+            },
+            {
+              "code": "appui-bookmark",
+              "text": "bbn/appui-bookmark"
+            },
+            {
+              "code": "appui-cdn",
+              "text": "bbn/appui-cdn"
+            },
+            {
+              "code": "appui-chat",
+              "text": "bbn/appui-chat"
+            },
+            {
+              "code": "appui-clipboard",
+              "text": "bbn/appui-clipboard"
+            },
+            {
+              "code": "appui-component",
+              "text": "bbn/appui-component"
+            },
+            {
+              "code": "appui-config",
+              "text": "bbn/appui-config"
+            },
+            {
+              "code": "appui-core",
+              "text": "bbn/appui-core"
+            },
+            {
+              "code": "appui-crm",
+              "text": "bbn/appui-crm"
+            },
+            {
+              "code": "appui-cron",
+              "text": "bbn/appui-cron"
+            },
+            {
+              "code": "appui-dashboard",
+              "text": "bbn/appui-dashboard"
+            },
+            {
+              "code": "appui-database",
+              "text": "bbn/appui-database"
+            },
+            {
+              "code": "appui-email",
+              "text": "bbn/appui-email"
+            },
+            {
+              "code": "appui-entity",
+              "text": "bbn/appui-entity"
+            },
+            {
+              "code": "appui-event",
+              "text": "bbn/appui-event"
+            },
+            {
+              "code": "appui-finder",
+              "text": "bbn/appui-finder"
+            },
+            {
+              "code": "appui-gdpr",
+              "text": "bbn/appui-gdpr"
+            },
+            {
+              "code": "appui-history",
+              "text": "bbn/appui-history"
+            },
+            {
+              "code": "appui-hr",
+              "text": "bbn/appui-hr"
+            },
+            {
+              "code": "appui-i18n",
+              "text": "bbn/appui-i18n"
+            },
+            {
+              "code": "appui-ide",
+              "text": "bbn/appui-ide"
+            },
+            {
+              "code": "appui-meeting",
+              "text": "bbn/appui-meeting"
+            },
+            {
+              "code": "appui-menu",
+              "text": "bbn/appui-menu"
+            },
+            {
+              "code": "appui-note",
+              "text": "bbn/appui-note"
+            },
+            {
+              "code": "appui-notification",
+              "text": "bbn/appui-notification"
+            },
+            {
+              "code": "appui-option",
+              "text": "bbn/appui-option"
+            },
+            {
+              "code": "appui-project",
+              "text": "bbn/appui-project"
+            },
+            {
+              "code": "appui-search",
+              "text": "bbn/appui-search"
+            },
+            {
+              "code": "appui-server",
+              "text": "bbn/appui-server"
+            },
+            {
+              "code": "appui-shop",
+              "text": "bbn/appui-shop"
+            },
+            {
+              "code": "appui-statistic",
+              "text": "bbn/appui-statistic"
+            },
+            {
+              "code": "appui-task",
+              "text": "bbn/appui-task"
+            },
+            {
+              "code": "appui-usergroup",
+              "text": "bbn/appui-usergroup"
+            },
+            {
+              "code": "appui-vcs",
+              "text": "bbn/appui-vcs"
+            }
+        ]
+    },
+    {
+        "text": "Countries",
+        "code": "countries",
+        "icon": "nf nf-fa-globe",
+        "tekname": "countries",
+        "items": [
+            {
+                "text": "Afghanistan",
+                "code": "AF",
+                "phone": "93"
+            },
+            {
+                "text": "Albania",
+                "code": "AL",
+                "phone": "355"
+            },
+            {
+                "text": "Algeria",
+                "code": "DZ",
+                "phone": "213"
+            },
+            {
+                "text": "American Samoa",
+                "code": "AS",
+                "phone": "1684"
+            },
+            {
+                "text": "Andorra",
+                "code": "AD",
+                "phone": "376"
+            },
+            {
+                "text": "Angola",
+                "code": "AO",
+                "phone": "244"
+            },
+            {
+                "text": "Anguilla",
+                "code": "AI",
+                "phone": "1264"
+            },
+            {
+                "text": "Antarctica",
+                "code": "AQ",
+                "phone": "672"
+            },
+            {
+                "text": "Antigua and Barbuda",
+                "code": "AG",
+                "phone": "1268"
+            },
+            {
+                "text": "Argentina",
+                "code": "AR",
+                "phone": "54"
+            },
+            {
+                "text": "Armenia",
+                "code": "AM",
+                "phone": "374"
+            },
+            {
+                "text": "Aruba",
+                "code": "AW",
+                "phone": "297"
+            },
+            {
+                "text": "Australia",
+                "code": "AU",
+                "phone": "61"
+            },
+            {
+                "text": "Austria",
+                "code": "AT",
+                "phone": "43"
+            },
+            {
+                "text": "Azerbaijan",
+                "code": "AZ",
+                "phone": "994"
+            },
+            {
+                "text": "Bahamas",
+                "code": "BS",
+                "phone": "1242"
+            },
+            {
+                "text": "Bahrain",
+                "code": "BH",
+                "phone": "973"
+            },
+            {
+                "text": "Bangladesh",
+                "code": "BD",
+                "phone": "880"
+            },
+            {
+                "text": "Barbados",
+                "code": "BB",
+                "phone": "1246"
+            },
+            {
+                "text": "Belarus",
+                "code": "BY",
+                "phone": "375"
+            },
+            {
+                "text": "Belgium",
+                "code": "BE",
+                "phone": "32"
+            },
+            {
+                "text": "Belize",
+                "code": "BZ",
+                "phone": "501"
+            },
+            {
+                "text": "Benin",
+                "code": "BJ",
+                "phone": "229"
+            },
+            {
+                "text": "Bermuda",
+                "code": "BM",
+                "phone": "1441"
+            },
+            {
+                "text": "Bhutan",
+                "code": "BT",
+                "phone": "975"
+            },
+            {
+                "text": "Bolivia",
+                "code": "BO",
+                "phone": "591"
+            },
+            {
+                "text": "Bosnia and Herzegovina",
+                "code": "BA",
+                "phone": "387"
+            },
+            {
+                "text": "Botswana",
+                "code": "BW",
+                "phone": "267"
+            },
+            {
+                "text": "Bouvet Island",
+                "code": "BV"
+            },
+            {
+                "text": "Brazil",
+                "code": "BR",
+                "phone": "55"
+            },
+            {
+                "text": "British Indian Ocean Territory",
+                "code": "IO"
+            },
+            {
+                "text": "Brunei Darussalam",
+                "code": "BN",
+                "phone": "673"
+            },
+            {
+                "text": "Bulgaria",
+                "code": "BG",
+                "phone": "359"
+            },
+            {
+                "text": "Burkina Faso",
+                "code": "BF",
+                "phone": "226"
+            },
+            {
+                "text": "Burundi",
+                "code": "BI",
+                "phone": "257"
+            },
+            {
+                "text": "Cambodia",
+                "code": "KH",
+                "phone": "855"
+            },
+            {
+                "text": "Cameroon",
+                "code": "CM",
+                "phone": "237"
+            },
+            {
+                "text": "Canada",
+                "code": "CA",
+                "phone": "1"
+            },
+            {
+                "text": "Cape Verde",
+                "code": "CV",
+                "phone": "238"
+            },
+            {
+                "text": "Cayman Islands",
+                "code": "KY",
+                "phone": "1345"
+            },
+            {
+                "text": "Central African Republic",
+                "code": "CF",
+                "phone": "236"
+            },
+            {
+                "text": "Chad",
+                "code": "TD",
+                "phone": "235"
+            },
+            {
+                "text": "Chile",
+                "code": "CL",
+                "phone": "56"
+            },
+            {
+                "text": "China",
+                "code": "CN",
+                "phone": "86"
+            },
+            {
+                "text": "Christmas Island",
+                "code": "CX",
+                "phone": "61"
+            },
+            {
+                "text": "Cocos (Keeling) Islands",
+                "code": "CC",
+                "phone": "61"
+            },
+            {
+                "text": "Colombia",
+                "code": "CO",
+                "phone": "57"
+            },
+            {
+                "text": "Comoros",
+                "code": "KM",
+                "phone": "269"
+            },
+            {
+                "text": "Congo",
+                "code": "CG",
+                "phone": "242"
+            },
+            {
+                "text": "Congo, The Democratic Republic of the",
+                "code": "CD",
+                "phone": "243"
+            },
+            {
+                "text": "Cook Islands",
+                "code": "CK",
+                "phone": "682"
+            },
+            {
+                "text": "Costa Rica",
+                "code": "CR",
+                "phone": "506"
+            },
+            {
+                "text": "Cote D'Ivoire",
+                "code": "CI",
+                "phone": "225"
+            },
+            {
+                "text": "Croatia",
+                "code": "HR",
+                "phone": "385"
+            },
+            {
+                "text": "Cuba",
+                "code": "CU",
+                "phone": "53"
+            },
+            {
+                "text": "Cyprus",
+                "code": "CY",
+                "phone": "357"
+            },
+            {
+                "text": "Czech Republic",
+                "code": "CZ",
+                "phone": "420"
+            },
+            {
+                "text": "Denmark",
+                "code": "DK",
+                "phone": "45"
+            },
+            {
+                "text": "Djibouti",
+                "code": "DJ",
+                "phone": "253"
+            },
+            {
+                "text": "Dominica",
+                "code": "DM",
+                "phone": "1767"
+            },
+            {
+                "text": "Dominican Republic",
+                "code": "DO",
+                "phone": "1809"
+            },
+            {
+                "text": "Ecuador",
+                "code": "EC",
+                "phone": "593"
+            },
+            {
+                "text": "Egypt",
+                "code": "EG",
+                "phone": "20"
+            },
+            {
+                "text": "El Salvador",
+                "code": "SV",
+                "phone": "503"
+            },
+            {
+                "text": "Equatorial Guinea",
+                "code": "GQ",
+                "phone": "240"
+            },
+            {
+                "text": "Eritrea",
+                "code": "ER",
+                "phone": "291"
+            },
+            {
+                "text": "Estonia",
+                "code": "EE",
+                "phone": "372"
+            },
+            {
+                "text": "Ethiopia",
+                "code": "ET",
+                "phone": "251"
+            },
+            {
+                "text": "Falkland Islands (Malvinas)",
+                "code": "FK",
+                "phone": "500"
+            },
+            {
+                "text": "Faroe Islands",
+                "code": "FO",
+                "phone": "298"
+            },
+            {
+                "text": "Fiji",
+                "code": "FJ",
+                "phone": "679"
+            },
+            {
+                "text": "Finland",
+                "code": "FI",
+                "phone": "358"
+            },
+            {
+                "text": "France",
+                "code": "FR",
+                "phone": "33"
+            },
+            {
+                "text": "French Guiana",
+                "code": "GF"
+            },
+            {
+                "text": "French Polynesia",
+                "code": "PF",
+                "phone": "689"
+            },
+            {
+                "text": "French Southern Territories",
+                "code": "TF"
+            },
+            {
+                "text": "Gabon",
+                "code": "GA",
+                "phone": "241"
+            },
+            {
+                "text": "Gambia",
+                "code": "GM",
+                "phone": "220"
+            },
+            {
+                "text": "Georgia",
+                "code": "GE",
+                "phone": "995"
+            },
+            {
+                "text": "Germany",
+                "code": "DE",
+                "phone": "49"
+            },
+            {
+                "text": "Ghana",
+                "code": "GH",
+                "phone": "233"
+            },
+            {
+                "text": "Gibraltar",
+                "code": "GI",
+                "phone": "350"
+            },
+            {
+                "text": "Greece",
+                "code": "GR",
+                "phone": "30"
+            },
+            {
+                "text": "Greenland",
+                "code": "GL",
+                "phone": "299"
+            },
+            {
+                "text": "Grenada",
+                "code": "GD",
+                "phone": "1473"
+            },
+            {
+                "text": "Guadeloupe",
+                "code": "GP"
+            },
+            {
+                "text": "Guam",
+                "code": "GU",
+                "phone": "1671"
+            },
+            {
+                "text": "Guatemala",
+                "code": "GT",
+                "phone": "502"
+            },
+            {
+                "text": "Guernsey",
+                "code": "GG"
+            },
+            {
+                "text": "Guinea",
+                "code": "GN",
+                "phone": "224"
+            },
+            {
+                "text": "Guinea-Bissau",
+                "code": "GW",
+                "phone": "245"
+            },
+            {
+                "text": "Guyana",
+                "code": "GY",
+                "phone": "592"
+            },
+            {
+                "text": "Haiti",
+                "code": "HT",
+                "phone": "509"
+            },
+            {
+                "text": "Heard Island and Mcdonald Islands",
+                "code": "HM"
+            },
+            {
+                "text": "Holy See (Vatican City State)",
+                "code": "VA",
+                "phone": "39"
+            },
+            {
+                "text": "Honduras",
+                "code": "HN",
+                "phone": "504"
+            },
+            {
+                "text": "Hong Kong",
+                "code": "HK",
+                "phone": "852"
+            },
+            {
+                "text": "Hungary",
+                "code": "HU",
+                "phone": "36"
+            },
+            {
+                "text": "Iceland",
+                "code": "IS",
+                "phone": "354"
+            },
+            {
+                "text": "India",
+                "code": "IN",
+                "phone": "91"
+            },
+            {
+                "text": "Indonesia",
+                "code": "ID",
+                "phone": "62"
+            },
+            {
+                "text": "Iran, Islamic Republic Of",
+                "code": "IR",
+                "phone": "98"
+            },
+            {
+                "text": "Iraq",
+                "code": "IQ",
+                "phone": "964"
+            },
+            {
+                "text": "Ireland",
+                "code": "IE",
+                "phone": "353"
+            },
+            {
+                "text": "Isle of Man",
+                "code": "IM",
+                "phone": "44"
+            },
+            {
+                "text": "Israel",
+                "code": "IL",
+                "phone": "972"
+            },
+            {
+                "text": "Italy",
+                "code": "IT",
+                "phone": "39"
+            },
+            {
+                "text": "Jamaica",
+                "code": "JM",
+                "phone": "1876"
+            },
+            {
+                "text": "Japan",
+                "code": "JP",
+                "phone": "81"
+            },
+            {
+                "text": "Jersey",
+                "code": "JE"
+            },
+            {
+                "text": "Jordan",
+                "code": "JO",
+                "phone": "962"
+            },
+            {
+                "text": "Kazakhstan",
+                "code": "KZ",
+                "phone": "7"
+            },
+            {
+                "text": "Kenya",
+                "code": "KE",
+                "phone": "254"
+            },
+            {
+                "text": "Kiribati",
+                "code": "KI",
+                "phone": "686"
+            },
+            {
+                "text": "Korea, Democratic People's Republic of",
+                "code": "KP",
+                "phone": "850"
+            },
+            {
+                "text": "Korea, Republic of",
+                "code": "KR",
+                "phone": "82"
+            },
+            {
+                "text": "Kuwait",
+                "code": "KW",
+                "phone": "965"
+            },
+            {
+                "text": "Kyrgyzstan",
+                "code": "KG",
+                "phone": "996"
+            },
+            {
+                "text": "land Islands",
+                "code": "AX"
+            },
+            {
+                "text": "Lao People's Democratic Republic",
+                "code": "LA",
+                "phone": "856"
+            },
+            {
+                "text": "Latvia",
+                "code": "LV",
+                "phone": "371"
+            },
+            {
+                "text": "Lebanon",
+                "code": "LB",
+                "phone": "961"
+            },
+            {
+                "text": "Lesotho",
+                "code": "LS",
+                "phone": "266"
+            },
+            {
+                "text": "Liberia",
+                "code": "LR",
+                "phone": "231"
+            },
+            {
+                "text": "Libyan Arab Jamahiriya",
+                "code": "LY",
+                "phone": "218"
+            },
+            {
+                "text": "Liechtenstein",
+                "code": "LI",
+                "phone": "423"
+            },
+            {
+                "text": "Lithuania",
+                "code": "LT",
+                "phone": "370"
+            },
+            {
+                "text": "Luxembourg",
+                "code": "LU",
+                "phone": "352"
+            },
+            {
+                "text": "Macao",
+                "code": "MO",
+                "phone": "853"
+            },
+            {
+                "text": "Macedonia, The Former Yugoslav Republic of",
+                "code": "MK",
+                "phone": "389"
+            },
+            {
+                "text": "Madagascar",
+                "code": "MG",
+                "phone": "261"
+            },
+            {
+                "text": "Malawi",
+                "code": "MW",
+                "phone": "265"
+            },
+            {
+                "text": "Malaysia",
+                "code": "MY",
+                "phone": "60"
+            },
+            {
+                "text": "Maldives",
+                "code": "MV",
+                "phone": "960"
+            },
+            {
+                "text": "Mali",
+                "code": "ML",
+                "phone": "223"
+            },
+            {
+                "text": "Malta",
+                "code": "MT",
+                "phone": "356"
+            },
+            {
+                "text": "Marshall Islands",
+                "code": "MH",
+                "phone": "692"
+            },
+            {
+                "text": "Martinique",
+                "code": "MQ"
+            },
+            {
+                "text": "Mauritania",
+                "code": "MR",
+                "phone": "222"
+            },
+            {
+                "text": "Mauritius",
+                "code": "MU",
+                "phone": "230"
+            },
+            {
+                "text": "Mayotte",
+                "code": "YT",
+                "phone": "262"
+            },
+            {
+                "text": "Mexico",
+                "code": "MX",
+                "phone": "52"
+            },
+            {
+                "text": "Micronesia, Federated States of",
+                "code": "FM",
+                "phone": "691"
+            },
+            {
+                "text": "Moldova, Republic of",
+                "code": "MD",
+                "phone": "373"
+            },
+            {
+                "text": "Monaco",
+                "code": "MC",
+                "phone": "377"
+            },
+            {
+                "text": "Mongolia",
+                "code": "MN",
+                "phone": "976"
+            },
+            {
+                "text": "Montenegro",
+                "code": "ME",
+                "phone": "382"
+            },
+            {
+                "text": "Montserrat",
+                "code": "MS",
+                "phone": "1664"
+            },
+            {
+                "text": "Morocco",
+                "code": "MA",
+                "phone": "212"
+            },
+            {
+                "text": "Mozambique",
+                "code": "MZ",
+                "phone": "258"
+            },
+            {
+                "text": "Myanmar",
+                "code": "MM",
+                "phone": "95"
+            },
+            {
+                "text": "Namibia",
+                "code": "NA",
+                "phone": "264"
+            },
+            {
+                "text": "Nauru",
+                "code": "NR",
+                "phone": "674"
+            },
+            {
+                "text": "Nepal",
+                "code": "NP",
+                "phone": "977"
+            },
+            {
+                "text": "Netherlands",
+                "code": "NL",
+                "phone": "31"
+            },
+            {
+                "text": "Netherlands Antilles",
+                "code": "AN",
+                "phone": "599"
+            },
+            {
+                "text": "New Caledonia",
+                "code": "NC",
+                "phone": "687"
+            },
+            {
+                "text": "New Zealand",
+                "code": "NZ",
+                "phone": "64"
+            },
+            {
+                "text": "Nicaragua",
+                "code": "NI",
+                "phone": "505"
+            },
+            {
+                "text": "Niger",
+                "code": "NE",
+                "phone": "227"
+            },
+            {
+                "text": "Nigeria",
+                "code": "NG",
+                "phone": "234"
+            },
+            {
+                "text": "Niue",
+                "code": "NU",
+                "phone": "683"
+            },
+            {
+                "text": "Norfolk Island",
+                "code": "NF"
+            },
+            {
+                "text": "Northern Mariana Islands",
+                "code": "MP",
+                "phone": "1670"
+            },
+            {
+                "text": "Norway",
+                "code": "NO",
+                "phone": "47"
+            },
+            {
+                "text": "Oman",
+                "code": "OM",
+                "phone": "968"
+            },
+            {
+                "text": "Pakistan",
+                "code": "PK",
+                "phone": "92"
+            },
+            {
+                "text": "Palau",
+                "code": "PW",
+                "phone": "680"
+            },
+            {
+                "text": "Palestinian Territory, Occupied",
+                "code": "PS"
+            },
+            {
+                "text": "Panama",
+                "code": "PA",
+                "phone": "507"
+            },
+            {
+                "text": "Papua New Guinea",
+                "code": "PG",
+                "phone": "675"
+            },
+            {
+                "text": "Paraguay",
+                "code": "PY",
+                "phone": "595"
+            },
+            {
+                "text": "Peru",
+                "code": "PE",
+                "phone": "51"
+            },
+            {
+                "text": "Philippines",
+                "code": "PH",
+                "phone": "63"
+            },
+            {
+                "text": "Pitcairn",
+                "code": "PN",
+                "phone": "870"
+            },
+            {
+                "text": "Poland",
+                "code": "PL",
+                "phone": "48"
+            },
+            {
+                "text": "Portugal",
+                "code": "PT",
+                "phone": "351"
+            },
+            {
+                "text": "Puerto Rico",
+                "code": "PR",
+                "phone": "1"
+            },
+            {
+                "text": "Qatar",
+                "code": "QA",
+                "phone": "974"
+            },
+            {
+                "text": "Reunion",
+                "code": "RE"
+            },
+            {
+                "text": "Romania",
+                "code": "RO",
+                "phone": "40"
+            },
+            {
+                "text": "Russian Federation",
+                "code": "RU",
+                "phone": "7"
+            },
+            {
+                "text": "RWANDA",
+                "code": "RW",
+                "phone": "250"
+            },
+            {
+                "text": "Saint Helena",
+                "code": "SH",
+                "phone": "290"
+            },
+            {
+                "text": "Saint Kitts and Nevis",
+                "code": "KN",
+                "phone": "1869"
+            },
+            {
+                "text": "Saint Lucia",
+                "code": "LC",
+                "phone": "1758"
+            },
+            {
+                "text": "Saint Pierre and Miquelon",
+                "code": "PM",
+                "phone": "508"
+            },
+            {
+                "text": "Saint Vincent and the Grenadines",
+                "code": "VC",
+                "phone": "1784"
+            },
+            {
+                "text": "Samoa",
+                "code": "WS",
+                "phone": "685"
+            },
+            {
+                "text": "San Marino",
+                "code": "SM",
+                "phone": "378"
+            },
+            {
+                "text": "Sao Tome and Principe",
+                "code": "ST",
+                "phone": "239"
+            },
+            {
+                "text": "Saudi Arabia",
+                "code": "SA",
+                "phone": "966"
+            },
+            {
+                "text": "Senegal",
+                "code": "SN",
+                "phone": "221"
+            },
+            {
+                "text": "Serbia",
+                "code": "RS",
+                "phone": "381"
+            },
+            {
+                "text": "Seychelles",
+                "code": "SC",
+                "phone": "248"
+            },
+            {
+                "text": "Sierra Leone",
+                "code": "SL",
+                "phone": "232"
+            },
+            {
+                "text": "Singapore",
+                "code": "SG",
+                "phone": "65"
+            },
+            {
+                "text": "Slovakia",
+                "code": "SK",
+                "phone": "421"
+            },
+            {
+                "text": "Slovenia",
+                "code": "SI",
+                "phone": "386"
+            },
+            {
+                "text": "Solomon Islands",
+                "code": "SB",
+                "phone": "677"
+            },
+            {
+                "text": "Somalia",
+                "code": "SO",
+                "phone": "252"
+            },
+            {
+                "text": "South Africa",
+                "code": "ZA",
+                "phone": "27"
+            },
+            {
+                "text": "South Georgia and the South Sandwich Islands",
+                "code": "GS"
+            },
+            {
+                "text": "Spain",
+                "code": "ES",
+                "phone": "34"
+            },
+            {
+                "text": "Sri Lanka",
+                "code": "LK",
+                "phone": "94"
+            },
+            {
+                "text": "Sudan",
+                "code": "SD",
+                "phone": "249"
+            },
+            {
+                "text": "Suriname",
+                "code": "SR",
+                "phone": "597"
+            },
+            {
+                "text": "Svalbard and Jan Mayen",
+                "code": "SJ"
+            },
+            {
+                "text": "Swaziland",
+                "code": "SZ",
+                "phone": "268"
+            },
+            {
+                "text": "Sweden",
+                "code": "SE",
+                "phone": "46"
+            },
+            {
+                "text": "Switzerland",
+                "code": "CH",
+                "phone": "41"
+            },
+            {
+                "text": "Syrian Arab Republic",
+                "code": "SY",
+                "phone": "963"
+            },
+            {
+                "text": "Taiwan, Province of China",
+                "code": "TW",
+                "phone": "886"
+            },
+            {
+                "text": "Tajikistan",
+                "code": "TJ",
+                "phone": "992"
+            },
+            {
+                "text": "Tanzania, United Republic of",
+                "code": "TZ",
+                "phone": "255"
+            },
+            {
+                "text": "Thailand",
+                "code": "TH",
+                "phone": "66"
+            },
+            {
+                "text": "Timor-Leste",
+                "code": "TL",
+                "phone": "670"
+            },
+            {
+                "text": "Togo",
+                "code": "TG",
+                "phone": "228"
+            },
+            {
+                "text": "Tokelau",
+                "code": "TK",
+                "phone": "690"
+            },
+            {
+                "text": "Tonga",
+                "code": "TO",
+                "phone": "676"
+            },
+            {
+                "text": "Trinidad and Tobago",
+                "code": "TT",
+                "phone": "1868"
+            },
+            {
+                "text": "Tunisia",
+                "code": "TN",
+                "phone": "216"
+            },
+            {
+                "text": "Turkey",
+                "code": "TR",
+                "phone": "90"
+            },
+            {
+                "text": "Turkmenistan",
+                "code": "TM",
+                "phone": "993"
+            },
+            {
+                "text": "Turks and Caicos Islands",
+                "code": "TC",
+                "phone": "1649"
+            },
+            {
+                "text": "Tuvalu",
+                "code": "TV",
+                "phone": "688"
+            },
+            {
+                "text": "Uganda",
+                "code": "UG",
+                "phone": "256"
+            },
+            {
+                "text": "Ukraine",
+                "code": "UA",
+                "phone": "380"
+            },
+            {
+                "text": "United Arab Emirates",
+                "code": "AE",
+                "phone": "971"
+            },
+            {
+                "text": "United Kingdom",
+                "code": "GB",
+                "phone": "44"
+            },
+            {
+                "text": "United States",
+                "code": "US",
+                "phone": "1"
+            },
+            {
+                "text": "United States Minor Outlying Islands",
+                "code": "UM"
+            },
+            {
+                "text": "Uruguay",
+                "code": "UY",
+                "phone": "598"
+            },
+            {
+                "text": "Uzbekistan",
+                "code": "UZ",
+                "phone": "998"
+            },
+            {
+                "text": "Vanuatu",
+                "code": "VU",
+                "phone": "678"
+            },
+            {
+                "text": "Venezuela",
+                "code": "VE",
+                "phone": "58"
+            },
+            {
+                "text": "Viet Nam",
+                "code": "VN",
+                "phone": "84"
+            },
+            {
+                "text": "Virgin Islands, British",
+                "code": "VG",
+                "phone": "1284"
+            },
+            {
+                "text": "Virgin Islands, U.S.",
+                "code": "VI",
+                "phone": "1340"
+            },
+            {
+                "text": "Wallis and Futuna",
+                "code": "WF",
+                "phone": "681"
+            },
+            {
+                "text": "Western Sahara",
+                "code": "EH"
+            },
+            {
+                "text": "Yemen",
+                "code": "YE",
+                "phone": "967"
+            },
+            {
+                "text": "Zambia",
+                "code": "ZM",
+                "phone": "260"
+            },
+            {
+                "text": "Zimbabwe",
+                "code": "ZW",
+                "phone": "263"
+            }
+        ],
+        "cfg": {
+            "show_code": 1
         }
-      ]
+    },
+    {
+        "text": "Currencies",
+        "code": "currencies",
+        "icon": "nf nf-md-currency_eur",
+        "items": [
+            {
+                "text": "Afghan Afghani",
+                "code": "AFN",
+                "symbol": "Af",
+                "symbol_native": "\u060b",
+                "plural": "Afghan Afghanis"
+            },
+            {
+                "text": "Albanian Lek",
+                "code": "ALL",
+                "symbol": "ALL",
+                "symbol_native": "Lek",
+                "plural": "Albanian lek\u00eb"
+            },
+            {
+                "text": "Algerian Dinar",
+                "code": "DZD",
+                "symbol": "DA",
+                "symbol_native": "\u062f.\u062c.\u200f",
+                "decimals": 2,
+                "plural": "Algerian dinars"
+            },
+            {
+                "text": "Argentine Peso",
+                "code": "ARS",
+                "symbol": "AR$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Argentine pesos"
+            },
+            {
+                "text": "Armenian Dram",
+                "code": "AMD",
+                "symbol": "AMD",
+                "symbol_native": "\u0564\u0580.",
+                "plural": "Armenian drams"
+            },
+            {
+                "text": "Australian Dollar",
+                "code": "AUD",
+                "symbol": "AU$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Australian dollars"
+            },
+            {
+                "text": "Azerbaijani Manat",
+                "code": "AZN",
+                "symbol": "man.",
+                "symbol_native": "\u043c\u0430\u043d.",
+                "decimals": 2,
+                "plural": "Azerbaijani manats"
+            },
+            {
+                "text": "Bahraini Dinar",
+                "code": "BHD",
+                "symbol": "BD",
+                "symbol_native": "\u062f.\u0628.\u200f",
+                "decimals": 3,
+                "plural": "Bahraini dinars"
+            },
+            {
+                "text": "Bangladeshi Taka",
+                "code": "BDT",
+                "symbol": "Tk",
+                "symbol_native": "\u09f3",
+                "decimals": 2,
+                "plural": "Bangladeshi takas"
+            },
+            {
+                "text": "Belarusian Ruble",
+                "code": "BYN",
+                "symbol": "Br",
+                "symbol_native": "\u0440\u0443\u0431.",
+                "decimals": 2,
+                "plural": "Belarusian rubles"
+            },
+            {
+                "text": "Belize Dollar",
+                "code": "BZD",
+                "symbol": "BZ$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Belize dollars"
+            },
+            {
+                "text": "Bolivian Boliviano",
+                "code": "BOB",
+                "symbol": "Bs",
+                "symbol_native": "Bs",
+                "decimals": 2,
+                "plural": "Bolivian bolivianos"
+            },
+            {
+                "text": "Bosnia-Herzegovina Convertible Mark",
+                "code": "BAM",
+                "symbol": "KM",
+                "symbol_native": "KM",
+                "decimals": 2,
+                "plural": "Bosnia-Herzegovina convertible marks"
+            },
+            {
+                "text": "Botswanan Pula",
+                "code": "BWP",
+                "symbol": "BWP",
+                "symbol_native": "P",
+                "decimals": 2,
+                "plural": "Botswanan pulas"
+            },
+            {
+                "text": "Brazilian Real",
+                "code": "BRL",
+                "symbol": "R$",
+                "symbol_native": "R$",
+                "decimals": 2,
+                "plural": "Brazilian reals"
+            },
+            {
+                "text": "British Pound Sterling",
+                "code": "GBP",
+                "symbol": "\u00a3",
+                "symbol_native": "\u00a3",
+                "decimals": 2,
+                "plural": "British pounds sterling"
+            },
+            {
+                "text": "Brunei Dollar",
+                "code": "BND",
+                "symbol": "BN$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Brunei dollars"
+            },
+            {
+                "text": "Bulgarian Lev",
+                "code": "BGN",
+                "symbol": "BGN",
+                "symbol_native": "\u043b\u0432.",
+                "decimals": 2,
+                "plural": "Bulgarian leva"
+            },
+            {
+                "text": "Burundian Franc",
+                "code": "BIF",
+                "symbol": "FBu",
+                "symbol_native": "FBu",
+                "plural": "Burundian francs"
+            },
+            {
+                "text": "Cambodian Riel",
+                "code": "KHR",
+                "symbol": "KHR",
+                "symbol_native": "\u17db",
+                "decimals": 2,
+                "plural": "Cambodian riels"
+            },
+            {
+                "text": "Canadian Dollar",
+                "code": "CAD",
+                "symbol": "CA$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Canadian dollars"
+            },
+            {
+                "text": "Cape Verdean Escudo",
+                "code": "CVE",
+                "symbol": "CV$",
+                "symbol_native": "CV$",
+                "decimals": 2,
+                "plural": "Cape Verdean escudos"
+            },
+            {
+                "text": "CFA Franc BCEAO",
+                "code": "XOF",
+                "symbol": "CFA",
+                "symbol_native": "CFA",
+                "plural": "CFA francs BCEAO"
+            },
+            {
+                "text": "CFA Franc BEAC",
+                "code": "XAF",
+                "symbol": "FCFA",
+                "symbol_native": "FCFA",
+                "plural": "CFA francs BEAC"
+            },
+            {
+                "text": "Chilean Peso",
+                "code": "CLP",
+                "symbol": "CL$",
+                "symbol_native": "$",
+                "plural": "Chilean pesos"
+            },
+            {
+                "text": "Chinese Yuan",
+                "code": "CNY",
+                "symbol": "CN\u00a5",
+                "symbol_native": "CN\u00a5",
+                "decimals": 2,
+                "plural": "Chinese yuan"
+            },
+            {
+                "text": "Colombian Peso",
+                "code": "COP",
+                "symbol": "CO$",
+                "symbol_native": "$",
+                "plural": "Colombian pesos"
+            },
+            {
+                "text": "Comorian Franc",
+                "code": "KMF",
+                "symbol": "CF",
+                "symbol_native": "FC",
+                "plural": "Comorian francs"
+            },
+            {
+                "text": "Congolese Franc",
+                "code": "CDF",
+                "symbol": "CDF",
+                "symbol_native": "FrCD",
+                "decimals": 2,
+                "plural": "Congolese francs"
+            },
+            {
+                "text": "Costa Rican Col\u00f3n",
+                "code": "CRC",
+                "symbol": "\u20a1",
+                "symbol_native": "\u20a1",
+                "plural": "Costa Rican col\u00f3ns"
+            },
+            {
+                "text": "Croatian Kuna",
+                "code": "HRK",
+                "symbol": "kn",
+                "symbol_native": "kn",
+                "decimals": 2,
+                "plural": "Croatian kunas"
+            },
+            {
+                "text": "Czech Republic Koruna",
+                "code": "CZK",
+                "symbol": "K\u010d",
+                "symbol_native": "K\u010d",
+                "decimals": 2,
+                "plural": "Czech Republic korunas"
+            },
+            {
+                "text": "Danish Krone",
+                "code": "DKK",
+                "symbol": "Dkr",
+                "symbol_native": "kr",
+                "decimals": 2,
+                "plural": "Danish kroner"
+            },
+            {
+                "text": "Djiboutian Franc",
+                "code": "DJF",
+                "symbol": "Fdj",
+                "symbol_native": "Fdj",
+                "plural": "Djiboutian francs"
+            },
+            {
+                "text": "Dominican Peso",
+                "code": "DOP",
+                "symbol": "RD$",
+                "symbol_native": "RD$",
+                "decimals": 2,
+                "plural": "Dominican pesos"
+            },
+            {
+                "text": "Egyptian Pound",
+                "code": "EGP",
+                "symbol": "EGP",
+                "symbol_native": "\u062c.\u0645.\u200f",
+                "decimals": 2,
+                "plural": "Egyptian pounds"
+            },
+            {
+                "text": "Eritrean Nakfa",
+                "code": "ERN",
+                "symbol": "Nfk",
+                "symbol_native": "Nfk",
+                "decimals": 2,
+                "plural": "Eritrean nakfas"
+            },
+            {
+                "text": "Estonian Kroon",
+                "code": "EEK",
+                "symbol": "Ekr",
+                "symbol_native": "kr",
+                "decimals": 2,
+                "plural": "Estonian kroons"
+            },
+            {
+                "text": "Ethiopian Birr",
+                "code": "ETB",
+                "symbol": "Br",
+                "symbol_native": "Br",
+                "decimals": 2,
+                "plural": "Ethiopian birrs"
+            },
+            {
+                "text": "Euro",
+                "code": "EUR",
+                "symbol": "\u20ac",
+                "symbol_native": "\u20ac",
+                "decimals": 2,
+                "plural": "euros"
+            },
+            {
+                "text": "Georgian Lari",
+                "code": "GEL",
+                "symbol": "GEL",
+                "symbol_native": "GEL",
+                "decimals": 2,
+                "plural": "Georgian laris"
+            },
+            {
+                "text": "Ghanaian Cedi",
+                "code": "GHS",
+                "symbol": "GH\u20b5",
+                "symbol_native": "GH\u20b5",
+                "decimals": 2,
+                "plural": "Ghanaian cedis"
+            },
+            {
+                "text": "Guatemalan Quetzal",
+                "code": "GTQ",
+                "symbol": "GTQ",
+                "symbol_native": "Q",
+                "decimals": 2,
+                "plural": "Guatemalan quetzals"
+            },
+            {
+                "text": "Guinean Franc",
+                "code": "GNF",
+                "symbol": "FG",
+                "symbol_native": "FG",
+                "plural": "Guinean francs"
+            },
+            {
+                "text": "Honduran Lempira",
+                "code": "HNL",
+                "symbol": "HNL",
+                "symbol_native": "L",
+                "decimals": 2,
+                "plural": "Honduran lempiras"
+            },
+            {
+                "text": "Hong Kong Dollar",
+                "code": "HKD",
+                "symbol": "HK$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Hong Kong dollars"
+            },
+            {
+                "text": "Hungarian Forint",
+                "code": "HUF",
+                "symbol": "Ft",
+                "symbol_native": "Ft",
+                "plural": "Hungarian forints"
+            },
+            {
+                "text": "Icelandic Kr\u00f3na",
+                "code": "ISK",
+                "symbol": "Ikr",
+                "symbol_native": "kr",
+                "plural": "Icelandic kr\u00f3nur"
+            },
+            {
+                "text": "Indian Rupee",
+                "code": "INR",
+                "symbol": "Rs",
+                "symbol_native": "\u099f\u0995\u09be",
+                "decimals": 2,
+                "plural": "Indian rupees"
+            },
+            {
+                "text": "Indonesian Rupiah",
+                "code": "IDR",
+                "symbol": "Rp",
+                "symbol_native": "Rp",
+                "plural": "Indonesian rupiahs"
+            },
+            {
+                "text": "Iranian Rial",
+                "code": "IRR",
+                "symbol": "IRR",
+                "symbol_native": "\ufdfc",
+                "plural": "Iranian rials"
+            },
+            {
+                "text": "Iraqi Dinar",
+                "code": "IQD",
+                "symbol": "IQD",
+                "symbol_native": "\u062f.\u0639.\u200f",
+                "plural": "Iraqi dinars"
+            },
+            {
+                "text": "Israeli New Sheqel",
+                "code": "ILS",
+                "symbol": "\u20aa",
+                "symbol_native": "\u20aa",
+                "decimals": 2,
+                "plural": "Israeli new sheqels"
+            },
+            {
+                "text": "Jamaican Dollar",
+                "code": "JMD",
+                "symbol": "J$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Jamaican dollars"
+            },
+            {
+                "text": "Japanese Yen",
+                "code": "JPY",
+                "symbol": "\u00a5",
+                "symbol_native": "\uffe5",
+                "plural": "Japanese yen"
+            },
+            {
+                "text": "Jordanian Dinar",
+                "code": "JOD",
+                "symbol": "JD",
+                "symbol_native": "\u062f.\u0623.\u200f",
+                "decimals": 3,
+                "plural": "Jordanian dinars"
+            },
+            {
+                "text": "Kazakhstani Tenge",
+                "code": "KZT",
+                "symbol": "KZT",
+                "symbol_native": "\u0442\u04a3\u0433.",
+                "decimals": 2,
+                "plural": "Kazakhstani tenges"
+            },
+            {
+                "text": "Kenyan Shilling",
+                "code": "KES",
+                "symbol": "Ksh",
+                "symbol_native": "Ksh",
+                "decimals": 2,
+                "plural": "Kenyan shillings"
+            },
+            {
+                "text": "Kuwaiti Dinar",
+                "code": "KWD",
+                "symbol": "KD",
+                "symbol_native": "\u062f.\u0643.\u200f",
+                "decimals": 3,
+                "plural": "Kuwaiti dinars"
+            },
+            {
+                "text": "Latvian Lats",
+                "code": "LVL",
+                "symbol": "Ls",
+                "symbol_native": "Ls",
+                "decimals": 2,
+                "plural": "Latvian lati"
+            },
+            {
+                "text": "Lebanese Pound",
+                "code": "LBP",
+                "symbol": "L.L.",
+                "symbol_native": "\u0644.\u0644.\u200f",
+                "plural": "Lebanese pounds"
+            },
+            {
+                "text": "Libyan Dinar",
+                "code": "LYD",
+                "symbol": "LD",
+                "symbol_native": "\u062f.\u0644.\u200f",
+                "decimals": 3,
+                "plural": "Libyan dinars"
+            },
+            {
+                "text": "Lithuanian Litas",
+                "code": "LTL",
+                "symbol": "Lt",
+                "symbol_native": "Lt",
+                "decimals": 2,
+                "plural": "Lithuanian litai"
+            },
+            {
+                "text": "Macanese Pataca",
+                "code": "MOP",
+                "symbol": "MOP$",
+                "symbol_native": "MOP$",
+                "decimals": 2,
+                "plural": "Macanese patacas"
+            },
+            {
+                "text": "Macedonian Denar",
+                "code": "MKD",
+                "symbol": "MKD",
+                "symbol_native": "MKD",
+                "decimals": 2,
+                "plural": "Macedonian denari"
+            },
+            {
+                "text": "Malagasy Ariary",
+                "code": "MGA",
+                "symbol": "MGA",
+                "symbol_native": "MGA",
+                "plural": "Malagasy Ariaries"
+            },
+            {
+                "text": "Malaysian Ringgit",
+                "code": "MYR",
+                "symbol": "RM",
+                "symbol_native": "RM",
+                "decimals": 2,
+                "plural": "Malaysian ringgits"
+            },
+            {
+                "text": "Mauritian Rupee",
+                "code": "MUR",
+                "symbol": "MURs",
+                "symbol_native": "MURs",
+                "plural": "Mauritian rupees"
+            },
+            {
+                "text": "Mexican Peso",
+                "code": "MXN",
+                "symbol": "MX$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Mexican pesos"
+            },
+            {
+                "text": "Moldovan Leu",
+                "code": "MDL",
+                "symbol": "MDL",
+                "symbol_native": "MDL",
+                "decimals": 2,
+                "plural": "Moldovan lei"
+            },
+            {
+                "text": "Moroccan Dirham",
+                "code": "MAD",
+                "symbol": "MAD",
+                "symbol_native": "\u062f.\u0645.\u200f",
+                "decimals": 2,
+                "plural": "Moroccan dirhams"
+            },
+            {
+                "text": "Mozambican Metical",
+                "code": "MZN",
+                "symbol": "MTn",
+                "symbol_native": "MTn",
+                "decimals": 2,
+                "plural": "Mozambican meticals"
+            },
+            {
+                "text": "Myanma Kyat",
+                "code": "MMK",
+                "symbol": "MMK",
+                "symbol_native": "K",
+                "plural": "Myanma kyats"
+            },
+            {
+                "text": "Namibian Dollar",
+                "code": "NAD",
+                "symbol": "N$",
+                "symbol_native": "N$",
+                "decimals": 2,
+                "plural": "Namibian dollars"
+            },
+            {
+                "text": "Nepalese Rupee",
+                "code": "NPR",
+                "symbol": "NPRs",
+                "symbol_native": "\u0928\u0947\u0930\u0942",
+                "decimals": 2,
+                "plural": "Nepalese rupees"
+            },
+            {
+                "text": "New Taiwan Dollar",
+                "code": "TWD",
+                "symbol": "NT$",
+                "symbol_native": "NT$",
+                "decimals": 2,
+                "plural": "New Taiwan dollars"
+            },
+            {
+                "text": "New Zealand Dollar",
+                "code": "NZD",
+                "symbol": "NZ$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "New Zealand dollars"
+            },
+            {
+                "text": "Nicaraguan C\u00f3rdoba",
+                "code": "NIO",
+                "symbol": "C$",
+                "symbol_native": "C$",
+                "decimals": 2,
+                "plural": "Nicaraguan c\u00f3rdobas"
+            },
+            {
+                "text": "Nigerian Naira",
+                "code": "NGN",
+                "symbol": "\u20a6",
+                "symbol_native": "\u20a6",
+                "decimals": 2,
+                "plural": "Nigerian nairas"
+            },
+            {
+                "text": "Norwegian Krone",
+                "code": "NOK",
+                "symbol": "Nkr",
+                "symbol_native": "kr",
+                "decimals": 2,
+                "plural": "Norwegian kroner"
+            },
+            {
+                "text": "Omani Rial",
+                "code": "OMR",
+                "symbol": "OMR",
+                "symbol_native": "\u0631.\u0639.\u200f",
+                "decimals": 3,
+                "plural": "Omani rials"
+            },
+            {
+                "text": "Pakistani Rupee",
+                "code": "PKR",
+                "symbol": "PKRs",
+                "symbol_native": "\u20a8",
+                "plural": "Pakistani rupees"
+            },
+            {
+                "text": "Panamanian Balboa",
+                "code": "PAB",
+                "symbol": "B\/.",
+                "symbol_native": "B\/.",
+                "decimals": 2,
+                "plural": "Panamanian balboas"
+            },
+            {
+                "text": "Paraguayan Guarani",
+                "code": "PYG",
+                "symbol": "\u20b2",
+                "symbol_native": "\u20b2",
+                "plural": "Paraguayan guaranis"
+            },
+            {
+                "text": "Peruvian Nuevo Sol",
+                "code": "PEN",
+                "symbol": "S\/.",
+                "symbol_native": "S\/.",
+                "decimals": 2,
+                "plural": "Peruvian nuevos soles"
+            },
+            {
+                "text": "Philippine Peso",
+                "code": "PHP",
+                "symbol": "\u20b1",
+                "symbol_native": "\u20b1",
+                "decimals": 2,
+                "plural": "Philippine pesos"
+            },
+            {
+                "text": "Polish Zloty",
+                "code": "PLN",
+                "symbol": "z\u0142",
+                "symbol_native": "z\u0142",
+                "decimals": 2,
+                "plural": "Polish zlotys"
+            },
+            {
+                "text": "Qatari Rial",
+                "code": "QAR",
+                "symbol": "QR",
+                "symbol_native": "\u0631.\u0642.\u200f",
+                "decimals": 2,
+                "plural": "Qatari rials"
+            },
+            {
+                "text": "Romanian Leu",
+                "code": "RON",
+                "symbol": "RON",
+                "symbol_native": "RON",
+                "decimals": 2,
+                "plural": "Romanian lei"
+            },
+            {
+                "text": "Russian Ruble",
+                "code": "RUB",
+                "symbol": "RUB",
+                "symbol_native": "\u20bd.",
+                "decimals": 2,
+                "plural": "Russian rubles"
+            },
+            {
+                "text": "Rwandan Franc",
+                "code": "RWF",
+                "symbol": "RWF",
+                "symbol_native": "FR",
+                "plural": "Rwandan francs"
+            },
+            {
+                "text": "Saudi Riyal",
+                "code": "SAR",
+                "symbol": "SR",
+                "symbol_native": "\u0631.\u0633.\u200f",
+                "decimals": 2,
+                "plural": "Saudi riyals"
+            },
+            {
+                "text": "Serbian Dinar",
+                "code": "RSD",
+                "symbol": "din.",
+                "symbol_native": "\u0434\u0438\u043d.",
+                "plural": "Serbian dinars"
+            },
+            {
+                "text": "Singapore Dollar",
+                "code": "SGD",
+                "symbol": "S$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Singapore dollars"
+            },
+            {
+                "text": "Somali Shilling",
+                "code": "SOS",
+                "symbol": "Ssh",
+                "symbol_native": "Ssh",
+                "plural": "Somali shillings"
+            },
+            {
+                "text": "South African Rand",
+                "code": "ZAR",
+                "symbol": "R",
+                "symbol_native": "R",
+                "decimals": 2,
+                "plural": "South African rand"
+            },
+            {
+                "text": "South Korean Won",
+                "code": "KRW",
+                "symbol": "\u20a9",
+                "symbol_native": "\u20a9",
+                "plural": "South Korean won"
+            },
+            {
+                "text": "Sri Lankan Rupee",
+                "code": "LKR",
+                "symbol": "SLRs",
+                "symbol_native": "SL Re",
+                "decimals": 2,
+                "plural": "Sri Lankan rupees"
+            },
+            {
+                "text": "Sudanese Pound",
+                "code": "SDG",
+                "symbol": "SDG",
+                "symbol_native": "SDG",
+                "decimals": 2,
+                "plural": "Sudanese pounds"
+            },
+            {
+                "text": "Swedish Krona",
+                "code": "SEK",
+                "symbol": "Skr",
+                "symbol_native": "kr",
+                "decimals": 2,
+                "plural": "Swedish kronor"
+            },
+            {
+                "text": "Swiss Franc",
+                "code": "CHF",
+                "symbol": "CHF",
+                "symbol_native": "CHF",
+                "rounding": 0.05,
+                "decimals": 2,
+                "plural": "Swiss francs"
+            },
+            {
+                "text": "Syrian Pound",
+                "code": "SYP",
+                "symbol": "SY\u00a3",
+                "symbol_native": "\u0644.\u0633.\u200f",
+                "plural": "Syrian pounds"
+            },
+            {
+                "text": "Tanzanian Shilling",
+                "code": "TZS",
+                "symbol": "TSh",
+                "symbol_native": "TSh",
+                "plural": "Tanzanian shillings"
+            },
+            {
+                "text": "Thai Baht",
+                "code": "THB",
+                "symbol": "\u0e3f",
+                "symbol_native": "\u0e3f",
+                "decimals": 2,
+                "plural": "Thai baht"
+            },
+            {
+                "text": "Tongan Pa\u02bbanga",
+                "code": "TOP",
+                "symbol": "T$",
+                "symbol_native": "T$",
+                "decimals": 2,
+                "plural": "Tongan pa\u02bbanga"
+            },
+            {
+                "text": "Trinidad and Tobago Dollar",
+                "code": "TTD",
+                "symbol": "TT$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Trinidad and Tobago dollars"
+            },
+            {
+                "text": "Tunisian Dinar",
+                "code": "TND",
+                "symbol": "DT",
+                "symbol_native": "\u062f.\u062a.\u200f",
+                "decimals": 3,
+                "plural": "Tunisian dinars"
+            },
+            {
+                "text": "Turkish Lira",
+                "code": "TRY",
+                "symbol": "TL",
+                "symbol_native": "TL",
+                "decimals": 2,
+                "plural": "Turkish Lira"
+            },
+            {
+                "text": "Ugandan Shilling",
+                "code": "UGX",
+                "symbol": "USh",
+                "symbol_native": "USh",
+                "plural": "Ugandan shillings"
+            },
+            {
+                "text": "Ukrainian Hryvnia",
+                "code": "UAH",
+                "symbol": "\u20b4",
+                "symbol_native": "\u20b4",
+                "decimals": 2,
+                "plural": "Ukrainian hryvnias"
+            },
+            {
+                "text": "United Arab Emirates Dirham",
+                "code": "AED",
+                "symbol": "AED",
+                "symbol_native": "\u062f.\u0625.\u200f",
+                "decimals": 2,
+                "plural": "UAE dirhams"
+            },
+            {
+                "text": "Uruguayan Peso",
+                "code": "UYU",
+                "symbol": "$U",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "Uruguayan pesos"
+            },
+            {
+                "text": "US Dollar",
+                "code": "USD",
+                "symbol": "$",
+                "symbol_native": "$",
+                "decimals": 2,
+                "plural": "US dollars"
+            },
+            {
+                "text": "Uzbekistan Som",
+                "code": "UZS",
+                "symbol": "UZS",
+                "symbol_native": "UZS",
+                "plural": "Uzbekistan som"
+            },
+            {
+                "text": "Venezuelan Bol\u00edvar",
+                "code": "VEF",
+                "symbol": "Bs.F.",
+                "symbol_native": "Bs.F.",
+                "decimals": 2,
+                "plural": "Venezuelan bol\u00edvars"
+            },
+            {
+                "text": "Vietnamese Dong",
+                "code": "VND",
+                "symbol": "\u20ab",
+                "symbol_native": "\u20ab",
+                "plural": "Vietnamese dong"
+            },
+            {
+                "text": "Yemeni Rial",
+                "code": "YER",
+                "symbol": "YR",
+                "symbol_native": "\u0631.\u064a.\u200f",
+                "plural": "Yemeni rials"
+            },
+            {
+                "text": "Zambian Kwacha",
+                "code": "ZMK",
+                "symbol": "ZK",
+                "symbol_native": "ZK",
+                "plural": "Zambian kwachas"
+            },
+            {
+                "text": "Zimbabwean Dollar",
+                "code": "ZWL",
+                "symbol": "ZWL$",
+                "symbol_native": "ZWL$",
+                "plural": "Zimbabwean Dollar"
+            }
+        ]
+    },
+    {
+        "text": "Themes",
+        "code": "themes",
+        "items": [
+            {
+                "text": "Black",
+                "code": "black",
+                "isDark": true
+            },
+            {
+                "text": "Blue",
+                "code": "blue"
+            },
+            {
+                "text": "Dark",
+                "code": "dark",
+                "isDark": true
+            },
+            {
+                "text": "Default",
+                "code": "default"
+            },
+            {
+                "text": "Flat",
+                "code": "flat"
+            },
+            {
+                "text": "Grey",
+                "code": "grey",
+                "isDark": true
+            },
+            {
+                "text": "Grinks",
+                "code": "grinks"
+            },
+            {
+                "text": "Jeans",
+                "code": "jeans"
+            },
+            {
+                "text": "Mirko",
+                "code": "mirko",
+                "isDark": true
+            },
+            {
+                "text": "Moonlight",
+                "code": "moonlight",
+                "isDark": true
+            },
+            {
+                "text": "Moonlight variant",
+                "code": "moonlight-variant",
+                "isDark": true
+            },
+            {
+                "text": "Neutral",
+                "code": "neutral"
+            },
+            {
+                "text": "Turquoise dark",
+                "code": "turquoise-dark",
+                "isDark": true
+            },
+            {
+                "text": "Turquoise dark variant",
+                "code": "turquoise-dark2",
+                "isDark": true
+            },
+            {
+                "text": "Turquoise light",
+                "code": "turquoise-light"
+            },
+            {
+                "text": "Turquoise light variant",
+                "code": "turquoise-light2"
+            },
+            {
+                "text": "Uniform",
+                "code": "uniform"
+            }
+        ],
+        "cfg": {
+            "allow_children": 1,
+            "show_code": 1,
+            "schema": [
+                {
+                    "title": "Is dark",
+                    "field": "isDark",
+                    "type": "boolean",
+                    "showable": true,
+                    "editable": true,
+                    "hidden": false,
+                    "width": 70,
+                    "options": {
+                        "value": true,
+                        "novalue": false
+                    },
+                    "cls": "bbn-c",
+                    "default": false
+                }
+            ]
+        }
     }
-  }
 ]
