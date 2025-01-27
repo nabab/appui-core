@@ -176,7 +176,7 @@
     window.app = bbn.cp.createApp(document.body.querySelector('div.appui'), {
       data() {
         return {
-          slots: slots,
+          appSlots: slots,
           options: data.options,
           plugins: data.plugins,
           browserNotification: true,

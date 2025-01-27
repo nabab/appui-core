@@ -39,7 +39,7 @@
              :change-url="core_root + 'login/index'"
              :lost-url="core_root + 'login/index'"
              :secure-key="key"
-             :secure-id="id"
+             :secure-id="uid"
              ref="login"
              action-name="action"
              salt-name="appui_salt"

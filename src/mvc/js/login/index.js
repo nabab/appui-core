@@ -5,7 +5,7 @@
         logging: data.is_dev || data.is_test ? true : false,
         isDev: data.is_dev ? true : false,
         mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
-        lang: data.lang,
+        lang: data.language,
         connection_failures: 0,
         connection_max_failures: 10,
         cdn: data.shared_path,
@@ -41,7 +41,7 @@
             email: ''
           },
           currentLogo: data.logo || svg,
-          clientHeight: document.documentElement.clientHeight,
+          screenHeight: document.documentElement.clientHeight,
           isMobile: bbn.fn.isMobile(),
           isTablet: bbn.fn.isTabletDevice(),
           custom: data.custom || ''
@@ -67,7 +67,7 @@
           this.lostPassFormData.email = '';
         },
         setHeight(){
-          this.clientHeight = document.documentElement.clientHeight;
+          this.screenHeight = document.documentElement.clientHeight;
         },
         init() {
           if (!this.isInit) {

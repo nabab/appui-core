@@ -30,7 +30,7 @@ else {
     'test' => (bool)BBN_IS_DEV,
     'year' => date('Y'),
     'theme' => defined('BBN_THEME') ? BBN_THEME : 'black',
-    'lang' => BBN_LANG,
+    'language' => BBN_LANG,
     'formData' => [
       'appui_salt' => $model->inc->user->getSalt(),
       'user' => '',

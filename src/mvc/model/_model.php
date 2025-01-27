@@ -15,7 +15,7 @@ return $model->getSetFromCache(
       'static_path' => BBN_STATIC_PATH,
       'test' => BBN_IS_DEV ? 1 : 0,
       'year' => date('Y'),
-      'lang' => BBN_LANG,
+      'language' => BBN_LANG,
       'root' => ''
     ];
   },

@@ -230,8 +230,13 @@
 </head>
 <body>
 <div id="nojs_bbn"
-     style="background: #fff url(<?= $logo_big ?>) no-repeat center; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
-  <div id="error_message"></div>
+     style="background-color: #fff; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center">
+    <img src="<?= $logo_big ?>"
+         style="max-width: 80%; max-height: 100%"
+         alt="<?= $site_title ?>"/>
+  </div>
+  <div id="error_message" style="background-color: #fff"></div>
 </div>
 <div class="appui-container"
      style="opacity: 0;">
@@ -258,8 +263,8 @@
         foreach ($arr as $i => $o) {
           ?>
           <component bbn-slot:<?= $name ?>
-                    :is="slots.<?= $name ?>[<?= $i ?>].cp"
-                    :source="slots.<?= $name ?>[<?= $i ?>].data">
+                    :is="appSlots.<?= $name ?>[<?= $i ?>].cp"
+                    :source="appSlots.<?= $name ?>[<?= $i ?>].data">
           </component>
           <?php
         }
