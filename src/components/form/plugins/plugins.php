@@ -3,6 +3,7 @@
 <bbn-form :action="source.action"
           :data="source.data"
           :confirm-message="confirmMessage"
+          :prefilled="true"
           @success="success"
           :source="{plugins}">
   <div class="bbn-w-100 bbn-padding">
