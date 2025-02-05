@@ -1,6 +1,6 @@
 <?php
 /**
- * @var string $lang        The current Language
+ * @var string $language    The current Language
  * @var string $site_url    The website's URL
  * @var string $static_path The URL to the static libraries
  * @var string $site_title  The website's title
@@ -13,7 +13,7 @@
  */
 
 ?><!DOCTYPE html>
-<html class="no-js" lang="<?= $lang ?>">
+<html class="no-js" lang="<?= $language ?>">
 <head>
 <base href="<?= $site_url ?>" target="_self">
 
