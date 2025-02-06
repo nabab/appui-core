@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="<?= $lang ?>">
+<html class="no-js" lang="<?= $language ?>">
 <head>
 <base href="<?= $site_url ?>" target="_self">
 <meta charset="utf-8">
@@ -48,7 +48,7 @@
   </bbn-login>
 </div>
 <script type="text/javascript" src="<?= $shared_path ?>lib/bbn-cp/v2/dist/bbn-cp.js?<?=http_build_query([
-  'lang' => $lang,
+  'lang' => $language,
   'test' => !!$test
 ])?>"></script>
 <?= $script ?>
