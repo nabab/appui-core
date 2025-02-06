@@ -92,7 +92,9 @@ if ($id_user = $model->inc->user->getId()) {
   // Removing the files in active directory as there should be only one
   if ($files = Dir::getFiles($actsource)) {
     foreach ($files as $f) {
-      unlink($f);
+      if (is_file($f)) {
+        unlink($f);
+      }
     }
   }
 
