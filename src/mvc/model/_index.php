@@ -28,6 +28,7 @@ if ($model->hasPlugin('appui-chat')) {
 $data = X::mergeArrays($model->data, [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'version' => $version,
+  'lang' => BBN_LANG,
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
@@ -63,7 +64,7 @@ if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_
   $data = X::mergeArrays($data, $custom_data);
 }
 $data['script_src'] = BBN_SHARED_PATH . 'lib/bbn-cp/v2/dist/bbn-cp.js?' . http_build_query([
-  'lang' => $data['language'] ?? BBN_LANG,
+  'lang' => $data['lang'] ?? BBN_LANG,
   'test' => !BBN_IS_PROD,
   'v' => $data['version']
 ]);

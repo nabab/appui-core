@@ -6,6 +6,5 @@ if ($model = $ctrl->getModel($ctrl->post)) {
 }
 else {
   //$ctrl->obj->script = 
-  sleep(3);
   die('{}');
 }

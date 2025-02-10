@@ -53,7 +53,7 @@
       },
       increaseVersion() {
         this.confirm(
-          bbn._("Are you sure you want to increase the version or all users?"),
+          bbn._("Are you sure you want to increase the version for all users?"),
           () => {
             bbn.fn.post(appui.plugins['appui-core'] + '/service/increase').then(() => {
               if (window.bbnSW) {
