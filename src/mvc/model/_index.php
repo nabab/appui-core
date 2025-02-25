@@ -33,6 +33,7 @@ $data = X::mergeArrays($model->data, [
   'options' => $model->inc->options->jsCategories(),
   'theme' => $theme,
   'cdn_lib' => 'axios,dayjs,bbn-css|latest|' . $theme . ',bbn-cp',
+  'default' => $model->getDefault(),
   'users' => $mgr->fullList(),
   'groups' => $mgr->groups(),
   'user' => [

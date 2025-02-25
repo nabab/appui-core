@@ -244,7 +244,7 @@
     <bbn-appui :cfg="app"
               :options="options"
               :plugins="plugins"
-              def="home"
+              def="<?= $default ?>"
               @setimessage="setImessage"
               :source="cfg.list"
               :header="cfg.header"
