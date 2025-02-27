@@ -15,7 +15,7 @@ if ($model->inc->user->isAdmin() && $model->hasData(['aliases', 'plugins'])) {
     "bbn/appui-core" => "dev-master",
     "bbn/appui-usergroup" => "dev-master"
   ];
-  $packages           = $model->getModel(APPUI_CORE_ROOT.'data/plugins/packages');
+  $packages           = $model->getModel($model->pluginUrl('appui-core') . '/data/plugins/packages');
   foreach ($packages as $p) {
     $plugins_packages[$p['value']] = $p['version'];
   }
