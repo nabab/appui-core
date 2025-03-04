@@ -256,6 +256,7 @@
               :splittable="cfg.splittable"
               :search-bar="cfg.searchBar"
               :browser-notification="cfg.browserNotification"
+              :pollable="true"
               @route1="init">
   <?php
     if (!empty($slots)) {
