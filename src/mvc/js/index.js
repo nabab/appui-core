@@ -79,7 +79,7 @@
       }
     }
 
-    const urlPrefix = 'components/';
+    const urlPrefix = data.plugins['appui-component'] + '/';
     bbn.fn.each(data.plugins, (path, name) => {
       bbn.cp.addUrlAsPrefix(
         name,
