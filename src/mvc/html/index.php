@@ -256,6 +256,7 @@
               :splittable="cfg.splittable"
               :search-bar="cfg.searchBar"
               :browser-notification="cfg.browserNotification"
+              :service-worker-active="true"
               :pollable="true"
               @route1="init">
   <?php
