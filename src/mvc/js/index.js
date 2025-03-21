@@ -46,7 +46,8 @@
         theme: data.theme
       },
       lng: bbn.fn.extend(true, {}, data.lng || {}),
-      opt: data.options || {}
+      opt: data.options || {},
+      var: data.var || {}
     });
     let js_data = {};
     if (data.js_data) {
