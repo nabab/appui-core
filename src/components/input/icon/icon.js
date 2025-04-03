@@ -1,6 +1,6 @@
 (() => {
   return {
-    mixins: [bbn.cp.mixins.basicComponent, bbn.cp.mixins.inputComponent],
+    mixins: [bbn.cp.mixins.basic, bbn.cp.mixins.input],
     data(){
       return {
         currentValue: this.value,
