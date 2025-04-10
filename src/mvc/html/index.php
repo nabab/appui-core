@@ -213,6 +213,23 @@
           onDomLoaded();
         }
       }
+      navigator.serviceWorker.addEventListener('message', event => {
+        const data = event.data?.data;
+        const type = event.data?.type;
+        if (data && type) {
+          const args = ["-- SW MESSAGE " + type + " -- "];
+          if (bbn.fn.isString(data)) {
+            args[0] += data;
+          }
+          else {
+            args.push(data);
+          }
+          bbn.fn.log(...args);
+        }
+        else {
+          bbn.fn.log("** SW UNKNOWN MESSAGE **", event.data);
+        }
+      });
     })
     .catch((error) => {
       console.log(<?= st::asVar(_("Service worker registration failed, error")) ?>, error);
@@ -225,6 +242,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     DOMLoaded = true;
   });
+
 })();
 </script>
 </head>
