@@ -23,6 +23,13 @@
    * @example "https://cdn.bbn.io/"
    **/
   const CDN = data.shared_path;
+  const decoder = new TextDecoder();
+  const boundary = '\n';
+  let searchValue = '';
+  let searchAborter;
+  let searchReader;
+  let json = '';
+
 
 
   /** @const {Array} precacheResources Static js files to load */
@@ -125,15 +132,13 @@
     })
   };
 
-  //log("This is the start...");
-
   /**
    * Update the variables windows, isFocused and lastFocused if focused.
    *
    * @param {Array} clientList
    */
   const updateWindows = clientList => {
-    log("updateWindows");
+    //log("updateWindows");
     let oks = [],
         toFill = [];
     isFocused = false;
@@ -179,7 +184,6 @@
    * Called in the interval and will launch the poller only if not running
    */
   const launchPoller = () => {
-    log("launchPoller");
     // Check if the poller is not running
     if (poller && !isRunning) {
       // Write log
@@ -616,64 +620,82 @@
     log("Receiving a message of type " + event.data.type + " on channel " + event.data.channel);
     log(JSON.stringify(event.data));
     // Get the current windows list
-    let promise = self.clients.matchAll().then(clientList => {
-      // Update the windows list
-      updateWindows(clientList);
-      const data = event.data.data;
-      // Analyze the message type
-      switch (event.data.type) {
+    const clientList = await self.clients.matchAll();
+    // Update the windows list
+    updateWindows(clientList);
+    const data = event.data.data;
+    // Analyze the message type
+    switch (event.data.type) {
 
-        // The message sent by appui-core after the DOM has been loaded
-        // and the initial data was fetched (onDomLoaded function).
-        // We'll send an init message to the relative window with the
-        // fetched data to complete the initial loading process.
-        case 'init':
-          // Find the correct window
-          clientList.forEach(client => {
-            if (client.id === event.source.id) {
-              // Send the init message with the fetched data
-              client.postMessage({
-                client: event.source.id,
-                type: 'init',
-                data
-              });
-            }
-          })
-          break;
-
-        // The message sent by bbn-appui when it's ready to signal that the init phase has completed
-        case 'initCompleted':
-          // Write log
-          log('init completed');
-          // Set the user session as connected
-          isConnected = true;
-          // Set the poller interval to 5 seconds
-          setPoller(5);
-          break;
-
-        // The message type used for register the window to a channel
-        case 'registerChannel':
-          // Check if the channel name is gived
-          if (event.data.channel
-            // Check if the window exists
-            && windows[event.source.id]
-          ){
-            // Create 'channels' window property if not exists
-            if (!('channels' in windows[event.source.id])) {
-              windows[event.source.id].channels = [];
-            }
-            // Add the channel to the window channels list if it not already exists
-            if (!windows[event.source.id].channels.includes(event.data.channel)) {
-              windows[event.source.id].channels.push(event.data.channel);
-            }
+      // The message sent by appui-core after the DOM has been loaded
+      // and the initial data was fetched (onDomLoaded function).
+      // We'll send an init message to the relative window with the
+      // fetched data to complete the initial loading process.
+      case 'init':
+        // Find the correct window
+        clientList.forEach(client => {
+          if (client.id === event.source.id) {
+            // Send the init message with the fetched data
+            client.postMessage({
+              client: event.source.id,
+              type: 'init',
+              data
+            });
           }
-          break;
+        })
+        break;
 
-        case 'search':
-          const aborter = new AbortController();
+      // The message sent by bbn-appui when it's ready to signal that the init phase has completed
+      case 'initCompleted':
+        // Write log
+        log('init completed');
+        // Set the user session as connected
+        isConnected = true;
+        // Set the poller interval to 5 seconds
+        setPoller(5);
+        break;
+
+      // The message type used for register the window to a channel
+      case 'registerChannel':
+        // Check if the channel name is gived
+        if (event.data.channel
+          // Check if the window exists
+          && windows[event.source.id]
+        ){
+          // Create 'channels' window property if not exists
+          if (!('channels' in windows[event.source.id])) {
+            windows[event.source.id].channels = [];
+          }
+          // Add the channel to the window channels list if it not already exists
+          if (!windows[event.source.id].channels.includes(event.data.channel)) {
+            windows[event.source.id].channels.push(event.data.channel);
+          }
+        }
+        break;
+
+      case 'search':
+        log("RECEIVING SEARCH");
+        if (data.done) {
+          log("DONE");
+          return;
+        }
+
+        const filters = data.filters;
+        const uid = data.uid;
+        searchValue = filters.conditions[0].value;
+        if (searchAborter) {
+          log("UPDATING SEARCH");
+          searchAborter.abort();
+          searchAborter = null;
+        }
+
+        if (searchValue.length > 1) {
+          log("LAUNCHING SEARCH FOR " + searchValue + " WITH DATA");
+          log(data);
+          searchAborter = new AbortController();
           fetch('search/start', {
             method: 'POST', // *GET, POST, PUT, DELETE, etc.
-            mode: 'cors', // no-cors, *cors, same-origin
+            mode: 'same-origin', // no-cors, *cors, same-origin
             cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
             credentials: 'same-origin', // include, *same-origin, omit
             headers: {
@@ -683,170 +705,205 @@
             redirect: 'follow', // manual, *follow, error
             referrerPolicy: 'no-referrer', // no-referrer, *client
             signal: aborter.signal,
-            body: JSON.stringify(data || {}) // body data type must match "Content-Type" header
+            body: JSON.stringify({uid, conditions: filters.conditions}) // body data type must match "Content-Type" header
           })
-            .then(response => {
-              bbn.fn.log("RESPONSE IN " + bbn.fn.stopChrono(chrono, true) + " SECS");
-              if (response.body) {
-                const reader = response.body.getReader();
-                const isFn = isFunction(success);
-                reader.read().then(function pump({ done, value }) {
-                  if (done) {
-                    // Do something with last chunk of data then exit reader
-                    _deleteLoader(requestId, data);
-                    if (json) {
-                      treatJSON(json);
-                    }
-        
-                    if (finished) {
-                      finished();
-                    }
-        
-                    return;
-                  }
-            
-                  if (isFn) {
-                    json += arrayBuffer2String(value).trim();
-                    bbn.fn.log(["STREAM RESULT", json.length, json]);
-                    if (json) {
-                      try {
-                        treatJSON(json);
-                        json = '';
-                      } catch (e) { }
-                    }
-                    else {
-                      success();
-                    }
-                  }
-                  else {
-                    bbn.fn.log(["STREAM SUCCESS IS FN? " + isFn]);
-                  }
-        
-                  // Read some more, and call this function again
-                  return reader.read().then(pump);
-                });
+          .then(response => {
+            log("RESPONSE");
+            if (response.body) {
+              try {
+                searchReader = response.body.getReader();
+                searchReader.read().then(pump);
               }
-            })
-            .catch((err) => {
-              let isAbort = axios.isCancel(err);
-              _deleteLoader(requestId, data, isAbort);
-              defaultEndLoadingFunction(url, tst, data, err);
-              if (isAbort) {
-                let ok = 1;
-                if (isFunction(abort)) {
-                  ok = abort(err.message, url);
+              catch (err) {
+                let isAbort = err.name == 'AbortError';
+                if (!isAbort) {
+                  searchValue = '';
+                  log("ERROR");
+                  log(err.message);
                 }
-                if (ok) {
-                  defaultAjaxAbortFunction(err.message, url);
-                }
-              } else {
-                let ok = 1;
-                if (isFunction(failure)) {
-                  ok = failure(err.request, err);
-                }
-                if (ok) {
-                  defaultAjaxErrorFunction(
-                    err.request,
-                    err.response ? err.response.data : "",
-                    err.response ? err.response.status : err
-                  );
-                }
-              }
-            });
-          break;
-        case 'nabab':
-          fetch('/core/service/data').then(d => {
-            log("!!!!FROM ANOTHER WORLD!!!!");
-            log(CDN);
-            log(CACHE_NAME);
-            try {
-              if (d.ok) {
-                log("RESPONSE OK");
-                d.json().then(json => {
-                  log("JSON RESPONSE");
-                  log(json)
-                });
-              }
-              else {
-                log("Error: " + d.status);
+                searchAborter = null;
+                return;
               }
             }
-            catch (e) {
-              log("Error: " + e.message);
-            }
           })
-          break;
+          .catch(err => {
+            let isAbort = err.name == 'AbortError';
+            if (!isAbort) {
+              searchValue = '';
+              log("ERROR");
+              log(err.message);
+            }
+            searchAborter = null;
+            return;
+          });
+        }
 
-        // The message type used for unregister the window from a channel
-        case 'unregisterChannel':
-          // Check if the channel name is gived
-          if (event.data.channel
-            // Check if the window exists
-            && windows[event.source.id]
-            // Check if 'channels' window property exists
-            && windows[event.source.id].channels
-            // Check if the channel exists into the window channels list
-            && windows[event.source.id].channels.includes(event.data.channel)
-          ){
-            // Remove the channel form the window channels list
-            windows[event.source.id].channels.splice(
-              windows[event.source.id].channels.indexOf(event.data.channel),
-              1
-            );
+        break;
+      case 'nabab':
+        fetch('/core/service/data').then(d => {
+          log("!!!!FROM ANOTHER WORLD!!!!");
+          log(CDN);
+          log(CACHE_NAME);
+          try {
+            if (d.ok) {
+              log("RESPONSE OK");
+              d.json().then(json => {
+                log("JSON RESPONSE");
+                log(json)
+              });
+            }
+            else {
+              log("Error: " + d.status);
+            }
           }
-          break;
-
-        // The message type used for send a message to all windows registered to a specific channel
-        case 'messageChannel':
-          // Check if the channel name and the data to send are gived
-          if (event.data.channel && event.data.data){
-            // Browse all windows
-            clientList.forEach(client => {
-              // Check if the window id is different from the sender one
-              if ((client.id !== event.source.id)
-              // Check if the window exists into windows list
-                && windows[client.id]
-                // Check if the window is registered to gived channel
-                && windows[client.id].channels.includes(event.data.channel)
-              ) {
-                // Send message to the window
-                client.postMessage({
-                  client: event.source.id,
-                  type: 'messageFromChannel',
-                  channel: event.data.channel,
-                  data: event.data.data
-                });
-              }
-            });
+          catch (e) {
+            log("Error: " + e.message);
           }
-          break;
+        })
+        break;
 
-        // The message type used when we receive a message from a channel
-        case 'messageFromChannel':
-          // Write log
-          log('messageFromChannel ' + JSON.stringify(event.data));
-          break;
+      // The message type used for unregister the window from a channel
+      case 'unregisterChannel':
+        // Check if the channel name is gived
+        if (event.data.channel
+          // Check if the window exists
+          && windows[event.source.id]
+          // Check if 'channels' window property exists
+          && windows[event.source.id].channels
+          // Check if the channel exists into the window channels list
+          && windows[event.source.id].channels.includes(event.data.channel)
+        ){
+          // Remove the channel form the window channels list
+          windows[event.source.id].channels.splice(
+            windows[event.source.id].channels.indexOf(event.data.channel),
+            1
+          );
+        }
+        break;
 
-        // The message type used to show a browser notification
-        case 'notification':
-          // Check if the same notification not already exists
-          self.registration.getNotifications({tag: event.data.data.options.tag}).then(notifications => {
-            if (!notifications.length) {
-              // Show the notification
-              self.registration.showNotification(event.data.data.title, event.data.data.options);
+      // The message type used for send a message to all windows registered to a specific channel
+      case 'messageChannel':
+        // Check if the channel name and the data to send are gived
+        if (event.data.channel && event.data.data){
+          // Browse all windows
+          clientList.forEach(client => {
+            // Check if the window id is different from the sender one
+            if ((client.id !== event.source.id)
+            // Check if the window exists into windows list
+              && windows[client.id]
+              // Check if the window is registered to gived channel
+              && windows[client.id].channels.includes(event.data.channel)
+            ) {
+              // Send message to the window
+              client.postMessage({
+                client: event.source.id,
+                type: 'messageFromChannel',
+                channel: event.data.channel,
+                data: event.data.data
+              });
+            }
+          });
+        }
+        break;
+
+      // The message type used when we receive a message from a channel
+      case 'messageFromChannel':
+        // Write log
+        log('messageFromChannel ' + JSON.stringify(event.data));
+        break;
+
+      // The message type used to show a browser notification
+      case 'notification':
+        // Check if the same notification not already exists
+        self.registration.getNotifications({tag: event.data.data.options.tag}).then(notifications => {
+          if (!notifications.length) {
+            // Show the notification
+            self.registration.showNotification(event.data.data.title, event.data.data.options);
+          }
+        })
+        break;
+
+      // We call the processClientMessage function as default action
+      default:
+        processClientMessage(event);
+        break;
+    }
+
+  };
+
+  const pump = async function(res) {
+    const {done, value} = res;
+    log("pump " + (done ? 'done' : 'not done'));
+    if (value) {
+      json += decoder.decode(value).trim();
+    }
+
+    if (json) {
+      const arr = json.split(boundary);
+      json = '';
+      try {
+        treatJSON(arr);
+      } catch (e) { }
+
+    }
+
+    if (done) {
+      searchAborter = null;
+      log("DONE");
+      await treatJSON([{done: 1}]);
+      return;
+    }
+
+    // Read some more, and call this function again
+    searchReader.read().then(pump);
+  };
+
+  const treatJSON = async (arr) => {
+    if (arr.length) {
+      for (let i = 0; i < arr.length; i++) {
+        const finalArr = [];
+        if ((typeof(arr[i]) !== 'string') && arr[i]?.done) {
+          finalArr.push(arr[i]);
+          log("DONE");
+        }
+        else {
+          let obj;
+          try {
+            obj = JSON.parse(arr[i]);
+          } catch (e) {
+            log("Error parsing JSON");
+            log(arr[i]);
+            log(e.message);
+            json = arr[i];
+          }
+
+          if (obj?.data?.length) {
+            log("treatJSON with " + obj.data?.length + " entries");
+            obj.data.sort((a, b) => b.score - a.score);
+            finalArr.push(obj);
+          }
+        }
+        if (finalArr.length) {
+          // Set the 'windows' property
+          //data.windows = windows;
+          // Try to send the 'log' message to the clients
+          const clientList = await self.clients.matchAll({
+            includeUncontrolled: false
+          });
+
+          clientList.forEach(client => {
+            if (windows[client.id]) {
+              client.postMessage({
+                client: client.id,
+                type: 'appui-search-stream',
+                data: finalArr
+              });
             }
           })
-          break;
-
-        // We call the processClientMessage function as default action
-        default:
-          processClientMessage(event);
-          break;
+        }
       }
-    });
-    // Make the event wait until the promise is resolved
-    if (event.waitUntil) {
-      event.waitUntil(promise);
+
+      //json = arr.join(boundary);
     }
   };
 

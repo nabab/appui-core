@@ -167,7 +167,7 @@
   // Only if service worker is enabled and not already registered
   if (hasServiceWorker) {
     // Registration of the service worker
-    navigator.serviceWorker.register('/sw', {scope: '/'})
+    navigator.serviceWorker.register('/sw.js', {type: 'module', scope: '/'})
     .then((registration) => {
       window.bbnSW = registration;
       registration.onupdatefound = () => {
@@ -216,15 +216,13 @@
       navigator.serviceWorker.addEventListener('message', event => {
         const data = event.data?.data;
         const type = event.data?.type;
-        if (data && type) {
-          const args = ["-- SW MESSAGE " + type + " -- "];
-          if (bbn.fn.isString(data)) {
-            args[0] += data;
+        if (type === 'log') {
+          if (bbn.env.path === 'ide/service-worker') {
+            bbn.fn.log(...(bbn.fn.isPrimitive(data) ? ["SW MESSAGE: " + data] : ["SW MESSAGE", data]));
           }
-          else {
-            args.push(data);
-          }
-          bbn.fn.log(...args);
+        }
+        else if (data && type && ('appui' in window)) {
+          appui.$emit('sw-' + type, data);
         }
         else {
           bbn.fn.log("** SW UNKNOWN MESSAGE **", event.data);
