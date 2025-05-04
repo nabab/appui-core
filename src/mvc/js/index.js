@@ -1,6 +1,6 @@
 /* jslint esversion: 6 */
 (() => {
-  return (data) => {
+  return async (data) => {
     //bbn.fn.log(["DATA SENT TO INDEX JS", data]);
     const slots = bbn.fn.createObject();
     if (data.slots) {
@@ -174,7 +174,7 @@
       });
     }
 
-    window.app = bbn.cp.createApp(document.body.querySelector('div.appui'), {
+    await bbn.cp.createApp(document.body.querySelector('div.appui'), {
       data() {
         return {
           appSlots: slots,
@@ -188,6 +188,7 @@
               return data.app
             }
           },
+          ready: false,
           users: data.users,
           user: data.user,
           groups: data.groups,
@@ -195,6 +196,7 @@
       },
       methods: {
         init() {
+          bbn.fn.log("ROOT COMPONENT INIT");
           this.$el.parentNode.style.opacity = 1;
         },
         setImessage(e){
@@ -218,6 +220,10 @@
           document.body.classList.add('bbn-tablet');
         }
       },
+      mounted() {
+        this.ready = true;
+        bbn.fn.log("ROOT COMPONENT MOUNTED");
+      }
     });
   };
 })();

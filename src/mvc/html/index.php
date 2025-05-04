@@ -47,9 +47,63 @@
 <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, User-scalable=yes">
 <title><?= $site_title ?></title>
 <style><?= $custom_css ?></style>
+</head>
+<body>
+<div id="nojs_bbn"
+     style="background-color: #fff; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
+  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center">
+    <img src="<?= $logo_big ?>"
+         style="max-width: 80%; max-height: 100%"
+         alt="<?= $site_title ?>"/>
+  </div>
+  <div id="error_message" style="background-color: #fff"></div>
+</div>
+<div class="appui-container"
+     style="opacity: 0;">
+  <div class="appui">
+    <bbn-appui bbn-if="ready" 
+              :cfg="app"
+              :options="options"
+              :plugins="plugins"
+              def="<?= $default ?>"
+              @setimessage="setImessage"
+              :source="cfg.list"
+              :header="cfg.header"
+              :nav="cfg.nav"
+              :users="users"
+              :groups="groups"
+              :user="user"
+              :status="cfg.status"
+              :splittable="cfg.splittable"
+              :search-bar="cfg.searchBar"
+              :browser-notification="cfg.browserNotification"
+              :service-worker-active="true"
+              :pollable="true"
+              @route1="init">
+  <?php
+    if (!empty($slots)) {
+      foreach ($slots as $name => $arr) {
+        foreach ($arr as $i => $o) {
+          ?>
+          <component bbn-slot:<?= $name ?>
+                    :is="appSlots.<?= $name ?>[<?= $i ?>].cp"
+                    :source="appSlots.<?= $name ?>[<?= $i ?>].data">
+          </component>
+          <?php
+        }
+      }
+    }
+  ?>
+    </bbn-appui>
+  </div>
+</div>
+<noscript>
+  <?= $noscript ?? '' ?>
+</noscript>
 <script type="text/javascript" src="<?= $script_src ?>"></script>
 <script>
 (() => {
+  "use strict";
   /** @var {String} errorMsg An error message to display */
   let errorMsg;
 
@@ -76,6 +130,8 @@
 
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
   let onDomLoaded = () => {
+    console.log("DOM LOADED");
+    console.log('bbn' in window);
     loaded = true;
     // Check that bbn is defined
     bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, init);
@@ -162,34 +218,37 @@
       res(d.data || {});
       bbn.env.token = "<?= $token ?>";
     }
+
+    setTimeout(() => {
+      if ((navigator.serviceWorker.controller === null) && confirm(
+        <?= st::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
+        <?= st::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
+        <?= st::asVar(_("Do you want to do it now?")) ?>
+      ) ){
+        isReloading = true;
+        location.reload();
+      }
+    }, 2000);
   };
 
   // Only if service worker is enabled and not already registered
   if (hasServiceWorker) {
+    console.log("SW: SERVICE WORKER ENABLED");
     // Registration of the service worker
     navigator.serviceWorker.register('/sw.js', {type: 'module', scope: '/'})
     .then((registration) => {
       window.bbnSW = registration;
+      let hasBeenUpdated = false;
       registration.onupdatefound = () => {
+        hasBeenUpdated = true;
         const installingWorker = registration.installing;
-        console.log("SW: STATE CHANGING " + installingWorker.state);
+        console.log("SW: STATE CHANGING TO " + installingWorker.state);
         installingWorker.onstatechange = () => {
           if (!hasBeenAsked
             && !isReloading
             && ['activated', 'installed'].includes(installingWorker.state)
           ) {
-            if (('appui' in window)) {
-              hasBeenAsked = true;
-              if ( confirm(
-                <?= st::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
-                <?= st::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
-                <?= st::asVar(_("Do you want to do it now?")) ?>
-              ) ){
-                isReloading = true;
-                location.reload();
-              }
-            }
-            else if ((installingWorker.state === 'activated') && !loaded) {
+            if ((installingWorker.state === 'activated') && !loaded) {
               if (!DOMLoaded) {
                 document.addEventListener('DOMContentLoaded', onDomLoaded)
               }
@@ -200,11 +259,12 @@
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn.cp-version');
-            console.log(<?= st::asVar(_("Polling from service worker")) ?> + ' ' + _("version") + ' ' + v);
+            bbn.fn.log(<?= st::asVar(_("Polling from service worker")) ?> + ' <?= st::asVar(_("version")) ?> ' + v);
             appui.poll();
           }
         };
       };
+      
       if (!loaded) {
         if (!DOMLoaded) {
           document.addEventListener('DOMContentLoaded', onDomLoaded)
@@ -213,13 +273,14 @@
           onDomLoaded();
         }
       }
+
       navigator.serviceWorker.addEventListener('message', event => {
         const data = event.data?.data;
         const type = event.data?.type;
         if (type === 'log') {
-          if (bbn.env.path === 'ide/service-worker') {
+          //if (bbn.env.path === 'ide/service-worker') {
             bbn.fn.log(...(bbn.fn.isPrimitive(data) ? ["SW MESSAGE: " + data] : ["SW MESSAGE", data]));
-          }
+          //}
         }
         else if (data && type && ('appui' in window)) {
           appui.$emit('sw-' + type, data);
@@ -230,7 +291,7 @@
       });
     })
     .catch((error) => {
-      console.log(<?= st::asVar(_("Service worker registration failed, error")) ?>, error);
+      bbn.fn.log(<?= st::asVar(_("Service worker registration failed, error")) ?>, error);
     });
   }
   else {
@@ -243,57 +304,5 @@
 
 })();
 </script>
-</head>
-<body>
-<div id="nojs_bbn"
-     style="background-color: #fff; position: absolute; width: 100%; height: 100%; top: 0; left: 0">
-  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center">
-    <img src="<?= $logo_big ?>"
-         style="max-width: 80%; max-height: 100%"
-         alt="<?= $site_title ?>"/>
-  </div>
-  <div id="error_message" style="background-color: #fff"></div>
-</div>
-<div class="appui-container"
-     style="opacity: 0;">
-  <div class="appui">
-    <bbn-appui :cfg="app"
-              :options="options"
-              :plugins="plugins"
-              def="<?= $default ?>"
-              @setimessage="setImessage"
-              :source="cfg.list"
-              :header="cfg.header"
-              :nav="cfg.nav"
-              :users="users"
-              :groups="groups"
-              :user="user"
-              :status="cfg.status"
-              :splittable="cfg.splittable"
-              :search-bar="cfg.searchBar"
-              :browser-notification="cfg.browserNotification"
-              :service-worker-active="true"
-              :pollable="true"
-              @route1="init">
-  <?php
-    if (!empty($slots)) {
-      foreach ($slots as $name => $arr) {
-        foreach ($arr as $i => $o) {
-          ?>
-          <component bbn-slot:<?= $name ?>
-                    :is="appSlots.<?= $name ?>[<?= $i ?>].cp"
-                    :source="appSlots.<?= $name ?>[<?= $i ?>].data">
-          </component>
-          <?php
-        }
-      }
-    }
-  ?>
-    </bbn-appui>
-  </div>
-</div>
-<noscript>
-  <?= $noscript ?? '' ?>
-</noscript>
 </body>
 </html>

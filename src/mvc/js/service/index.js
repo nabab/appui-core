@@ -77,7 +77,6 @@
    */
   const log = (...args) => {
     //console.log("**** START LOG FROM SERVICE WORKER ****");
-    let logs = [];
     for (let i = 0; i < args.length; i++) {
       self.clients.matchAll({
         includeUncontrolled: true
@@ -87,11 +86,20 @@
         // Try to send the 'log' message to the clients
         clientList.forEach(client => {
           if (windows[client.id]) {
-            client.postMessage({
-              client: client.id,
-              type: 'log',
-              data: args[i]
-            });
+            try {
+              client.postMessage({
+                client: client.id,
+                type: 'log',
+                data: args[i]
+              });
+            }
+            catch (e) {
+              client.postMessage({
+                client: client.id,
+                type: 'log',
+                data: JSON.stringify(args[i])
+              });
+            }
           }
         })
       })
@@ -221,7 +229,7 @@
           log(errorState);
           if (interval !== 60) {
             // Set the poller interval to 60 seconds
-            setPoller(60);
+            setPoller(5);
             // Reset the error state variable
             errorState = false;
             // Reset retries variable
@@ -279,6 +287,7 @@
    */
   const processClientMessage = event => {
     log("processClientMessage");
+    log(event);
         // The sender window's ID
     let senderID = event.source.id,
         // The message data
@@ -516,9 +525,74 @@
     }
   };
 
-  const onFetch = event => {
+  const hash = async (message, algo = 'SHA-256') => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const binary = await crypto.subtle.digest(algo, data);
+    const hashArray = Array.from(new Uint8Array(binary)); // convert buffer to byte array
+    const hashHex = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join(""); // convert bytes to hex string
+    return hashHex;
+  };
+  
+
+  const onFetch = async event => {
     // Check if the request method is different than POST
-    if (event.request.method !== 'POST') {
+    if (event.request.method === 'POST') {
+      return;
+      log("fetching " + event.request.url + ' with body');
+      if (!event.request.url.indexOf(data.site_url)) {
+        const newRequest = event.request.clone();
+        event.respondWith(new Promise(async (resolve, reject) => {
+          let body = '';
+          const decoder = new TextDecoder();
+          for await (const chunk of event.request.body) {
+            // Do something with each 'chunk'
+            body += decoder.decode(chunk);
+          }
+
+          const data = JSON.parse(body);
+          delete data._bbn_token;
+          delete data._bbn_key;
+          log("data: " + JSON.stringify(data, null, 2));
+          const dataHash = await hash(JSON.stringify(data));
+          log("dataHash: " + dataHash);
+          //log("Fetch event 2 for " + event.request.url);
+          // Check if the request is present in the cache
+          const cachedResponse = await caches.match(event.request.url + ':' + dataHash);
+          // If the request is already in the cache, let's return it
+          if (cachedResponse) {
+            log("Returning cached response");
+            resolve(cachedResponse);
+            return;
+          }
+
+          // Otherwise we execute the request and cache the response if positive
+          return fetch(newRequest).then(response => {
+            if (response.ok) {
+              log("Caching " + event.request.url);
+              // Open the cache by CACHE_NAME value
+              return caches.open(CACHE_NAME).then(cache => {
+                // Write the response into the cache and return the response
+                return cache.put(event.request.url + ':' + dataHash, response.clone()).then(() => {
+                  resolve(response);
+                  return;
+                });
+              })
+            }
+            resolve(response);
+          }).catch(error => {
+            // Return a response error
+            console.error('Error on fetch -> ', error);
+            return Response.error();
+          });
+        }));
+      }
+
+    }
+    else {
+      log("Fetch event for " + event.request.url + ' as ' + event.request.method);
       // Check if the browser is Safari
       if (navigator
         && navigator.userAgent
@@ -528,7 +602,7 @@
         let fullVersion = navigator.userAgent.substring(navigator.userAgent.indexOf("Version") + 8),
             versionIdx = fullVersion.indexOf(' '),
             version = versionIdx > 0 ? fullVersion.substring(0, versionIdx) : fullVersion;
-        console.log('SAFARI ' + version);
+        log('SAFARI ' + version);
         // No cache if the Safari version is less than 15
         if (parseFloat(version) < 15) {
           return;
@@ -539,8 +613,9 @@
       //log("POSITION: " + event.request.url.indexOf(CDN));
       if ((event.request.url.indexOf(CDN) === 0)
         || (event.request.url.indexOf(data.site_url + 'components/') === 0)
-        || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
-      ){
+      || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
+      || /^http(s?):\/\/fonts.gstatic.com/.test(event.request.url)
+    ) {
         //log("Fetch event 2 for " + event.request.url);
         // Check if the request is present in the cache
         event.respondWith(caches.match(event.request.url).then(cachedResponse => {
@@ -561,6 +636,7 @@
                 });
               })
             }
+
             return response;
           }).catch(error => {
             // Return a response error
@@ -569,7 +645,11 @@
           });
         }));
       }
+      else {
+        log("Fetch event lost for " + event?.request?.url);
+      }
     }
+    
   };
 
   const onInstall = event => {
@@ -579,40 +659,29 @@
 
     event.waitUntil(
       // Open the cache by CACHE_NAME value
-      caches.open(CACHE_NAME)
-        .then(cache => {
-          // Add resources to cache
-          return cache.addAll(precacheResources);
-        })
-        .then(function() {
-          // `skipWaiting()` forces the waiting ServiceWorker to become the
-          // active ServiceWorker, triggering the `onactivate` event.
-          // Together with `Clients.claim()` this allows a worker to take effect
-          // immediately in the client(s).
-          return self.skipWaiting();
-        })
+      self.skipWaiting().then(
+        caches.open(CACHE_NAME).then(
+          cache => cache.addAll(precacheResources)
+        )
+      )
     );
   };
 
-  const onActivate = () => {
+  const onActivate = event => {
     // Write log
     log('Service worker activate event for version ' + CACHE_NAME);
     log('Service worker activate with CDN ' + CDN);
-    caches.keys().then(function(cacheNames) {
-      return Promise.all(
-        cacheNames.filter(function(cacheName) {
-          return cacheName !== CACHE_NAME;
-          // Return true if you want to remove this cache,
-          // but remember that caches are shared across
-          // the whole origin
-        }).map(function(cacheName) {
-          return caches.delete(cacheName);
-        })
-      // `claim()` sets this worker as the active worker for all clients that
-      // match the workers scope and triggers an `oncontrollerchange` event for
-      // the clients.
-      ).then(() => self.clients.claim());
-    })
+
+    event.waitUntil(
+      self.clients.claim().then(
+        () => caches.keys().then(
+          cacheNames => Promise.all(cacheNames
+            .filter(cacheName => cacheName !== CACHE_NAME)
+            .map(cacheName => caches.delete(cacheName))
+          )
+        )
+      )
+    )
   };
 
   const onMessage = async event => {
