@@ -235,7 +235,7 @@
   if (hasServiceWorker) {
     console.log("SW: SERVICE WORKER ENABLED");
     // Registration of the service worker
-    navigator.serviceWorker.register('/sw.js', {type: 'module', scope: '/'})
+    navigator.serviceWorker.register('/sw', {type: 'module', scope: '/'})
     .then((registration) => {
       window.bbnSW = registration;
       let hasBeenUpdated = false;
