@@ -2,6 +2,7 @@
 <div class="bbn-right-smargin">
   <bbn-context class="bbn-iblock bbn-p bbn-rel"
                :title="appMode"
+               :z-index="10"
                tag="div">
     <i slot="default"
        class="nf nf-fa-power_off"

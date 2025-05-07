@@ -496,7 +496,7 @@
         }).catch(err => {
           isRunning = false;
           if (err.message !== 'The user aborted a request.') {
-            log('fetch failed!');
+            log('fetch failed for ' + poller);
             log(err.message);
             errorState = true;
           }
