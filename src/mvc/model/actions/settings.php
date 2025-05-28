@@ -118,7 +118,7 @@ if ($model->hasData(['name', 'value'], true)) {
       $json = file_get_contents($model->appPath().'cfg/environment.json');
       if ($json) {
         $ar = json_decode($json, true);
-        $idx = \bbn\X::find($ar, [
+        $idx = \bbn\X::search($ar, [
           'hostname' => $hostname,
           'app_path' => $app_path
         ]);
