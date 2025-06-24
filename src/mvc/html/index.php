@@ -277,12 +277,7 @@
       navigator.serviceWorker.addEventListener('message', event => {
         const data = event.data?.data;
         const type = event.data?.type;
-        if (type === 'log') {
-          //if (bbn.env.path === 'ide/service-worker') {
-            bbn.fn.log(...(bbn.fn.isPrimitive(data) ? ["SW MESSAGE: " + data] : ["SW MESSAGE", data]));
-          //}
-        }
-        else if (data && type && ('appui' in window)) {
+        if (data && type && ('appui' in window)) {
           appui.$emit('sw-' + type, data);
         }
         else {

@@ -317,8 +317,13 @@
     log("processClientMessage with keys " + Object.keys(d).join(', '));
 
     // Aborting the current polling will make a new one happen with the new dataObj
-    if ( isRunning ){
-      aborter.abort();
+    if (isRunning) {
+      if (aborter) {
+        aborter.abort();
+      }
+      else {
+        log("The aborter is not defined, what will happen now?");
+      }
     }
   };
 
