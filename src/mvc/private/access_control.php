@@ -16,7 +16,7 @@ else{
   die("Impossible to set up the definitions in the root supercontroller");
 }
 
-if (constant('BBN_APP_NAME') && ($idRoot = $ctrl->inc->options->fromCode(constant('BBN_APP_NAME'), false))) {
+if (constant('BBN_APP_NAME') && ($idRoot = $ctrl->inc->options->fromRealCode(constant('BBN_APP_NAME'), false))) {
   $ctrl->inc->options->setDefault($idRoot);
 }
 
