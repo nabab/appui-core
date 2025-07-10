@@ -2369,7 +2369,7 @@
             "show_code": 1,
             "schema": [
                 {
-                    "title": "Is dark",
+                    "label": "Is dark",
                     "field": "isDark",
                     "type": "boolean",
                     "showable": true,
