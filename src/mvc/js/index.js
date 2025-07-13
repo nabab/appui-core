@@ -14,13 +14,13 @@
                 tmp.template = a.content;
               }
               slots[slot].push({
-                cp: bbnData.immunizeValue(tmp),
+                cp: bbn.cp.immunizeValue(tmp),
                 data: a.data || {}
               });
             }
           }
           catch (e) {
-            bbn.fn.log(a, slot, e);
+            console.log([a, slot, e]);
             bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
           }
         });
