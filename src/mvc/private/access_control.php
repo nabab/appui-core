@@ -53,7 +53,7 @@ if ($path === $cr.'logout') {
 }
 
 $err = $ctrl->inc->user->getError();
-// Recherche du logo APST pour les stats
+// Recherche du logo (pour les stats?)
 if (!empty($_SERVER['REDIRECT_URL'])
     && strpos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
 ) {

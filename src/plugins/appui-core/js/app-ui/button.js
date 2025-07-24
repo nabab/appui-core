@@ -48,7 +48,8 @@
             this.$nextTick(() => {
               document.location.reload();
             });
-          }
+          },
+          {zIndex: 1000}
         );
       },
       increaseVersion() {
@@ -65,7 +66,8 @@
                 this.$nextTick(() => document.location.reload());
               }
             });
-          }
+          },
+          {zIndex: 1000}
         );
       }
     }
