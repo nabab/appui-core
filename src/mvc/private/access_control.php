@@ -1,8 +1,10 @@
 <?php
-/** @var \bbn\Mvc\Controller $ctrl The controller */
+use bbn\Str;
+
+/** @var bbn\Mvc\Controller $ctrl The controller */
 $cr = $ctrl->pluginUrl('appui-core').'/';
 
-if (($definitions = $ctrl->getCachedModel($cr.'_definitions', 86400))
+if (($definitions = $ctrl->getCachedModel("{$cr}_definitions", 86400))
     && isset($definitions['data'])
 ) {
   foreach ($definitions['data'] as $k => $def) {
@@ -16,7 +18,9 @@ else{
   die("Impossible to set up the definitions in the root supercontroller");
 }
 
-if (constant('BBN_APP_NAME') && ($idRoot = $ctrl->inc->options->fromRealCode(constant('BBN_APP_NAME'), false))) {
+if (constant('BBN_APP_NAME')
+  && ($idRoot = $ctrl->inc->options->fromRealCode(constant('BBN_APP_NAME'), false))
+) {
   $ctrl->inc->options->setDefault($idRoot);
 }
 
@@ -24,7 +28,7 @@ if ($ctrl->isCli()) {
   return 1;
 }
 
-/** @var \bbn\User\Permissions $perm */
+/** @var bbn\User\Permissions $perm */
 $perm =& $ctrl->inc->perm;
 
 /* @var $path string The controller that will be called */
@@ -32,7 +36,7 @@ $path = $ctrl->getPath();
 $ctrl->db->setErrorMode('die');
 
 $auth_no_user = [
-  $cr.'manifest'
+  "{$cr}manifest"
 ];
 if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
   return 1;
@@ -40,14 +44,14 @@ if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
 
 /* @var $authorized array The authorized pages for the non logged in users */
 $ctrl->addAuthorizedRoute(
-  $cr.'login',
-  $cr.'login/index',
-  $cr.'service/index',
-  $cr.'service',
-  $cr.'components',
-  $cr.'poller'
+  "{$cr}login",
+  "{$cr}login/index",
+  "{$cr}service/index",
+  "{$cr}service",
+  "{$cr}components",
+  "{$cr}poller",
 );
-if ($path === $cr.'logout') {
+if ($path === "{$cr}logout") {
   $ctrl->setMode('public');
   return true;
 }
@@ -76,7 +80,7 @@ elseif ($ctrl->inc->user->isReset()) {
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->getMode() === 'dom') {
   // Check registered URL
-  $urlCls = new \bbn\Appui\Url($ctrl->db);
+  $urlCls = new bbn\Appui\Url($ctrl->db);
   $request = $ctrl->getRequest();
   // Removing modifiers for image URL
   $reg = '/(\.bbn-[\-\dwhc]+\.)/';
@@ -91,18 +95,22 @@ elseif ($ctrl->getMode() === 'dom') {
         $fullUrl['url'] = dirname($fullUrl['url']) . '/' . $exts[0] . $match[1] . $exts[1];
       }
 
-      header("Location: /" . $fullUrl['url']);
+      header("Location: /$fullUrl[url]");
       exit();
     }
 
     switch ($fullUrl['type_url']) {
       case 'media':
-        $mediaCls = new \bbn\Appui\Medias($ctrl->db);
+        $mediaCls = new bbn\Appui\Medias($ctrl->db);
         if (($idMedia = $mediaCls->urlToId($fullUrl['url']))
           && ($m = $mediaCls->getMedia($idMedia, true))
           && !empty($m['is_image'])
         ) {
-          $ctrl->reroute($ctrl->pluginUrl('appui-note') . '/media/image/index', [], \bbn\X::split($fullUrl['url'], '/'));
+          $ctrl->reroute(
+            $ctrl->pluginUrl('appui-note') . '/media/image/index',
+            [],
+            bbn\X::split($fullUrl['url'], '/')
+          );
           return true;
         }
         break;
@@ -114,16 +122,16 @@ elseif ($ctrl->getMode() === 'dom') {
   if ($ctrl->hasPlugin('appui-api')
       && ($api = $ctrl->pluginUrl('appui-api'))
       && (      ($ctrl->getRequest() === $api)
-      || ($ctrl->getRequest() === $api.'/index'))
+      || ($ctrl->getRequest() === "{$api}/index"))
   ) {
     $ctrl->addAuthorizedRoute(
-      $api.'/index',
+      "{$api}/index",
       $api
     );
     //die(var_dump($ctrl->getRequest()));
   }
   elseif (!$ctrl->inc->user->checkSession()) {
-    if ($ctrl->getPath() === $cr.'service') {
+    if ($ctrl->getPath() === "{$cr}service") {
       return 1;
     }
 
@@ -141,7 +149,7 @@ elseif ($ctrl->getMode() === 'dom') {
         return 1;
       }
 
-      $ctrl->reroute($cr.'login');
+      $ctrl->reroute("{$cr}login");
     }
   }
 
@@ -156,11 +164,14 @@ if (!$ctrl->inc->user->checkSession()) {
   die(json_encode(['disconnected' => true]));
 }
 
-if (defined('BBN_HISTORY') && BBN_HISTORY && class_exists('\\bbn\\Appui\\History')) {
-  \bbn\Appui\History::setUser($ctrl->inc->user->getId());
+if (defined('BBN_HISTORY')
+  && constant('BBN_HISTORY') 
+  && class_exists('bbn\\Appui\\History')
+) {
+  bbn\Appui\History::setUser($ctrl->inc->user->getId());
 }
 
-if (($path !== $cr.'poller')
+if (($path !== "{$cr}poller")
     && !defined("BBN_MVC_ID")
     && defined('BBN_REFERER')
 ) {
@@ -186,11 +197,16 @@ $url = $ctrl->getUrl();
 /** @var string BBN_BASEURL */
 
 // Case where we have a bbn-router (nav)
-if (defined('BBN_BASEURL') && (empty(BBN_BASEURL) || (strpos($url, BBN_BASEURL) === 0))) {
+if (defined('BBN_BASEURL')
+  && (
+    !constant('BBN_BASEURL')
+    || (strpos($url, constant('BBN_BASEURL')) === 0)
+  )
+) {
   // Length of the baseURL from the bbn-router(nav) sending the request
-  $len = strlen(BBN_BASEURL);
+  $len = strlen(constant('BBN_BASEURL'));
   // So we will give the first file matching after the base URL sent
-  $start = BBN_BASEURL;
+  $start = constant('BBN_BASEURL');
   // The baseURL must end with a slash
   if ($len && (substr($url, -1) !== '/')) {
     $url .= '/';
@@ -202,13 +218,13 @@ if (defined('BBN_BASEURL') && (empty(BBN_BASEURL) || (strpos($url, BBN_BASEURL) 
     // Explores each part of the URL
     $bits = explode('/', $remain);
     foreach ($bits as $i => $b) {
-      $new = isset($new) ? $new.'/'.$b : $b;
-      if (($route = $ctrl->getRoute($start.$new, $ctrl->getMode()))
+      $new = $i ? "$new/$b" : $b;
+      if (($route = $ctrl->getRoute("{$start}{$new}", $ctrl->getMode()))
           && ($route['path'] === $route['request'])
       ) {
         if ($route['path'] !== $ctrl->getPath()) {
           $ctrl->reroute(
-            $start.$new,
+            "{$start}{$new}",
             $ctrl->post,
             isset($bits[$i + 1]) ? array_slice($bits, $i + 1) : []
           );
@@ -222,7 +238,7 @@ if (defined('BBN_BASEURL') && (empty(BBN_BASEURL) || (strpos($url, BBN_BASEURL) 
 
 /** @var bbn\User\Preferences $pref */
 /*
-$pref = \bbn\User\Preferences::getInstance();
+$pref = bbn\User\Preferences::getInstance();
 if ( $perms = $pref->get_existing_permissions($path) ){
   die(var_dump($perms));
 }
@@ -241,7 +257,10 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
   }
   else {
     $ctrl->obj->errorTitle = _("Unauthorized");
-    $ctrl->obj->error      = sprintf(_("Sorry but you don't have the permission for %s"), $ctrl->getPath());
+    $ctrl->obj->error      = sprintf(
+      _("Sorry but you don't have the permission for %s"), 
+      $ctrl->getPath()
+    );
   }
 }
 
