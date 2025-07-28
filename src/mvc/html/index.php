@@ -1,4 +1,6 @@
 <?php
+use bbn\Str;
+use bbn\X;
 /**
  * @var string $language    The current Language
  * @var string $site_url    The website's URL
@@ -37,7 +39,7 @@
 <link rel="icon" type="image/png" href="<?= $static_path ?>img/favicon/favicon-32x32.png" sizes="32x32">
 <link rel="icon" type="image/png" href="<?= $static_path ?>img/favicon/android-chrome-192x192.png" sizes="192x192">
 <link rel="icon" type="image/png" href="<?= $static_path ?>img/favicon/favicon-16x16.png" sizes="16x16">
-<?php if (is_file(BBN_PUBLIC . 'manifest.json')) { ?>
+<?php if (is_file(constant('BBN_PUBLIC') . 'manifest.json')) { ?>
 <link rel="manifest" href="manifest.json">
 <?php } ?>
 <link rel="mask-icon" href="<?= $static_path ?>img/favicon/safari-pinned-tab.svg" color="#5bbad5">
@@ -114,7 +116,7 @@
   const hasServiceWorker = !!('serviceWorker' in navigator);
 
   /** @var {String} scriptSrc The script source */
-  const scriptSrc = <?= st::asVar($script_src ?: '') ?>;
+  const scriptSrc = <?= Str::asVar($script_src ?: '') ?>;
 
   /** @var {Boolean} hasBeenAsked True if it already has been asked to reload because the version is new */
   let hasBeenAsked = false;
@@ -221,9 +223,9 @@
 
     setTimeout(() => {
       if ((navigator.serviceWorker.controller === null) && confirm(
-        <?= st::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
-        <?= st::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
-        <?= st::asVar(_("Do you want to do it now?")) ?>
+        <?= Str::asVar(_("The application has been updated but you still use an old version.")) ?> + "\n" +
+        <?= Str::asVar(_("You need to refresh the page to upgrade.")) ?> + "\n" +
+        <?= Str::asVar(_("Do you want to do it now?")) ?>
       ) ){
         isReloading = true;
         location.reload();
@@ -259,7 +261,7 @@
           }
           else if ('appui' in window) {
             let v = window.localStorage.getItem('bbn.cp-version');
-            bbn.fn.log(<?= st::asVar(_("Polling from service worker")) ?> + ' <?= st::asVar(_("version")) ?> ' + v);
+            bbn.fn.log(<?= Str::asVar(_("Polling from service worker")) ?> + ' <?= Str::asVar(_("version")) ?> ' + v);
             appui.poll();
           }
         };
@@ -286,7 +288,7 @@
       });
     })
     .catch((error) => {
-      bbn.fn.log(<?= st::asVar(_("Service worker registration failed, error")) ?>, error);
+      bbn.fn.log(<?= Str::asVar(_("Service worker registration failed, error")) ?>, error);
     });
   }
   else {
