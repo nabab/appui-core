@@ -398,7 +398,7 @@
    * @returns {Promise}
    */
   const fetchWithTimeout = (url, timeout, options) => {
-    log("Fetch with timeout");
+    //log("Fetch with timeout");
     // Create and return a Promise
     return new Promise((resolve, reject) => {
       // Set timeout timer
@@ -485,7 +485,6 @@
                   });
                 }
                 else {
-                  log('Empty answer from poller');
                   retries = 0;
                   poll();
                 }
@@ -568,7 +567,7 @@
           const cachedResponse = await caches.match(event.request.url + ':' + dataHash);
           // If the request is already in the cache, let's return it
           if (cachedResponse) {
-            log("Returning cached response");
+            //log("Returning cached response");
             resolve(cachedResponse);
             return;
           }
@@ -597,7 +596,7 @@
 
     }
     else {
-      log("Fetch event for " + event.request.url + ' as ' + event.request.method);
+      //log("Fetch event for " + event.request.url + ' as ' + event.request.method);
       // Check if the browser is Safari
       if (navigator
         && navigator.userAgent
@@ -626,13 +625,13 @@
         event.respondWith(caches.match(event.request.url).then(cachedResponse => {
           // If the request is already in the cache, let's return it
           if (cachedResponse) {
-            log("Returning cached response");
+            //log("Returning cached response");
             return cachedResponse;
           }
           // Otherwise we execute the request and cache the response if positive
           return fetch(event.request).then(response => {
             if (response.ok) {
-              log("Caching " + event.request.url);
+              //log("Caching " + event.request.url);
               // Open the cache by CACHE_NAME value
               return caches.open(CACHE_NAME).then(cache => {
                 // Write the response into the cache and return the response
