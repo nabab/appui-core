@@ -199,6 +199,14 @@
           bbn.fn.log("ROOT COMPONENT INIT");
           this.$el.parentNode.style.opacity = 1;
         },
+        addShortcut(data) {
+          if (this.plugins.menu) {
+            const menu = appui.getRegistered('menu');
+            if (menu) {
+              menu.addShortcut(data);
+            }
+          }
+        },
         setImessage(e){
           if ( (e.hidden !== undefined) && e.id ){
             bbn.fn.post(this.root + 'actions/imessage', e, (r) => {

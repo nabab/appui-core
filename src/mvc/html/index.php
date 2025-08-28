@@ -81,6 +81,7 @@ use bbn\X;
               :browser-notification="cfg.browserNotification"
               :service-worker-active="true"
               :pollable="true"
+              @shortcut="addShortcut"
               @route1="init">
   <?php
     if (!empty($slots)) {

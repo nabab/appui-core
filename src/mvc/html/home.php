@@ -14,7 +14,7 @@
     <li>My images</li>
     <li>My documents</li>
     <li>My notes</li>
-    <li>My projectss</li>
+    <li>My projects</li>
     <li>My passwords</li>
     <li>My bookmarks</li>
     <li>My colors</li>
