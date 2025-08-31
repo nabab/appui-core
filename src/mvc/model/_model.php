@@ -1,5 +1,5 @@
 <?php
-/** @var \bbn\Mvc\Model $model The model */
+/** @var bbn\Mvc\Model $model The model */
 return $model->getSetFromCache(
   function () use ($model) {
     return [

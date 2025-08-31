@@ -8,7 +8,7 @@
 
  use bbn\X;
 
-/** @var \bbn\Mvc\Controller $ctrl */
+/** @var bbn\Mvc\Controller $ctrl */
 if (!empty($ctrl->post)) {
   $ctrl->action();
 }

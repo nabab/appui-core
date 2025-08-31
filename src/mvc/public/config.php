@@ -1,10 +1,6 @@
 <?php
-/*
- * Describe what it does!
- *
- **/
 
-/** @var $this \bbn\Mvc\Controller */
+/** @var bbn\Mvc\Controller $ctrl */
 $data = $ctrl
   ->addData(['aliases' => $ctrl->getAliases(), 'plugins' => $ctrl->getRoutes()])
   ->setObj([

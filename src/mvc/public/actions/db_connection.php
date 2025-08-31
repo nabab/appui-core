@@ -1,4 +1,4 @@
 <?php
-/* @var \bbn\Mvc\Controller $ctrl */
+/* @var bbn\Mvc\Controller $ctrl */
 
 $ctrl->action();

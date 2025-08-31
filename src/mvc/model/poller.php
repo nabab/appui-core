@@ -15,6 +15,7 @@
 use bbn\Util\Timer;
 use bbn\File\Dir;
 use bbn\X;
+use bbn\Mvc;
 
 set_time_limit(0);
 // User is identified
@@ -23,15 +24,15 @@ if ($id_user = $model->inc->user->getId()) {
   /**
    * @var string The path for the active files
    */
-  $actsource = Dir::createPath(\bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/active');
+  $actsource = Dir::createPath(Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/active');
   /**
    * @var string The path for the queue
    */
-  $datasource = Dir::createPath(\bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/queue');
+  $datasource = Dir::createPath(Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/queue');
   /**
    * @var string The path of the times.json file
    */
-  $times_file = \bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/times.json';
+  $times_file = Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/times.json';
   /**
    * @var int A timestamp of the start of the execution.
    */

@@ -5,6 +5,6 @@
  * Time: 10:50
  */
 
-/** @var \bbn\Mvc\Controller $ctrl The current controller */
+/** @var bbn\Mvc\Controller $ctrl The current controller */
 $ctrl->combo(_("Welcome in App-UI"));
 

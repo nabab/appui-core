@@ -1,5 +1,5 @@
 <?php
-/* @var \bbn\Mvc\Model $model */
+/* @var bbn\Mvc\Model $model */
 if ( \bbn\X::hasProps($model->data, ['host', 'user', 'pass'], true) ){
   $db = new \bbn\Db([
     'engine' => 'mysql',

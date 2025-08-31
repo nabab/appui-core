@@ -1,5 +1,5 @@
 <?php
-/** @var \bbn\Mvc\Model $model */
+/** @var bbn\Mvc\Model $model */
 $data = ['success' => false];
 if ($model->hasData(['name', 'value'], true)) {
   switch ($model->data['name']) {
