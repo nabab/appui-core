@@ -490,13 +490,10 @@
       },
       "id_string": {
         "type": "varchar",
-        "null": 1,
         "key": "UNI",
         "extra": "VIRTUAL GENERATED",
         "virtual": true,
         "generation": "md5(concat(convert(`request` using utf8mb4),convert(ifnull(`params`,'') using utf8mb4)))",
-        "default": "NULL",
-        "defaultExpression": 1,
         "maxlength": 32
       }
     }
