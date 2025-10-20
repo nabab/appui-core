@@ -2,34 +2,9 @@
 (() => {
   return async (data) => {
     //bbn.fn.log(["DATA SENT TO INDEX JS", data]);
-    const slots = bbn.fn.createObject();
-    if (data.slots) {
-      bbn.fn.iterate(data.slots, (arr, slot) => {
-        slots[slot] = [];
-        bbn.fn.iterate(arr, a => {
-          try {
-            let tmp = eval(a.script);
-            if (bbn.fn.isObject(tmp)) {
-              if (a.content) {
-                tmp.template = a.content;
-              }
-              slots[slot].push({
-                cp: bbn.cp.immunizeValue(tmp),
-                data: a.data || {}
-              });
-            }
-          }
-          catch (e) {
-            console.log([a, slot, e]);
-            bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
-          }
-        });
-      });
-    }
-
     bbn.fn.init({
       env: {
-        logging: data.is_dev || data.is_test ? true : false,
+        logging: data.is_dev || data.is_test ? true : true,
         isDev: data.is_dev ? true : false,
         mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
         lang: data.lang,
@@ -49,6 +24,7 @@
       opt: data.options || {},
       var: data.var || {}
     });
+
     let js_data = {};
     if (data.js_data) {
       js_data = eval(data.js_data) || {};
@@ -60,7 +36,7 @@
     }
     const cfg = {
       header: true,
-      nav: true,
+      mode: 'visual',
       status: true,
       splittable: true,
       list: [
@@ -174,6 +150,7 @@
       });
     }
 
+    const slots = bbn.fn.createObject();
     await bbn.cp.createApp(document.body.querySelector('div.appui'), {
       data() {
         return {
@@ -196,7 +173,6 @@
       },
       methods: {
         init() {
-          bbn.fn.log("ROOT COMPONENT INIT");
           this.$el.parentNode.style.opacity = 1;
         },
         addShortcut(data) {
@@ -228,9 +204,33 @@
           document.body.classList.add('bbn-tablet');
         }
       },
+      beforeCreate() {
+        if (data.slots) {
+          bbn.fn.iterate(data.slots, (arr, slot) => {
+            slots[slot] = [];
+            bbn.fn.iterate(arr, a => {
+              try {
+                let tmp = eval(a.script);
+                if (bbn.fn.isObject(tmp)) {
+                  if (a.content) {
+                    tmp.template = a.content;
+                  }
+                  slots[slot].push({
+                    cp: bbn.cp.immunizeValue(tmp),
+                    data: a.data || {}
+                  });
+                }
+              }
+              catch (e) {
+                console.log([a, slot, e]);
+                bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
+              }
+            });
+          });
+        }
+      },
       mounted() {
         this.ready = true;
-        bbn.fn.log("ROOT COMPONENT MOUNTED");
       }
     });
   };

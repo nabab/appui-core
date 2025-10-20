@@ -43,7 +43,7 @@ $data = X::mergeArrays($model->data, [
     'name' => $mgr->getName($model->inc->user->getId()),
     'email' => $mgr->getEmail($model->inc->user->getId()),
     'chat' => $chat,
-    'id_group' => $model->inc->user->getGroup() // Deprecated
+    'id_group' => $model->inc->user->getIdGroup() // Deprecated
   ]
 ]);
 

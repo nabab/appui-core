@@ -56,12 +56,6 @@
             this.alert(d.errorMessage, bbn.lng.error);
           }
         },
-        lostPasssubmited(d){
-          if ( d.success ){
-            this.alert(bbn._('An email has been sent to') + ' ' + this.lostPassFormData.email, bbn._('Info'));
-            this.hideLostPassForm();
-          }
-        },
         hideLostPassForm(){
           this.lostPassForm = false;
           this.lostPassFormData.email = '';

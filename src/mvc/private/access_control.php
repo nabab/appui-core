@@ -1,6 +1,9 @@
 <?php
 use bbn\Str;
-
+use bbn\X;
+use bbn\Appui\Url;
+use bbn\Appui\Medias;
+use bbn\Appui\History;
 /** @var bbn\Mvc\Controller $ctrl The controller */
 $cr = $ctrl->pluginUrl('appui-core').'/';
 
@@ -80,7 +83,7 @@ elseif ($ctrl->inc->user->isReset()) {
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->getMode() === 'dom') {
   // Check registered URL
-  $urlCls = new bbn\Appui\Url($ctrl->db);
+  $urlCls = new Url($ctrl->db);
   $request = $ctrl->getRequest();
   // Removing modifiers for image URL
   $reg = '/(\.bbn-[\-\dwhc]+\.)/';
@@ -101,7 +104,7 @@ elseif ($ctrl->getMode() === 'dom') {
 
     switch ($fullUrl['type_url']) {
       case 'media':
-        $mediaCls = new bbn\Appui\Medias($ctrl->db);
+        $mediaCls = new Medias($ctrl->db);
         if (($idMedia = $mediaCls->urlToId($fullUrl['url']))
           && ($m = $mediaCls->getMedia($idMedia, true))
           && !empty($m['is_image'])
@@ -109,7 +112,7 @@ elseif ($ctrl->getMode() === 'dom') {
           $ctrl->reroute(
             $ctrl->pluginUrl('appui-note') . '/media/image/index',
             [],
-            bbn\X::split($fullUrl['url'], '/')
+            X::split($fullUrl['url'], '/')
           );
           return true;
         }
@@ -164,18 +167,14 @@ if (!$ctrl->inc->user->checkSession()) {
   die(json_encode(['disconnected' => true]));
 }
 
-if (defined('BBN_HISTORY')
-  && constant('BBN_HISTORY') 
-  && class_exists('bbn\\Appui\\History')
-) {
-  bbn\Appui\History::setUser($ctrl->inc->user->getId());
+if (defined('BBN_HISTORY') && constant('BBN_HISTORY')) {
+  History::setUser($ctrl->inc->user->getId());
 }
 
 if (($path !== "{$cr}poller")
     && !defined("BBN_MVC_ID")
     && defined('BBN_REFERER')
 ) {
-  /*
   $ctrl->db->insert(
     'bbn_mvc_logs',
     [
@@ -184,11 +183,10 @@ if (($path !== "{$cr}poller")
       'path' => $path,
       'params' => count($ctrl->arguments) ? implode("/", $ctrl->arguments) : null,
       'post' => empty($ctrl->post) ? null : json_encode(array_keys($ctrl->post)),
-      'referer' => BBN_REFERER
+      'referer' => constant('BBN_REFERER')
     ]
   );
   define("BBN_MVC_ID", $ctrl->db->lastId());
-  */
 }
 
 // The current path

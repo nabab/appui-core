@@ -71,7 +71,7 @@ use bbn\X;
               @setimessage="setImessage"
               :source="cfg.list"
               :header="cfg.header"
-              :nav="cfg.nav"
+              :mode="cfg.mode"
               :users="users"
               :groups="groups"
               :user="user"

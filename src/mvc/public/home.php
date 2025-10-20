@@ -6,5 +6,5 @@
  */
 
 /** @var bbn\Mvc\Controller $ctrl The current controller */
-$ctrl->combo(_("Welcome in App-UI"));
+$ctrl->setUrl($ctrl->getPath())->combo(_("Welcome in App-UI"));
 

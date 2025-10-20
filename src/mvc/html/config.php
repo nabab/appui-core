@@ -1,6 +1,6 @@
 <!-- HTML Document -->
 <bbn-router class="appui-core-config"
-            :nav="true"
+            mode="tabs"
             :autoload="false"
 >
 	<bbn-container url="general"
@@ -80,7 +80,7 @@
                  :fixed="true">
     <bbn-router class="bbn-overlay"
                 default="official"
-                :nav="true"
+                mode="tabs"
                 :autoload="false"
     >
       <bbn-container url="official"
