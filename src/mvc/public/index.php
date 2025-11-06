@@ -13,10 +13,7 @@ use bbn\X;
 
 if ($ctrl->inc->user->check()) {
   $cacheName = 'appui-core-index';
-  if ($ctrl->inc->user->hasCache($cacheName)) {
-    $data = $ctrl->inc->user->getCache($cacheName);
-  }
-  else {
+  if (!($data = $ctrl->inc->user->getCache($cacheName))) {
     $routes = $ctrl->getRoutes();
     $plugins = [];
     $slots = [
