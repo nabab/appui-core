@@ -25,13 +25,17 @@
         <div class="bbn-label"><?= _("Client IP") ?></div>
         <div><?= $client ?></div>
 
+        <div class="bbn-label"><?= _("Library version") ?></div>
+        <div bbn-text="bbn.cp.version"/>
+
         <div class="bbn-label">
           <bbn-button @click="clearStorage"
                       icon="nf nf-md-sync_alert"
                       label="<?= _("Set default view") ?>"/>
         </div>
         <div>
-          <bbn-button @click="increaseVersion"
+          <bbn-button bbn-if="appui.user.isAdmin"
+                      @click="increaseVersion"
                       icon="nf nf-oct-versions"
                       label="<?= _("Increase version") ?>"/>
         </div>
