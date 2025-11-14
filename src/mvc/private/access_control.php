@@ -1,6 +1,7 @@
 <?php
 use bbn\Str;
 use bbn\X;
+use bbn\Util\Timer;
 use bbn\Appui\Url;
 use bbn\Appui\Medias;
 use bbn\Appui\History;
@@ -173,8 +174,9 @@ if (defined('BBN_HISTORY') && constant('BBN_HISTORY')) {
 
 if (($path !== "{$cr}poller")
     && !defined("BBN_MVC_ID")
-    && defined('BBN_REFERER')
+    //&& defined('BBN_REFERER')
 ) {
+  $ctrl->addInc('timer', new Timer());
   $ctrl->db->insert(
     'bbn_mvc_logs',
     [
@@ -183,10 +185,11 @@ if (($path !== "{$cr}poller")
       'path' => $path,
       'params' => count($ctrl->arguments) ? implode("/", $ctrl->arguments) : null,
       'post' => empty($ctrl->post) ? null : json_encode(array_keys($ctrl->post)),
-      'referer' => constant('BBN_REFERER')
+      'referer' => defined('BBN_REFERER') ? constant('BBN_REFERER') : null
     ]
   );
   define("BBN_MVC_ID", $ctrl->db->lastId());
+  $ctrl->inc->timer->start(BBN_MVC_ID);
 }
 
 // The current path
