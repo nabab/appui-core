@@ -1,6 +1,7 @@
 <?php
 
 use bbn\X;
+use bbn\Str;
 
 /** @var bbn\Mvc\Controller $ctrl */
 //if (!empty($ctrl->post['go'])) {
@@ -20,9 +21,9 @@ use bbn\X;
     foreach ($plugins as $name => $plugin) {
       echo '<h2 style="color: red">'.$name.'</h2>';
       // If it starts with appui-
-      if (strpos($name, 'appui-') === 0) {
+      if (Str::pos($name, 'appui-') === 0) {
         // The name is without the prefix
-        $shortname = substr($name, 6);
+        $shortname = Str::sub($name, 6);
         $id_plugin = $o->fromCode($shortname, $appui);
         // If the ID doesn't exist
         if (!$id_plugin) {

@@ -63,7 +63,7 @@ if ($path === "{$cr}logout") {
 $err = $ctrl->inc->user->getError();
 // Recherche du logo (pour les stats?)
 if (!empty($_SERVER['REDIRECT_URL'])
-    && strpos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
+    && Str::pos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
 ) {
   $ctrl->reroute('logo_mail');
 }
@@ -201,21 +201,21 @@ $url = $ctrl->getUrl();
 if (defined('BBN_BASEURL')
   && (
     !constant('BBN_BASEURL')
-    || (strpos($url, constant('BBN_BASEURL')) === 0)
+    || (Str::pos($url, constant('BBN_BASEURL')) === 0)
   )
 ) {
   // Length of the baseURL from the bbn-router(nav) sending the request
-  $len = strlen(constant('BBN_BASEURL'));
+  $len = Str::len(constant('BBN_BASEURL'));
   // So we will give the first file matching after the base URL sent
   $start = constant('BBN_BASEURL');
   // The baseURL must end with a slash
-  if ($len && (substr($url, -1) !== '/')) {
+  if ($len && (Str::sub($url, -1) !== '/')) {
     $url .= '/';
   }
 
   // Start the rerouting search only if there is an URL behind
   // otherwise the normal controller will be launched
-  if ($remain = substr($url, $len)) {
+  if ($remain = Str::sub($url, $len)) {
     // Explores each part of the URL
     $bits = explode('/', $remain);
     foreach ($bits as $i => $b) {

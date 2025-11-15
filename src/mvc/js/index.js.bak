@@ -64,7 +64,7 @@
     }
     bbn.fn.each(data.plugins, (path, name) => {
       bbn.cp.addPrefix(name, (tag, resolve, reject) => {
-        bbn.cp.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
+        bbn.cp.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).Str::sub(name.length + 1), null, resolve, reject);
       });
     });
     bbn.cp.addPrefix(
@@ -72,7 +72,7 @@
       (tag, resolve, reject, mixins) => {
         bbn.cp.queueComponent(
           tag,
-          'components/' + bbn.fn.replaceAll('-', '/', tag).substr((data.app_prefix + '-').length),
+          'components/' + bbn.fn.replaceAll('-', '/', tag).Str::sub((data.app_prefix + '-').length),
           mixins,
           resolve,
           reject

@@ -1,6 +1,7 @@
 <?php
 
 use bbn\X;
+use bbn\Str;
 /** @var bbn\Mvc\Model $model */
 
 
@@ -13,7 +14,7 @@ return $model->getSetFromCache(function() {
     foreach ($obj->packageNames as $repo) {
       if (X::indexOf($repo, 'bbn/appui-') === 0) {
         $tmp = [
-          'text'    => substr($repo, 4),
+          'text'    => Str::sub($repo, 4),
           'value'   => $repo,
           'version' => 'dev-master'
         ];
