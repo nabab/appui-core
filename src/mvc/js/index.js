@@ -137,6 +137,7 @@
       }
     });
 
+    /*
     if (window.dayjs !== undefined) {
       dayjs.updateLocale(bbn.env.lang, {
         calendar: {
@@ -148,7 +149,7 @@
           sameElse: 'L'
         }
       });
-    }
+    }*/
 
     const slots = bbn.fn.createObject();
     await bbn.cp.createApp(document.body.querySelector('div.appui'), {
