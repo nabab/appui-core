@@ -165,7 +165,16 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
-  die(json_encode(['disconnected' => true]));
+  if (($err = $ctrl->inc->user->getError())
+    && !empty($err['code'])
+    && ($err['code'] == 17)
+  ) {
+    die(json_encode(['saltError' => true]));
+  }
+
+  $ctrl->obj->disconnected = true;
+  return false;
+  //die(json_encode(['disconnected' => true]));
 }
 
 if (defined('BBN_HISTORY') && constant('BBN_HISTORY')) {
