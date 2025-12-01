@@ -18,7 +18,6 @@ if ($model->hasPlugin('appui-chat')) {
 }
 $data = X::mergeArrays($model->data, [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
-  'version' => $version,
   'lang' => BBN_LANG,
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
   'options' => $model->inc->options->jsCategories(null, true),
