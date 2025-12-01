@@ -9,15 +9,6 @@ use bbn\Mvc\Model;
 $mgr = new Manager($model->inc->user);
 $is_dev = $model->inc->user->isDev();
 $theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? constant('BBN_THEME') : 'default');
-$vfile = $model->dataPath() . 'version.txt';
-if (!is_file($vfile)) {
-  file_put_contents($vfile, '1');
-  $version = 1;
-}
-else {
-  $version = intval(file_get_contents($vfile));
-}
-
 if ($model->hasPlugin('appui-chat')) {
   $chat = true;
   /*
@@ -64,9 +55,5 @@ if ($model->hasPlugin('appui-hr')) {
 if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
   $data = X::mergeArrays($data, $custom_data);
 }
-$data['script_src'] = constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-components.js?' . http_build_query([
-  'lang' => $data['lang'] ?? BBN_LANG,
-  'test' => !BBN_IS_PROD,
-  'v' => $data['version']
-]);
+
 return $data;

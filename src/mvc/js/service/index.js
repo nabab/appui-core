@@ -22,7 +22,9 @@
    * @const {String} CDN The URL of the CDN
    * @example "https://cdn.bbn.io/"
    **/
-  const CDN = data.shared_path;
+
+  const CDN = data.shared_path.indexOf('/') === 0 ? data.site_url + data.shared_path.substr(1) : data.shared_path;
+  const STATIC = data.static_path.indexOf('/') === 0 ? data.site_url + data.static_path.substr(1) : data.static_path;
   const decoder = new TextDecoder();
   const boundary = '\n';
   let searchValue = '';
@@ -71,6 +73,8 @@
   let lastClientMessage = {};
   /** @var {Object} lastResponse The last response processed */
   let lastResponse = {};
+  let numberOfRequests = 0;
+  let allRequests = [];
 
   /**
    * Logs in the console in a special format evidencing it comes from the service worker.
@@ -616,6 +620,7 @@
       //log("Fetch event for " + event.request.url);
       //log("POSITION: " + event.request.url.indexOf(CDN));
       if ((event.request.url.indexOf(CDN) === 0)
+        || (event.request.url.indexOf(STATIC) === 0)
         || (event.request.url.indexOf(data.site_url + 'components/') === 0)
       || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
       || /^http(s?):\/\/fonts.gstatic.com/.test(event.request.url)
@@ -623,6 +628,9 @@
         //log("Fetch event 2 for " + event.request.url);
         // Check if the request is present in the cache
         event.respondWith(caches.match(event.request.url).then(cachedResponse => {
+          numberOfRequests++;
+          allRequests.push(event.request.url);
+          //log("Checking cache (" + numberOfRequests + '/' + CDN + ") for " + event.request.url + ': ' + (cachedResponse ? 'HIT' : 'MISS') + '\n' + JSON.stringify(allRequests));
           // If the request is already in the cache, let's return it
           if (cachedResponse) {
             //log("Returning cached response");

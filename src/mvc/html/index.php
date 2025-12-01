@@ -103,10 +103,27 @@ use bbn\X;
 <noscript>
   <?= $noscript ?? '' ?>
 </noscript>
-<script type="text/javascript" src="<?= $script_src ?>"></script>
 <script>
-(() => {
+(async () => {
   "use strict";
+  let loadLibraries = urls => {
+    return urls.reduce(
+      (promise, url) =>
+        promise.then(
+          () =>
+            new Promise((resolve, reject) => {
+              const script = document.createElement('script');
+              script.src = url;
+              script.async = false; // keep order if needed
+              script.onload = () => resolve();
+              script.onerror = () =>
+                reject(new Error('Failed to load script ' + url));
+              document.head.appendChild(script);
+            })
+        ),
+      Promise.resolve()
+    );
+  };
   /** @var {String} errorMsg An error message to display */
   let errorMsg;
 
@@ -236,9 +253,40 @@ use bbn\X;
 
   // Only if service worker is enabled and not already registered
   if (hasServiceWorker) {
+    await new Promise(resolve => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', resolve, { once: true });
+      } else {
+        resolve();
+      }
+    });
+
+    // 2. Register service worker and wait until it's ready
+    if ('serviceWorker' in navigator) {
+      try {
+        const registration = await navigator.serviceWorker.register('/sw', {type: 'module', scope: '/'});
+
+        // This promise resolves when the active SW is controlling the page
+        await navigator.serviceWorker.ready;
+
+        // Optional: you can check if we’re actually controlled
+        if (!navigator.serviceWorker.controller) {
+          console.warn('Service worker is ready but not controlling this page yet.');
+        }
+      } catch (err) {
+        console.error('Service worker registration failed:', err);
+        // If SW fails, you might still want to continue loading libraries
+      }
+    }
+
+    // 3. Load your libraries dynamically (after SW is ready)
+    await loadLibraries(['<?= $script_src ?>']);
+    onDomLoaded();
+  }
+  /*
     console.log("SW: SERVICE WORKER ENABLED");
     // Registration of the service worker
-    navigator.serviceWorker.register('/sw', {type: 'module', scope: '/'})
+    navigator.serviceWorker.register('/sw')
     .then((registration) => {
       window.bbnSW = registration;
       let hasBeenUpdated = false;
@@ -299,6 +347,7 @@ use bbn\X;
   document.addEventListener('DOMContentLoaded', () => {
     DOMLoaded = true;
   });
+  */
 
 })();
 </script>
