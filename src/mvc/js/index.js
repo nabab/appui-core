@@ -198,6 +198,7 @@
         }
       },
       created(){
+        bbn.fn.log("APP CREATED");
         if ( this.isMobile ){
           document.body.classList.add('bbn-mobile');
         }

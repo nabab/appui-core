@@ -1,8 +1,4 @@
 <?php
-/*
- *  Describe what it does or you're a pussy
- *
- **/
 
 use bbn\X;
 use bbn\Parsers\Apache;

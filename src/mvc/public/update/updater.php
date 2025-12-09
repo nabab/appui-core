@@ -1,8 +1,3 @@
 <?php
-/*
- * Describe what it does!
- *
- * @var $ctrl \bbn\mvc\controller
- *
- */
+/** @var bbn\Mvc\Controller $ctrl */
 $ctrl->combo("Options updater", true);
