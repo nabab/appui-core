@@ -69,12 +69,14 @@ if (!empty($_SERVER['REDIRECT_URL'])
 }
 elseif ($ctrl->inc->user->isJustLogin()) {
   if ($err) {
+    header('Content-type: application/json; charset=utf-8');
     die(json_encode(['errorMessage' => $err['text']]));
   }
 
   die('1');
 }
 elseif ($ctrl->inc->user->isReset()) {
+  header('Content-type: application/json; charset=utf-8');
   if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
   }
@@ -165,6 +167,7 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
+  header('Content-type: application/json; charset=utf-8');
   if (($err = $ctrl->inc->user->getError())
     && !empty($err['code'])
     && ($err['code'] == 17)
@@ -172,9 +175,7 @@ if (!$ctrl->inc->user->checkSession()) {
     die(json_encode(['saltError' => true]));
   }
 
-  $ctrl->obj->disconnected = true;
-  return false;
-  //die(json_encode(['disconnected' => true]));
+  die(json_encode(['disconnected' => true]));
 }
 
 if (defined('BBN_HISTORY') && constant('BBN_HISTORY')) {
