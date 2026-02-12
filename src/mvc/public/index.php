@@ -13,7 +13,16 @@ use bbn\X;
 
 if ($ctrl->inc->user->check()) {
   $cacheName = 'appui-core-index';
-  if (!($data = $ctrl->inc->user->getCache($cacheName))) {
+  $vfile = $ctrl->dataPath() . 'version.txt';
+  if (!is_file($vfile)) {
+    file_put_contents($vfile, '1');
+    $version = 1;
+  }
+  else {
+    $version = intval(file_get_contents($vfile));
+  }
+
+  if (!($data = $ctrl->inc->user->getCache($cacheName)) || ($data['version'] !== $version)) {
     $routes = $ctrl->getRoutes();
     $plugins = [];
     $slots = [
@@ -56,28 +65,19 @@ if ($ctrl->inc->user->check()) {
     $data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index');
     $data['plugins'] = $plugins;
     $data['slots'] = $slots;
+    $data['version'] = $version;
+    $data['script_src'] = constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-components.js?' . http_build_query([
+      'lang' => $data['lang'] ?? BBN_LANG,
+      'test' => !BBN_IS_PROD,
+      'v' => $data['version']
+    ]);
+    $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
     $ctrl->inc->user->setCache($cacheName, $data, 86400);
   }
 
-  $vfile = $ctrl->dataPath() . 'version.txt';
-  if (!is_file($vfile)) {
-    file_put_contents($vfile, '1');
-    $version = 1;
-  }
-  else {
-    $version = intval(file_get_contents($vfile));
-  }
-
-  $data['version'] = $version;
-  $data['script_src'] = constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-components.js?' . http_build_query([
-    'lang' => $data['lang'] ?? BBN_LANG,
-    'test' => !BBN_IS_PROD,
-    'v' => $data['version']
-  ]);
   $ctrl->addData($data);
   // The whole DOM
   if (empty($ctrl->post)) {
-    $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
     $ctrl->data['token'] = $ctrl->inc->user->addToken();
     $ctrl->combo($ctrl->data['site_title'], true);
   }
