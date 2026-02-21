@@ -10,8 +10,10 @@ if ($model->db->check()) {
     'dev_group' => $mgr->getDevGroup()
   ];
   if ( defined('BBN_EXTERNAL_USER_EMAIL') ){
-    $res['external_user_id'] = $mgr->getUserId(BBN_EXTERNAL_USER_EMAIL);
+    $res['external_user_id'] = $mgr->getUserId(constant('BBN_EXTERNAL_USER_EMAIL'));
   }
+
   $res['success'] = true;
 }
+
 return $res;

@@ -8,7 +8,7 @@ use bbn\Appui\History;
 /** @var bbn\Mvc\Controller $ctrl The controller */
 $cr = $ctrl->pluginUrl('appui-core').'/';
 
-if (($definitions = $ctrl->getCachedModel("{$cr}_definitions", 86400))
+if (($definitions = $ctrl->getCachedModel("{$cr}_definitions", [], 86400))
     && isset($definitions['data'])
 ) {
   foreach ($definitions['data'] as $k => $def) {
@@ -18,7 +18,7 @@ if (($definitions = $ctrl->getCachedModel("{$cr}_definitions", 86400))
     }
   }
 }
-else{
+else {
   die("Impossible to set up the definitions in the root supercontroller");
 }
 
