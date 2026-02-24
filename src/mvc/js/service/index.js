@@ -426,7 +426,6 @@
    * Polls the server and recalls itself when finished.
    */
   const poll = () => {
-    log('Poll');
     isRunning = true;
     errorState = false;
     noResp = false;
@@ -510,6 +509,9 @@
           }
         });
       });
+    }
+    else {
+      log("User is not connected, skipping poll");
     }
   };
 

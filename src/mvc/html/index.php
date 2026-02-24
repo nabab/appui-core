@@ -150,8 +150,6 @@ use bbn\X;
 
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
   let onDomLoaded = () => {
-    console.log("DOM LOADED");
-    console.log('bbn' in window);
     loaded = true;
     // Check that bbn is defined
     bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, init);
@@ -279,7 +277,7 @@ use bbn\X;
       }
     }
 
-    // 3. Load your libraries dynamically (after SW is ready)
+    // 3. Load libraries dynamically (after SW is ready)
     await loadLibraries(['<?= $script_src ?>']);
     onDomLoaded();
   }
