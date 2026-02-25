@@ -71,13 +71,13 @@ if ($ctrl->inc->user->check()) {
       'test' => !BBN_IS_PROD,
       'v' => $data['version']
     ]);
-    $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
     $ctrl->inc->user->setCache($cacheName, $data, 86400);
   }
 
   $ctrl->addData($data);
   // The whole DOM
   if (empty($ctrl->post)) {
+    $ctrl->data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
     $ctrl->data['token'] = $ctrl->inc->user->addToken();
     $ctrl->combo($ctrl->data['site_title'], true);
   }
