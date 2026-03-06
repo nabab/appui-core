@@ -198,7 +198,7 @@ if (($path !== "{$cr}poller")
     ]
   );
   define("BBN_MVC_ID", $ctrl->db->lastId());
-  $ctrl->timer->start(BBN_MVC_ID);
+  $ctrl->getTimer()->start(BBN_MVC_ID);
 }
 
 // The current path
@@ -253,14 +253,14 @@ if ( $perms = $pref->get_existing_permissions($path) ){
   die(var_dump($perms));
 }
 */
-$ctrl->timer->start('retrievePermission');
+$ctrl->getTimer()->start('retrievePermission');
 if ($id_option = $ctrl->inc->perm->is($path)) {
   if (!defined('BBN_ID_PERMISSION')) {
     define('BBN_ID_PERMISSION', $id_option);
   }
 
   $ctrl->inc->perm->setCurrent($id_option);
-  $ctrl->timer->stop('retrievePermission');
+  $ctrl->getTimer()->stop('retrievePermission');
   if ($ctrl->inc->perm->has($id_option)) {
     return true;
   }
