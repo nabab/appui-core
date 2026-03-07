@@ -15,7 +15,7 @@ elseif ($model->hasData(['pass1', 'pass2', 'key'], true)) {
     return ['success' => true];
   }
   else {
-    return ['success' => false, 'error' => $model->inc->user->getError()];
+    return ['success' => false, 'error' => $model->inc->user->getFullError()];
   }
 }
 else {

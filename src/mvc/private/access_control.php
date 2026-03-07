@@ -60,7 +60,7 @@ if ($path === "{$cr}logout") {
   return true;
 }
 
-$err = $ctrl->inc->user->getError();
+$err = $ctrl->inc->user->getFullError();
 // Recherche du logo (pour les stats?)
 if (!empty($_SERVER['REDIRECT_URL'])
     && Str::pos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
@@ -168,7 +168,7 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
   header('Content-type: application/json; charset=utf-8');
-  if (($err = $ctrl->inc->user->getError())
+  if (($err = $ctrl->inc->user->getFullError())
     && !empty($err['code'])
     && ($err['code'] == 17)
   ) {
