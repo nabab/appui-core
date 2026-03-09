@@ -168,7 +168,7 @@ elseif ($ctrl->isAuthorizedRoute($path)) {
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
   header('Content-type: application/json; charset=utf-8');
-  if (($err = $ctrl->inc->user->getFullError())
+  if (($err = method_exists($ctrl->inc->user, 'getFullError') ? $ctrl->inc->user->getFullError() : $ctrl->inc->user->getError())
     && !empty($err['code'])
     && ($err['code'] == 17)
   ) {
@@ -198,7 +198,12 @@ if (($path !== "{$cr}poller")
     ]
   );
   define("BBN_MVC_ID", $ctrl->db->lastId());
-  $ctrl->getTimer()->start(BBN_MVC_ID);
+  if (method_exists($ctrl, 'getTimer')) {
+    $ctrl->getTimer()->start(BBN_MVC_ID);
+  }
+  else {
+    $ctrl->timer->start(BBN_MVC_ID);
+  }
 }
 
 // The current path
@@ -253,14 +258,26 @@ if ( $perms = $pref->get_existing_permissions($path) ){
   die(var_dump($perms));
 }
 */
-$ctrl->getTimer()->start('retrievePermission');
+if (method_exists($ctrl, 'getTimer')) {
+  $ctrl->getTimer()->start('retrievePermission');
+}
+else {
+  $ctrl->timer->start('retrievePermission');
+}
+
 if ($id_option = $ctrl->inc->perm->is($path)) {
   if (!defined('BBN_ID_PERMISSION')) {
     define('BBN_ID_PERMISSION', $id_option);
   }
 
   $ctrl->inc->perm->setCurrent($id_option);
-  $ctrl->getTimer()->stop('retrievePermission');
+  if (method_exists($ctrl, 'getTimer')) {
+    $ctrl->getTimer()->stop('retrievePermission');
+  }
+  else {
+    $ctrl->timer->stop('retrievePermission');
+  }
+
   if ($ctrl->inc->perm->has($id_option)) {
     return true;
   }
