@@ -60,7 +60,7 @@ if ($path === "{$cr}logout") {
   return true;
 }
 
-$err = $ctrl->inc->user->getFullError();
+$err = method_exists($ctrl->inc->user, 'getFullError') ? $ctrl->inc->user->getFullError() : $ctrl->inc->user->getError();
 // Recherche du logo (pour les stats?)
 if (!empty($_SERVER['REDIRECT_URL'])
     && Str::pos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
