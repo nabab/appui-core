@@ -109,7 +109,7 @@ if ($model->hasData(['name', 'value'], true)) {
       if ($json) {
         $ar = json_decode($json, true);
         $ar[$model->data['name']] = $res;
-        file_put_contents($model->appPath().'cfg/settings.json', Json_encode($ar, JSON_PRETTY_PRINT));
+        file_put_contents($model->appPath().'cfg/settings.json', json_encode($ar, JSON_PRETTY_PRINT));
         $data['success'] = true;
       }
     }
@@ -124,7 +124,7 @@ if ($model->hasData(['name', 'value'], true)) {
         ]);
         if ($idx !== null ) {
           $ar[$idx][$model->data['name']] = $res;
-          file_put_contents($model->appPath().'cfg/environment.json', Json_encode($ar, JSON_PRETTY_PRINT));
+          file_put_contents($model->appPath().'cfg/environment.json', json_encode($ar, JSON_PRETTY_PRINT));
           $data['success'] = true;
         }
       }
@@ -154,7 +154,7 @@ elseif ($model->hasData(['url', 'path', 'action'], true)) {
           $i++;
         }
       }
-      file_put_contents($model->appPath().'cfg/routes.json', Json_encode($ar, JSON_PRETTY_PRINT));
+      file_put_contents($model->appPath().'cfg/routes.json', json_encode($ar, JSON_PRETTY_PRINT));
       $data['success'] = true;
     }
   }

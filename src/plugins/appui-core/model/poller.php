@@ -1,7 +1,11 @@
 <?php
-$observer = new \bbn\Appui\Observer($model->db);
+use bbn\X;
+use bbn\Mvc;
+use bbn\File\Dir;
+use bbn\Appui\Observer;
+$observer = new Observer($model->db);
 $id_user = $model->inc->user->getId();
-$queue = \bbn\Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/queue/' . $model->inc->user->getOsession('id_session');
+$queue = Mvc::getUserDataPath($id_user, 'appui-core') . 'poller/queue/' . $model->inc->user->getOsession('id_session');
 return [[
   'id' => 'appui-core-0',
   'frequency' => 1,
@@ -11,7 +15,7 @@ return [[
       'data' => []
     ];
     // Get files in the poller dir
-    if (count($data['clients']) && ($files = \bbn\File\Dir::getFiles($queue)) && count($files)) {
+    if (count($data['clients']) && ($files = Dir::getFiles($queue)) && count($files)) {
       $returned_obs = [];
       $after = false;
       $clients_obs = [];
@@ -32,7 +36,7 @@ return [[
       foreach ($files as $f){
         if (($ar = json_decode(file_get_contents($f), true)) && isset($ar['observers'])) {
           foreach ($ar['observers'] as $i => $o){
-            $value = \bbn\X::getField($data['data']['observers'] ?? [], ['id' => $o['id']], 'value');
+            $value = X::getField($data['data']['observers'] ?? [], ['id' => $o['id']], 'value');
             if (!$value || ($value !== $o['result'])) {
               $returned_obs[] = $o;
             }
@@ -45,13 +49,13 @@ return [[
           }
         }
         if (empty($ar)) {
-          \bbn\File\Dir::delete($f);
-          if (!\bbn\File\Dir::getFiles($queue)) {
-            \bbn\File\Dir::delete($queue);
+          Dir::delete($f);
+          if (!Dir::getFiles($queue)) {
+            Dir::delete($queue);
           }
         }
         else {
-          file_put_contents($f, Json_encode($ar));
+          file_put_contents($f, json_encode($ar));
         }
       }
       if (count($returned_obs)) {

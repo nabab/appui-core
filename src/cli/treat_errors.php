@@ -30,7 +30,7 @@ catch (\Exception $e) {
   X::log("Impossible to parse the Apache log file", "IMPORTANT");
 }
 if (!empty($res)) {
-  if (file_put_contents($log_dir.$json_file, Json_encode($res, JSON_PRETTY_PRINT))) {
+  if (file_put_contents($log_dir.$json_file, json_encode($res, JSON_PRETTY_PRINT))) {
     if (apache::cutLogFile($log_dir.$log_file, 500000)) {
       X::dump(_("Log file partially truncated"));
     }
