@@ -183,8 +183,7 @@ if (defined('BBN_HISTORY') && constant('BBN_HISTORY')) {
 }
 
 if (($path !== "{$cr}poller")
-    && !defined("BBN_MVC_ID")
-    //&& defined('BBN_REFERER')
+    && !$ctrl->getConstant('mvc_id')
 ) {
   $ctrl->db->insert(
     'bbn_mvc_logs',
@@ -194,36 +193,25 @@ if (($path !== "{$cr}poller")
       'path' => $path,
       'params' => count($ctrl->arguments) ? implode("/", $ctrl->arguments) : null,
       'post' => empty($ctrl->post) ? null : json_encode(array_keys($ctrl->post)),
-      'referer' => defined('BBN_REFERER') ? constant('BBN_REFERER') : null
+      'referer' => $ctrl->getConstant('referer') ?: null
     ]
   );
-  define("BBN_MVC_ID", $ctrl->db->lastId());
-  if (method_exists($ctrl, 'getTimer')) {
-    $ctrl->getTimer()->start(BBN_MVC_ID);
-  }
-  else {
-    $ctrl->timer->start(BBN_MVC_ID);
+  if ($ctrl->setConstant('mvc_id', $ctrl->db->lastId())) {
+    $ctrl->getTimer()->start($ctrl->getConstant('mvc_id'));
   }
 }
 
 // The current path
 $url = $ctrl->getUrl();
 
-/** @var string BBN_BASEURL */
-
 // Case where we have a bbn-router (nav)
-if (defined('BBN_BASEURL')
-  && (
-    !constant('BBN_BASEURL')
-    || (Str::pos($url, constant('BBN_BASEURL')) === 0)
-  )
-) {
-  // Length of the baseURL from the bbn-router(nav) sending the request
-  $len = Str::len(constant('BBN_BASEURL'));
+if (($ctrl->getConstant('baseURL') !== null) && (!$ctrl->getConstant('baseURL') || (Str::pos($url, $ctrl->getConstant('baseURL')) === 0))) {
   // So we will give the first file matching after the base URL sent
-  $start = constant('BBN_BASEURL');
+  $start = $ctrl->getConstant('baseURL');
+  // Length of the baseURL from the bbn-router(nav) sending the request
+  $len = Str::len($start);
   // The baseURL must end with a slash
-  if ($len && (Str::sub($url, -1) !== '/')) {
+  if ($len && !Str::endsWith($url, '/')) {
     $url .= '/';
   }
 

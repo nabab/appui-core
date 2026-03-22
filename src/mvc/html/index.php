@@ -150,9 +150,12 @@ use bbn\X;
 
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
   let onDomLoaded = () => {
+    bbn.env.logging = true;
     loaded = true;
     // Check that bbn is defined
-    bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, init);
+    console.log("WJU??");
+    bbn.fn.log("NO?");
+    bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, d => init(d));
     // If bbn is not defined we reload the window
   };
   /*
@@ -203,8 +206,11 @@ use bbn\X;
   };
   */
 
-  let init = d => {
-    //bbn.fn.warning("INIT");
+  const init = d => {
+    console.log("KOI??");
+    bbn.fn.warning("INIT");
+    console.log(d);
+    bbn.fn.log(d);
     //bbn.fn.log(["DATA FROM INDEX", d, eval(d.script)(d.data), eval(d.data.js_data)(d.data)]);
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';

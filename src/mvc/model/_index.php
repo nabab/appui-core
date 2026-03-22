@@ -16,16 +16,29 @@ if ($model->hasPlugin('appui-chat')) {
   $chat = $cchat->getUserStatus();
   */
 }
+$t = $model->getTimer();
+$t->start('jsCat');
+$jsCat = $model->inc->options->jsCategories(null, true);
+$t->stop('jsCat');
+$t->start('default');
+$default = $model->getDefault();
+$t->stop('default');
+$t->start('usersList');
+$usersList = $mgr->fullList();
+$t->stop('usersList');
+$t->start('userGroups');
+$userGroups = $mgr->groups();
+$t->stop('userGroups');
 $data = X::mergeArrays($model->data, [
   'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
   'lang' => BBN_LANG,
   //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
-  'options' => $model->inc->options->jsCategories(null, true),
+  'options' => $jsCat,
   'theme' => $theme,
   'cdn_lib' => 'bbn-css|latest|' . $theme . ',bbn-cp',
-  'default' => $model->getDefault(),
-  'users' => $mgr->fullList(),
-  'groups' => $mgr->groups(),
+  'default' => $default,
+  'users' => $usersList,
+  'groups' => $userGroups,
   'user' => [
     'id' => $model->inc->user->getId(),
     'isAdmin' => $model->inc->user->isAdmin(),
@@ -50,9 +63,10 @@ if ($model->hasPlugin('appui-hr')) {
   ]);
   */
 }
-
+$t->start('custom');
 if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
   $data = X::mergeArrays($data, $custom_data);
 }
+$t->stop('custom');
 
 return $data;

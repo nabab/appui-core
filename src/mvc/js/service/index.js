@@ -602,7 +602,7 @@
 
     }
     else {
-      //log("Fetch event for " + event.request.url + ' as ' + event.request.method);
+      log("Fetch event for " + event.request.url + ' as ' + event.request.method);
       // Check if the browser is Safari
       if (navigator
         && navigator.userAgent
@@ -618,15 +618,16 @@
           return;
         }
       }
-      // We will only cache requests to the CDN, local application components or Google fonts
-      //log("Fetch event for " + event.request.url);
-      //log("POSITION: " + event.request.url.indexOf(CDN));
-      if ((event.request.url.indexOf(CDN) === 0)
+      const isOkToCache = (event.request.url.indexOf(CDN) === 0)
         || (event.request.url.indexOf(STATIC) === 0)
         || (event.request.url.indexOf(data.site_url + 'components/') === 0)
       || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
-      || /^http(s?):\/\/fonts.gstatic.com/.test(event.request.url)
-    ) {
+      || /^http(s?):\/\/fonts.gstatic.com/.test(event.request.url);
+      log("Checking with CDN " + CDN + ", STATIC " + STATIC + " and SITE_URL " + data.site_url + " AND... " + isOkToCache);
+      // We will only cache requests to the CDN, local application components or Google fonts
+      //log("Fetch event for " + event.request.url);
+      //log("POSITION: " + event.request.url.indexOf(CDN));
+      if (isOkToCache) {
         //log("Fetch event 2 for " + event.request.url);
         // Check if the request is present in the cache
         event.respondWith(caches.match(event.request.url).then(cachedResponse => {
