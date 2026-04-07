@@ -1,7 +1,6 @@
 /* jslint esversion: 6 */
 (() => {
   return async (data) => {
-    //bbn.fn.log(["DATA SENT TO INDEX JS", data]);
     bbn.fn.init({
       env: {
         logging: data.is_dev || data.is_test ? true : true,
@@ -48,6 +47,7 @@
           icon: 'nf nf-fa-home'
         }
       ],
+      routes: data.routes || [],
       browserNotification: true
     };
     for (let n in cfg) {
@@ -82,77 +82,8 @@
       urlPrefix,
       {methods}
     );
-
-  
-    /*
-    bbn.fn.each(data.plugins, (path, name) => {
-      bbn.cp.addPrefix(name, (tag, resolve, reject) => {
-        bbn.cp.queueComponent(tag, path + '/components/' + bbn.fn.replaceAll('-', '/', tag).substr(name.length + 1), null, resolve, reject);
-      });
-    });
-
-
-    bbn.cp.addPrefix(
-      data.app_prefix,
-      (tag, resolve, reject, mixins) => {
-        bbn.cp.queueComponent(
-          tag,
-          'components/' + bbn.fn.replaceAll('-', '/', tag).substr((data.app_prefix + '-').length),
-          mixins,
-          resolve,
-          reject
-        );
-      },
-      bbn.fn.extend(true, {}, {
-        methods: {
-          getTab(){
-            return this.closest('bbns-container');
-          },
-          popup(){
-            return this.getTab().popup.apply(this, arguments);
-          }
-        }
-      }, js_data.componentsMixin)
-    );
-    */
-
-    bbn.cp.initDefaults({
-      appui: {
-        /*
-        root: data.root,
-        list: [{
-          source: data.list || js_data.appuiMixin.list
-        }],
-        /*
-        nav: true,
-        status: true,
-        header: true,
-        footer: false,
-        broserNotification: true,
-        clipboard: true,
-        logo: data.logo,
-        pollable: (data.pollable === undefined) || data.pollable,
-        theme: data.theme
-        */
-      }
-    });
-
-    /*
-    if (window.dayjs !== undefined) {
-      dayjs.updateLocale(bbn.env.lang, {
-        calendar: {
-          lastDay: '[' + bbn._('Yesterday at') + '] LT',
-          sameDay: '[' + bbn._('Today at') + '] LT',
-          nextDay: '[' + bbn._('Tomorrow at') + '] LT',
-          lastWeek: '[' + bbn._('last') + '] dddd [' + bbn._('at') + '] LT',
-          nextWeek: 'dddd [' + bbn._('at') + '] LT',
-          sameElse: 'L'
-        }
-      });
-    }*/
-
     const slots = bbn.fn.createObject();
-    await bbn.cp.createApp(document.body.querySelector('div.appui'), {
+    bbn.cp.createApp(document.body.querySelector('div.appui'), {
       data() {
         return {
           appSlots: slots,
@@ -197,7 +128,7 @@
           }
         }
       },
-      created(){
+      async created(){
         bbn.fn.log("APP CREATED");
         if ( this.isMobile ){
           document.body.classList.add('bbn-mobile');
@@ -206,7 +137,7 @@
           document.body.classList.add('bbn-tablet');
         }
       },
-      beforeCreate() {
+      async beforeCreate() {
         if (data.slots) {
           bbn.fn.iterate(data.slots, (arr, slot) => {
             slots[slot] = [];
@@ -231,7 +162,7 @@
           });
         }
       },
-      mounted() {
+      async mounted() {
         this.ready = true;
       }
     });

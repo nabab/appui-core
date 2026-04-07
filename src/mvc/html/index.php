@@ -73,6 +73,7 @@ use bbn\X;
               :header="cfg.header"
               :mode="cfg.mode"
               :users="users"
+              :routes="cfg.routes"
               :groups="groups"
               :user="user"
               :status="cfg.status"

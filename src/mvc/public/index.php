@@ -87,6 +87,8 @@ if ($ctrl->inc->user->check()) {
     $ctrl->inc->user->setCache($cacheName, $data, 86400);
     $t->stop('user-cache');
   }
+  X::log($data, 'index-data');
+
 
   $ctrl->addData($data);
   // The whole DOM
