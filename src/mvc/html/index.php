@@ -61,7 +61,7 @@ use bbn\X;
   <div id="error_message" style="background-color: #fff"></div>
 </div>
 <div class="appui-container"
-     style="opacity: 0;">
+     style="opacity: 0; transition: opacity 0.5s;">
   <div class="appui">
     <bbn-appui bbn-if="ready" 
               :cfg="app"
@@ -83,6 +83,7 @@ use bbn\X;
               :service-worker-active="true"
               :pollable="true"
               @shortcut="addShortcut"
+              @hook:mounted="bbn.fn.log('Hook mounted')"
               @route1="init">
   <?php
     if (!empty($slots)) {
@@ -107,6 +108,7 @@ use bbn\X;
 <script>
 (async () => {
   "use strict";
+  console.log("Starting the application3...");
   let loadLibraries = urls => {
     return urls.reduce(
       (promise, url) =>
@@ -151,12 +153,38 @@ use bbn\X;
 
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
   let onDomLoaded = () => {
+    console.log('onDomLoaded');
     bbn.env.logging = true;
     loaded = true;
+
+    if (hasServiceWorker) {
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        console.log("RECEIVING FROM SW");
+        console.log(event);
+        if (event.data?.type === 'data') {
+          console.log("EVALUATED?");
+          console.log(event.data?.data);
+
+          const fn = eval(event.data.data.script);
+          const js_data = eval(event.data.data.js_data);
+          console.log("EVALUATED!");
+          console.log(fn);
+          console.log(js_data);
+          const d = fn(event.data.data);
+          init(event.data);
+        }
+      });
+      if (navigator?.serviceWorker?.controller) {
+        console.log("Asking the service worker for the data...");
+        navigator.serviceWorker.controller.postMessage({data: {giveMeTheData: true}, type: 'data'});
+      }
+    }
     // Check that bbn is defined
+    /*
     console.log("WJU??");
     bbn.fn.log("NO?");
     bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, d => init(d));
+    */
     // If bbn is not defined we reload the window
   };
   /*
@@ -232,17 +260,7 @@ use bbn\X;
 
     let res = {};
     const data = d.data;
-    if (d.script) {
-      res = eval(d.script);
-    }
-    else if (d.data && d.data.script) {
-      res = eval(d.data.script);
-    }
-
-    if (bbn.fn.isFunction(res)) {
-      res(d.data || {});
-      bbn.env.token = "<?= $token ?>";
-    }
+    bbn.env.token = "<?= $token ?>";
 
     setTimeout(() => {
       if ((navigator.serviceWorker.controller === null) && confirm(
@@ -267,27 +285,44 @@ use bbn\X;
     });
 
     // 2. Register service worker and wait until it's ready
-    if ('serviceWorker' in navigator) {
-      try {
-        const registration = await navigator.serviceWorker.register('/sw', {type: 'module', scope: '/'});
+    try {
+      const registration = await navigator.serviceWorker.register('/sw', {type: 'module', scope: '/'});
 
-        // This promise resolves when the active SW is controlling the page
-        await navigator.serviceWorker.ready;
+      // This promise resolves when the active SW is controlling the page
+      await navigator.serviceWorker.ready;
 
-        // Optional: you can check if we’re actually controlled
-        if (!navigator.serviceWorker.controller) {
-          console.warn('Service worker is ready but not controlling this page yet.');
-        }
-      } catch (err) {
-        console.error('Service worker registration failed:', err);
-        // If SW fails, you might still want to continue loading libraries
+      // Optional: you can check if we’re actually controlled
+      if (!navigator.serviceWorker.controller) {
+        console.warn('Service worker is ready but not controlling this page yet.');
       }
+      else {
+        registration.onupdatefound = () => {
+          const installingWorker = registration.installing;
+          installingWorker.onstatechange = () => {
+            if (['activated', 'installed'].includes(installingWorker.state)) {
+              if (!hasBeenAsked && !isReloading) {
+                if (confirm(
+                  <?= Str::asVar(_("A new version of the application is available.")) ?> + "\n" +
+                  <?= Str::asVar(_("Do you want to refresh now to update?")) ?>
+                )) {
+                  isReloading = true;
+                  location.reload();
+                }
+                hasBeenAsked = true;
+              }
+            }
+          };
+        };
+      }
+    } catch (err) {
+      throw new Error('Service worker registration failed:', err);
+      // If SW fails, you might still want to continue loading libraries
     }
-
-    // 3. Load libraries dynamically (after SW is ready)
-    await loadLibraries(['<?= $script_src ?>']);
-    onDomLoaded();
   }
+
+  // 3. Load libraries dynamically (after SW is ready)
+  await loadLibraries(['<?= $script_src ?>']);
+  onDomLoaded();
   /*
     console.log("SW: SERVICE WORKER ENABLED");
     // Registration of the service worker
@@ -356,5 +391,6 @@ use bbn\X;
 
 })();
 </script>
+<?= $script; ?>
 </body>
 </html>

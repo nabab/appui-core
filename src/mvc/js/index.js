@@ -26,8 +26,11 @@
 
     let js_data = {};
     if (data.js_data) {
-      js_data = eval(data.js_data) || {};
-      //bbn.fn.log("JSDATA CREATED", js_data);
+      const tmp = eval(data.js_data) || {};
+      if (bbn.fn.isFunction(tmp)) {
+        js_data = tmp(data);
+      }
+      bbn.fn.log("JSDATA CREATED", js_data);
     }
 
     if (!js_data.cfg) {
@@ -105,6 +108,7 @@
       },
       methods: {
         init() {
+          bbn.fn.log("APP INIT");
           this.$el.parentNode.style.opacity = 1;
         },
         addShortcut(data) {

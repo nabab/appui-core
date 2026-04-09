@@ -94,14 +94,14 @@ if ($ctrl->inc->user->check()) {
   // The whole DOM
   if (empty($ctrl->post)) {
     $t->start('combo');
-    $ctrl->data['token'] = $ctrl->inc->user->addToken();
-    $ctrl->combo($ctrl->data['site_title'], true);
+    $ctrl->addData(['token' => $ctrl->inc->user->addToken()]);
+    $ctrl->combo(constant('BBN_SITE_TITLE'), true);
     $t->stop('combo');
   }
   // Only the data
   else {
     $t->start('data');
-    $ctrl->addJs();
+    $ctrl->data['script'] = $ctrl->getView($ctrl->pluginUrl('appui-core') . '/index', 'js');
     $ctrl->data['js_data'] = $ctrl->customPluginView('index', 'js', $ctrl->data, 'appui-core');
     $ctrl->obj->data = $ctrl->data;
     $t->stop('data');

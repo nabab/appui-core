@@ -1,6 +1,7 @@
 <?php
+use bbn\X;
 /** @var bbn\Mvc\Model $model The model */
-return [
+$data = [
   'version' => file_get_contents(constant('BBN_DATA_PATH') . 'version.txt') ?: '666',
   'site_url' => constant('BBN_URL'),
   'site_title' => constant('BBN_SITE_TITLE'),
@@ -16,3 +17,5 @@ return [
   'language' => constant('BBN_LANG'),
   'root' => ''
 ];
+$data['fingerprint'] = X::makeHash($data);
+return $data;

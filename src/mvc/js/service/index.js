@@ -10,13 +10,17 @@
  * @var {String} CACHE_NAME The name of the version
  * @example 242
  **/
-(function(data) {
+import bbn from "/static/lib/bbn-js/v2/dist/index-no-dep.js";
+globalThis.bbn = bbn;
+(async function(data) {
+  const version = data.version;
 
   /**
    * @const {String} CACHE_NAME The cache name
    * @example "v39"
    */
-  const CACHE_NAME = 'v' + data.version;
+  const CACHE_VERSION = 11;
+  const CACHE_NAME = 'v' + data.version + '.' + CACHE_VERSION;
 
   /**
    * @const {String} CDN The URL of the CDN
@@ -25,12 +29,23 @@
 
   const CDN = data.shared_path.indexOf('/') === 0 ? data.site_url + data.shared_path.substr(1) : data.shared_path;
   const STATIC = data.static_path.indexOf('/') === 0 ? data.site_url + data.static_path.substr(1) : data.static_path;
+  console.log("CDN is " + CDN);
+  console.log("STATIC is " + STATIC);
+  console.log("VERSION is " + version);
+  console.log("BBN is installed with version " + bbn.version);
+  bbn.fn.init(data);
+  console.log("BBN test:" + bbn.fn.isString(data.plugins));
+  console.log("BBN test:" + bbn.fn.isObject(data.plugins));
+  console.log(data);
+  //console.log(bbn);
   const decoder = new TextDecoder();
   const boundary = '\n';
   let searchValue = '';
   let searchAborter;
   let searchReader;
-  let json = '';
+  let jsonSearch = '';
+  let jsonCfg;
+  let db;
 
 
 
@@ -82,6 +97,7 @@
   const log = (...args) => {
     //console.log("**** START LOG FROM SERVICE WORKER ****");
     for (let i = 0; i < args.length; i++) {
+      /*
       self.clients.matchAll({
         includeUncontrolled: true
       }).then(clientList => {
@@ -107,6 +123,8 @@
           }
         })
       })
+      */
+      console.log(args[i]);
   
     }
     //debug({logs: logs});
@@ -425,90 +443,90 @@
   /**
    * Polls the server and recalls itself when finished.
    */
-  const poll = () => {
+  const poll = async () => {
     isRunning = true;
     errorState = false;
     noResp = false;
     // Check if the user is connected
     if (isConnected) {
       // Get the current windows list
-      self.clients.matchAll().then(clientList => {
-        let clientsObj = {};
-        // Update the windows list
-        updateWindows(clientList);
-        for (let id in windows){
-          clientsObj[id] = windows[id].data;
-        }
-        debug({request: clientsObj});
-        // Call 'fetchWithTimeout' function
-        fetchWithTimeout(poller, 600000, {
-          method: "POST", // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            "Content-Type": "application/json",
-            // "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: JSON.stringify(Object.keys(clientsObj).length ? {clients: clientsObj} : {test: 1})
-        }).then(response => {
-          if ( response.status !== 200 ){
-            log("Error: " + response.status);
-            // Retry poll
-            retryPoll();
-          }
-          else{
-            // What we do with the answer from poller
-            response.text().then(text => {
-              let json;
-              if ((typeof text === 'string')
-                  && (text.trim().substr(0, 1) === '{')
-                  && (text.trim().substr(-1) === '}')
-              ) {
-                // Parse JSON
-                try {
-                  json = JSON.parse(text);
-                }
-                catch(e){
-                  log("The response is no JSON");
+      const clientList = await self.clients.matchAll();
+      let clientsObj = {};
+      // Update the windows list
+      updateWindows(clientList);
+      for (let id in windows){
+        clientsObj[id] = windows[id].data;
+      }
+      debug({request: clientsObj});
+      // Call 'fetchWithTimeout' function
+      const response = await fetchWithTimeout(poller, 600000, {
+        method: "POST", // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          "Content-Type": "application/json",
+          // "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: JSON.stringify(Object.keys(clientsObj).length ? {clients: clientsObj} : {test: 1})
+      });
+      if ( response.status !== 200 ){
+        log("Error: " + response.status);
+        // Retry poll
+        retryPoll();
+      }
+      else {
+        // What we do with the answer from poller
+        try {
+          const text = await response.text();
+          let json;
+          if ((typeof text === 'string')
+              && (text.trim().substr(0, 1) === '{')
+              && (text.trim().substr(-1) === '}')
+          ) {
+            // Parse JSON
+            try {
+              json = JSON.parse(text);
+            }
+            catch(e){
+              log("The response is no JSON");
+              // Retry poll
+              retryPoll(true);
+              return;
+            }
+            if (Object.keys(json).length) {
+              log("JSON RESULT with keys " + Object.keys(json).join(', '));
+              // Call 'processServerMessage' function
+              processServerMessage(json).then(res => {
+                isRunning = false;
+                if (res === false) {
                   // Retry poll
-                  retryPoll(true);
-                  return;
-                }
-                if (Object.keys(json).length) {
-                  log("JSON RESULT with keys " + Object.keys(json).join(', '));
-                  // Call 'processServerMessage' function
-                  processServerMessage(json).then(res => {
-                    isRunning = false;
-                    if (res === false) {
-                      // Retry poll
-                      retryPoll(false);
-                    }
-                    else {
-                      retries = 0;
-                      poll();
-                    }
-                  });
+                  retryPoll(false);
                 }
                 else {
                   retries = 0;
                   poll();
                 }
-              }
-              else {
-                log("The response is no JSON");
-                // Retry poll
-                retryPoll(true);
-                return;
-              }
-            });
+              });
+            }
+            else {
+              retries = 0;
+              poll();
+            }
           }
-        }).catch(err => {
+          else {
+            log("The response is no JSON");
+            // Retry poll
+            retryPoll(true);
+            return;
+          }
+        }
+        catch(err) {
           isRunning = false;
           if (err.message !== 'The user aborted a request.') {
             log('fetch failed for ' + poller);
             log(err.message);
             errorState = true;
           }
-        });
-      });
+        }
+      }
     }
     else {
       log("User is not connected, skipping poll");
@@ -602,7 +620,7 @@
 
     }
     else {
-      log("Fetch event for " + event.request.url + ' as ' + event.request.method);
+      //log("Fetch event for " + event.request.url + ' as ' + event.request.method);
       // Check if the browser is Safari
       if (navigator
         && navigator.userAgent
@@ -620,10 +638,9 @@
       }
       const isOkToCache = (event.request.url.indexOf(CDN) === 0)
         || (event.request.url.indexOf(STATIC) === 0)
-        || (event.request.url.indexOf(data.site_url + 'components/') === 0)
       || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
       || /^http(s?):\/\/fonts.gstatic.com/.test(event.request.url);
-      log("Checking with CDN " + CDN + ", STATIC " + STATIC + " and SITE_URL " + data.site_url + " AND... " + isOkToCache);
+      //log("Checking with CDN " + CDN + ", STATIC " + STATIC + " and SITE_URL " + data.site_url + " AND... " + isOkToCache);
       // We will only cache requests to the CDN, local application components or Google fonts
       //log("Fetch event for " + event.request.url);
       //log("POSITION: " + event.request.url.indexOf(CDN));
@@ -667,7 +684,7 @@
     
   };
 
-  const onInstall = event => {
+  const onInstall = async event => {
     // Write log
     log('Service worker install with CDN ' + CDN);
     log('Service worker install event for version ' + CACHE_NAME);
@@ -680,9 +697,33 @@
         )
       )
     );
+    if (!bbn.db._structures?.bbn?.data) {
+      await bbn.db.add('bbn', 'data', {
+        keys: {
+          PRIMARY: {
+            columns: ['id'],
+            unique: true
+          },
+          FINGERPRINT: {
+            columns: ['fingerprint'],
+            unique: false
+          },
+          VERSION: {
+            columns: ['version'],
+            unique: false
+          }
+        },
+        fields: {
+          id: {},
+          content: {},
+          version: {},
+          fingerprint: {}
+        }
+      });
+    }
   };
 
-  const onActivate = event => {
+  const onActivate = async event => {
     // Write log
     log('Service worker activate event for version ' + CACHE_NAME);
     log('Service worker activate with CDN ' + CDN);
@@ -696,20 +737,71 @@
           )
         )
       )
-    )
+    );
+
+    if (!db) {
+      db = await bbn.db.open('bbn');
+    }
+    if (db) {
+      bbn.fn.log("DB IS HERE")
+      const row = await db.select('data', [], {id: 'sw'});
+      bbn.fn.log(["RESULT", row]);
+      if (row?.content) {
+        jsonCfg = row.content;
+        log("!!!!CONTENT FROM THE DB!!!!");
+      }
+    }
+    if (!jsonCfg && db) {
+      const d = await fetch('core/index', {method: "POST", body: JSON.stringify({get: 1})});
+      try {
+        const tmp = await d.json();
+        jsonCfg = tmp.data;
+      }
+      catch (e) {
+        log("Error parsing JSON from core/index");
+        log(e);
+      }
+      if (jsonCfg) {
+        await db.insert('data', {
+          id: 'sw',
+          content: jsonCfg,
+          version: jsonCfg.version,
+          fingerprint: jsonCfg.fingerprint
+        }, true);
+      }
+      log("!!!!INSERTED IN THE DB!!!!");
+    }
+    log("!!!!FROM ANOTHER WORLD ON ACTIVATE!!!!");
+    log(jsonCfg);
+
   };
+
 
   const onMessage = async event => {
     // Write log
-    log("Receiving a message of type " + event.data.type + " on channel " + event.data.channel);
+    log("Receiving a message of type " + (event.data?.type || 'unknown') + " on channel " + (event.data?.channel || 'unknown'));
     log(JSON.stringify(event.data));
     // Get the current windows list
     const clientList = await self.clients.matchAll();
     // Update the windows list
     updateWindows(clientList);
-    const data = event.data.data;
+    const data = event.data?.data || {};
     // Analyze the message type
-    switch (event.data.type) {
+    switch (event.data?.type) {
+      case 'data':
+        clientList.forEach(client => {
+          console.log("Checking client " + client.id + " for data message");
+          if (client.id === event.source.id) {
+            console.log("Positing to client " + client.id + " the data message");
+            // Send the init message with the fetched data
+            client.postMessage({
+              client: event.source.id,
+              type: 'data',
+              data: jsonCfg
+            });
+          }
+        })
+        break;
 
       // The message sent by appui-core after the DOM has been loaded
       // and the initial data was fetched (onDomLoaded function).
@@ -919,12 +1011,12 @@
     const {done, value} = res;
     log("pump " + (done ? 'done' : 'not done'));
     if (value) {
-      json += decoder.decode(value).trim();
+      jsonSearch += decoder.decode(value).trim();
     }
 
-    if (json) {
+    if (jsonSearch) {
       const arr = json.split(boundary);
-      json = '';
+      jsonSearch = '';
       try {
         treatJSON(arr);
       } catch (e) { }
@@ -958,7 +1050,7 @@
             log("Error parsing JSON");
             log(arr[i]);
             log(e.message);
-            json = arr[i];
+            jsonSearch = arr[i];
           }
 
           if (obj?.data?.length) {
@@ -987,7 +1079,7 @@
         }
       }
 
-      //json = arr.join(boundary);
+      //jsonSearch = arr.join(boundary);
     }
   };
 
