@@ -58,48 +58,50 @@ use bbn\X;
          style="max-width: 80%; max-height: 100%"
          alt="<?= $site_title ?>"/>
   </div>
-  <div id="error_message" style="background-color: #fff"></div>
+  <div id="error_message" style="background-color: #fff; position: absolute; top: 90%; left: 50%; transform: translate(-50%, -50%); text-align: center"></div>
+  <div id="loading_message" style="background-color: #fff; position: absolute; top: 90%; left: 50%; transform: translate(-50%, -50%); text-align: center"></div>
 </div>
 <div class="appui-container"
      style="opacity: 0; transition: opacity 0.5s;">
   <div class="appui">
-    <bbn-appui bbn-if="ready" 
-              :cfg="app"
-              :options="options"
-              :plugins="plugins"
-              def="<?= $default ?>"
-              @setimessage="setImessage"
-              :source="cfg.list"
-              :header="cfg.header"
-              :mode="cfg.mode"
-              :users="users"
-              :routes="cfg.routes"
-              :groups="groups"
-              :user="user"
-              :status="cfg.status"
-              :splittable="cfg.splittable"
-              :search-bar="cfg.searchBar"
-              :browser-notification="cfg.browserNotification"
-              :service-worker-active="true"
-              :pollable="true"
-              @shortcut="addShortcut"
-              @hook:mounted="bbn.fn.log('Hook mounted')"
-              @route1="init">
-  <?php
-    if (!empty($slots)) {
-      foreach ($slots as $name => $arr) {
-        foreach ($arr as $i => $o) {
-          ?>
-          <component bbn-slot:<?= $name ?>
-                    :is="appSlots.<?= $name ?>[<?= $i ?>].cp"
-                    :source="appSlots.<?= $name ?>[<?= $i ?>].data">
-          </component>
-          <?php
+    <template>
+      <bbn-appui bbn-if="ready" 
+                :cfg="app"
+                :options="options"
+                :plugins="plugins"
+                def="<?= $default ?>"
+                @setimessage="setImessage"
+                :source="cfg.list"
+                :header="cfg.header"
+                :mode="cfg.mode"
+                :users="users"
+                :routes="cfg.routes"
+                :groups="groups"
+                :user="user"
+                :status="cfg.status"
+                :splittable="cfg.splittable"
+                :search-bar="cfg.searchBar"
+                :browser-notification="cfg.browserNotification"
+                :service-worker-active="true"
+                :pollable="true"
+                @shortcut="addShortcut"
+                @route1="init">
+    <?php
+      if (!empty($slots)) {
+        foreach ($slots as $name => $arr) {
+          foreach ($arr as $i => $o) {
+            ?>
+            <component bbn-slot:<?= $name ?>
+                      :is="appSlots.<?= $name ?>[<?= $i ?>].cp"
+                      :source="appSlots.<?= $name ?>[<?= $i ?>].data">
+            </component>
+            <?php
+          }
         }
       }
-    }
-  ?>
-    </bbn-appui>
+    ?>
+      </bbn-appui>
+    </template>
   </div>
 </div>
 <noscript>
@@ -108,25 +110,130 @@ use bbn\X;
 <script>
 (async () => {
   "use strict";
-  console.log("Starting the application3...");
-  let loadLibraries = urls => {
-    return urls.reduce(
-      (promise, url) =>
-        promise.then(
-          () =>
-            new Promise((resolve, reject) => {
-              const script = document.createElement('script');
-              script.src = url;
-              script.async = false; // keep order if needed
-              script.onload = () => resolve();
-              script.onerror = () =>
-                reject(new Error('Failed to load script ' + url));
-              document.head.appendChild(script);
-            })
-        ),
-      Promise.resolve()
-    );
+  const log = (...args) => {
+    for (let i = 0; i < args.length; i++) {
+      console.log(args[i]);
+    }
   };
+
+  window.addEventListener("error", e => {
+    log(e);
+  });
+
+  window.addEventListener("unhandledrejection", e => {
+    log("unhandled rejection:", e);
+  });
+
+  function waitFor(check, timeout = 15000, interval = 20) {
+    return new Promise((resolve, reject) => {
+      const start = Date.now();
+
+      function tick() {
+        try {
+          if (check()) {
+            resolve();
+            return;
+          }
+        }
+        catch (e) {
+        }
+
+        if (Date.now() - start >= timeout) {
+          reject(new Error("Timeout while waiting for library to be ready"));
+          return;
+        }
+
+        setTimeout(tick, interval);
+      }
+
+      tick();
+    });
+  }
+
+  function loadScript(url, check, timeout = 15000) {
+    return new Promise((resolve, reject) => {
+      let script = document.querySelector(`script[src="${url}"]`);
+
+      if (!script) {
+        script = document.createElement("script");
+        script.src = url;
+        script.async = false;
+        document.head.appendChild(script);
+      }
+
+      let settled = false;
+
+      const finish = (fn, value) => {
+        if (settled) {
+          return;
+        }
+        settled = true;
+        fn(value);
+      };
+
+      if (check && check()) {
+        finish(resolve);
+        return;
+      }
+
+      const timer = setTimeout(() => {
+        finish(reject, new Error("Timeout while loading script: " + url));
+      }, timeout);
+
+      const cleanup = () => {
+        clearTimeout(timer);
+        script.removeEventListener("load", onLoad);
+        script.removeEventListener("error", onError);
+      };
+
+      const onLoad = async () => {
+        try {
+          if (check) {
+            await waitFor(check, timeout);
+          }
+          cleanup();
+          finish(resolve);
+        }
+        catch (err) {
+          cleanup();
+          finish(reject, err);
+        }
+      };
+
+      const onError = () => {
+        cleanup();
+        finish(reject, new Error("Failed to load script: " + url));
+      };
+
+      script.addEventListener("load", onLoad, { once: true });
+      script.addEventListener("error", onError, { once: true });
+
+      if (check) {
+        waitFor(check, timeout)
+          .then(() => {
+            cleanup();
+            finish(resolve);
+          })
+          .catch(err => {
+            cleanup();
+            finish(reject, err);
+          });
+      }
+    });
+  }
+
+  async function loadLibraries(items) {
+    for (const item of items) {
+      if (typeof item === "string") {
+        await loadScript(item);
+      }
+      else {
+        await loadScript(item.url, item.check, item.timeout);
+      }
+    }
+  }
+
+
   /** @var {String} errorMsg An error message to display */
   let errorMsg;
 
@@ -151,95 +258,35 @@ use bbn\X;
   /** @var {Boolean} isReloading True wgen is reloading */
   let isReloading = false;
 
+  const messages = [];
+
   /** @var {Function} onDomLoaded Loading the libraries through service worker or Ajax */
-  let onDomLoaded = () => {
-    console.log('onDomLoaded');
-    bbn.env.logging = true;
+  const onDomLoaded = () => {
     loaded = true;
-
     if (hasServiceWorker) {
-      navigator.serviceWorker.addEventListener("message", (event) => {
-        console.log("RECEIVING FROM SW");
-        console.log(event);
+      navigator.serviceWorker.addEventListener("message", async (event) => {
+        log(['received event from SW', event]);
         if (event.data?.type === 'data') {
-          console.log("EVALUATED?");
-          console.log(event.data?.data);
-
+          document.getElementById('loading_message').innerHTML = bbn._("Receiving data from service worker...");
           const fn = eval(event.data.data.script);
-          const js_data = eval(event.data.data.js_data);
-          console.log("EVALUATED!");
-          console.log(fn);
-          console.log(js_data);
-          const d = fn(event.data.data);
+          document.getElementById('loading_message').innerHTML = bbn._("Checking data from servioce worker...");
+          await fn(event.data.data);
           init(event.data);
+        }
+        else if (event.data?.type === 'load') {
+          if (event.data?.data?.message) {
+            document.getElementById('loading_message').innerHTML = event.data.data.message;
+            messages.push(event.data.data.message);
+          }
         }
       });
       if (navigator?.serviceWorker?.controller) {
-        console.log("Asking the service worker for the data...");
         navigator.serviceWorker.controller.postMessage({data: {giveMeTheData: true}, type: 'data'});
       }
     }
-    // Check that bbn is defined
-    /*
-    console.log("WJU??");
-    bbn.fn.log("NO?");
-    bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, d => init(d));
-    */
-    // If bbn is not defined we reload the window
   };
-  /*
-  let onDomLoaded = () => {
-    loaded = true;
-    // Check that bbn is defined
-    if ('bbn' in window) {
-      if (bbn.fn.isMobile()) {
-        document.body.classList.add('bbn-mobile');
-        if ( bbn.fn.isTabletDevice() ){
-          document.body.classList.add('bbn-tablet');
-        }
-      }
-      // Init phase
-      // through service worker
-      if (hasServiceWorker && navigator.serviceWorker.controller) {
-        navigator.serviceWorker.addEventListener('message', function(event) {
-          if ( event.data && event.data.data ){
-            let d = event.data;
-            if ( d.type === 'init' ){
-              init(d.data);
-            }
-            else if ('appui' in window){
-              let v = window.localStorage.getItem('bbn.cp-version');
-              appui.receive(d);
-            }
-          }
-        });
-        bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, d => {
-          navigator.serviceWorker.controller.postMessage({type: "init", token: "<?= $token ?>", data: d});
-        });
-      }
-      // Through Ajax
-      else {
-        bbn.fn.post('<?= $plugins['appui-core'] ?>/index', {get: 1}, init);
-      }
-    }
-    // If bbn is not defined we reload the window
-    else {
-      let attempts = window.localStorage.getItem('bbn-load') || 0;
-      // and avoid to do it more than 3 times
-      if ( attempts < 3 ){
-        window.localStorage.setItem('bbn-load', ++attempts);
-        alert("RELOADING??");
-        location.reload();
-      }
-    }
-  };
-  */
 
   const init = d => {
-    console.log("KOI??");
-    bbn.fn.warning("INIT");
-    console.log(d);
-    bbn.fn.log(d);
     //bbn.fn.log(["DATA FROM INDEX", d, eval(d.script)(d.data), eval(d.data.js_data)(d.data)]);
     //document.getElementById('nojs_bbn').remove();
     //document.querySelectorAll('.appui')[0].style.display = 'block';
@@ -271,7 +318,7 @@ use bbn\X;
         isReloading = true;
         location.reload();
       }
-    }, 2000);
+    }, 500);
   };
 
   // Only if service worker is enabled and not already registered
@@ -279,7 +326,8 @@ use bbn\X;
     await new Promise(resolve => {
       if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', resolve, { once: true });
-      } else {
+      }
+      else {
         resolve();
       }
     });
@@ -316,81 +364,23 @@ use bbn\X;
       }
     } catch (err) {
       throw new Error('Service worker registration failed:', err);
-      // If SW fails, you might still want to continue loading libraries
     }
   }
 
   // 3. Load libraries dynamically (after SW is ready)
-  await loadLibraries(['<?= $script_src ?>']);
-  onDomLoaded();
-  /*
-    console.log("SW: SERVICE WORKER ENABLED");
-    // Registration of the service worker
-    navigator.serviceWorker.register('/sw')
-    .then((registration) => {
-      window.bbnSW = registration;
-      let hasBeenUpdated = false;
-      registration.onupdatefound = () => {
-        hasBeenUpdated = true;
-        const installingWorker = registration.installing;
-        console.log("SW: STATE CHANGING TO " + installingWorker.state);
-        installingWorker.onstatechange = () => {
-          if (!hasBeenAsked
-            && !isReloading
-            && ['activated', 'installed'].includes(installingWorker.state)
-          ) {
-            if ((installingWorker.state === 'activated') && !loaded) {
-              if (!DOMLoaded) {
-                document.addEventListener('DOMContentLoaded', onDomLoaded)
-              }
-              else {
-                onDomLoaded();
-              }
-            }
-          }
-          else if ('appui' in window) {
-            let v = window.localStorage.getItem('bbn.cp-version');
-            bbn.fn.log(<?= Str::asVar(_("Polling from service worker")) ?> + ' <?= Str::asVar(_("version")) ?> ' + v);
-            appui.poll();
-          }
-        };
-      };
-      
-      if (!loaded) {
-        if (!DOMLoaded) {
-          document.addEventListener('DOMContentLoaded', onDomLoaded)
-        }
-        else {
-          onDomLoaded();
-        }
-      }
-
-      navigator.serviceWorker.addEventListener('message', event => {
-        const data = event.data?.data;
-        const type = event.data?.type;
-        if (data && type && ('appui' in window)) {
-          appui.$emit('sw-' + type, data);
-        }
-        else {
-          bbn.fn.log("** SW UNKNOWN MESSAGE **", event.data);
-        }
-      });
-    })
-    .catch((error) => {
-      bbn.fn.log(<?= Str::asVar(_("Service worker registration failed, error")) ?>, error);
-    });
-  }
-  else {
-    // Adding the function onDOMContentLoaded
-    document.addEventListener('DOMContentLoaded', onDomLoaded);
-  }
-  document.addEventListener('DOMContentLoaded', () => {
-    DOMLoaded = true;
+  loadLibraries([
+    {
+      url: scriptSrc,
+      check: () => !!window.bbn
+    }
+  ]).then(() => {
+    //log("Libraries loaded successfully.");
+    onDomLoaded();
+  }).catch(err => {
+    log("Error loading libraries:", err);
+    document.getElementById('error_message').innerHTML = <?= Str::asVar(_("Failed to load the application. Please try again later.")) ?>;
   });
-  */
-
 })();
 </script>
-<?= $script; ?>
 </body>
 </html>

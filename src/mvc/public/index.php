@@ -95,7 +95,7 @@ if ($ctrl->inc->user->check()) {
   if (empty($ctrl->post)) {
     $t->start('combo');
     $ctrl->addData(['token' => $ctrl->inc->user->addToken()]);
-    $ctrl->combo(constant('BBN_SITE_TITLE'), true);
+    $ctrl->combo(constant('BBN_SITE_TITLE'), true)->clientCache();
     $t->stop('combo');
   }
   // Only the data

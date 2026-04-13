@@ -10,7 +10,7 @@
  * @var {String} CACHE_NAME The name of the version
  * @example 242
  **/
-import bbn from "/static/lib/bbn-js/v2/dist/index-no-dep.js";
+import bbn, {Temporal}  from "/static/lib/bbn-js/v2/dist/bbn.sw.js";
 globalThis.bbn = bbn;
 (async function(data) {
   const version = data.version;
@@ -29,15 +29,25 @@ globalThis.bbn = bbn;
 
   const CDN = data.shared_path.indexOf('/') === 0 ? data.site_url + data.shared_path.substr(1) : data.shared_path;
   const STATIC = data.static_path.indexOf('/') === 0 ? data.site_url + data.static_path.substr(1) : data.static_path;
-  console.log("CDN is " + CDN);
-  console.log("STATIC is " + STATIC);
-  console.log("VERSION is " + version);
-  console.log("BBN is installed with version " + bbn.version);
+  /**
+   * Logs in the console in a special format evidencing it comes from the service worker.
+   */
+  const log = (...args) => {
+    for (let i = 0; i < args.length; i++) {
+      console.log(args[i]);
+    }
+  };
+
+ 
+  //log("CDN is " + CDN);
+  //log("STATIC is " + STATIC);
+  //log("VERSION is " + version);
+  log("BBN is installed with version " + bbn.version);
   bbn.fn.init(data);
-  console.log("BBN test:" + bbn.fn.isString(data.plugins));
-  console.log("BBN test:" + bbn.fn.isObject(data.plugins));
-  console.log(data);
-  //console.log(bbn);
+  //log("BBN test:" + bbn.fn.isString(data.plugins));
+  //log("BBN test:" + bbn.fn.isObject(data.plugins));
+  log(data);
+  //log(bbn);
   const decoder = new TextDecoder();
   const boundary = '\n';
   let searchValue = '';
@@ -45,7 +55,6 @@ globalThis.bbn = bbn;
   let searchReader;
   let jsonSearch = '';
   let jsonCfg;
-  let db;
 
 
 
@@ -90,46 +99,6 @@ globalThis.bbn = bbn;
   let lastResponse = {};
   let numberOfRequests = 0;
   let allRequests = [];
-
-  /**
-   * Logs in the console in a special format evidencing it comes from the service worker.
-   */
-  const log = (...args) => {
-    //console.log("**** START LOG FROM SERVICE WORKER ****");
-    for (let i = 0; i < args.length; i++) {
-      /*
-      self.clients.matchAll({
-        includeUncontrolled: true
-      }).then(clientList => {
-        // Set the 'windows' property
-        //data.windows = windows;
-        // Try to send the 'log' message to the clients
-        clientList.forEach(client => {
-          if (windows[client.id]) {
-            try {
-              client.postMessage({
-                client: client.id,
-                type: 'log',
-                data: args[i]
-              });
-            }
-            catch (e) {
-              client.postMessage({
-                client: client.id,
-                type: 'log',
-                data: JSON.stringify(args[i])
-              });
-            }
-          }
-        })
-      })
-      */
-      console.log(args[i]);
-  
-    }
-    //debug({logs: logs});
-    //console.log("**** END LOG FROM SERVICE WORKER ****");
-  };
 
   /**
    * Send debug data to the windows.
@@ -308,12 +277,10 @@ globalThis.bbn = bbn;
    * @param {Event} event
    */
   const processClientMessage = event => {
-    log("processClientMessage");
-    log(event);
-        // The sender window's ID
-    let senderID = event.source.id,
-        // The message data
-        d = event.data;
+    // The sender window's ID
+    let senderID = event.source.id
+    // The message data
+    let d = event.data;
 
     // Call 'poll' function if the 'pool' property exists into data
     if (d.poll) {
@@ -435,7 +402,7 @@ globalThis.bbn = bbn;
       // Fetch
       fetch(url, options).then(
         response => resolve(response),
-        err => reject(err)
+        err => log(err.message)
       ).finally(() => clearTimeout(timer));
     })
   };
@@ -565,11 +532,9 @@ globalThis.bbn = bbn;
   };
   
 
-  const onFetch = async event => {
+  const onFetch = event => {
     // Check if the request method is different than POST
     if (event.request.method === 'POST') {
-      return;
-      log("fetching " + event.request.url + ' with body');
       if (!event.request.url.indexOf(data.site_url)) {
         const newRequest = event.request.clone();
         event.respondWith(new Promise(async (resolve, reject) => {
@@ -583,15 +548,13 @@ globalThis.bbn = bbn;
           const data = JSON.parse(body);
           delete data._bbn_token;
           delete data._bbn_key;
-          log("data: " + JSON.stringify(data, null, 2));
           const dataHash = await hash(JSON.stringify(data));
-          log("dataHash: " + dataHash);
           //log("Fetch event 2 for " + event.request.url);
           // Check if the request is present in the cache
           const cachedResponse = await caches.match(event.request.url + ':' + dataHash);
           // If the request is already in the cache, let's return it
           if (cachedResponse) {
-            //log("Returning cached response");
+            log("Returning cached POST response");
             resolve(cachedResponse);
             return;
           }
@@ -599,16 +562,20 @@ globalThis.bbn = bbn;
           // Otherwise we execute the request and cache the response if positive
           return fetch(newRequest).then(response => {
             if (response.ok) {
-              log("Caching " + event.request.url);
-              // Open the cache by CACHE_NAME value
-              return caches.open(CACHE_NAME).then(cache => {
-                // Write the response into the cache and return the response
-                return cache.put(event.request.url + ':' + dataHash, response.clone()).then(() => {
-                  resolve(response);
-                  return;
-                });
-              })
+              const bbnCache = response.headers.get('bbn-cache'); 
+              if (bbnCache) {
+                log("Caching " + event.request.url);
+                // Open the cache by CACHE_NAME value
+                return caches.open(CACHE_NAME).then(cache => {
+                  // Write the response into the cache and return the response
+                  return cache.put(event.request.url + ':' + dataHash, response.clone()).then(() => {
+                    resolve(response);
+                    return;
+                  });
+                })
+              }
             }
+
             resolve(response);
           }).catch(error => {
             // Return a response error
@@ -640,26 +607,26 @@ globalThis.bbn = bbn;
         || (event.request.url.indexOf(STATIC) === 0)
       || /^http(s?):\/\/fonts.googleapis.com/.test(event.request.url)
       || /^http(s?):\/\/fonts.gstatic.com/.test(event.request.url);
-      //log("Checking with CDN " + CDN + ", STATIC " + STATIC + " and SITE_URL " + data.site_url + " AND... " + isOkToCache);
       // We will only cache requests to the CDN, local application components or Google fonts
-      //log("Fetch event for " + event.request.url);
-      //log("POSITION: " + event.request.url.indexOf(CDN));
       if (isOkToCache) {
-        //log("Fetch event 2 for " + event.request.url);
         // Check if the request is present in the cache
         event.respondWith(caches.match(event.request.url).then(cachedResponse => {
           numberOfRequests++;
           allRequests.push(event.request.url);
-          //log("Checking cache (" + numberOfRequests + '/' + CDN + ") for " + event.request.url + ': ' + (cachedResponse ? 'HIT' : 'MISS') + '\n' + JSON.stringify(allRequests));
+          // Otherwise we execute the request and cache the response if positive
+          self.clients.get(event.clientId).then(client => {
+            client.postMessage({
+              client: event.clientId,
+              type: 'load',
+              data: {message: bbn._("Loading") + ' ' + (cachedResponse ? bbn._("from cache") : bbn._("from network")) + " " + event.request.url}
+            });
+          })
           // If the request is already in the cache, let's return it
           if (cachedResponse) {
-            //log("Returning cached response");
             return cachedResponse;
           }
-          // Otherwise we execute the request and cache the response if positive
           return fetch(event.request).then(response => {
             if (response.ok) {
-              //log("Caching " + event.request.url);
               // Open the cache by CACHE_NAME value
               return caches.open(CACHE_NAME).then(cache => {
                 // Write the response into the cache and return the response
@@ -686,9 +653,7 @@ globalThis.bbn = bbn;
 
   const onInstall = async event => {
     // Write log
-    log('Service worker install with CDN ' + CDN);
     log('Service worker install event for version ' + CACHE_NAME);
-
     event.waitUntil(
       // Open the cache by CACHE_NAME value
       self.skipWaiting().then(
@@ -723,11 +688,9 @@ globalThis.bbn = bbn;
     }
   };
 
-  const onActivate = async event => {
+  const onActivate = event => {
     // Write log
     log('Service worker activate event for version ' + CACHE_NAME);
-    log('Service worker activate with CDN ' + CDN);
-
     event.waitUntil(
       self.clients.claim().then(
         () => caches.keys().then(
@@ -738,17 +701,15 @@ globalThis.bbn = bbn;
         )
       )
     );
+  };
 
-    if (!db) {
-      db = await bbn.db.open('bbn');
-    }
+  const retrieveJsonCfg = async () => {
+    const db = await bbn.db.open('bbn');
+    log(db);
     if (db) {
-      bbn.fn.log("DB IS HERE")
       const row = await db.select('data', [], {id: 'sw'});
-      bbn.fn.log(["RESULT", row]);
       if (row?.content) {
         jsonCfg = row.content;
-        log("!!!!CONTENT FROM THE DB!!!!");
       }
     }
     if (!jsonCfg && db) {
@@ -769,18 +730,18 @@ globalThis.bbn = bbn;
           fingerprint: jsonCfg.fingerprint
         }, true);
       }
-      log("!!!!INSERTED IN THE DB!!!!");
+      if (db) {
+        const conn = await db.getConnection();
+        if (conn) {
+          conn.close();
+        }
+      }
     }
-    log("!!!!FROM ANOTHER WORLD ON ACTIVATE!!!!");
-    log(jsonCfg);
-
   };
-
 
   const onMessage = async event => {
     // Write log
-    log("Receiving a message of type " + (event.data?.type || 'unknown') + " on channel " + (event.data?.channel || 'unknown'));
-    log(JSON.stringify(event.data));
+    log(['receive message from client ' + event.source.id, event]);
     // Get the current windows list
     const clientList = await self.clients.matchAll();
     // Update the windows list
@@ -789,10 +750,11 @@ globalThis.bbn = bbn;
     // Analyze the message type
     switch (event.data?.type) {
       case 'data':
+        if (!jsonCfg) {
+          await retrieveJsonCfg();
+        }
         clientList.forEach(client => {
-          console.log("Checking client " + client.id + " for data message");
           if (client.id === event.source.id) {
-            console.log("Positing to client " + client.id + " the data message");
             // Send the init message with the fetched data
             client.postMessage({
               client: event.source.id,
@@ -823,8 +785,6 @@ globalThis.bbn = bbn;
 
       // The message sent by bbn-appui when it's ready to signal that the init phase has completed
       case 'initCompleted':
-        // Write log
-        log('init completed');
         // Set the user session as connected
         isConnected = true;
         // Set the poller interval to 5 seconds
@@ -1014,9 +974,9 @@ globalThis.bbn = bbn;
       jsonSearch += decoder.decode(value).trim();
     }
 
-    if (jsonSearch) {
+    if (json) {
       const arr = json.split(boundary);
-      jsonSearch = '';
+      json = '';
       try {
         treatJSON(arr);
       } catch (e) { }
@@ -1050,7 +1010,7 @@ globalThis.bbn = bbn;
             log("Error parsing JSON");
             log(arr[i]);
             log(e.message);
-            jsonSearch = arr[i];
+            json = arr[i];
           }
 
           if (obj?.data?.length) {
@@ -1079,7 +1039,7 @@ globalThis.bbn = bbn;
         }
       }
 
-      //jsonSearch = arr.join(boundary);
+      //json = arr.join(boundary);
     }
   };
 

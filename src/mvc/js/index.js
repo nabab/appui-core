@@ -1,6 +1,6 @@
 /* jslint esversion: 6 */
 (() => {
-  return async (data) => {
+  return async data => {
     bbn.fn.init({
       env: {
         logging: data.is_dev || data.is_test ? true : true,
@@ -30,7 +30,6 @@
       if (bbn.fn.isFunction(tmp)) {
         js_data = tmp(data);
       }
-      bbn.fn.log("JSDATA CREATED", js_data);
     }
 
     if (!js_data.cfg) {
@@ -86,7 +85,7 @@
       {methods}
     );
     const slots = bbn.fn.createObject();
-    bbn.cp.createApp(document.body.querySelector('div.appui'), {
+    await bbn.cp.createApp(document.body.querySelector('div.appui'), {
       data() {
         return {
           appSlots: slots,
@@ -108,7 +107,6 @@
       },
       methods: {
         init() {
-          bbn.fn.log("APP INIT");
           this.$el.parentNode.style.opacity = 1;
         },
         addShortcut(data) {
@@ -132,8 +130,7 @@
           }
         }
       },
-      async created(){
-        bbn.fn.log("APP CREATED");
+      created(){
         if ( this.isMobile ){
           document.body.classList.add('bbn-mobile');
         }
@@ -141,7 +138,7 @@
           document.body.classList.add('bbn-tablet');
         }
       },
-      async beforeCreate() {
+      beforeCreate() {
         if (data.slots) {
           bbn.fn.iterate(data.slots, (arr, slot) => {
             slots[slot] = [];
@@ -166,7 +163,7 @@
           });
         }
       },
-      async mounted() {
+      mounted() {
         this.ready = true;
       }
     });
