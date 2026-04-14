@@ -712,6 +712,7 @@ globalThis.bbn = bbn;
         jsonCfg = row.content;
       }
     }
+
     if (!jsonCfg && db) {
       const d = await fetch('core/index', {method: "POST", body: JSON.stringify({get: 1})});
       try {
@@ -719,6 +720,10 @@ globalThis.bbn = bbn;
         jsonCfg = tmp.data;
       }
       catch (e) {
+        if (db) {
+          db.close("bbn");
+        }
+
         log("Error parsing JSON from core/index");
         log(e);
       }
@@ -730,12 +735,10 @@ globalThis.bbn = bbn;
           fingerprint: jsonCfg.fingerprint
         }, true);
       }
-      if (db) {
-        const conn = await db.getConnection();
-        if (conn) {
-          conn.close();
-        }
-      }
+    }
+
+    if (db) {
+      db.close("bbn");
     }
   };
 
