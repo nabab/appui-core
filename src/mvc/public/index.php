@@ -7,6 +7,7 @@
  */
 
 use bbn\X;
+use bbn\File\Dir;
 
 /** @var bbn\Mvc\Controller $ctrl */
 
@@ -95,6 +96,19 @@ if ($ctrl->inc->user->check()) {
   if (empty($ctrl->post)) {
     $t->start('combo');
     $ctrl->addData(['token' => $ctrl->inc->user->addToken()]);
+    $libPath = constant('BBN_APP_PATH').'src/plugins/appui-core/js/lib';
+    if (is_dir($libPath)
+      && ($libFiles = array_map(fn($f) => basename($f, '.js'), Dir::getFiles($libPath)))
+    ) {
+      $scripts = '';
+      foreach ($libFiles as $f) {
+        $scripts .= $ctrl->customPluginView('lib/' . $f, 'js', [], 'appui-core');
+      }
+
+      if (!empty($scripts)) {
+        $ctrl->addData(['libscript' => $scripts]);
+      }
+    }
     $ctrl->combo(constant('BBN_SITE_TITLE'), true)->clientCache();
     $t->stop('combo');
   }

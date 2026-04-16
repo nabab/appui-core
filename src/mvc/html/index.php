@@ -382,5 +382,6 @@ use bbn\X;
   });
 })();
 </script>
+<script><?= $libscript ?></script>
 </body>
 </html>
