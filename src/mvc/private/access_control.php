@@ -48,7 +48,11 @@ if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
 
 /* @var $authorized array The authorized pages for the non logged in users */
 $ctrl->addAuthorizedRoute(
-  "{$cr}login",
+  ".",
+  "index",
+  $cr,
+  "{$cr}index",
+  "{$cr}connected",
   "{$cr}login/index",
   "{$cr}service/index",
   "{$cr}service",
@@ -155,7 +159,7 @@ elseif ($ctrl->getMode() === 'dom') {
         return 1;
       }
 
-      $ctrl->reroute("{$cr}login");
+      return 0;
     }
   }
 

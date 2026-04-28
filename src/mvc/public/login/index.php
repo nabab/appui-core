@@ -10,14 +10,12 @@
 
 /** @var bbn\Mvc\Controller $ctrl */
 if (!empty($ctrl->post)) {
-  $ctrl->action();
-}
-else {
   $css = $ctrl->getPluginView('login/index', 'css') ?: $ctrl->getLess();
   $ctrl->addData([
     'css' => $css,
     'uid' => $ctrl->get['id'] ?? '',
-    'key' => $ctrl->get['key'] ?? ''
+    'key' => $ctrl->get['key'] ?? '',
+    'core_root' => $ctrl->pluginUrl('appui-core') . '/',
   ]);
   if ($custom = $ctrl->getPluginView('login/index', 'html')) {
     $ctrl->addData([
@@ -29,10 +27,14 @@ else {
   if ( ($custom_data = $ctrl->getPluginModel('login/index', $ctrl->data)) && is_array($custom_data) ){
     $ctrl->data = X::mergeArrays($ctrl->data, $custom_data);
   }
-  $ctrl->setTitle($ctrl->data['site_title']);
   $ctrl->addData([
-    'script' => $ctrl->getJs($ctrl->data)
+    'script_src' => [
+      constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-all.js?' . http_build_query([
+        'lang' => $data['lang'] ?? BBN_LANG,
+        'test' => !BBN_IS_PROD,
+        'v' => $data['version']
+      ]),
+    ]
   ]);
-
-  echo $ctrl->getView();
+  $ctrl->addJs();
 }
