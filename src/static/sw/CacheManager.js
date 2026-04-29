@@ -130,7 +130,11 @@ export class CacheManager {
               client.postMessage({
                 client: event.clientId,
                 type: 'load',
-                data: {message: bbn._("Loading") + ' ' + (cachedResponse ? bbn._("from cache") : bbn._("from network")) + " " + event.request.url}
+                data: {
+                  message: bbn._("Loading") + ' ' + (cachedResponse ? bbn._("from cache") : bbn._("from network")) + " " + event.request.url,
+                  cached: cachedResponse ? 1 : 0,
+                  url: event.request.url
+                }
               });
             } else {
               this.core.log("Client not found for " + event.clientId);

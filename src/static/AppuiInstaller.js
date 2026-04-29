@@ -21,11 +21,14 @@ class AppuiInstaller
     }
   }
 
-  async load(url) {
+  async load(url, module = false) {
     return new Promise((resolve, reject) => {
       let script = document.querySelector(`script[src="${url}"]`);
       if (!script) {
         script = document.createElement("script");
+        if (module) {
+          script.type = "module";
+        }
         script.onload = () => {
           resolve();
         };
@@ -104,7 +107,7 @@ class AppuiInstaller
         }
 
         for (let i = 0; i < data.script_src.length; i++) {
-          await this.load(data.script_src[i]);
+          await this.load(data.script_src[i], data.script_src[i].indexOf('index.js') > -1);
         }
 
         if (window.bbn) {
@@ -136,7 +139,7 @@ class AppuiInstaller
         }
 
         for (let i = 0; i < data.script_src.length; i++) {
-          await this.load(data.script_src[i]);
+          await this.load(data.script_src[i], data.script_src[i].indexOf('index.js') > -1);
         }
 
         if (window.bbn) {

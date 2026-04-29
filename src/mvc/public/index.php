@@ -104,7 +104,7 @@ else {
           'test' => !BBN_IS_PROD,
           'v' => $data['version']
         ]),
-        constant('BBN_SHARED_PATH') . 'lib/main/apstEntity.js?' . http_build_query([
+        constant('BBN_SHARED_PATH') . 'lib/main/index.js?' . http_build_query([
           'lang' => $data['lang'] ?? BBN_LANG,
           'test' => !BBN_IS_PROD,
           'v' => $data['version']
