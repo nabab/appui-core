@@ -45,18 +45,18 @@ export class MessageHandler {
 
     this.core.lastClientMessage = d;
     this.core.windows[senderID].data = d;
-    this.core.debug({ client: d });
+    //this.core.debug({ client: d });
     this.core.log("processClientMessage with keys " + Object.keys(d).join(', '));
 
     if (this.core.isRunning && this.core.aborter) {
+      this.core.log("Aborting");
       this.core.aborter.abort();
     }
   }
 
   async processServerMessage(obj) {
     this.core.log("processServerMessage with keys " + Object.keys(obj).join(', '));
-    this.core.debug({ response: obj });
-
+    //this.core.debug({ response: obj });
     return self.clients.matchAll().then(clientList => {
       this.core.isFocused = false;
       this.core.windowManager.updateWindows(clientList);
