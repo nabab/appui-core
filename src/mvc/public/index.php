@@ -33,7 +33,8 @@ if (empty($ctrl->post)) {
     'lost_pass' => true,
     'core_root' => constant('APPUI_CORE_ROOT'),
     'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
-    'logo' => false
+    'logo' => false,
+    'version' => file_get_contents(constant('BBN_DATA_PATH') . 'version.txt') ?: '1',
   ];
   if ($custom_data = $ctrl->getPluginModel('login/index', $data)) {
     $data = X::mergeArrays($data, $custom_data);
@@ -99,6 +100,11 @@ else {
       $data['slots'] = $slots;
       $data['version'] = $version;
       $data['script_src'] = [
+        constant('BBN_SHARED_PATH') . 'lib/bbn-js/v2/dist/bbn.js?' . http_build_query([
+          'lang' => $data['lang'] ?? BBN_LANG,
+          'test' => !BBN_IS_PROD,
+          'v' => $data['version']
+        ]),
         constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-all.js?' . http_build_query([
           'lang' => $data['lang'] ?? BBN_LANG,
           'test' => !BBN_IS_PROD,

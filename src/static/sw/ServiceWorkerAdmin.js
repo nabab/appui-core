@@ -5,18 +5,21 @@ import { WindowManager } from './WindowManager.js';
 import { NotificationHandler } from './NotificationHandler.js';
 import { SearchManager } from './SearchManager.js';
 import { DataManager } from './DataManager.js';
-export { CacheManager, Poller, MessageHandler, WindowManager, NotificationHandler, SearchManager, DataManager };
+export { CacheManager, Poller, MessageHandler, WindowManager, NotificationHandler, SearchManager, DataManager};
+
 
 export default class ServiceWorkerAdmin {
   #isConnected = null;
   constructor(data) {
     this.data = data;
+    console.log("DATA");
+    console.log(data);
     const version = data.version;
     /**
      * @const {String} CACHE_NAME The cache name
      * @example "v39"
      */
-    const CACHE_VERSION = 11;
+    const CACHE_VERSION = 18;
     this.CACHE_NAME = 'v' + data.version + '.' + CACHE_VERSION;
     // Initialize all components
     this.cacheManager = new CacheManager(this);
@@ -53,6 +56,20 @@ export default class ServiceWorkerAdmin {
 
     // Set up event listeners
     this.setupEventListeners();
+    bbn.fn.init({
+      env: {
+        logging: data.is_dev,
+        isDev: data.is_dev,
+        mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
+        lang: data.language,
+        siteTitle: data.site_title,
+        appPrefix: data.app_prefix,
+        appName: data.app_name,
+        plugins: data.plugins,
+        cdn: data.static_path,
+      }
+    });
+    this.dbCenter = bbn.dbCenter();
   }
 
   get windows() {
@@ -79,13 +96,13 @@ export default class ServiceWorkerAdmin {
       }
     } catch (e) {
       //this.disconnect();
-      this.core.log("Error checking connection status");
+      this.log("Error checking connection status");
     }
   }
 
   log(...args) {
     for (let i = 0; i < args.length; i++) {
-      console.log(args[i]);
+      bbn.fn.log(args[i]);
     }
     self.clients.matchAll({ includeUncontrolled: true }).then(clientList => {
       clientList.forEach(client => {

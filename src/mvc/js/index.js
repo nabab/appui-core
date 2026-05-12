@@ -61,10 +61,10 @@
 `;
     bbn.fn.init({
       env: {
-        logging: data.is_dev || data.is_test ? true : true,
-        isDev: data.is_dev ? true : false,
+        logging: data.is_dev,
+        isDev: data.is_dev,
         mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
-        lang: data.lang,
+        lang: data.language,
         siteTitle: data.site_title,
         wp_url: data.wp_url,
         token: data.token,

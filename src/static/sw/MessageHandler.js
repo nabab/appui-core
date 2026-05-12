@@ -5,9 +5,17 @@ export class MessageHandler {
 
   async onMessage(event) {
     this.core.log(['client ' + event.source.id + ': ' + (event.data?.type || 'unknown'), event.data]);
+    const processed = await this.core.dbCenter.handleMessage(event);
+
+    if (processed) {
+      // It's a DB message.
+      this.core.log(['DB message:', event.data, processed]);
+      return;
+    }
     const clientList = await self.clients.matchAll();
     this.core.windowManager.updateWindows(clientList);
     const data = event.data?.data || {};
+
 
     switch (event.data?.type) {
       case 'start': return this.onMessageStart(event, clientList);
@@ -25,6 +33,7 @@ export class MessageHandler {
       case 'messageChannel': return this.onMessageChannel(event, clientList);
       case 'messageFromChannel': return this.onMessageFromChannel(event, clientList);
       case 'notification': return this.core.notificationHandler.onMessageNotification(event, clientList);
+      case 'db': return this.core.dbCenter.handleMessage(event, clientList);
     }
   }
 
