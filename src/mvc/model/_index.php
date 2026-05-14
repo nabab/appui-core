@@ -9,7 +9,6 @@ use bbn\Mvc\Model;
 
 if ($model->inc->user->check()) {
   $mgr = new Manager($model->inc->user);
-  $is_dev = $model->inc->user->isDev();
   $theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? constant('BBN_THEME') : 'default');
   if ($model->hasPlugin('appui-chat')) {
     $chat = true;
@@ -24,7 +23,7 @@ if ($model->inc->user->check()) {
   $userGroups = $mgr->groups();
   $data = X::mergeArrays($model->data, [
     'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
-    'lang' => BBN_LANG,
+    'lang' => BBN_LANG, 
     //'shortcuts' => $model->getModel($model->pluginUrl('appui-menu').'/shortcuts/list'),
     'options' => $jsCat,
     'theme' => $theme,

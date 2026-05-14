@@ -18,6 +18,7 @@
                   lostUrl: core_root + 'index',
                   secureKey: key,
                   secureId: uid,
+                  logo: currentLogo,
                 }"
                 def="home"
                 @setimessage="setImessage"

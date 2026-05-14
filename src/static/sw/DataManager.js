@@ -12,17 +12,20 @@ export class DataManager {
       }
     }
 
+
     try {
-      const tmp = await this.core.fetch(this.core.data.plugins['appui-core'] + '/index', {get: 1});
-      if (tmp?.data) {
-        this.core.indexCfg = tmp.data;
-        if (db) {
-          await db.insert('data', {
-            id: 'sw',
-            content: this.core.indexCfg,
-            version: this.core.indexCfg.version,
-            fingerprint: this.core.indexCfg.fingerprint
-          }, true);
+      if (!this.core.indexCfg?.version) {
+        const tmp = await this.core.fetch(this.core.data.plugins['appui-core'] + '/index', {get: 1});
+        if (tmp?.data) {
+          this.core.indexCfg = tmp.data;
+          if (db) {
+            await db.insert('data', {
+              id: 'sw',
+              content: this.core.indexCfg,
+              version: this.core.indexCfg.version,
+              fingerprint: this.core.indexCfg.fingerprint
+            }, true);
+          }
         }
       }
     } catch (e) {
