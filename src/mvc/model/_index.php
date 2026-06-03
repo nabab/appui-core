@@ -8,6 +8,9 @@ use bbn\Mvc\Model;
 
 
 if ($model->inc->user->check()) {
+  $t = $model->getTimer();
+  $t->start('global');
+  $t->start('bbn');
   $mgr = new Manager($model->inc->user);
   $theme = $model->inc->user->getSession('theme') ?: (defined('BBN_THEME') ? constant('BBN_THEME') : 'default');
   if ($model->hasPlugin('appui-chat')) {
@@ -17,10 +20,17 @@ if ($model->inc->user->check()) {
     $chat = $cchat->getUserStatus();
     */
   }
+  $t->start('js_cat');
   $jsCat = $model->inc->options->jsCategories(null, true);
+  $t->stop('js_cat');
+  $t->start('default');
   $default = $model->getDefault();
+  $t->stop('default');
+  $t->start('users');
   $usersList = $mgr->fullList();
   $userGroups = $mgr->groups();
+  $t->stop('users');
+  $t->start('data');
   $data = X::mergeArrays($model->data, [
     'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
     'lang' => BBN_LANG, 
@@ -44,6 +54,7 @@ if ($model->inc->user->check()) {
 
   $data['options']['media_types'] = $model->inc->options->codeOptions(\bbn\Appui\Note::getOptionId('media'));
   $data['options']['categories'] = $model->inc->options->fullOptions();
+  $t->stop('data');
 
   if ($model->hasPlugin('appui-hr')) {
     /*
@@ -55,10 +66,14 @@ if ($model->inc->user->check()) {
     ]);
     */
   }
+  $t->stop('bbn');
+  $t->start('custom');
   if (($custom_data = $model->getPluginModel('index', $data)) && is_array($custom_data)) {
     $data = X::mergeArrays($data, $custom_data);
   }
-
+  $t->stop('custom');
+  $t->stop('global');
+  $data['timings'] = $t->results();
   return $data;
 }
 else {
