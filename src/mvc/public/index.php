@@ -45,17 +45,17 @@ if (empty($ctrl->post)) {
 }
 else {
   $data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index', $ctrl->post);
+  $vfile = $ctrl->dataPath() . 'version.txt';
+  $data['version'] = 1;
+  if (!is_file($vfile)) {
+    file_put_contents($vfile, (string)$data['version']);
+  }
+  else {
+    $data['version'] = intval(file_get_contents($vfile)) ?: 1;
+  }
+
   if ($ctrl->inc->user->check()) {
     $cacheName = 'appui-core-index';
-    $vfile = $ctrl->dataPath() . 'version.txt';
-    if (!is_file($vfile)) {
-      file_put_contents($vfile, '1');
-      $version = 1;
-    }
-    else {
-      $version = intval(file_get_contents($vfile));
-    }
-
     if (true) {
       $routes = $ctrl->getRoutes();
       $plugins = [];
@@ -98,7 +98,6 @@ else {
 
       $data['plugins'] = $plugins;
       $data['slots'] = $slots;
-      $data['version'] = $version;
       $data['script_src'] = [
         constant('BBN_SHARED_PATH') . 'lib/bbn-js/v2/dist/bbn.js?' . http_build_query([
           'lang' => $data['lang'] ?? BBN_LANG,
