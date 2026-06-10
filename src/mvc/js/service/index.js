@@ -13,4 +13,5 @@
 import { ServiceWorkerAdmin, bbn } from "/static/lib/appui-core/sw/index.js";
 (async function(data) {
   const swManager = new ServiceWorkerAdmin(data);
+  await swManager.dataManager.setUpDb();
 })(data);
