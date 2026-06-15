@@ -6,6 +6,7 @@ export class CacheManager {
     this.STATIC = core.data.static_path.indexOf('/') === 0 ?
       core.data.site_url + core.data.static_path.substr(1) : core.data.static_path;
     this.COMPONENTS = core.data.site_url + 'components/';
+    this.PATH = core.data.cur_path;
     this.precacheResources = [];
     this.isOldSafari = (() => {
       if (navigator && navigator.userAgent &&
@@ -110,10 +111,33 @@ export class CacheManager {
           });
         }));
       }
-    } else {
+    }
+    else {
       if (this.isOldSafari) {
         return;
       }
+
+      if (event.request.mode === 'navigate') {
+        event.respondWith(
+          caches.open(this.CACHE_NAME).then((cache) => {
+            return cache.match(this.PATH).then((cachedResponse) => {
+              // Fallback to network if not cached (first visit)
+              const fetchPromise = fetch(this.PATH).then((networkResponse) => {
+                // Optional: update cache silently in background
+                cache.put(this.PATH, networkResponse.clone());
+                return networkResponse;
+              }).catch(() => {
+                // Network failed, serve cached shell
+                return cachedResponse;
+              });
+
+              return fetchPromise;
+            });
+          })
+        );
+        return;
+      }
+
 
       const isOkToCache = (event.request.url.indexOf(this.CDN) === 0)
         || (event.request.url.indexOf(this.STATIC) === 0)

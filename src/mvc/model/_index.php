@@ -41,6 +41,7 @@ if ($model->inc->user->check()) {
     'default' => $default,
     'users' => $usersList,
     'groups' => $userGroups,
+    'cur_path' => $model->curPath(),
     'user' => [
       'id' => $model->inc->user->getId(),
       'isAdmin' => $model->inc->user->isAdmin(),
@@ -104,6 +105,7 @@ else {
       'shared_path' => constant('BBN_SHARED_PATH'),
       'static_path' => constant('BBN_STATIC_PATH'),
       'test' => (bool)constant('BBN_IS_DEV'),
+      'cur_path' => $model->curPath(),
       'year' => date('Y'),
       'theme' => defined('BBN_THEME') ? constant('BBN_THEME') : 'black',
       'language' => constant('BBN_LANG'),
