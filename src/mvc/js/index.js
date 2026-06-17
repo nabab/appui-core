@@ -2,8 +2,6 @@
 (() => {
   
   return async data => {
-    console.log("STARTING COMPONENT");
-    console.log(data);
     let tpl = `
       <bbn-appui bbn-if="ready" 
                 :cfg="app"

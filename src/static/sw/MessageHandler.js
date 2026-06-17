@@ -4,14 +4,14 @@ export class MessageHandler {
   }
 
   async onMessage(event) {
-    this.core.log(['client ' + event.source.id + ': ' + (event.data?.type || 'unknown'), event.data]);
     const processed = await this.core.dbCenter.handleMessage(event);
-
+    
     if (processed) {
       // It's a DB message.
-      this.core.log(['DB message:', event.data, processed]);
+      //this.core.log(['DB message:', event.data, processed]);
       return;
     }
+    this.core.log(['client ' + event.source.id + ': ' + (event.data?.type || 'unknown'), event.data]);
     const clientList = await self.clients.matchAll();
     this.core.windowManager.updateWindows(clientList);
     const data = event.data?.data || {};
@@ -136,7 +136,7 @@ export class MessageHandler {
     await clientList.forEach(async client => {
       if (client.id === event.source.id) {
         await this.core.checkConnection();
-        bbn.fn.log("Sending connection status to client " + client.id + ": " + this.core.isConnected);
+        //bbn.fn.log("Sending connection status to client " + client.id + ": " + this.core.isConnected);
         client.postMessage({
           client: event.source.id,
           type: 'connection',

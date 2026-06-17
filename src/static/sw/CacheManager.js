@@ -117,7 +117,8 @@ export class CacheManager {
         return;
       }
 
-      if (event.request.mode === 'navigate') {
+      // Caching the application DOM, if in iframe there is no clientId
+      if (event.clientId && (event.request.mode === 'navigate')) {
         event.respondWith(
           caches.open(this.CACHE_NAME).then((cache) => {
             return cache.match(this.PATH).then((cachedResponse) => {
