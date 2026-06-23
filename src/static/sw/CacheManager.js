@@ -65,13 +65,15 @@ export class CacheManager {
             body += decoder.decode(chunk);
           }
 
-          const data = JSON.parse(body);
-          delete data._bbn_token;
-          delete data._bbn_key;
+          const isJson = !(event.request.headers.get('Content-Type') || '').indexOf('application/json');
+          const data = isJson ? JSON.parse(body) : body;
+          if (isJson) {
+            delete data._bbn_token;
+            delete data._bbn_key;
+          }
+
           const dataHash = await this.core.hash(JSON.stringify(data));
-
           const cachedResponse = await caches.match(event.request.url + ':' + dataHash);
-
           if (cachedResponse) {
             this.core.log("Returning cached POST response");
             resolve(cachedResponse);
