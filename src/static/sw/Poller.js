@@ -14,7 +14,7 @@ export class Poller {
   launchPoller() {
     if (this.pollerUrl && !this.core.isRunning) {
       self.clients.matchAll({ includeUncontrolled: true }).then(clientList => {
-        this.core.windowManager.updateWindows(clientList);
+        //this.core.windowManager.update(clientList);
         if (!clientList.length) {
           this.core.log("There is no client, user certainly disconnected (or not?). Interval is " + this.core.interval);
           if (this.core.interval !== 60) {
@@ -62,7 +62,7 @@ export class Poller {
       const clientList = await self.clients.matchAll();
       let clientsObj = {};
 
-      this.core.windowManager.updateWindows(clientList);
+      //this.core.windowManager.update(clientList);
       for (let id in this.core.windows) {
         clientsObj[id] = this.core.windows[id].data;
       }

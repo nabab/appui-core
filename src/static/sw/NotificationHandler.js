@@ -13,7 +13,7 @@ export class NotificationHandler {
 
   onnotificationclick(event) {
     self.clients.matchAll().then(clientList => {
-      this.core.windowManager.updateWindows(clientList);
+      //this.core.windowManager.update(clientList);
       clientList.every(client => {
         if (client.id && this.core.windows[client.id]) {
           client.postMessage({

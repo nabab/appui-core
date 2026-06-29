@@ -13,9 +13,7 @@ export class MessageHandler {
     }
     this.core.log(['client ' + event.source.id + ': ' + (event.data?.type || 'unknown'), event.data]);
     const clientList = await self.clients.matchAll();
-    this.core.windowManager.updateWindows(clientList);
     const data = event.data?.data || {};
-
 
     switch (event.data?.type) {
       case 'start': return this.onMessageStart(event, clientList);
@@ -34,13 +32,100 @@ export class MessageHandler {
       case 'messageFromChannel': return this.onMessageFromChannel(event, clientList);
       case 'notification': return this.core.notificationHandler.onMessageNotification(event, clientList);
       case 'db': return this.core.dbCenter.handleMessage(event, clientList);
+      case 'beforeRouting': return this.onMessageBeforeRouting(event, clientList);
+      case 'routing': return this.onMessageRouting(event, clientList);
+      case 'registerWindow': return this.core.windowManager.register(event, clientList);
+      case 'unregisterWindow': return this.core.windowManager.unregister(event, clientList);
+      case 'open-link': return this.onMessageOpenLink(event, clientList);
     }
+  }
+
+  onMessageOpenLink(event, clientList) {
+    this.core.log('onMessageOpenLink');
+    const data = event.data?.data || {};
+    const windows = this.core.windowManager.windows;
+    const corr = this.core.windowManager.idCorrespondence;
+    if (data.url && data.windowId) {
+      clientList.forEach(c => {
+        if (corr[c.id] === data.windowId) {
+          c.postMessage({
+            type: 'open-link',
+            data: {
+              url: data.url
+            }
+          });
+        }
+      });
+    }
+  }
+
+  onMessageBeforeRouting(event, clientList) {
+    this.core.log("EVENT");
+    this.core.log(event);
+    if (event.data.data.url) {
+      const url = event.data.data.url;
+      let client;
+      clientList.forEach(c => {
+        if (c.id === event.source.id) {
+          client = c;
+        }
+      });
+      if (!client) {
+        return;
+      }
+      this.core.log("Looking for url " + url + " in " + Object.keys(this.core.windowManager.windows).length + " windows");
+      for (let windowId in this.core.windowManager.windows) {
+        const corr = this.core.windowManager.idCorrespondence;
+        if (corr[client.id] === windowId) {
+          continue;
+        }
+        const row = bbn.fn.getRow(this.core.windowManager.windows[windowId].views || [], a => !a.current.indexOf(url));
+        if (row) {
+          this.core.log("Found url " + url + " in window " + windowId);
+          client.postMessage({
+            type: 'routing',
+            data: {
+              windowId,
+              url
+            }
+          });
+          return;
+        }
+      }
+
+      this.core.log("Did not find url " + url);
+      this.core.log(this.core.windowManager.windows);
+      client.postMessage({
+        type: 'routing',
+        data: {
+          ok: true,
+          url
+        }
+      });
+    }
+  }
+
+  onMessageRouting(event, clientList) {
+    this.core.windowManager.update(event, clientList);
+    this.core.log("Routing message from client " + event.source.id + " to main client " + this.core.windowManager.mainClient);
+    this.core.log(event.data);
+    if (event.source.id === this.core.windowManager.mainClient) {
+      this.core.log("Routing to main client");
+    }
+    else {
+      this.core.log("Routing to client " + event.source.id);
+    }
+  }
+
+  onMessageFocus(event, clientList) {
+    this.core.windowManager.update(event, clientList);
+    this.core.log("Focus message from client " + event.source.id + " to main client " + this.core.windowManager.mainClient);
   }
 
   processClientMessage(event) {
     const senderID = event.source.id;
     const d = event.data;
-    this.core.windowManager.add(senderID);
+    //this.core.windowManager.add(senderID);
     if (d.poll) {
       this.core.poller.poll();
     } else if (d.token && this.core.windows[senderID]) {
@@ -68,7 +153,7 @@ export class MessageHandler {
     //this.core.debug({ response: obj });
     return self.clients.matchAll().then(clientList => {
       this.core.isFocused = false;
-      this.core.windowManager.updateWindows(clientList);
+      //this.core.windowManager.update(clientList);
 
       for (let clientId in obj) {
         if (obj[clientId].disconnected) {

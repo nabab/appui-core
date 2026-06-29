@@ -25,7 +25,7 @@ export default class ServiceWorkerAdmin {
     this.cacheManager = new CacheManager(this);
     this.poller = new Poller(this);
     this.messageHandler = new MessageHandler(this);
-    this.windowManager = new WindowManager();
+    this.windowManager = new WindowManager(this);
     this.notificationHandler = new NotificationHandler(this);
     this.searchManager = new SearchManager(this);
     this.dataManager = new DataManager(this);

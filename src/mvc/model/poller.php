@@ -11,7 +11,7 @@
  * serves new content after the last file change. Sounds weird, but try it out, you'll get into it really fast!
  */
 // set php runtime to unlimited
-
+/** @var bbn\Mvc\Model $model */
 use bbn\Util\Timer;
 use bbn\File\Dir;
 use bbn\X;
@@ -37,9 +37,7 @@ if ($id_user = $model->inc->user->getId()) {
    * @var int A timestamp of the start of the execution.
    */
   $now = time();
-  /**
-   * @var \bbn\Util\Timer A timer object to keep track of the time
-   */
+  /** @var Timer A timer object to keep track of the time */
   $timer = new Timer();
   // For the timout
   $timer->start('timeout');
@@ -137,7 +135,7 @@ if ($id_user = $model->inc->user->getId()) {
           $res[$id]['plugins'][$pp['plugin']] = [];
         }
 
-        $res[$id]['plugins'][$pp['plugin']] = \bbn\X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
+        $res[$id]['plugins'][$pp['plugin']] = X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
       }
     }
   }
@@ -202,7 +200,7 @@ if ($id_user = $model->inc->user->getId()) {
               $res[$id]['plugins'][$pp['plugin']] = [];
             }
 
-            $res[$id]['plugins'][$pp['plugin']] = \bbn\X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
+            $res[$id]['plugins'][$pp['plugin']] = X::mergeArrays($res[$id]['plugins'][$pp['plugin']], $plugin_res['data']);
           }
 
           $restart_timer = true;
