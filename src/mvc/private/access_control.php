@@ -64,14 +64,19 @@ if ($path === "{$cr}logout") {
   return true;
 }
 
-$err = method_exists($ctrl->inc->user, 'getFullError') ? $ctrl->inc->user->getFullError() : $ctrl->inc->user->getError();
+if ($err = method_exists($ctrl->inc->user, 'getFullError') ? $ctrl->inc->user->getFullError() : $ctrl->inc->user->getError()) {
+  X::log(['ERROR!', $err], 'frankenrouter-run');
+}
+
 // Recherche du logo (pour les stats?)
 if (!empty($_SERVER['REDIRECT_URL'])
     && Str::pos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
 ) {
+  X::log('is-logo', 'frankenrouter-run');
   $ctrl->reroute('logo_mail');
 }
 elseif ($ctrl->inc->user->isJustLogin()) {
+  X::log('just-login', 'frankenrouter-run');
   if ($err) {
     header('Content-type: application/json; charset=utf-8');
     die(json_encode(['errorMessage' => $err['text']]));
@@ -80,6 +85,7 @@ elseif ($ctrl->inc->user->isJustLogin()) {
   die('1');
 }
 elseif ($ctrl->inc->user->isReset()) {
+  X::log('is-reset', 'frankenrouter-run');
   header('Content-type: application/json; charset=utf-8');
   if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
@@ -89,6 +95,7 @@ elseif ($ctrl->inc->user->isReset()) {
 }
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->getMode() === 'dom') {
+  X::log('is-dom', 'frankenrouter-run');
   // Check registered URL
   $urlCls = new Url($ctrl->db);
   $request = $ctrl->getRequest();
@@ -166,9 +173,11 @@ elseif ($ctrl->getMode() === 'dom') {
   return 1;
 }
 elseif ($ctrl->isAuthorizedRoute($path)) {
+  X::log('is-authorized', 'frankenrouter-run');
   return 1;
 }
 
+X::log('check-connection', 'frankenrouter-run');
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
   header('Content-type: application/json; charset=utf-8');
