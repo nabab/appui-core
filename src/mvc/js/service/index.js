@@ -10,8 +10,7 @@
  * @var {String} CACHE_NAME The name of the version
  * @example 242
  **/
-import { ServiceWorkerAdmin, bbn } from "/static/lib/appui-core/sw/index.js";
+import ServiceWorkerAdmin from "/static/lib/appui-core/sw/ServiceWorkerAdmin.js";
 (async function(data) {
-  const swManager = new ServiceWorkerAdmin(data);
-  await swManager.dataManager.setUpDb();
+  new ServiceWorkerAdmin(data);
 })(data);

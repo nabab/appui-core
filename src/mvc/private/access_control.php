@@ -56,6 +56,8 @@ $ctrl->addAuthorizedRoute(
   "{$cr}login/index",
   "{$cr}service/index",
   "{$cr}service",
+  "{$cr}worker/index",
+  "{$cr}worker",
   "{$cr}components",
   "{$cr}poller",
 );
@@ -82,7 +84,8 @@ elseif ($ctrl->inc->user->isJustLogin()) {
     die(json_encode(['errorMessage' => $err['text']]));
   }
 
-  die('1');
+  header('Content-type: application/json; charset=utf-8');
+  die(json_encode(['success' => 1]));
 }
 elseif ($ctrl->inc->user->isReset()) {
   X::log('is-reset', 'frankenrouter-run');
@@ -233,6 +236,7 @@ if (($ctrl->getConstant('baseURL') !== null) && (!$ctrl->getConstant('baseURL') 
   if ($remain = Str::sub($url, $len)) {
     // Explores each part of the URL
     $bits = explode('/', $remain);
+    $new = '';
     foreach ($bits as $i => $b) {
       $new = $i ? "$new/$b" : $b;
       if (($route = $ctrl->getRoute("{$start}{$new}", $ctrl->getMode()))
@@ -259,12 +263,6 @@ if ( $perms = $pref->get_existing_permissions($path) ){
   die(var_dump($perms));
 }
 */
-if (method_exists($ctrl, 'getTimer')) {
-  $ctrl->getTimer()->start('retrievePermission');
-}
-else {
-  $ctrl->timer->start('retrievePermission');
-}
 
 if ($id_option = $ctrl->inc->perm->is($path)) {
   if (!defined('BBN_ID_PERMISSION')) {
@@ -272,12 +270,6 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
   }
 
   $ctrl->inc->perm->setCurrent($id_option);
-  if (method_exists($ctrl, 'getTimer')) {
-    $ctrl->getTimer()->stop('retrievePermission');
-  }
-  else {
-    $ctrl->timer->stop('retrievePermission');
-  }
 
   if ($ctrl->inc->perm->has($id_option)) {
     return true;

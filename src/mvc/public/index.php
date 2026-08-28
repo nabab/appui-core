@@ -47,12 +47,16 @@ else {
   $data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index', $ctrl->post);
   $vfile = $ctrl->dataPath() . 'version.txt';
   $data['version'] = 1;
-  if (!is_file($vfile)) {
-    file_put_contents($vfile, (string)$data['version']);
+  $errReporting = error_reporting();
+  error_reporting(0);
+  $fp = @fopen($vfile, 'x');
+  if ($fp !== false) {
+    fwrite($fp, (string)$data['version']);
   }
   else {
     $data['version'] = intval(file_get_contents($vfile)) ?: 1;
   }
+  error_reporting($errReporting);
 
   if ($ctrl->inc->user->check()) {
     $cacheName = 'appui-core-index';

@@ -4,6 +4,5 @@ export { bbn };
 
 // Export all the classes needed for ServiceWorkerAdmin
 export {
-  default as ServiceWorkerAdmin,
-  CacheManager,
-} from './ServiceWorkerAdmin.js';
+  default as AppuiWorker
+} from './AppuiWorker.js';

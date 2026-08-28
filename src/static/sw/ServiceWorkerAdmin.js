@@ -1,19 +1,9 @@
-import { CacheManager } from './CacheManager.js';
-import { Poller } from './Poller.js';
-import { MessageHandler } from './MessageHandler.js';
-import { WindowManager } from './WindowManager.js';
-import { NotificationHandler } from './NotificationHandler.js';
-import { SearchManager } from './SearchManager.js';
-import { DataManager } from './DataManager.js';
-export { CacheManager, Poller, MessageHandler, WindowManager, NotificationHandler, SearchManager, DataManager};
-
-
+import bbn, {Temporal} from "/static/lib/bbn-js/v2/dist/bbn.sw.js";
+import CacheManager from './CacheManager.js';
 export default class ServiceWorkerAdmin {
   #isConnected = null;
   constructor(data) {
     this.data = data;
-    console.log("DATA");
-    console.log(data);
     const version = data.version;
     /**
      * @const {String} CACHE_NAME The cache name
@@ -23,12 +13,13 @@ export default class ServiceWorkerAdmin {
     this.CACHE_NAME = 'v' + data.version + '.' + CACHE_VERSION;
     // Initialize all components
     this.cacheManager = new CacheManager(this);
+    /*
     this.poller = new Poller(this);
     this.messageHandler = new MessageHandler(this);
     this.windowManager = new WindowManager(this);
     this.notificationHandler = new NotificationHandler(this);
     this.searchManager = new SearchManager(this);
-    this.dataManager = new DataManager(this);
+    */
 
     // Initialize state variables
     this.offlineTimeout = 3600000;
@@ -106,20 +97,18 @@ export default class ServiceWorkerAdmin {
     }
     self.clients.matchAll({ includeUncontrolled: true }).then(clientList => {
       clientList.forEach(client => {
-        if (this.windows[client.id]) {
-          try {
-            client.postMessage({
-              client: client.id,
-              type: 'log',
-              data: { logs: args }
-            });
-          } catch (e) {
-            client.postMessage({
-              client: client.id,
-              type: 'log',
-              data: { logs: JSON.parse(JSON.stringify(args)) }
-            });
-          }
+        try {
+          client.postMessage({
+            client: client.id,
+            type: 'log',
+            data: { logs: args }
+          });
+        } catch (e) {
+          client.postMessage({
+            client: client.id,
+            type: 'log',
+            data: { logs: JSON.parse(JSON.stringify(args)) }
+          });
         }
       })
     })
@@ -145,16 +134,14 @@ export default class ServiceWorkerAdmin {
   debug(data) {
     self.clients.matchAll({ includeUncontrolled: true }).then(clientList => {
       clientList.forEach(client => {
-        if (this.windows[client.id]) {
-          try {
-            client.postMessage({
-              client: client.id,
-              type: 'debug',
-              data,
-              windows: this.windows
-            });
-          } catch (e) { }
-        }
+        try {
+          client.postMessage({
+            client: client.id,
+            type: 'debug',
+            data,
+            windows: this.windows
+          });
+        } catch (e) { }
       })
     })
   }
@@ -163,11 +150,6 @@ export default class ServiceWorkerAdmin {
     self.addEventListener('install', (event) => this.cacheManager.onInstall(event));
     self.addEventListener('activate', (event) => this.cacheManager.onActivate(event));
     self.addEventListener('fetch', (event) => this.cacheManager.onFetch(event));
-    self.addEventListener('message', (event) => this.messageHandler.onMessage(event));
-    self.onnotificationclick = (event) => this.notificationHandler.onnotificationclick(event);
-
-    // Start the poller
-    this.poller.setPoller(1);
   }
 
   async hash(message, algo = 'SHA-256') {

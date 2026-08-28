@@ -54,18 +54,24 @@ if ($id_user = $model->inc->user->getId()) {
   // List for plugins intended to run only once at startup
   $plugins_pollers_noloop = [];
 
+  X::log($plugins, 'plugins-poller');
   // Categorize plugins based on whether they have a defined frequency
   foreach ($plugins as $plugin) {
-    if ($m = $model->getSubpluginModel('poller', [], $plugin, 'appui-core')) {
-      foreach ($m as $p) {
-        $p['plugin'] = $plugin;
-        // If no frequency is set, it's a "run once" plugin
-        if (empty($p['frequency'])) {
-          $plugins_pollers_noloop[] = $p;
-        } else {
-          $plugins_pollers[] = $p;
+    try {
+      if ($m = $model->getSubpluginModel('poller', [], $plugin, 'appui-core')) {
+        foreach ($m as $p) {
+          $p['plugin'] = $plugin;
+          // If no frequency is set, it's a "run once" plugin
+          if (empty($p['frequency'])) {
+            $plugins_pollers_noloop[] = $p;
+          } else {
+            $plugins_pollers[] = $p;
+          }
         }
       }
+    }
+    catch (Exception $e) {
+      X::log("Error loading poller plugin for {$plugin}: {$e->getMessage()}", 'poller');
     }
   }
 

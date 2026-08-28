@@ -1,6 +1,5 @@
 /* jslint esversion: 6 */
 (() => {
-  
   return async data => {
     let tpl = `
       <bbn-appui bbn-if="ready" 
@@ -18,7 +17,6 @@
                   secureId: uid,
                   logo: currentLogo,
                 }"
-                def="home"
                 @setimessage="setImessage"
                 :source="cfg.list"
                 :header="cfg.header"
@@ -74,11 +72,12 @@
         appName: data.app_name,
         plugins: data.plugins,
         cdn: data.shared_path,
-        theme: data.theme
+        theme: data.theme,
+        worker: data.site_url + 'worker?v=5' + data.version,
       },
       lng: bbn.fn.extend(true, {}, data.lng || {}),
       opt: data.options || {},
-      var: data.var || {}
+      var: data.var || {},
     });
 
     let js_data = {app: {}};
@@ -137,113 +136,115 @@
           methods[n] = (...args) => appui.app[n](...args)
         }
       }
-      bbn.fn.log(["Adding URL prefix for appui-component", urlPrefix, bbn.env.appPrefix, methods]);
+      // Adding URL prefix for appui-component
       bbn.cp.addUrlAsPrefix(
         bbn.env.appPrefix,
         urlPrefix,
         {methods}
       );
     }
-    const slots = bbn.fn.createObject();
-    await bbn.cp.createApp(document.body.querySelector('div.appui'), {
-      template: tpl,
-      data() {
-        return {
-          appSlots: slots,
-          options: data.options || {},
-          plugins: data.plugins || {},
-          browserNotification: true,
-          cfg: js_data.cfg,
-          app: {
-            ...js_data.app,
-            data() {
-              return data.app
-            }
-          },
-          formData: data.formData || {},
-          ready: false,
-          users: data.users || [],
-          user: data.user || null,
-          groups: data.groups || [],
-          key: bbn.env.getParameters?.key || null,
-          uid: bbn.env.getParameters?.uid || null,
-          isInit: false,
-          url: bbn.env.path.split('?')[0],
-          popup: false,
-          lostPassForm: false,
-          lostPassFormData: {
-            email: ''
-          },
-          core_root: data.core_root || data.plugins['appui-core'] || '',
-          currentLogo: data.logo || svg,
-          screenHeight: document.documentElement.clientHeight,
-          isMobile: bbn.fn.isMobile(),
-          isTablet: bbn.fn.isTabletDevice(),
-          custom: data.custom || ''
-        }
-      },
-      methods: {
-        init() {
-          this.$el.parentNode.style.opacity = 1;
-        },
-        addShortcut(data) {
-          if (this.plugins.menu) {
-            const menu = appui.getRegistered('menu');
-            if (menu) {
-              menu.addShortcut(data);
-            }
+    setTimeout(() => {
+      const slots = bbn.fn.createObject();
+      bbn.cp.createApp(document.body.querySelector('div.appui'), {
+        template: tpl,
+        data() {
+          return {
+            appSlots: slots,
+            options: data.options || {},
+            plugins: data.plugins || {},
+            browserNotification: true,
+            cfg: js_data.cfg,
+            app: {
+              ...js_data.app,
+              data() {
+                return data.app
+              }
+            },
+            formData: data.formData || {},
+            ready: false,
+            users: data.users || [],
+            user: data.user || null,
+            groups: data.groups || [],
+            key: bbn.env.getParameters?.key || null,
+            uid: bbn.env.getParameters?.uid || null,
+            isInit: false,
+            url: bbn.env.path.split('?')[0],
+            popup: false,
+            lostPassForm: false,
+            lostPassFormData: {
+              email: ''
+            },
+            core_root: data.core_root || data.plugins['appui-core'] || '',
+            currentLogo: data.logo || svg,
+            screenHeight: document.documentElement.clientHeight,
+            isMobile: bbn.fn.isMobile(),
+            isTablet: bbn.fn.isTabletDevice(),
+            custom: data.custom || ''
           }
         },
-        setImessage(e){
-          if ( (e.hidden !== undefined) && e.id ){
-            bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
-              if ( r.success ){
-                appui.success(bbn._('Saved'));
+        methods: {
+          init() {
+            this.$el.parentNode.style.opacity = 1;
+          },
+          addShortcut(data) {
+            if (this.plugins.menu) {
+              const menu = appui.getRegistered('menu');
+              if (menu) {
+                menu.addShortcut(data);
               }
-              else {
-                appui.error(bbn._('Error'));
-              }
-            });
-          }
-        }
-      },
-      created(){
-        if ( this.isMobile ){
-          document.body.classList.add('bbn-mobile');
-        }
-        if ( this.isTablet ){
-          document.body.classList.add('bbn-tablet');
-        }
-      },
-      beforeCreate() {
-        if (data.slots) {
-          bbn.fn.iterate(data.slots, (arr, slot) => {
-            slots[slot] = [];
-            bbn.fn.iterate(arr, a => {
-              try {
-                let tmp = eval(a.script);
-                if (bbn.fn.isObject(tmp)) {
-                  if (a.content) {
-                    tmp.template = a.content;
-                  }
-                  slots[slot].push({
-                    cp: bbn.cp.immunizeValue(tmp),
-                    data: a.data || {}
-                  });
+            }
+          },
+          setImessage(e){
+            if ( (e.hidden !== undefined) && e.id ){
+              bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
+                if ( r.success ){
+                  appui.success(bbn._('Saved'));
                 }
-              }
-              catch (e) {
-                console.log([a, slot, e]);
-                bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
-              }
+                else {
+                  appui.error(bbn._('Error'));
+                }
+              });
+            }
+          }
+        },
+        created(){
+          if ( this.isMobile ){
+            document.body.classList.add('bbn-mobile');
+          }
+          if ( this.isTablet ){
+            document.body.classList.add('bbn-tablet');
+          }
+        },
+        beforeCreate() {
+          if (data.slots) {
+            bbn.fn.iterate(data.slots, (arr, slot) => {
+              slots[slot] = [];
+              bbn.fn.iterate(arr, a => {
+                try {
+                  let tmp = eval(a.script);
+                  if (bbn.fn.isObject(tmp)) {
+                    if (a.content) {
+                      tmp.template = a.content;
+                    }
+                    slots[slot].push({
+                      cp: bbn.cp.immunizeValue(tmp),
+                      data: a.data || {}
+                    });
+                  }
+                }
+                catch (e) {
+                  console.log([a, slot, e]);
+                  bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
+                }
+              });
             });
-          });
+          }
+        },
+        mounted() {
+          this.ready = true;
+          this.$nextTick(this.init);
         }
-      },
-      mounted() {
-        this.ready = true;
-        this.$nextTick(this.init);
-      }
-    });
+      });
+    }, 50);
   };
 })();

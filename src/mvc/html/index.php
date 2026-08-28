@@ -32,8 +32,8 @@ use bbn\X;
 <script type="module">
 import AppuiInstaller from '/static/lib/appui-core/AppuiInstaller.js';
 document.addEventListener("DOMContentLoaded", async () => {
-  const installer = new AppuiInstaller();
-  await installer.setUp();
+  window.app = new AppuiInstaller("<?= $site_url ?>");
+  await window.app.setUp();
 });
 </script>
 </head>

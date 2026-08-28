@@ -1,4 +1,4 @@
-export class CacheManager {
+export default class CacheManager {
   constructor(core) {
     this.core = core;
     this.CDN = core.data.shared_path.indexOf('/') === 0 ?
@@ -29,7 +29,7 @@ export class CacheManager {
   }
 
   async onInstall(event) {
-    this.core.log('Service worker install event for version ' + this.CACHE_NAME);
+    //this.core.log('Service worker install event for version ' + this.CACHE_NAME);
     event.waitUntil(
       self.skipWaiting().then(
         caches.open(this.CACHE_NAME).then(
@@ -37,11 +37,10 @@ export class CacheManager {
         )
       )
     );
-    await this.core.dataManager.setUpDb();
   }
 
   async onActivate(event) {
-    this.core.log('Service worker activate event for version ' + this.CACHE_NAME);
+    //this.core.log('Service worker activate event for version ' + this.CACHE_NAME);
     event.waitUntil(
       self.clients.claim().then(
         () => caches.keys().then(
@@ -55,6 +54,13 @@ export class CacheManager {
   }
 
   async onFetch(event) {
+    const r = event.request;
+    const url = new URL(event.request.url);
+    // Caching the application DOM, if in iframe there is no clientId
+    if (url.pathname === '/worker') {
+      return;
+    }
+
     if (event.request.method === 'POST') {
       if (!event.request.url.indexOf(this.core.data.site_url)) {
         const newRequest = event.request.clone();
@@ -75,7 +81,7 @@ export class CacheManager {
           const dataHash = await this.core.hash(JSON.stringify(data));
           const cachedResponse = await caches.match(event.request.url + ':' + dataHash);
           if (cachedResponse) {
-            this.core.log("Returning cached POST response");
+            //this.core.log("Returning cached POST response");
             resolve(cachedResponse);
             return;
           }
@@ -96,7 +102,7 @@ export class CacheManager {
               }
 
               if (bbnCache) {
-                this.core.log("Caching " + event.request.url);
+                //this.core.log("Caching " + event.request.url);
                 return caches.open(this.CACHE_NAME).then(cache => {
                   return cache.put(event.request.url + ':' + dataHash, response.clone()).then(() => {
                     resolve(response);
@@ -119,7 +125,6 @@ export class CacheManager {
         return;
       }
 
-      // Caching the application DOM, if in iframe there is no clientId
       if (event.clientId && (event.request.mode === 'navigate')) {
         event.respondWith(
           caches.open(this.CACHE_NAME).then((cache) => {
