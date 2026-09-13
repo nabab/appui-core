@@ -1,23 +1,28 @@
 {
-  "name": "bbn/appui-core",
-  "description": "Appui DOM Interface",
-  "keywords": ["cms","intranet","spa","appui"],
-  "homepage": "https://github.com/nabab/appui-i18n",
-  "license": "MIT",
-  "authors": [
-    {
-      "name": "Thomas Nabet",
-      "email": "thomas.nabet@gmail.com",
-      "homepage": "https://bbn.solutions",
-      "role": "Developer"
+    "name": "bbn\/appui-core",
+    "description": "Appui DOM Interface",
+    "keywords": [
+        "cms",
+        "intranet",
+        "spa",
+        "appui"
+    ],
+    "homepage": "https:\/\/github.com\/nabab\/appui-i18n",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Nabet",
+            "email": "thomas.nabet@gmail.com",
+            "homepage": "https:\/\/bbn.solutions",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^8.5",
+        "bbn\/bbn": "^1.1",
+        "bbn\/appui-component": "^1.2",
+        "bbn\/appui-usergroup": "^1.2",
+        "bbn\/appui-option": "^1.2",
+        "bbn\/appui-menu": "^1.2"
     }
-  ],
-  "require": {
-    "php": ">=8.3",
-    "bbn/bbn": "dev-master",
-    "bbn/appui-component": "dev-master",
-    "bbn/appui-usergroup": "dev-master",
-    "bbn/appui-option": "dev-master",
-    "bbn/appui-menu": "dev-master"
-  }
 }
