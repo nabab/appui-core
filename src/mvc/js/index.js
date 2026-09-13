@@ -1,12 +1,67 @@
 /* jslint esversion: 6 */
 (() => {
-  return async (data) => {
+  return async data => {
+    let tpl = `
+      <bbn-appui bbn-if="ready" 
+                :cfg="app"
+                :options="options"
+                :plugins="plugins"
+                :login="{
+                  url: url,
+                  salt: formData.appui_salt,
+                  mode: key ? 'change' : 'login',
+                  custom: custom,
+                  changeUrl: core_root + 'index',
+                  lostUrl: core_root + 'index',
+                  secureKey: key,
+                  secureId: uid,
+                  logo: currentLogo,
+                }"
+                @setimessage="setImessage"
+                :source="cfg.list"
+                :header="cfg.header"
+                :mode="cfg.mode"
+                :users="users"
+                :routes="cfg.routes"
+                :groups="groups"
+                :user="user"
+                :status="cfg.status"
+                :splittable="cfg.splittable"
+                :search-bar="cfg.searchBar"
+                :browser-notification="cfg.browserNotification"
+                :service-worker-active="true"
+                :manage-windows="true"
+                :pollable="true"
+                @shortcut="addShortcut">
+`;
+    if (data.slots) {
+      for (let name in data.slots) {
+        for (let i in data.slots[name]) {
+          tpl += `<component bbn-slot:${name}
+                      :is="appSlots.${name}[${i}].cp"
+                      :source="appSlots.${name}[${i}].data"/>`;
+        }
+      }
+    }
+
+    tpl += '</bbn-appui>';
+  
+    const svg = `<svg width="100%" version="1.1" viewBox="0 0 37.921 30" xmlns="http://www.w3.org/2000/svg">
+  <g transform="translate(-52.823 -101.69)">
+    <g transform="translate(50.748 97.989)">
+      <polygon class="cls-1" transform="matrix(.35714 0 0 .35714 2.0747 3.7019)" points="50.55 78.18 67.27 61.45 50.55 44.73 39.27 56 33.45 50.18 44.73 38.91 22.55 16.73 0 39.27 28 67.27 33.82 61.45" fill="#b3b3b3"/>
+      <polygon transform="matrix(.35714 0 0 .35714 2.0747 3.7019)" points="50.55 44.73 39.27 56 33.45 50.18 83.64 0 106.18 22.55 67.27 61.45" fill="#4d4d4d"/>
+      <rect transform="rotate(-45)" x="-11.067" y="28.145" width="2.9392" height="8.4499" fill="#4d4d4d" stroke-width=".35714"/>
+    </g>
+  </g>
+</svg>
+`;
     bbn.fn.init({
       env: {
-        logging: data.is_dev || data.is_test ? true : true,
-        isDev: data.is_dev ? true : false,
+        logging: data.is_dev,
+        isDev: data.is_dev,
         mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
-        lang: data.lang,
+        lang: data.language,
         siteTitle: data.site_title,
         wp_url: data.wp_url,
         token: data.token,
@@ -17,17 +72,20 @@
         appName: data.app_name,
         plugins: data.plugins,
         cdn: data.shared_path,
-        theme: data.theme
+        theme: data.theme,
+        worker: data.site_url + 'worker?v=5' + data.version,
       },
       lng: bbn.fn.extend(true, {}, data.lng || {}),
       opt: data.options || {},
-      var: data.var || {}
+      var: data.var || {},
     });
 
-    let js_data = {};
+    let js_data = {app: {}};
     if (data.js_data) {
-      js_data = eval(data.js_data) || {};
-      //bbn.fn.log("JSDATA CREATED", js_data);
+      const tmp = eval(data.js_data) || {};
+      if (bbn.fn.isFunction(tmp)) {
+        js_data = tmp(data);
+      }
     }
 
     if (!js_data.cfg) {
@@ -40,14 +98,14 @@
       splittable: true,
       list: [
         {
-          url: data.plugins['appui-core'] + '/home',
+          url: (data.core_root || data.plugins['appui-core']) + '/home',
           label: bbn._("Home"),
           load: true,
           fixed: true,
           icon: 'nf nf-fa-home'
         }
       ],
-      routes: data.routes || [],
+      routes: data.routes || {},
       browserNotification: true
     };
     for (let n in cfg) {
@@ -56,115 +114,137 @@
       }
     }
 
-    const urlPrefix = data.plugins['appui-component'] + '/';
-    bbn.fn.each(data.plugins, (path, name) => {
+    if (data.plugins) {
+      const urlPrefix = data.plugins['appui-component'] + '/';
+      bbn.fn.each(data.plugins, (path, name) => {
+        bbn.cp.addUrlAsPrefix(
+          name,
+          urlPrefix,
+          bbn.cp.mixins.basic
+        );
+      });
+      const methods = {
+        getTab(){
+          return this.closest('bbns-container');
+        },
+        popup(){
+          return this.getTab().popup.apply(this, arguments);
+        }
+      };
+      if (js_data.app?.methods) {
+        for (let n in js_data.app.methods) {
+          methods[n] = (...args) => appui.app[n](...args)
+        }
+      }
+      // Adding URL prefix for appui-component
       bbn.cp.addUrlAsPrefix(
-        name,
+        bbn.env.appPrefix,
         urlPrefix,
-        bbn.cp.mixins.basic
+        {methods}
       );
-    });
-    const methods = {
-      getTab(){
-        return this.closest('bbns-container');
-      },
-      popup(){
-        return this.getTab().popup.apply(this, arguments);
-      }
-    };
-    if (js_data.app && js_data.app.methods) {
-      for (let n in js_data.app.methods) {
-        methods[n] = (...args) => appui.app[n](...args)
-      }
     }
-    bbn.cp.addUrlAsPrefix(
-      bbn.env.appPrefix,
-      urlPrefix,
-      {methods}
-    );
-    const slots = bbn.fn.createObject();
-    bbn.cp.createApp(document.body.querySelector('div.appui'), {
-      data() {
-        return {
-          appSlots: slots,
-          options: data.options,
-          plugins: data.plugins,
-          browserNotification: true,
-          cfg: js_data.cfg,
-          app: {
-            ...js_data.app,
-            data() {
-              return data.app
+    setTimeout(() => {
+      const slots = bbn.fn.createObject();
+      bbn.cp.createApp(document.body.querySelector('div.appui'), {
+        template: tpl,
+        data() {
+          return {
+            appSlots: slots,
+            options: data.options || {},
+            plugins: data.plugins || {},
+            browserNotification: true,
+            cfg: js_data.cfg,
+            app: {
+              ...js_data.app,
+              data() {
+                return data.app
+              }
+            },
+            formData: data.formData || {},
+            ready: false,
+            users: data.users || [],
+            user: data.user || null,
+            groups: data.groups || [],
+            key: bbn.env.getParameters?.key || null,
+            uid: bbn.env.getParameters?.uid || null,
+            isInit: false,
+            url: bbn.env.path.split('?')[0],
+            popup: false,
+            lostPassForm: false,
+            lostPassFormData: {
+              email: ''
+            },
+            core_root: data.core_root || data.plugins['appui-core'] || '',
+            currentLogo: data.logo || svg,
+            screenHeight: document.documentElement.clientHeight,
+            isMobile: bbn.fn.isMobile(),
+            isTablet: bbn.fn.isTabletDevice(),
+            custom: data.custom || ''
+          }
+        },
+        methods: {
+          init() {
+            this.$el.parentNode.style.opacity = 1;
+          },
+          addShortcut(data) {
+            if (this.plugins.menu) {
+              const menu = appui.getRegistered('menu');
+              if (menu) {
+                menu.addShortcut(data);
+              }
             }
           },
-          ready: false,
-          users: data.users,
-          user: data.user,
-          groups: data.groups,
-        }
-      },
-      methods: {
-        init() {
-          this.$el.parentNode.style.opacity = 1;
-        },
-        addShortcut(data) {
-          if (this.plugins.menu) {
-            const menu = appui.getRegistered('menu');
-            if (menu) {
-              menu.addShortcut(data);
+          setImessage(e){
+            if ( (e.hidden !== undefined) && e.id ){
+              bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
+                if ( r.success ){
+                  appui.success(bbn._('Saved'));
+                }
+                else {
+                  appui.error(bbn._('Error'));
+                }
+              });
             }
           }
         },
-        setImessage(e){
-          if ( (e.hidden !== undefined) && e.id ){
-            bbn.fn.post(this.root + 'actions/imessage', e, (r) => {
-              if ( r.success ){
-                appui.success(bbn._('Saved'));
-              }
-              else {
-                appui.error(bbn._('Error'));
-              }
+        created(){
+          if ( this.isMobile ){
+            document.body.classList.add('bbn-mobile');
+          }
+          if ( this.isTablet ){
+            document.body.classList.add('bbn-tablet');
+          }
+        },
+        beforeCreate() {
+          if (data.slots) {
+            bbn.fn.iterate(data.slots, (arr, slot) => {
+              slots[slot] = [];
+              bbn.fn.iterate(arr, a => {
+                try {
+                  let tmp = eval(a.script);
+                  if (bbn.fn.isObject(tmp)) {
+                    if (a.content) {
+                      tmp.template = a.content;
+                    }
+                    slots[slot].push({
+                      cp: bbn.cp.immunizeValue(tmp),
+                      data: a.data || {}
+                    });
+                  }
+                }
+                catch (e) {
+                  console.log([a, slot, e]);
+                  bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
+                }
+              });
             });
           }
+        },
+        mounted() {
+          this.ready = true;
+          this.$nextTick(this.init);
         }
-      },
-      async created(){
-        bbn.fn.log("APP CREATED");
-        if ( this.isMobile ){
-          document.body.classList.add('bbn-mobile');
-        }
-        if ( this.isTablet ){
-          document.body.classList.add('bbn-tablet');
-        }
-      },
-      async beforeCreate() {
-        if (data.slots) {
-          bbn.fn.iterate(data.slots, (arr, slot) => {
-            slots[slot] = [];
-            bbn.fn.iterate(arr, a => {
-              try {
-                let tmp = eval(a.script);
-                if (bbn.fn.isObject(tmp)) {
-                  if (a.content) {
-                    tmp.template = a.content;
-                  }
-                  slots[slot].push({
-                    cp: bbn.cp.immunizeValue(tmp),
-                    data: a.data || {}
-                  });
-                }
-              }
-              catch (e) {
-                console.log([a, slot, e]);
-                bbn.fn.error(bbn._("Impossible to read the slot %s in %s", slot, a.name));
-              }
-            });
-          });
-        }
-      },
-      async mounted() {
-        this.ready = true;
-      }
-    });
+      });
+    }, 50);
   };
 })();

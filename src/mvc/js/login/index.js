@@ -1,5 +1,5 @@
 (() => {
-  addEventListener("DOMContentLoaded", (event) => {
+  return async data => {
     bbn.fn.init({
       env: {
         logging: data.is_dev || data.is_test ? true : false,
@@ -24,15 +24,29 @@
   </g>
 </svg>
 `;
-    window.app = bbn.cp.createApp(document.body.querySelector('div.appui-login'), {
-      props: {
-        zIndex: {
-          type: Number,
-          default: 1
-        }
-      },
+    alert("LOGIN!")
+    window.app = bbn.cp.createApp(document.body.querySelector('div.appui-container'), {
+      template: `
+<div class="appui-login bbn-overlay" style="transition: opacity 0.5s">
+  <bbn-login :logo="currentLogo"
+              :url="url"
+             :salt="formData.appui_salt"
+             :change-url="core_root + 'login/index'"
+             :lost-url="core_root + 'login/index'"
+             :secure-key="key"
+             :secure-id="uid"
+             ref="login"
+             action-name="action"
+             salt-name="appui_salt"
+             :mode="key ? 'change' : 'login'"
+             :custom="custom">
+  </bbn-login>
+</div>
+      `,
       data(){
         return bbn.fn.extend({
+          key: bbn.env.getParameters?.key || null,
+          uid: bbn.env.getParameters?.uid || null,
           isInit: false,
           url: bbn.env.path.split('?')[0],
           popup: false,
@@ -104,5 +118,5 @@
         window.removeEventListener('resize', this.setHeight);
       },
     });
-  });
+  };
 })();

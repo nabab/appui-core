@@ -48,10 +48,16 @@ if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
 
 /* @var $authorized array The authorized pages for the non logged in users */
 $ctrl->addAuthorizedRoute(
-  "{$cr}login",
+  ".",
+  "index",
+  $cr,
+  "{$cr}index",
+  "{$cr}connected",
   "{$cr}login/index",
   "{$cr}service/index",
   "{$cr}service",
+  "{$cr}worker/index",
+  "{$cr}worker",
   "{$cr}components",
   "{$cr}poller",
 );
@@ -60,22 +66,29 @@ if ($path === "{$cr}logout") {
   return true;
 }
 
-$err = method_exists($ctrl->inc->user, 'getFullError') ? $ctrl->inc->user->getFullError() : $ctrl->inc->user->getError();
+if ($err = method_exists($ctrl->inc->user, 'getFullError') ? $ctrl->inc->user->getFullError() : $ctrl->inc->user->getError()) {
+  X::log(['ERROR!', $err], 'frankenrouter-run');
+}
+
 // Recherche du logo (pour les stats?)
 if (!empty($_SERVER['REDIRECT_URL'])
     && Str::pos('logo-appui.app.jpg', $_SERVER['REDIRECT_URL'])
 ) {
+  X::log('is-logo', 'frankenrouter-run');
   $ctrl->reroute('logo_mail');
 }
 elseif ($ctrl->inc->user->isJustLogin()) {
+  X::log('just-login', 'frankenrouter-run');
   if ($err) {
     header('Content-type: application/json; charset=utf-8');
     die(json_encode(['errorMessage' => $err['text']]));
   }
 
-  die('1');
+  header('Content-type: application/json; charset=utf-8');
+  die(json_encode(['success' => 1]));
 }
 elseif ($ctrl->inc->user->isReset()) {
+  X::log('is-reset', 'frankenrouter-run');
   header('Content-type: application/json; charset=utf-8');
   if ($err) {
     die(json_encode(['errorMessage' => $err['text']]));
@@ -85,6 +98,7 @@ elseif ($ctrl->inc->user->isReset()) {
 }
 // Dans le cas où l'on veut la structure
 elseif ($ctrl->getMode() === 'dom') {
+  X::log('is-dom', 'frankenrouter-run');
   // Check registered URL
   $urlCls = new Url($ctrl->db);
   $request = $ctrl->getRequest();
@@ -155,16 +169,18 @@ elseif ($ctrl->getMode() === 'dom') {
         return 1;
       }
 
-      $ctrl->reroute("{$cr}login");
+      return 0;
     }
   }
 
   return 1;
 }
 elseif ($ctrl->isAuthorizedRoute($path)) {
+  X::log('is-authorized', 'frankenrouter-run');
   return 1;
 }
 
+X::log('check-connection', 'frankenrouter-run');
 // Checks if the user is connected
 if (!$ctrl->inc->user->checkSession()) {
   header('Content-type: application/json; charset=utf-8');
@@ -220,6 +236,7 @@ if (($ctrl->getConstant('baseURL') !== null) && (!$ctrl->getConstant('baseURL') 
   if ($remain = Str::sub($url, $len)) {
     // Explores each part of the URL
     $bits = explode('/', $remain);
+    $new = '';
     foreach ($bits as $i => $b) {
       $new = $i ? "$new/$b" : $b;
       if (($route = $ctrl->getRoute("{$start}{$new}", $ctrl->getMode()))
@@ -246,12 +263,6 @@ if ( $perms = $pref->get_existing_permissions($path) ){
   die(var_dump($perms));
 }
 */
-if (method_exists($ctrl, 'getTimer')) {
-  $ctrl->getTimer()->start('retrievePermission');
-}
-else {
-  $ctrl->timer->start('retrievePermission');
-}
 
 if ($id_option = $ctrl->inc->perm->is($path)) {
   if (!defined('BBN_ID_PERMISSION')) {
@@ -259,12 +270,6 @@ if ($id_option = $ctrl->inc->perm->is($path)) {
   }
 
   $ctrl->inc->perm->setCurrent($id_option);
-  if (method_exists($ctrl, 'getTimer')) {
-    $ctrl->getTimer()->stop('retrievePermission');
-  }
-  else {
-    $ctrl->timer->stop('retrievePermission');
-  }
 
   if ($ctrl->inc->perm->has($id_option)) {
     return true;

@@ -31,8 +31,8 @@
 <style><?= $css ?></style>
 </head>
 <body>
-<div class="appui-login bbn-overlay" style="transition: opacity 5s">
-  <bbn-login :url="url || (core_root + 'home')"
+<div class="appui-login bbn-overlay" style="transition: opacity 0.5s">
+  <bbn-login url="<?= isset($_GET['url']) ? $_GET['url'] : $plugins['appui-core'] . '/home' ?>"
              :logo="currentLogo"
              :salt="formData.appui_salt"
              :change-url="core_root + 'login/index'"

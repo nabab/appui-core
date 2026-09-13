@@ -7,104 +7,140 @@
  */
 
 use bbn\X;
+use bbn\File\Dir;
 
 /** @var bbn\Mvc\Controller $ctrl */
 
 
-if ($ctrl->inc->user->check()) {
-  $t = $ctrl->getTimer();
-  $t->start('appui-core-index');
-  $cacheName = 'appui-core-index';
+if (empty($ctrl->post)) {
+  $data = [
+    'site_url' => constant('BBN_URL'),
+    'site_title' => constant('BBN_SITE_TITLE'),
+    'is_dev' => (bool)constant('BBN_IS_DEV'),
+    'is_prod' => (bool)constant('BBN_IS_PROD'),
+    'is_test' => (bool)constant('BBN_IS_TEST'),
+    'shared_path' => constant('BBN_SHARED_PATH'),
+    'static_path' => constant('BBN_STATIC_PATH'),
+    'test' => (bool)constant('BBN_IS_DEV'),
+    'year' => date('Y'),
+    'theme' => defined('BBN_THEME') ? constant('BBN_THEME') : 'black',
+    'language' => constant('BBN_LANG'),
+    'formData' => [
+      'appui_salt' => $ctrl->inc->user->getSalt(),
+      'user' => '',
+      'pass' => ''
+    ],
+    'lost_pass' => true,
+    'core_root' => constant('APPUI_CORE_ROOT'),
+    'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
+    'logo' => false,
+    'version' => file_get_contents(constant('BBN_DATA_PATH') . 'version.txt') ?: '1',
+  ];
+  if ($custom_data = $ctrl->getPluginModel('login/index', $data)) {
+    $data = X::mergeArrays($data, $custom_data);
+  }
+  echo $ctrl->addData($data)
+    ->clientCache()
+    ->getView();
+}
+else {
+  $data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index', $ctrl->post);
   $vfile = $ctrl->dataPath() . 'version.txt';
-  if (!is_file($vfile)) {
-    file_put_contents($vfile, '1');
-    $version = 1;
+  $data['version'] = 1;
+  $errReporting = error_reporting();
+  error_reporting(0);
+  $fp = @fopen($vfile, 'x');
+  if ($fp !== false) {
+    fwrite($fp, (string)$data['version']);
   }
   else {
-    $version = intval(file_get_contents($vfile));
+    $data['version'] = intval(file_get_contents($vfile)) ?: 1;
   }
-  $t->stop('appui-core-index');
+  error_reporting($errReporting);
 
-  if (!($data = $ctrl->inc->user->getCache($cacheName)) || ($data['version'] !== $version)) {
-    $t->start('user-cache');
-    $t->start('routes');
-    $routes = $ctrl->getRoutes();
-    $t->stop('routes');
-    $plugins = [];
-    $slots = [
-      'before' => [],
-      'headleft' => [],
-      'head' => [],
-      'headright' => [],
-      'central' => [],
-      'status' => [],
-      'after' => []
-    ];
+  if ($ctrl->inc->user->check()) {
+    $cacheName = 'appui-core-index';
+    if (true) {
+      $routes = $ctrl->getRoutes();
+      $plugins = [];
+      $slots = [
+        'before' => [],
+        'headleft' => [],
+        'head' => [],
+        'headright' => [],
+        'central' => [],
+        'status' => [],
+        'after' => []
+      ];
 
-    $t->start('slots');
-    foreach ($routes as $r) {
-      $plugins[$r['name']] = $r['url'];
+      foreach ($routes as $r) {
+        $plugins[$r['name']] = $r['url'];
 
-      if ($appuiElements = $ctrl->getSubpluginModelGroup('app-ui', $r['name'], 'appui-core')) {
-        foreach ($appuiElements as $obj) {
-          foreach ($obj as $slot => $data) {
-            if (isset($slots[$slot])) {
-              array_push($slots[$slot], ...(X::isAssoc($data) ? [$data] : $data));
+        if ($appuiElements = $ctrl->getSubpluginModelGroup('app-ui', $r['name'], 'appui-core')) {
+          foreach ($appuiElements as $obj) {
+            foreach ($obj as $slot => $s) {
+              if (isset($slots[$slot])) {
+                array_push($slots[$slot], ...(X::isAssoc($s) ? [$s] : $s));
+              }
             }
           }
-        }
-        //X::ddump("YYY", $slots);
-      }
-    }
-
-    foreach ($slots as &$s) {
-      foreach ($s as &$m) {
-        if (!isset($m['priority'])) {
-          $m['priority'] = 5;
+          //X::ddump("YYY", $slots);
         }
       }
 
-      unset($m);
-      X::sortBy($s, 'priority');
+      foreach ($slots as &$s) {
+        foreach ($s as &$m) {
+          if (!isset($m['priority'])) {
+            $m['priority'] = 5;
+          }
+        }
+
+        unset($m);
+        X::sortBy($s, 'priority');
+      }
+      unset($s);
+
+      $data['plugins'] = $plugins;
+      $data['slots'] = $slots;
+      $data['script_src'] = [
+        constant('BBN_SHARED_PATH') . 'lib/bbn-js/v2/dist/bbn.js?' . http_build_query([
+          'lang' => $data['lang'] ?? BBN_LANG,
+          'test' => !BBN_IS_PROD,
+          'v' => $data['version']
+        ]),
+        constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-all.js?' . http_build_query([
+          'lang' => $data['lang'] ?? BBN_LANG,
+          'test' => !BBN_IS_PROD,
+          'v' => $data['version']
+        ]),
+        constant('BBN_SHARED_PATH') . 'lib/main/index.js?' . http_build_query([
+          'lang' => $data['lang'] ?? BBN_LANG,
+          'test' => !BBN_IS_PROD,
+          'v' => $data['version']
+        ]),
+      ];
+      $data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
+      $ctrl->inc->user->setCache($cacheName, $data, 86400);
     }
-    unset($s);
-    $t->stop('slots');
-
-    $t->start('_index');
-    $data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index');
-    $t->stop('_index');
-    $data['plugins'] = $plugins;
-    $data['slots'] = $slots;
-    $data['version'] = $version;
-    $data['script_src'] = constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-components.js?' . http_build_query([
-      'lang' => $data['lang'] ?? BBN_LANG,
-      'test' => !BBN_IS_PROD,
-      'v' => $data['version']
-    ]);
-    $t->start('css');
-    $data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
-    $t->stop('css');
-    $ctrl->inc->user->setCache($cacheName, $data, 86400);
-    $t->stop('user-cache');
-  }
-  X::log($data, 'index-data');
 
 
-  $ctrl->addData($data);
-  // The whole DOM
-  if (empty($ctrl->post)) {
-    $t->start('combo');
-    $ctrl->data['token'] = $ctrl->inc->user->addToken();
-    $ctrl->combo($ctrl->data['site_title'], true);
-    $t->stop('combo');
-  }
-  // Only the data
-  else {
-    $t->start('data');
-    $ctrl->addJs();
+    $ctrl->addData($data);
+    // The whole DOM
+    $ctrl->data['script'] = $ctrl->getView($ctrl->pluginUrl('appui-core') . '/index', 'js', $data);
     $ctrl->data['js_data'] = $ctrl->customPluginView('index', 'js', $ctrl->data, 'appui-core');
     $ctrl->obj->data = $ctrl->data;
-    $t->stop('data');
   }
-  X::log($t->results(), 'timers-index');
+  else  {
+    $data['script_src'] = [
+      constant('BBN_SHARED_PATH') . 'lib/bbn-cp/v2/dist/bbn-cp-all.js?' . http_build_query([
+        'lang' => $data['lang'] ?? BBN_LANG,
+        'test' => !BBN_IS_PROD,
+        'v' => $data['version']
+      ]),
+    ];
+    $ctrl->addData($data);
+    $ctrl->data['script'] = $ctrl->getView($ctrl->pluginUrl('appui-core') . '/index', 'js', $data);
+    $ctrl->obj->data = $ctrl->data;
+  }
 }
+

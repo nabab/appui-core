@@ -2,7 +2,7 @@
 use bbn\X;
 //header('Content-type: application/javascript; charset=utf-8');
 //echo 'console.log("This SW has been created...");'.PHP_EOL;
-X::log('Starting the service worker...', 'sw');
+/** @var bbn\Mvc\Controller $ctrl */
 $ctrl->setMode('js');
 $routes = $ctrl->getRoutes();
 $plugins = [];
@@ -11,13 +11,16 @@ foreach ($routes as $r) {
 }
 
 $vfile = $ctrl->dataPath() . '/version.txt';
-if (!is_file($vfile)) {
-  file_put_contents($vfile, '1');
+$fp = @fopen($vfile, 'x');
+if ($fp !== false) {
   $version = 1;
+  fwrite($fp, (string)$version);
+  fclose($fp);
 }
 else {
-  $version = intval(file_get_contents($vfile));
+  $version = intval(file_get_contents($vfile)) ?: 1;
 }
+
 $ctrl->addData([
   'version' => $version,
   'shared_path' => constant('BBN_SHARED_PATH'),
@@ -29,12 +32,11 @@ if (!empty($ctrl->post['connect'])) {
   X::log('is sent post connect', 'sw');
   X::log($ctrl->post, 'sw');
   $ctrl->setMode('json');
-  $ctrl->obj = $ctrl->data;
+  $ctrl->obj = X::toObject($ctrl->data);
 }
 else {
   //$script = $ctrl->getView($ctrl->pluginUrl('appui-core') . 'index', 'js');
   $json = json_encode($ctrl->data, JSON_PRETTY_PRINT);
-  X::log('is not sent post connect', 'sw');
   if (!empty($ctrl->post)) {
     X::log($ctrl->post, 'sw');
   }
