@@ -16,7 +16,7 @@ if ($model->inc->user->isAdmin() && $model->hasData(['aliases', 'plugins'])) {
     $plugins_packages[$p['value']] = $p['version'];
   }
 
-  $json = file_get_contents($model->libPath().'bbn/appui-core/src/cfg/composers.json');
+  $json = file_get_contents($model->libPath().'bbn/appui-core/cfg/composers.json');
   $composers = json_decode($json, true);
   $oplugins = $composers['plugins'];
   unset($composers['plugins']);
@@ -37,7 +37,7 @@ if ($model->inc->user->isAdmin() && $model->hasData(['aliases', 'plugins'])) {
   $envs = $appui->getEnvironment(true);
   $settings = $appui->getSettings();
 
-  $json = file_get_contents($model->libPath().'bbn/appui-core/src/cfg/schema.json');
+  $json = file_get_contents($model->libPath().'bbn/appui-core/cfg/schema.json');
   $schema = json_decode($json, true);
 
   $json = file_get_contents(dirname(BBN_LIB_PATH).'/composer.json');

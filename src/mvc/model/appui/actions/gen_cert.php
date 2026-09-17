@@ -28,7 +28,7 @@ if (!is_file($rsa.'_rsa.pub')) {
         'url' => BBN_URL,
         'hostname' => BBN_HOSTNAME
       ],
-      file_get_contents(BBN_APP_PATH.'src/cfg/to_appui_rsa')
+      file_get_contents(BBN_APP_PATH.'cfg/to_appui_rsa')
     );
     if ($reg && !empty($reg['id_app'])) {
       $appui->setEnvironment(['id_app' => $reg['id_app']]);
