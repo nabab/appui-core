@@ -184,16 +184,28 @@ export default class AppuiInstaller {
    * @throws {Error} If the HTTP request fails or returns a non-OK status.
    */
   async fetch(url, params = {}, method = 'POST') {
-    const response = await window.fetch(url, {
+    if ((method === 'POST') && !Object.keys(params || {}).length) {
+      params = {_bbn: 1};
+    }
+    const hasBody = !['GET', 'HEAD'].includes(method);;
+    const opt = {
       method,
-      credentials: 'same-origin',
-      headers: {
+      credentials: 'same-origin'
+    };
+    if (hasBody) {
+      opt.headers = {
         'Content-Type': 'application/json'
-      },
-      body: ['GET', 'HEAD'].includes(method)
-        ? undefined
-        : JSON.stringify(params)
-    });
+      };
+      opt.body = JSON.stringify(params);
+    }
+
+    let response;
+    try {
+      response = await window.fetch(url, opt);
+    }
+    catch (err) {
+      throw new Error(`Network error fetching ${url}: ${err.message}`);
+    }
 
     if (!response.ok) {
       throw new Error(
@@ -201,7 +213,12 @@ export default class AppuiInstaller {
       );
     }
 
-    return response.json();
+    try {
+      return response.json();
+    }
+    catch {
+      return response.text();
+    }
   }
 
   /**
@@ -210,6 +227,7 @@ export default class AppuiInstaller {
    * @returns {Promise<boolean>} A promise that resolves to true if connected, false otherwise.
    */
   async checkConnection() {
+    console.log("TRYING TO REACH " + this.siteUrl + 'core/connected');
     const data = await this.fetch(
       this.siteUrl + 'core/connected'
     );
@@ -329,12 +347,15 @@ export default class AppuiInstaller {
 
     try {
       this.loadMessage('Checking connection...');
+      console.log("BEFORE XONN")
       const connected = await this.checkConnection();
+      console.log("CONNECTED: " + connected)
       this.loadMessage(
         connected
           ? 'Loading application...'
           : 'Loading login...'
       );
+      console.log("BEFORE RETRIV")
       const response = await this.retrieveConfig(connected);
 
       /*
@@ -342,6 +363,7 @@ export default class AppuiInstaller {
        * the configuration directly or wrapped in `data`.
        */
       const data = response?.data || response;
+      console.log("BEFORE EXEC")
       await this.execute(data);
       this.loadMessage('Initialization complete.');
     } catch (e) {
@@ -410,10 +432,13 @@ export default class AppuiInstaller {
      * Do not await it before bootstrapping the application,
      * since the SW is only used for cache now.
      */
+    console.log("UUUUUU");
     await this.registerServiceWorker();
     // Await full app initialization
+    console.log("VVVVV");
     await this.init();
 
+    console.log("BBBBBB");
     return this;
   }
 }
