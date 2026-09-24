@@ -174,6 +174,12 @@ export default class AppuiInstaller {
     }
   }
 
+  buildCustomCss(css) {
+    const style = document.createElement('style');
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
   /**
    * Generic JSON request used during application bootstrap.
    * 
@@ -303,6 +309,10 @@ export default class AppuiInstaller {
     // Verify that the core framework (bbn) has been loaded by the scripts
     if (!window.bbn) {
       throw new Error('Application configuration received but bbn is not loaded');
+    }
+
+    if (data.custom_css) {
+      this.buildCustomCss(data.custom_css);
     }
 
     this.buildContainer();
