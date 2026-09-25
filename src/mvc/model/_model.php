@@ -3,7 +3,7 @@ use bbn\X;
 /** @var bbn\Mvc\Model $model The model */
 $data = [
   'version' => file_get_contents(constant('BBN_DATA_PATH') . 'version.txt') ?: '666',
-  'site_url' => constant('BBN_URL'),
+  'site_url' => $model->getRootUrl(),
   'site_title' => constant('BBN_SITE_TITLE'),
   'app_name' => constant('BBN_APP_NAME'),
   'app_prefix' => defined('BBN_APP_PREFIX') ? constant('BBN_APP_PREFIX') : constant('BBN_APP_NAME'),

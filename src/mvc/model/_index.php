@@ -39,6 +39,7 @@ if ($model->inc->user->check()) {
     'theme' => $theme,
     'cdn_lib' => 'bbn-css|latest|' . $theme . ',bbn-cp',
     'default' => $default,
+    'site_url' => $model->getRootUrl(),
     'users' => $usersList,
     'groups' => $userGroups,
     'cur_path' => $model->curPath(),
@@ -97,7 +98,7 @@ else {
   }
   else {
     $data = [
-      'site_url' => constant('BBN_URL'),
+      'site_url' => $model->getRootUrl(),
       'site_title' => constant('BBN_SITE_TITLE'),
       'is_dev' => (bool)constant('BBN_IS_DEV'),
       'is_prod' => (bool)constant('BBN_IS_PROD'),

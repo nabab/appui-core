@@ -14,7 +14,7 @@ use bbn\File\Dir;
 
 if (empty($ctrl->post)) {
   $data = [
-    'site_url' => constant('BBN_URL'),
+    'site_url' => $ctrl->getRootUrl(),
     'site_title' => constant('BBN_SITE_TITLE'),
     'is_dev' => (bool)constant('BBN_IS_DEV'),
     'is_prod' => (bool)constant('BBN_IS_PROD'),

@@ -357,15 +357,12 @@ export default class AppuiInstaller {
 
     try {
       this.loadMessage('Checking connection...');
-      console.log("BEFORE XONN")
       const connected = await this.checkConnection();
-      console.log("CONNECTED: " + connected)
       this.loadMessage(
         connected
           ? 'Loading application...'
           : 'Loading login...'
       );
-      console.log("BEFORE RETRIV")
       const response = await this.retrieveConfig(connected);
 
       /*
@@ -373,7 +370,6 @@ export default class AppuiInstaller {
        * the configuration directly or wrapped in `data`.
        */
       const data = response?.data || response;
-      console.log("BEFORE EXEC")
       await this.execute(data);
       this.loadMessage('Initialization complete.');
     } catch (e) {
@@ -442,13 +438,9 @@ export default class AppuiInstaller {
      * Do not await it before bootstrapping the application,
      * since the SW is only used for cache now.
      */
-    console.log("UUUUUU");
     await this.registerServiceWorker();
     // Await full app initialization
-    console.log("VVVVV");
     await this.init();
-
-    console.log("BBBBBB");
     return this;
   }
 }

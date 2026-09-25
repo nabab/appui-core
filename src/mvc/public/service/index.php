@@ -25,7 +25,7 @@ $ctrl->addData([
   'version' => $version,
   'shared_path' => constant('BBN_SHARED_PATH'),
   'static_path' => constant('BBN_STATIC_PATH'),
-  'site_url' => BBN_URL,
+  'site_url' => $ctrl->getRootUrl(),
   'plugins' => $plugins
 ]);
 if (!empty($ctrl->post['connect'])) {
