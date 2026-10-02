@@ -176,12 +176,20 @@ export default class AppuiWorkerService {
     this.ports.add(port);
 
     port.onmessage = event => {
+      console.log('port.onmessage', event);
       this.handlePortMessage(port, event);
     };
 
     port.onmessageerror = event => {
       this.log(
         'SharedWorker MessagePort messageerror',
+        event
+      );
+    };
+
+    port.onerror = event => {
+      this.log(
+        'SharedWorker MessagePort error',
         event
       );
     };
@@ -265,6 +273,7 @@ export default class AppuiWorkerService {
    */
   async handlePortMessage(port, event) {
     try {
+
       /*
        * IndexedDB messages are special because dbCenter
        * already knows its own protocol.

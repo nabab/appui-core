@@ -17,12 +17,13 @@ export class MessageHandler {
     const message = event.data;
 
     if (!message?.type) {
+      console.log("FAILED", message);
       return false;
     }
 
     const data = message.data || {};
 
-    this.core.log?.(["MessageHandler: " + message.type, data]);
+    this.core.log?.("MessageHandler: " + message.type);
 
     switch (message.type) {
       case "start":
@@ -80,6 +81,10 @@ export class MessageHandler {
 
       case "clientMessage":
         this.processClientMessage(port, data);
+        return true;
+
+      default:
+        console.log(message)
         return true;
     }
 

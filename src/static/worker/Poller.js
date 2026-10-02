@@ -243,11 +243,13 @@ export class Poller {
 
 
     socket.onopen = () => {
+      console.log("OPENING SOCKET");
       /*
        * Ignore stale sockets.
        */
       if (this.socket !== socket) {
         try {
+          console.log("CLOSING SOCKET")
           socket.close();
         }
         catch (e) {
@@ -295,10 +297,12 @@ export class Poller {
 
 
     socket.onmessage = async event => {
+      console.log('onmessage')
       if (this.socket !== socket) {
         return;
       }
 
+      console.log('onmessage ok')
       let json;
 
       try {
@@ -373,6 +377,7 @@ export class Poller {
 
 
     socket.onerror = event => {
+      console.log('onerror', event)
       if (this.socket !== socket) {
         return;
       }
@@ -489,7 +494,7 @@ export class Poller {
       request: message
     });
 
-    return this.send(message);
+    return this.send({type: 'clients', data: message});
   }
 
 
@@ -722,6 +727,9 @@ export class Poller {
    * AppuiWorkerService sendSocket() method.
    */
   sendSocket(data) {
+    if (!data.type) {
+      data = {type: 'message', data}
+    }
     return this.send(data);
   }
 }
