@@ -1,12 +1,10 @@
-import bbn from "/static/lib/bbn-js/v2/dist/bbn.sw.js";
-
-import { DataManager } from "./worker/DataManager.js";
-import { Poller } from "./worker/Poller.js";
-import { MessageHandler } from "./worker/MessageHandler.js";
-import { WindowManager } from "./worker/WindowManager.js";
-import { NotificationHandler } from "./worker/NotificationHandler.js";
-import { SearchManager } from "./worker/SearchManager.js";
-
+import bbn from '/static/lib/bbn-js/v2/dist/bbn.sw.js';
+import {DataManager} from './worker/DataManager.js';
+import {Poller} from './worker/Poller.js';
+import {MessageHandler} from './worker/MessageHandler.js';
+import {WindowManager} from './worker/WindowManager.js';
+import {NotificationHandler} from './worker/NotificationHandler.js';
+import {SearchManager} from './worker/SearchManager.js';
 
 export default class AppuiWorkerService {
   #isConnected = null;
@@ -16,602 +14,227 @@ export default class AppuiWorkerService {
     this.socketUrl = socketUrl;
     this.data = data;
     scope.app = this;
-
-    /*
-     * Connected SharedWorker ports.
-     */
     this.ports = new Set();
-
-    /*
-     * Initialize bbn environment before creating managers
-     * that may depend on it.
-     */
-    bbn.fn.init({
-      env: {
-        logging: data.is_dev,
-        isDev: data.is_dev,
-        mode: data.is_dev
-          ? 'dev'
-          : (
-            data.is_test
-              ? 'test'
-              : 'prod'
-          ),
-        lang: data.language,
-        siteTitle: data.site_title,
-        appPrefix: data.app_prefix,
-        appName: data.app_name,
-        plugins: data.plugins,
-        cdn: data.static_path
-      }
-    });
-
-    /*
-     * Managers.
-     *
-     * WindowManager should exist before managers that may
-     * need to resolve a MessagePort into a window.
-     */
+    this.portQueues = new Map();
+    this.destroyed = false;
+    this.startPromise = null;
+    bbn.fn.init({env: {
+      logging: data.is_dev,
+      isDev: data.is_dev,
+      mode: data.is_dev ? 'dev' : data.is_test ? 'test' : 'prod',
+      lang: data.language,
+      siteTitle: data.site_title,
+      appPrefix: data.app_prefix,
+      appName: data.app_name,
+      plugins: data.plugins,
+      cdn: data.static_path
+    }});
     this.windowManager = new WindowManager(this);
     this.dataManager = new DataManager(this, bbn.dbCenter());
     this.poller = new Poller(this);
     this.searchManager = new SearchManager(this);
     this.notificationHandler = new NotificationHandler(this);
     this.messageHandler = new MessageHandler(this);
-
-    /*
-     * Optional generic state which genuinely belongs to
-     * the service itself rather than one of the managers.
-     */
     this.numberOfRequests = 0;
     this.allRequests = [];
-
-    this.scope.onconnect = event => {
+    scope.onconnect = event => {
       const port = event.ports?.[0];
-
-      if (!port) {
-        return;
-      }
-
-      this.addPort(port);
+      if (port && !this.destroyed) this.addPort(port);
     };
   }
 
-
-  /**
-   * Starts the SharedWorker service.
-   */
   async start() {
-    /*
-     * Prepare IndexedDB before messages start using it.
-     */
+    if (this.destroyed) throw new Error('Worker service has been destroyed');
+    if (!this.startPromise) {
+      this.startPromise = (async () => {
+        try { await this.dataManager.setUpDb(); }
+        catch (error) { this.log('Error setting up SharedWorker database', error); }
+        if (!this.destroyed) this.poller.setPoller();
+        return this;
+      })();
+    }
+    return this.startPromise;
+  }
+
+  get windows() { return this.windowManager.windows; }
+  get isConnected() { return this.#isConnected; }
+
+  connect() {
+    if (this.destroyed) return false;
+    const changed = this.#isConnected !== true;
+    this.#isConnected = true;
+    this.poller.launchPoller();
+    return changed;
+  }
+
+  disconnect() {
+    const changed = this.#isConnected !== false;
+    this.#isConnected = false;
+    this.poller.stop();
+    // An account/session change must not inherit another account's subscriptions.
+    this.poller.clearSubscriptions();
+    return changed;
+  }
+
+  addPort(port) {
+    if (!port || this.destroyed || this.ports.has(port)) return false;
+    this.ports.add(port);
+    this.portQueues.set(port, Promise.resolve());
+    port.onmessage = event => {
+      // Await each message for THIS port; async init must not be overtaken by its next message.
+      const next = (this.portQueues.get(port) || Promise.resolve())
+        .then(async () => {
+          await this.start();
+          if (this.ports.has(port)) await this.handlePortMessage(port, event);
+        })
+        .catch(error => this.log('SharedWorker port handler failed', error));
+      this.portQueues.set(port, next);
+    };
+    port.onmessageerror = event => this.log('MessagePort messageerror', event);
+    port.start();
+    port.postMessage({type: 'init', data: {hello: 'world'}});
+    this.poller.clientsChanged();
+    return true;
+  }
+
+  removePort(port, removeWindow = true) {
+    if (!port || !this.ports.has(port)) return false;
+    const windowId = this.windowManager.portToWindow.get(port);
+    // Delete FIRST so a WindowManager callback cannot recursively remove this port.
+    this.ports.delete(port);
+    this.portQueues.delete(port);
+    this.poller.removePort(port);
+    if (removeWindow && windowId) this.windowManager.remove(windowId);
+    if (!this.destroyed) this.poller.clientsChanged();
     try {
-      await this.dataManager.setUpDb();
-    }
-    catch (e) {
-      this.log(
-        'Error while setting up SharedWorker database',
-        e
-      );
-    }
-
-    /*
-     * Initialize the realtime Poller.
-     *
-     * It will do nothing until:
-     * - at least one window is connected;
-     * - the application/session is connected.
-     */
-    this.poller.setPoller();
-
-    return this;
+      port.onmessage = port.onmessageerror = null;
+      port.close();
+    } catch (_) {}
+    return true;
   }
 
-
-  /**
-   * Current registered windows.
-   */
-  get windows() {
-    return this.windowManager.windows;
+  async handlePortMessage(port, event) {
+    if (this.destroyed || !this.ports.has(port)) return false;
+    const message = event.data;
+    try {
+      // Service-level realtime commands go BEFORE managers to avoid accidental swallowing.
+      switch (message?.type) {
+        case 'send': {
+          const envelope = message.data;
+          if (envelope?.type === 'subscribe') {
+            this.poller.subscribeFor(port, envelope.data);
+          } else if (envelope?.type === 'unsubscribe') {
+            this.poller.unsubscribeFor(port, envelope.data);
+          } else {
+            const ok = this.poller.send(envelope);
+            port.postMessage({type: 'send:result', data: {ok, requestId: message.requestId ?? null}});
+          }
+          return true;
+        }
+        case 'subscribe':
+        case 'unsubscribe': {
+          const events = message.type === 'subscribe'
+            ? this.poller.subscribeFor(port, message.data)
+            : this.poller.unsubscribeFor(port, message.data);
+          // Local requested state. PHP's subscribed/unsubscribed messages are the ACKs.
+          port.postMessage({type: 'subscriptions', data: {events, connected: this.poller.connected}});
+          return true;
+        }
+        case 'status':
+          port.postMessage({type: 'status', connected: this.poller.connected});
+          return true;
+        case 'detach':
+          return this.removePort(port);
+      }
+      if (await this.dataManager.handleMessage(event)) return true;
+      for (const manager of [this.windowManager, this.searchManager, this.notificationHandler]) {
+        if (await manager.handleMessage?.(port, event)) return true;
+      }
+      return await this.messageHandler.handleMessage(port, event);
+    } catch (error) {
+      this.log('Error processing SharedWorker message', error);
+      try { port.postMessage({type: 'worker:error', data: {message: error.message}}); } catch (_) {}
+      return false;
+    }
   }
 
+  broadcast(message) {
+    let sent = 0;
+    const dead = [];
+    for (const port of Array.from(this.ports)) {
+      try { port.postMessage(message); sent++; }
+      catch (_) { dead.push(port); }
+    }
+    for (const port of dead) this.removePort(port);
+    return sent; // Failed ports are not subtracted twice.
+  }
 
-  /**
-   * Whether the application/server session is connected.
-   */
-  get isConnected() {
+  log(...args) {
+    try { for (const arg of args) bbn.fn.log(arg); }
+    catch (_) { console.log(...args); }
+    this.broadcast({type: 'log', data: {logs: this.makeCloneable(args)}});
+  }
+
+  debug(data) {
+    this.broadcast({
+      type: 'debug', data: this.makeCloneable(data),
+      windows: this.windowManager.getPublicWindows()
+    });
+  }
+
+  makeCloneable(data) {
+    try { structuredClone(data); return data; }
+    catch (_) {
+      try { return JSON.parse(JSON.stringify(data)); }
+      catch (_) { return String(data); }
+    }
+  }
+
+  async checkConnection() {
+    try {
+      const response = await this.fetch('/' + this.data.plugins['appui-core'] + '/connected', {});
+      if (typeof response?.connected === 'boolean' && response.connected !== this.#isConnected) {
+        if (response.connected) this.connect();
+        else this.disconnect();
+      }
+    } catch (error) { this.log('Error checking session status', error); }
     return this.#isConnected;
   }
 
-
-  /**
-   * Mark application session as connected.
-   */
-  connect() {
-    if (this.#isConnected === true) {
-      return false;
-    }
-
-    this.#isConnected = true;
-
-    /*
-     * Poller owns the single WebSocket.
-     */
-    this.poller.launchPoller();
-
-    return true;
-  }
-
-
-  /**
-   * Mark application session as disconnected.
-   */
-  disconnect() {
-    if (this.#isConnected === false) {
-      return false;
-    }
-
-    this.#isConnected = false;
-
-    /*
-     * A disconnected application/session shouldn't keep
-     * the realtime WebSocket alive.
-     */
-    this.poller.stop();
-
-    return true;
-  }
-
-
-  /**
-   * Registers a new browser MessagePort.
-   *
-   * @param {MessagePort} port
-   */
-  addPort(port) {
-    if (!port || this.ports.has(port)) {
-      return false;
-    }
-
-    this.ports.add(port);
-
-    port.onmessage = event => {
-      console.log('port.onmessage', event);
-      this.handlePortMessage(port, event);
-    };
-
-    port.onmessageerror = event => {
-      this.log(
-        'SharedWorker MessagePort messageerror',
-        event
-      );
-    };
-
-    port.onerror = event => {
-      this.log(
-        'SharedWorker MessagePort error',
-        event
-      );
-    };
-
-    port.start();
-
-    port.postMessage({
-      type: 'init',
-      data: {
-        hello: 'world'
-      }
+  async fetch(url, params, method = 'POST') {
+    method = method.toUpperCase();
+    const response = await globalThis.fetch(url, {
+      method,
+      body: ['GET', 'HEAD'].includes(method) ? undefined : JSON.stringify(params ?? {}),
+      headers: {'Content-Type': 'application/json'},
+      credentials: 'same-origin'
     });
-
-    /*
-     * There is now at least one active browser context.
-     *
-     * Poller decides whether the WebSocket should actually
-     * be opened.
-     */
-    this.poller.clientsChanged();
-
-    return true;
-  }
-
-
-  /**
-   * Removes a MessagePort and its corresponding window.
-   *
-   * @param {MessagePort} port
-   * @param {Boolean} removeWindow
-   */
-  removePort(port, removeWindow = true) {
-    if (!port || !this.ports.has(port)) {
-      return false;
-    }
-
-    if (removeWindow) {
-      /*
-       * WindowManager also removes the port/window mapping.
-       *
-       * We don't want it to recursively manipulate
-       * core.ports here.
-       */
-      const windowId =
-        this.windowManager.portToWindow.get(port);
-
-      if (windowId) {
-        this.windowManager.remove(windowId);
-      }
-    }
-
-    this.ports.delete(port);
-
-    /*
-     * Let Poller react to the changed client collection.
-     *
-     * If there are no ports left, it won't reconnect.
-     */
-    this.poller.clientsChanged();
-
-    try {
-      port.onmessage = null;
-      port.onmessageerror = null;
-      port.close();
-    }
-    catch (e) {
-      /*
-       * Port may already effectively be gone.
-       */
-    }
-
-    return true;
-  }
-
-
-  /**
-   * Main entry point for messages coming from windows.
-   *
-   * @param {MessagePort} port
-   * @param {MessageEvent} event
-   */
-  async handlePortMessage(port, event) {
-    try {
-
-      /*
-       * IndexedDB messages are special because dbCenter
-       * already knows its own protocol.
-       *
-       * If it consumed the message, stop here.
-       */
-      const processed =
-        await this.dataManager.handleMessage(event);
-
-      if (processed) {
-        return true;
-      }
-
-      /*
-       * Specialized managers first.
-       *
-       * Each returns true when it recognizes/consumes
-       * the message.
-       */
-      if (
-        this.windowManager.handleMessage?.(
-          port,
-          event
-        )
-      ) {
-        return true;
-      }
-
-      if (
-        this.searchManager.handleMessage?.(
-          port,
-          event
-        )
-      ) {
-        return true;
-      }
-
-      if (
-        this.notificationHandler.handleMessage?.(
-          port,
-          event
-        )
-      ) {
-        return true;
-      }
-
-      /*
-       * MessageHandler is deliberately last because
-       * untyped messages may be interpreted as poller
-       * or application state.
-       */
-      if (
-        await this.messageHandler.handleMessage(
-          port,
-          event
-        )
-      ) {
-        return true;
-      }
-
-      /*
-       * AppuiWorkerService-specific protocol.
-       */
-      const message = event.data;
-
-      switch (message?.type) {
-        /*
-         * Delegate all realtime sending to Poller.
-         */
-        case 'send':
-          this.poller.send(message.data);
-          return true;
-
-        /*
-         * Poller is the authority on WebSocket state.
-         */
-        case 'status':
-          port.postMessage({
-            type: 'status',
-            connected: this.poller.connected
-          });
-
-          return true;
-      }
-
-      return false;
-    }
-    catch (e) {
-      this.log(
-        'Error processing SharedWorker message',
-        e
-      );
-
-      return false;
-    }
-  }
-
-
-  /**
-   * Broadcasts a message to every active SharedWorker port.
-   *
-   * Failed ports are removed automatically.
-   *
-   * @param {Object} message
-   */
-  broadcast(message) {
-    const dead = [];
-
-    for (const port of this.ports) {
-      try {
-        port.postMessage(message);
-      }
-      catch (e) {
-        dead.push(port);
-      }
-    }
-
-    for (const port of dead) {
-      this.removePort(port);
-    }
-
-    return this.ports.size - dead.length;
-  }
-
-
-  /**
-   * Sends logs to connected application windows.
-   */
-  log(...args) {
-    /*
-     * Keep worker-side logging too.
-     */
-    try {
-      for (const arg of args) {
-        bbn.fn.log(arg);
-      }
-    }
-    catch (e) {
-      console.log(...args);
-    }
-
-    this.broadcast({
-      type: 'log',
-      data: {
-        logs: this.makeCloneable(args)
-      }
-    });
-  }
-
-
-  /**
-   * Sends debug information to registered application
-   * windows.
-   *
-   * @param {*} data
-   */
-  debug(data) {
-    this.broadcast({
-      type: 'debug',
-      data: this.makeCloneable(data),
-      windows:
-        this.windowManager.getPublicWindows()
-    });
-  }
-
-
-  /**
-   * Makes diagnostic data structured-clone safe.
-   *
-   * This is intentionally only used for logs/debug data,
-   * not normal application messages.
-   */
-  makeCloneable(data) {
-    try {
-      structuredClone(data);
-
-      return data;
-    }
-    catch (e) {
-      try {
-        return JSON.parse(
-          JSON.stringify(data)
-        );
-      }
-      catch (e2) {
-        return String(data);
-      }
-    }
-  }
-
-
-  /**
-   * Checks whether the user/session is connected.
-   */
-  async checkConnection() {
-    try {
-      const response = await this.fetch(
-        '/' +
-        this.data.plugins['appui-core'] +
-        '/connected',
-        {},
-        'POST'
-      );
-
-      if (
-        response &&
-        ('connected' in response) &&
-        response.connected !== this.#isConnected
-      ) {
-        if (response.connected) {
-          this.connect();
-        }
-        else {
-          this.disconnect();
-        }
-      }
-
-      return this.#isConnected;
-    }
-    catch (e) {
-      this.log(
-        'Error checking connection status',
-        e
-      );
-
-      return this.#isConnected;
-    }
-  }
-
-
-  /**
-   * Generic JSON HTTP helper.
-   */
-  async fetch(
-    url,
-    params,
-    meth = 'POST'
-  ) {
-    const response = await fetch(
-      url,
-      {
-        method: meth,
-        body:
-          meth === 'GET' || meth === 'HEAD'
-            ? undefined
-            : JSON.stringify(params || {}),
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin'
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(
-        'Fetch error: ' +
-        response.status
-      );
-    }
-
-    /*
-     * 204 / empty bodies should not generate a JSON error.
-     */
-    if (
-      response.status === 204 ||
-      !response.headers
-        .get('content-type')
-        ?.includes('application/json')
-    ) {
-      const text = await response.text();
-
-      return text
-        ? JSON.parse(text)
-        : null;
-    }
-
-    const data = await response.json();
-
-    /*
-     * Preserve the old ServiceWorker behaviour.
-     */
+    if (!response.ok) throw new Error('Fetch error: ' + response.status);
+    if (response.status === 204) return null;
+    const text = await response.text();
+    if (!text.trim()) return null;
+    const data = JSON.parse(text);
     if (data?.disconnected) {
       this.disconnect();
-
-      this.broadcast({
-        type: 'DISCONNECTED'
-      });
-
+      this.broadcast({type: 'DISCONNECTED'});
       return null;
     }
-
     return data;
   }
 
-
-  /**
-   * SHA hash helper retained from ServiceWorkerAdmin.
-   */
-  async hash(
-    message,
-    algo = 'SHA-256'
-  ) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-
-    const binary = await crypto.subtle.digest(
-      algo,
-      data
-    );
-
-    return Array
-      .from(new Uint8Array(binary))
-      .map(
-        byte =>
-          byte
-            .toString(16)
-            .padStart(2, '0')
-      )
-      .join('');
+  async hash(message, algo = 'SHA-256') {
+    const binary = await crypto.subtle.digest(algo, new TextEncoder().encode(message));
+    return Array.from(new Uint8Array(binary), byte => byte.toString(16).padStart(2, '0')).join('');
   }
 
-
-  /**
-   * Stops worker-managed resources.
-   *
-   * Mostly useful during development/tests.
-   */
   destroy() {
-    /*
-     * Poller is solely responsible for closing the
-     * WebSocket and cancelling reconnect timers.
-     */
-    this.poller.stop?.();
-
+    if (this.destroyed) return;
+    this.destroyed = true;
+    this.#isConnected = false;
+    this.poller.stop();
+    this.poller.clearSubscriptions();
     this.searchManager.abort?.();
-
-    for (const port of Array.from(this.ports)) {
-      this.removePort(port);
-    }
+    this.scope.onconnect = null;
+    for (const port of Array.from(this.ports)) this.removePort(port);
   }
 }
