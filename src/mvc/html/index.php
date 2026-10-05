@@ -12,6 +12,7 @@ use bbn\X;
  * @var string $plugins     Array of the plugins in use
  * @var string $token       A token
  * @var string $noscript    Some text to show if noscript
+ * @var string $logo_big    The central logo
  */
 
 ?><!DOCTYPE html>
