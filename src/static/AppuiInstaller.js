@@ -232,13 +232,12 @@ export default class AppuiInstaller {
    * 
    * @returns {Promise<boolean>} A promise that resolves to true if connected, false otherwise.
    */
-  async checkConnection() {
+  async getConnection() {
     console.log("TRYING TO REACH " + this.siteUrl + 'core/connected');
-    const data = await this.fetch(
-      this.siteUrl + 'core/connected'
-    );
+    const data = await this.fetch(this.siteUrl + 'core/connected');
 
-    this.#connected = !!data?.connected;
+    this.#connected = data?.connected || false;
+    
 
     this.log(
       'Checking connection: ' +
@@ -249,24 +248,17 @@ export default class AppuiInstaller {
         )
     );
 
-    return this.#connected;
+    return data;
   }
 
   /**
    * Retrieves the configuration necessary to bootstrap
    * either the logged-in application or login screen.
    * 
-   * @param {boolean} connected - Whether the user is currently connected/authenticated.
    * @returns {Promise<Object>} A promise that resolves with the configuration data from the server.
    */
-  async retrieveConfig(connected) {
-    return this.fetch(
-      this.siteUrl + 'core/index',
-      {
-        get: 1,
-        login: connected ? 0 : 1
-      }
-    );
+  async retrieveConfig() {
+    return this.fetch(this.siteUrl + 'core/index', {get: 1});
   }
 
   /**
@@ -280,16 +272,10 @@ export default class AppuiInstaller {
       return;
     }
 
-    const scripts = Array.isArray(data.script_src)
-      ? data.script_src
-      : [data.script_src];
-
+    const scripts = Array.isArray(data.script_src) ? data.script_src : [data.script_src];
     for (const src of scripts) {
       // Heuristic: treat as module if filename contains 'index.js'
-      await this.load(
-        src,
-        src.indexOf('index.js') > -1
-      );
+      await this.load(src, src.indexOf('index.js') > -1);
     }
   }
 
@@ -324,7 +310,8 @@ export default class AppuiInstaller {
     let fn;
     try {
       fn = eval(data.script);
-    } catch (e) {
+    }
+    catch (e) {
       throw new Error('Error evaluating bootstrap script: ' + e.message);
     }
 
@@ -356,23 +343,15 @@ export default class AppuiInstaller {
     this.isInit = true;
 
     try {
-      this.loadMessage('Checking connection...');
-      const connected = await this.checkConnection();
-      this.loadMessage(
-        connected
-          ? 'Loading application...'
-          : 'Loading login...'
-      );
-      const response = await this.retrieveConfig(connected);
-
-      /*
-       * Depending on the backend response, index may return
-       * the configuration directly or wrapped in `data`.
-       */
-      const data = response?.data || response;
+      const response = await this.retrieveConfig();
+      const data = response?.data;
+      if (!data) {
+        throw new Error("Impossible to retrieve config")
+      }
       await this.execute(data);
       this.loadMessage('Initialization complete.');
-    } catch (e) {
+    }
+    catch (e) {
       this.log('Application initialization failed', e);
       this.errorMessage(e.message || 'Application initialization failed');
       throw e;
@@ -396,13 +375,10 @@ export default class AppuiInstaller {
 
     try {
       const registration =
-        await navigator.serviceWorker.register(
-          '/sw',
-          {
-            type: 'module',
-            scope: '/'
-          }
-        );
+        await navigator.serviceWorker.register('/sw', {
+          type: 'module',
+          scope: '/'
+        });
 
       this.log('Service worker registered');
 
@@ -414,7 +390,8 @@ export default class AppuiInstaller {
        * on it controlling this page.
        */
       return registration;
-    } catch (e) {
+    }
+    catch (e) {
       /*
        * A caching failure should normally not prevent the
        * application itself from starting.

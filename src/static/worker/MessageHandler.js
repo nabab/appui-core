@@ -1,506 +1,201 @@
+import bbn from '/static/lib/bbn-js/v2/dist/bbn.sw.js';
+
 export class MessageHandler {
   constructor(core) {
     this.core = core;
-
     this.lastClientMessage = {};
     this.lastResponse = {};
   }
 
-  /**
-   * Handles messages coming from a connected window.
-   *
-   * @param {MessagePort} port
-   * @param {MessageEvent} event
-   * @returns {Boolean|Promise<Boolean>}
-   */
-  handleMessage(port, event) {
+  async handleMessage(port, event) {
     const message = event.data;
-
-    if (!message?.type) {
-      return false;
-    }
-
-    const data = message.data || {};
-
-    this.core.log?.(["MessageHandler: " + message.type, data]);
-
+    if (!message?.type) return false;
+    const data = message.data ?? {};
     switch (message.type) {
-      case "start":
-        this.onMessageStart(port, data);
-        return true;
-
-      case "test":
-        this.onMessageTest(port, data);
-        return true;
-
-      case "connection":
-        this.onMessageConnection(port, data);
-        return true;
-
-      case "init":
-        this.onMessageInit(port, data);
-        return true;
-
-      case "login":
-        this.onMessageLogin(port, data);
-        return true;
-
-      case "initCompleted":
-        this.core.connect();
-        this.core.poller.setPoller(5);
-        return true;
-
-      case "registerChannel":
-        this.onMessageRegisterChannel(port, message);
-        return true;
-
-      case "unregisterChannel":
-        this.onMessageUnregisterChannel(port, message);
-        return true;
-
-      case "messageChannel":
-        this.onMessageChannel(port, message);
-        return true;
-
-      case "messageFromChannel":
-        this.onMessageFromChannel(port, message);
-        return true;
-
-      case "beforeRouting":
-        this.onMessageBeforeRouting(port, data);
-        return true;
-
-      case "routing":
-        this.onMessageRouting(port, data);
-        return true;
-
-      case "open-link":
-        this.onMessageOpenLink(port, data);
-        return true;
-
-      case "clientMessage":
-        this.processClientMessage(port, data);
-        return true;
+      case 'start': await this.onMessageStart(port, data); return true;
+      case 'test': await this.onMessageTest(port, data); return true;
+      case 'connection': await this.onMessageConnection(port); return true;
+      case 'init': await this.onMessageInit(port); return true;
+      case 'login': await this.onMessageLogin(port); return true;
+      case 'initCompleted': this.core.connect(); return true;
+      case 'registerChannel': this.onMessageRegisterChannel(port, message); return true;
+      case 'unregisterChannel': this.onMessageUnregisterChannel(port, message); return true;
+      case 'messageChannel': this.onMessageChannel(port, message); return true;
+      case 'messageFromChannel': return true;
+      case 'beforeRouting': this.onMessageBeforeRouting(port, data); return true;
+      case 'routing': this.onMessageRouting(port, data); return true;
+      case 'open-link': this.onMessageOpenLink(port, data); return true;
+      case 'clientMessage': this.processClientMessage(port, data); return true;
+      default: return false; // Never swallow someone else's protocol.
     }
-
-    return false;
   }
 
-  /**
-   * Sends a message to a specific SharedWorker port.
-   *
-   * @param {MessagePort} port
-   * @param {Object} message
-   * @returns {Boolean}
-   */
   send(port, message) {
-    if (!port) {
-      return false;
-    }
-
-    try {
-      port.postMessage(message);
-      return true;
-    } catch (e) {
-      this.core.log?.("Unable to send message to window");
-      this.core.log?.(e);
-
+    if (!port) return false;
+    try { port.postMessage(message); return true; }
+    catch (error) {
+      this.core.log?.('Unable to send to window', error);
       return false;
     }
   }
 
-  /**
-   * Returns the registered window associated with a port.
-   *
-   * @param {MessagePort} port
-   * @returns {Object|null}
-   */
-  getWindow(port) {
-    return this.core.windowManager.getWindowFromPort(port);
-  }
+  getWindow(port) { return this.core.windowManager.getWindowFromPort(port); }
 
-  /**
-   * Sends a URL to another registered window.
-   *
-   * Expected data:
-   * {
-   *   url,
-   *   windowId
-   * }
-   */
-  onMessageOpenLink(port, data) {
-    if (!data?.url || !data?.windowId) {
-      return false;
+  /** The ONE entry point for PHP's {type, data} WebSocket protocol. */
+  async processSocketMessage(message) {
+    if (!message || typeof message !== 'object' || Array.isArray(message)
+      || typeof message.type !== 'string') return false;
+
+    if (message.type === 'windows') {
+      // Only this explicit event uses the old per-window response structure.
+      return this.processServerMessage(message.data);
     }
-
-    const targetPort = this.core.windowManager.getPort(data.windowId);
-
-    if (!targetPort) {
-      return false;
+    if (message.type === 'error') {
+      this.core.log?.('WebSocket server error', message.data);
     }
-
-    return this.send(targetPort, {
-      type: "open-link",
-      data: {
-        url: data.url,
-      },
-    });
-  }
-
-  /**
-   * Checks whether the requested URL is already displayed
-   * in another registered window.
-   */
-  onMessageBeforeRouting(port, data) {
-    if (!data?.url) {
-      return false;
-    }
-
-    const sender = this.core.windowManager.getWindowFromPort(port);
-
-    if (!sender) {
-      return false;
-    }
-
-    const url = data.url;
-    const windows = this.core.windowManager.windows;
-
-    this.core.log?.(
-      "Looking for url " +
-        url +
-        " in " +
-        Object.keys(windows).length +
-        " windows",
-    );
-
-    for (const windowId in windows) {
-      if (windowId === sender.windowId) {
-        continue;
-      }
-
-      const win = windows[windowId];
-
-      const row = bbn.fn.getRow(
-        win.views || [],
-        (a) => a?.current && !a.current.indexOf(url),
-      );
-
-      if (row) {
-        this.core.log?.("Found url " + url + " in window " + windowId);
-
-        this.send(port, {
-          type: "routing",
-          data: {
-            windowId,
-            url,
-          },
-        });
-
-        return true;
-      }
-    }
-
-    this.send(port, {
-      type: "routing",
-      data: {
-        ok: true,
-        url,
-      },
-    });
-
+    // Socket notifications are distinct from window-manager/channel protocols.
+    // All tabs sharing this socket receive the envelope, including subscription ACKs.
+    this.core.broadcast({type: 'socket', data: message});
     return true;
   }
 
-  /**
-   * Updates the routing/window information received
-   * from one window.
-   */
+  /** Legacy response, now nested under {type:'windows', data:{windowId: ...}}. */
+  async processServerMessage(obj) {
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return false;
+    const windows = this.core.windowManager.windows;
+    for (const [windowId, message] of Object.entries(obj)) {
+      if (!Object.hasOwn(windows, windowId)) continue;
+      const win = windows[windowId];
+      if (!message || typeof message !== 'object' || Array.isArray(message)) continue;
+      if (message.disconnected) {
+        this.core.disconnect();
+        this.core.broadcast({type: 'DISCONNECTED'});
+      }
+      if (message.plugins && typeof message.plugins === 'object') {
+        if (!win.data || typeof win.data !== 'object' || Array.isArray(win.data)) win.data = {};
+        for (const [plugin, pluginData] of Object.entries(message.plugins)) {
+          if (['__proto__', 'constructor', 'prototype'].includes(plugin)) continue;
+          const workers = pluginData?.serviceWorkers;
+          if (!workers || typeof workers !== 'object' || Array.isArray(workers)) continue;
+          if (!win.data[plugin] || typeof win.data[plugin] !== 'object' || Array.isArray(win.data[plugin])) {
+            win.data[plugin] = {};
+          }
+          for (const [key, value] of Object.entries(workers)) {
+            if (!['__proto__', 'constructor', 'prototype'].includes(key)) {
+              win.data[plugin][key] = value;
+            }
+          }
+        }
+      }
+      if (win.port) this.send(win.port, {type: 'message', data: message});
+    }
+    this.lastResponse = obj;
+    return true;
+  }
+
+  processClientMessage(port, data) {
+    if (!data || typeof data !== 'object' || Array.isArray(data)) {
+      throw new Error('Client metadata must be an object');
+    }
+    const win = this.getWindow(port);
+    if (!win) {
+      this.core.log?.('Client data received from an unregistered window');
+      return false;
+    }
+    if (data.token) {
+      if (!win.token) win.token = data.token;
+      else if (win.token !== data.token) throw new Error("The token doesn't correspond");
+    }
+    this.lastClientMessage = data;
+    win.data = data;
+    // No AbortController/long-poll logic remains. Send the new snapshot now.
+    this.core.poller.clientsChanged();
+    return true;
+  }
+
+  onMessageOpenLink(port, data) {
+    if (!data?.url || !data?.windowId) return false;
+    return this.send(this.core.windowManager.getPort(data.windowId), {
+      type: 'open-link', data: {url: data.url}
+    });
+  }
+
+  onMessageBeforeRouting(port, data) {
+    if (!data?.url) return false;
+    const sender = this.getWindow(port);
+    if (!sender) return false;
+    for (const [windowId, win] of Object.entries(this.core.windowManager.windows)) {
+      if (windowId === sender.windowId) continue;
+      const row = bbn.fn.getRow(win.views || [], item => item?.current?.startsWith(data.url));
+      if (row) {
+        this.send(port, {type: 'routing', data: {windowId, url: data.url}});
+        return true;
+      }
+    }
+    this.send(port, {type: 'routing', data: {ok: true, url: data.url}});
+    return true;
+  }
+
   onMessageRouting(port, data) {
     return this.core.windowManager.update(port, data);
   }
 
-  /**
-   * Stores data sent by a window for the poller.
-   */
-  processClientMessage(port, data) {
-    const win = this.core.windowManager.getWindowFromPort(port);
-
-    if (!win) {
-      this.core.log?.("Poller data received from an unregistered window");
-
-      return false;
-    }
-
-    if (data.poll) {
-      this.core.poller.poll();
-    }
-
-    if (data.token) {
-      if (!win.token) {
-        win.token = data.token;
-      } else if (win.token !== data.token) {
-        throw new Error("The token doesn't correspond");
-      }
-    }
-
-    this.lastClientMessage = data;
-    win.data = data;
-
-    /*
-     * New state should be taken into account immediately.
-     * Abort the current long poll; the poller will restart.
-     */
-    if (this.core.poller.isRunning && this.core.poller.aborter) {
-      this.core.poller.aborter.abort();
-    }
-
-    return true;
-  }
-
-  /**
-   * Processes server data returned by Poller and dispatches
-   * each entry to its corresponding window.
-   *
-   * The server response is expected to be keyed by windowId.
-   *
-   * @param {Object} obj
-   * @returns {Promise<Boolean>}
-   */
-  async processServerMessage(obj) {
-    if (!obj || typeof obj !== "object") {
-      return false;
-    }
-
-    const windows = this.core.windowManager.windows;
-
-    for (const windowId in obj) {
-      const win = windows[windowId];
-
-      /*
-       * The server may return stale data for a window that
-       * has since disappeared.
-       */
-      if (!win) {
-        continue;
-      }
-
-      const message = obj[windowId];
-
-      if (message?.disconnected) {
-        this.core.disconnect();
-      }
-
-      /*
-       * Merge ServiceWorker/plugin state into the window's
-       * stored polling data, preserving the behaviour of the
-       * old ServiceWorker implementation.
-       */
-      if (message?.plugins && Object.keys(message.plugins).length) {
-        if (!win.data) {
-          win.data = {};
-        }
-
-        for (const plugin in message.plugins) {
-          const pluginData = message.plugins[plugin];
-
-          if (pluginData && "serviceWorkers" in pluginData) {
-            if (!win.data[plugin]) {
-              win.data[plugin] = {};
-            }
-
-            Object.assign(win.data[plugin], pluginData.serviceWorkers);
-          }
-        }
-      }
-
-      if (win.port) {
-        this.send(win.port, {
-          type: "message",
-          data: message,
-        });
-      }
-    }
-
-    this.lastResponse = obj;
-
-    return true;
-  }
-
-  /**
-   * Retrieves application configuration.
-   */
   async onMessageInit(port) {
     await this.core.dataManager.retrieveIndexCfg();
-
-    this.send(port, {
-      type: "init",
-      data: this.core.dataManager.indexCfg,
-    });
-
-    return true;
+    return this.send(port, {type: 'init', data: this.core.dataManager.indexCfg});
   }
 
-  /**
-   * Retrieves login configuration.
-   */
   async onMessageLogin(port) {
     await this.core.dataManager.retrieveLoginCfg();
-
-    this.send(port, {
-      type: "login",
-      data: this.core.dataManager.loginCfg,
-    });
-
-    return true;
+    return this.send(port, {type: 'login', data: this.core.dataManager.loginCfg});
   }
 
-  /**
-   * Checks server connection status.
-   */
   async onMessageConnection(port) {
     await this.core.checkConnection();
-
-    this.send(port, {
-      type: "connection",
-      data: {
-        connected: this.core.isConnected,
-      },
-    });
-
-    return true;
+    return this.send(port, {type: 'connection', data: {connected: this.core.isConnected}});
   }
 
-  /**
-   * Registers the current window to a message channel.
-   *
-   * Supports either:
-   *
-   * {type:'registerChannel', channel:'foo'}
-   *
-   * or:
-   *
-   * {type:'registerChannel', data:{channel:'foo'}}
-   */
   onMessageRegisterChannel(port, message) {
-    const channel = message.channel;
+    const channel = message.channel ?? message.data?.channel;
     const win = this.getWindow(port);
-
-    if (!channel || !win) {
-      return false;
-    }
-
-    if (!win.channels.includes(channel)) {
-      win.channels.push(channel);
-    }
-
+    if (typeof channel !== 'string' || !channel || !win) return false;
+    win.channels ||= [];
+    if (!win.channels.includes(channel)) win.channels.push(channel);
     return true;
   }
 
-  /**
-   * Removes the current window from a message channel.
-   */
   onMessageUnregisterChannel(port, message) {
-    const channel = message.channel || message.data?.channel;
-
-    if (!channel) {
-      return false;
-    }
-
+    const channel = message.channel ?? message.data?.channel;
     const win = this.getWindow(port);
-
-    if (!win?.channels) {
-      return false;
-    }
-
-    const idx = win.channels.indexOf(channel);
-
-    if (idx > -1) {
-      win.channels.splice(idx, 1);
-    }
-
+    if (!channel || !win?.channels) return false;
+    const index = win.channels.indexOf(channel);
+    if (index >= 0) win.channels.splice(index, 1);
     return true;
   }
 
-  /**
-   * Broadcasts a channel message to every other subscribed
-   * window.
-   */
   onMessageChannel(port, message) {
-    if (!message.channel) {
-      return false;
-    }
-
-    const sender = this.core.windowManager.getWindowFromPort(port);
-
-    for (const windowId in this.core.windowManager.windows) {
-      const win = this.core.windowManager.windows[windowId];
-
-      if (sender && windowId === sender.windowId) {
-        continue;
-      }
-
-      if (win.channels.includes(message.channel)) {
-        win.port.postMessage({
-          type: "messageFromChannel",
-          channel: message.channel,
-          data: message.data,
+    if (!message.channel) return false;
+    const sender = this.getWindow(port);
+    for (const [windowId, win] of Object.entries(this.core.windowManager.windows)) {
+      if (windowId !== sender?.windowId && win.channels?.includes(message.channel)) {
+        this.send(win.port, {
+          type: 'messageFromChannel', channel: message.channel, data: message.data
         });
       }
     }
-
     return true;
   }
 
-  /**
-   * Kept for compatibility.
-   *
-   * messageFromChannel is normally a worker -> window event,
-   * so receiving it from a window requires no action.
-   */
-  onMessageFromChannel() {
-    return true;
-  }
+  onMessageFromChannel() { return true; }
 
-  /**
-   * Temporary diagnostic endpoint.
-   */
   async onMessageTest(port, data) {
-    this.core.log?.([
-      "TEST MESSAGE RECEIVED",
-      "DATA:",
-      data,
-      "WINDOW:",
-      this.core.windowManager.getWindowFromPort(port)?.windowId,
-    ]);
-
+    this.core.log?.('TEST MESSAGE', data, this.getWindow(port)?.windowId);
     return true;
   }
 
-  /**
-   * Legacy start/test endpoint.
-   */
-  async onMessageStart(port) {
-    try {
-      const response = await fetch(this.core.data.site_url + "core/index", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          test: 1,
-        }),
-      });
-
-      const json = await response.json();
-
-      this.core.log?.("RESPONSE", json);
-
-      return true;
-    } catch (e) {
-      this.core.log?.("Error in start message");
-      this.core.log?.(e);
-
-      return false;
-    }
+  async onMessageStart() {
+    const response = await this.core.fetch(this.core.data.site_url + 'core/index', {test: 1});
+    this.core.log?.('RESPONSE', response);
+    return true;
   }
 }

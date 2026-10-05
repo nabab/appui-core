@@ -18,7 +18,8 @@ $ctrl->addData([
   'shared_path' => constant('BBN_SHARED_PATH'),
   'static_path' => constant('BBN_STATIC_PATH'),
   'site_url' => $ctrl->getRootUrl(),
-  'plugins' => $plugins
+  'plugins' => $plugins,
+  'id_user' => $ctrl->inc->user->getId()
 ]);
 //$script = $ctrl->getView($ctrl->pluginUrl('appui-core') . 'index', 'js');
 $json = json_encode($ctrl->data, JSON_PRETTY_PRINT);

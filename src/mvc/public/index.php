@@ -13,51 +13,12 @@ use bbn\File\Dir;
 
 
 if (empty($ctrl->post)) {
-  $data = [
-    'site_url' => $ctrl->getRootUrl(),
-    'site_title' => constant('BBN_SITE_TITLE'),
-    'is_dev' => (bool)constant('BBN_IS_DEV'),
-    'is_prod' => (bool)constant('BBN_IS_PROD'),
-    'is_test' => (bool)constant('BBN_IS_TEST'),
-    'shared_path' => constant('BBN_SHARED_PATH'),
-    'static_path' => constant('BBN_STATIC_PATH'),
-    'test' => (bool)constant('BBN_IS_DEV'),
-    'year' => date('Y'),
-    'theme' => defined('BBN_THEME') ? constant('BBN_THEME') : 'black',
-    'language' => constant('BBN_LANG'),
-    'formData' => [
-      'appui_salt' => $ctrl->inc->user->getSalt(),
-      'user' => '',
-      'pass' => ''
-    ],
-    'lost_pass' => true,
-    'core_root' => constant('APPUI_CORE_ROOT'),
-    'logo_big' => 'https://ressources.app-ui.com/logo_big.png',
-    'logo' => false,
-    'version' => file_get_contents(constant('BBN_DATA_PATH') . 'version.txt') ?: '1',
-  ];
-  if ($custom_data = $ctrl->getPluginModel('login/index', $data)) {
-    $data = X::mergeArrays($data, $custom_data);
-  }
-  echo $ctrl->addData($data)
+  echo $ctrl->addData($ctrl->getModel())
     ->clientCache()
     ->getView();
 }
 else {
-  $data = $ctrl->getModel($ctrl->pluginUrl('appui-core').'/_index', $ctrl->post);
-  $vfile = $ctrl->dataPath() . 'version.txt';
-  $data['version'] = 1;
-  $errReporting = error_reporting();
-  error_reporting(0);
-  $fp = @fopen($vfile, 'x');
-  if ($fp !== false) {
-    fwrite($fp, (string)$data['version']);
-  }
-  else {
-    $data['version'] = intval(file_get_contents($vfile)) ?: 1;
-  }
-  error_reporting($errReporting);
-
+  $data = $ctrl->getModel($ctrl->post);
   if ($ctrl->inc->user->check()) {
     $cacheName = 'appui-core-index';
     if (true) {
@@ -119,7 +80,6 @@ else {
           'v' => $data['version']
         ]),
       ];
-      $data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
       $ctrl->inc->user->setCache($cacheName, $data, 86400);
     }
 
