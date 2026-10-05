@@ -19,10 +19,6 @@
     ],
     "require": {
         "php": "^8.5",
-        "bbn\/bbn": "^1.1",
-        "bbn\/appui-component": "^1.3",
-        "bbn\/appui-usergroup": "^1.3",
-        "bbn\/appui-option": "^1.3",
-        "bbn\/appui-menu": "^1.3"
+        "bbn\/bbn": "^1.1"
     }
 }
