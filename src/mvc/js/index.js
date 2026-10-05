@@ -56,25 +56,31 @@
   </g>
 </svg>
 `;
+    const env = {
+      logging: data.is_dev,
+      isDev: data.is_dev,
+      mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
+      lang: data.language,
+      siteTitle: data.site_title,
+      wp_url: data.wp_url,
+      token: data.token,
+      connection_failures: 0,
+      connection_max_failures: 10,
+      money: data.money,
+      appPrefix: data.app_prefix,
+      appName: data.app_name,
+      plugins: data.plugins,
+      cdn: data.shared_path,
+      theme: data.theme,
+      version: data.version
+    };
+
+    if (data.connected) {
+      env.worker = data.site_url + data.core_root + 'worker?v=5' + data.version;
+    }
+
     bbn.fn.init({
-      env: {
-        logging: data.is_dev,
-        isDev: data.is_dev,
-        mode: data.is_dev ? 'dev' : (data.is_test ? 'test' : 'prod'),
-        lang: data.language,
-        siteTitle: data.site_title,
-        wp_url: data.wp_url,
-        token: data.token,
-        connection_failures: 0,
-        connection_max_failures: 10,
-        money: data.money,
-        appPrefix: data.app_prefix,
-        appName: data.app_name,
-        plugins: data.plugins,
-        cdn: data.shared_path,
-        theme: data.theme,
-        worker: data.site_url + 'worker?v=5' + data.version,
-      },
+      env,
       lng: bbn.fn.extend(true, {}, data.lng || {}),
       opt: data.options || {},
       var: data.var || {},

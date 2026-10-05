@@ -76,10 +76,31 @@ export class Poller {
     try {
       const url = this.getSocketUrl(this.pollerUrl);
       socket = new WebSocket(url);
+      const attemptStarted = performance.now();
+
+      socket.addEventListener('open', () => {
+        console.log('WebSocket transport opened', {
+          elapsedMs: Math.round(
+            performance.now() - attemptStarted
+          )
+        });
+      });
+
+      socket.addEventListener('close', event => {
+        console.warn('WebSocket transport closed', {
+          code: event.code,
+          reason: event.reason,
+          wasClean: event.wasClean,
+          elapsedMs: Math.round(
+            performance.now() - attemptStarted
+          )
+        });
+      });
       socket.binaryType = 'arraybuffer';
     } catch (error) {
       this.errorState = true;
-      this.core.log?.('Unable to create WebSocket', error);
+      this.core.log('Unable to create WebSocket', error);
+      console.log()
       this.scheduleReconnect();
       return false;
     }
@@ -185,6 +206,9 @@ export class Poller {
   }
 
   failSocket(socket, reason) {
+    console.trace('Poller.failSocket() called', {
+      reason
+    });
     if (this.socket !== socket) return;
     this.core.log?.('WebSocket failure: ' + reason);
     this.releaseSocket();
@@ -195,6 +219,7 @@ export class Poller {
   }
 
   stop() {
+    console.trace('Poller.stop() called');
     this.stopped = true;
     clearTimeout(this.reconnectTimeout);
     this.reconnectTimeout = null;
@@ -373,6 +398,7 @@ export class Poller {
   }
 
   getSocketUrl(url) {
+    return url;
     const base = this.core.scope?.location?.href || globalThis.location?.href;
     const parsed = new URL(url, base);
     if (parsed.protocol === 'http:') parsed.protocol = 'ws:';
