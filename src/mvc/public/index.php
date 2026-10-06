@@ -80,6 +80,7 @@ else {
           'v' => $data['version']
         ]),
       ];
+      $data['custom_css'] = $ctrl->customPluginView('index', 'css', [], 'appui-core') ?: $ctrl->getLess();
       $ctrl->inc->user->setCache($cacheName, $data, 86400);
     }
 
