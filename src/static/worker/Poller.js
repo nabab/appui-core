@@ -41,10 +41,7 @@ export class Poller {
       || (this.socket?.readyState === WebSocket.OPEN && !this.ready);
   }
 
-  setPoller() { this.launchPoller(); return this; }
-  poll() { return this.launchPoller(); }
   retryPoll() { return this.scheduleReconnect(); }
-  realTimeConnect() { return this.launchPoller(); }
   sendSocket(data) { return this.send(data); }
 
   canRun() {
@@ -61,49 +58,59 @@ export class Poller {
     return true;
   }
 
-  launchPoller() {
+  async launchPoller() {
     if (!this.canRun()) return false;
     if (this.connected || this.connecting) return true;
     if (this.reconnectTimeout !== null) return false;
     this.stopped = false;
-    return this.connect();
+    return await this.connect();
   }
 
-  connect() {
+  async connect() {
     if (this.stopped || !this.canRun()) return false;
     if (this.connected || this.connecting) return true;
     let socket;
     try {
-      const url = this.getSocketUrl(this.pollerUrl);
-      socket = new WebSocket(url);
-      const attemptStarted = performance.now();
-
-      socket.addEventListener('open', () => {
-        console.log('WebSocket transport opened', {
-          elapsedMs: Math.round(
-            performance.now() - attemptStarted
-          )
+      console.log("KK1");
+      const res = await bbn.fn.post('/' + this.core.data.plugins['appui-core'] + '/connected');
+      if ((res.status == 200) && (res.data?.connected)) {
+        console.log('success on connected');
+        console.log(res.data);
+        const url = this.getSocketUrl(this.pollerUrl);
+        socket = new WebSocket(url + '?ticket=' + res.data.ticket);
+        const attemptStarted = performance.now();
+        socket.addEventListener('open', () => {
+          console.log('WebSocket transport opened', {
+            elapsedMs: Math.round(
+              performance.now() - attemptStarted
+            )
+          });
         });
-      });
-
-      socket.addEventListener('close', event => {
-        console.warn('WebSocket transport closed', {
-          code: event.code,
-          reason: event.reason,
-          wasClean: event.wasClean,
-          elapsedMs: Math.round(
-            performance.now() - attemptStarted
-          )
+  
+        socket.addEventListener('close', event => {
+          console.warn('WebSocket transport closed', {
+            code: event.code,
+            reason: event.reason,
+            wasClean: event.wasClean,
+            elapsedMs: Math.round(
+              performance.now() - attemptStarted
+            )
+          });
         });
-      });
-      socket.binaryType = 'arraybuffer';
+        socket.binaryType = 'arraybuffer';
+      }
+      else {
+        this.core.log('Not connected, socket rescheduled');
+        this.scheduleReconnect();
+        return false;
+      }
     } catch (error) {
       this.errorState = true;
       this.core.log('Unable to create WebSocket', error);
-      console.log()
       this.scheduleReconnect();
       return false;
     }
+
     this.socket = socket;
     this.ready = false;
     this.isRunning = true;
@@ -239,7 +246,9 @@ export class Poller {
     this.core.log?.('WebSocket reconnect scheduled in ' + delay + 'ms');
     this.reconnectTimeout = setTimeout(() => {
       this.reconnectTimeout = null;
-      if (!this.stopped && this.canRun()) this.connect();
+      if (!this.stopped && this.canRun()) {
+        (async () => await this.connect())();
+      }
     }, delay);
     return true;
   }
@@ -278,7 +287,7 @@ export class Poller {
   sendClients() {
     const clients = Object.create(null);
     for (const [id, win] of Object.entries(this.core.windowManager.windows)) {
-      clients[id] = win.data || {};
+      clients[id] = {views: win.views.map(a => ({url: a.url, current: a.current, loaded: a.loaded, selected: a.selected}))};
     }
     return this.send({type: 'clients', data: {clients}});
   }
@@ -398,7 +407,6 @@ export class Poller {
   }
 
   getSocketUrl(url) {
-    return url;
     const base = this.core.scope?.location?.href || globalThis.location?.href;
     const parsed = new URL(url, base);
     if (parsed.protocol === 'http:') parsed.protocol = 'ws:';

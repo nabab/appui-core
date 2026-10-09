@@ -3,6 +3,7 @@
 use bbn\Cache;
 use bbn\User\Live;
 
+/** @var bbn\Mvc\Model $model */
 $cache = Cache::getEngine();
 $redis = $cache->getObj();
 try {

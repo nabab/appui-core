@@ -1,6 +1,8 @@
 <?php
-/* @var bbn\Mvc\Controller $ctrl */
 
+use bbn\X;
+
+/** @var bbn\Mvc\Controller $ctrl */
 $file = $ctrl->dataPath() . 'version.txt';
 $version = is_file($file) ? (int)file_get_contents($file) : 0;
 if ($version >= 10000) {

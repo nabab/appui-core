@@ -49,7 +49,10 @@ export default class AppuiWorkerService {
       this.startPromise = (async () => {
         try { await this.dataManager.setUpDb(); }
         catch (error) { this.log('Error setting up SharedWorker database', error); }
-        if (!this.destroyed) this.poller.setPoller();
+        if (!this.destroyed) {
+          await this.poller.launchPoller();
+        }
+
         return this;
       })();
     }
@@ -59,11 +62,11 @@ export default class AppuiWorkerService {
   get windows() { return this.windowManager.windows; }
   get isConnected() { return this.#isConnected; }
 
-  connect() {
+  async connect() {
     if (this.destroyed) return false;
     const changed = this.#isConnected !== true;
     this.#isConnected = true;
-    this.poller.launchPoller();
+    await this.poller.launchPoller();
     return changed;
   }
 
@@ -194,8 +197,12 @@ export default class AppuiWorkerService {
     try {
       const response = await this.fetch('/' + this.data.plugins['appui-core'] + '/connected', {});
       if (typeof response?.connected === 'boolean' && response.connected !== this.#isConnected) {
-        if (response.connected) this.connect();
-        else this.disconnect();
+        if (response.connected) {
+          await this.connect();
+        }
+        else {
+          this.disconnect();
+        }
       }
     } catch (error) { this.log('Error checking session status', error); }
     return this.#isConnected;

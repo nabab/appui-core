@@ -35,7 +35,7 @@ if ($ctrl->isCli()) {
 /** @var bbn\User\Permissions $perm */
 $perm =& $ctrl->inc->perm;
 
-/* @var $path string The controller that will be called */
+/** @var $path string The controller that will be called */
 $path = $ctrl->getPath();
 $ctrl->db->setErrorMode('die');
 
@@ -46,7 +46,7 @@ if (($ctrl->getMode() === 'dom') && in_array($path, $auth_no_user, true)) {
   return 1;
 }
 
-/* @var $authorized array The authorized pages for the non logged in users */
+/** @var $authorized array The authorized pages for the non logged in users */
 $ctrl->addAuthorizedRoute(
   ".",
   "index",
